@@ -21,6 +21,14 @@ h1 {
 }
 
 /* nav styles */
+.menu {
+  background-color: #0d0950;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px 10px;
+}
 
 .nav-links {
   width: 100%;
@@ -44,6 +52,10 @@ h1 {
   background-color: #ff9776;
 }
 
+:has(.menu[aria-expanded="true"]) .nav-links {
+  display: unset;
+}
+
 @media screen and (min-width: 636px) {
   .nav-links {
     margin-left: 5em;
@@ -56,5 +68,8 @@ h1 {
   .nav-links a {
     display: inline-block;
     padding: 15px 20px;
+  }
+    .menu {
+    display: none;
   }
 }
