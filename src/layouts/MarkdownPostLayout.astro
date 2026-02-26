@@ -1,0 +1,19 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+const { frontmatter } = Astro.props;
+---
+
+<meta charset="utf-8" />
+<Header />
+<h1>{frontmatter.title}</h1>
+<p>Published on: {frontmatter.pubDate.toString().slice(0, 10)}</p>
+<p><em>{frontmatter.description}</em></p>
+<p>Written by {frontmatter.author}</p>
+<img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+<slot />
+<Footer />
+<script>
+  import "../../scripts/menu.js";
+</script>
