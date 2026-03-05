@@ -1,5 +1,6 @@
 ---
 import avatarImage from "./avatar.jpeg";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 ---
 
 <header class="bg-white dark:bg-gray-900">
@@ -10,11 +11,7 @@ import avatarImage from "./avatar.jpeg";
     <div class="flex lg:flex-1">
       <a href="/" class="-m-1.5 p-1.5">
         <span class="sr-only">Sourcier</span>
-        <img
-          src={avatarImage.src}
-          alt=""
-          class="h-8 w-auto rounded-full"
-        />
+        <img src={avatarImage.src} alt="" class="h-8 w-auto rounded-full" />
       </a>
     </div>
     <div class="flex lg:hidden">
@@ -52,10 +49,13 @@ import avatarImage from "./avatar.jpeg";
         >Tags</a
       >
     </div>
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a href="#" class="text-sm/6 font-semibold text-gray-900 dark:text-white"
-        >Log in <span aria-hidden="true">&rarr;</span></a
-      >
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-2">
+      <a href="https://github.com/sourcier" target="_blank">
+        <FaGithub className="h-6 w-auto" />
+      </a>
+      <a href="https://www.linkedin.com/in/roger-rajaratnam" target="_blank">
+        <FaLinkedin className="h-6 w-auto" />
+      </a>
     </div>
   </nav>
   <el-dialog>
@@ -117,10 +117,27 @@ import avatarImage from "./avatar.jpeg";
               </div>
               <div class="py-6">
                 <a
-                  href="#"
-                  class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                  >Log in</a
+                  href="https://github.com/sourcier"
+                  class="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
+                  <div
+                    class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-700"
+                  >
+                    <FaGithub className="h-6 w-auto" />
+                  </div>
+                  Github
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/roger-rajaratnam"
+                  class="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
+                >
+                  <div
+                    class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-700"
+                  >
+                    <FaLinkedin className="h-6 w-auto" />
+                  </div>
+                  LinkedIn
+                </a>
               </div>
             </div>
           </div>
