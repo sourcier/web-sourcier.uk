@@ -41,22 +41,33 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
     <div class="hidden lg:flex lg:gap-x-12">
       <a
         href="/about"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white">About</a
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
+        >About</a
       >
       <a
         href="/blog"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white">Blog</a
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
+        >Blog</a
       >
       <a
         href="/tags"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white">Tags</a
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
+        >Tags</a
       >
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-x-2">
-      <a href="https://github.com/sourcier" target="_blank">
+      <a
+        href="https://github.com/sourcier"
+        target="_blank"
+        class="hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
+      >
         <FaGithub className="h-6 w-auto" />
       </a>
-      <a href="https://www.linkedin.com/in/roger-rajaratnam" target="_blank">
+      <a
+        href="https://www.linkedin.com/in/roger-rajaratnam"
+        target="_blank"
+        class="hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
+      >
         <FaLinkedin className="h-6 w-auto" />
       </a>
     </div>
