@@ -39,14 +39,17 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
       </button>
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
-      <a href="#" class="text-sm/6 font-semibold text-gray-900 dark:text-white"
-        >About</a
+      <a
+        href="/about"
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white">About</a
       >
-      <a href="#" class="text-sm/6 font-semibold text-gray-900 dark:text-white"
-        >Blog</a
+      <a
+        href="/blog"
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white">Blog</a
       >
-      <a href="#" class="text-sm/6 font-semibold text-gray-900 dark:text-white"
-        >Tags</a
+      <a
+        href="/tags"
+        class="text-sm/6 font-semibold text-gray-900 dark:text-white">Tags</a
       >
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-x-2">
@@ -58,10 +61,10 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
       </a>
     </div>
   </nav>
-  <el-dialog>
+  <div>
     <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
       <div tabindex="0" class="fixed inset-0 focus:outline-none">
-        <el-dialog-panel
+        <div
           class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10"
         >
           <div class="flex items-center justify-between">
@@ -100,19 +103,19 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
             <div class="-my-6 divide-y divide-gray-500/10 dark:divide-white/10">
               <div class="space-y-2 py-6">
                 <a
-                  href="#"
+                  href="/about"
                   class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
                   About
                 </a>
                 <a
-                  href="#"
+                  href="/blog"
                   class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
                   Blog
                 </a>
                 <a
-                  href="#"
+                  href="/tags"
                   class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
                 >
                   Tags
@@ -144,8 +147,8 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
               </div>
             </div>
           </div>
-        </el-dialog-panel>
+        </div>
       </div>
     </dialog>
-  </el-dialog>
+  </div>
 </header>
