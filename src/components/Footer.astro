@@ -1,17 +1,33 @@
 ---
-const platform = "github";
-const username = "withastro";
-import Social from "./Social.astro";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 ---
 
-<style>
-  footer {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-</style>
-
-<footer>
-  <Social platform="github" username="sourcier" />
+<footer class="bg-white dark:bg-gray-900 mt-auto p-6">
+  <div
+    class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8 border-t border-gray-500/10 dark:border-white/10"
+  >
+    <div class="flex justify-center gap-x-6 md:order-2">
+      <a
+        href="https://github.com/sourcier"
+        target="_blank"
+        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+      >
+        <span class="sr-only">GitHub</span>
+        <FaGithub className="h-6 w-auto" />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/roger-rajaratnam"
+        target="_blank"
+        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+      >
+        <span class="sr-only">LinkedIn</span>
+        <FaLinkedin className="h-6 w-auto" />
+      </a>
+    </div>
+    <p
+      class="mt-8 text-center text-sm/6 text-gray-600 md:order-1 md:mt-0 dark:text-gray-400"
+    >
+      &copy; 2024 Sourcier, All rights reserved.
+    </p>
+  </div>
 </footer>
