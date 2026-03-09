@@ -19,10 +19,12 @@ const { frontmatter } = Astro.props;
     }
   </div>
 
-  <slot />
+  <div class="content">
+    <slot />
+  </div>
 </BaseLayout>
 
-<style>
+<!-- <style>
   a {
     color: #00539f;
   }
@@ -40,4 +42,4 @@ const { frontmatter } = Astro.props;
     font-size: 1.15em;
     background-color: #f8fcfd;
   }
-</style>
+</style> -->

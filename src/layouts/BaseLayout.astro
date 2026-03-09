@@ -1,28 +1,29 @@
 ---
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer.astro";
-import "../styles/global.css";
+import "../styles/global.scss";
 const { pageTitle } = Astro.props;
 ---
 
-<html lang="en" class="bg-white dark:bg-gray-950 scheme-light dark:scheme-dark">
+<!doctype html>
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
   </head>
-  <body class="flex min-h-screen flex-col">
-    <Header />
+  <body>
+    <!-- <Header /> -->
     <div class="p-6">
       <h1>{pageTitle}</h1>
       <slot />
     </div>
-    <Footer />
-    <script>
+    <!-- <Footer /> -->
+    <!-- <script>
       import "../scripts/menu.js";
-    </script>
+    </script> -->
   </body>
 </html>
