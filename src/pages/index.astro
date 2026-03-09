@@ -5,6 +5,11 @@ const pageTitle = "Home Page";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <h2>My awesome blog subtitle</h2>
-  <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
+  <section class="section">
+    <div class="container">
+      <h1>Welcome to my blog</h1>
+      <h2>My awesome blog subtitle</h2>
+      <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
+    </div>
+  </section>
 </BaseLayout>
