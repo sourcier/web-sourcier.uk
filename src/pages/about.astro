@@ -1,78 +1,69 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 const pageTitle = "About Me";
-
-const identity = {
-  firstName: "Roger",
-  country: "United Kingdom",
-  occupation: "Software Engineer",
-  hobbies: ["cycling", "running"],
-};
-
-const skills = ["HTML", "CSS", "JavaScript", "React", "Astro"];
-
-const happy = true;
-const finished = false;
-const goal = 3;
-
-const skillColor = "crimson";
-const fontWeight = "bold";
-const textCase = "uppercase";
 ---
 
-<style define:vars={{ skillColor, fontWeight, textCase }}>
-  h1 {
-    color: purple;
-    font-size: 4rem;
-  }
-  .skill {
-    color: var(--skillColor);
-    font-weight: var(--fontWeight);
-    text-transform: var(--textCase);
-  }
-</style>
-
 <BaseLayout pageTitle={pageTitle}>
-  <h2>... and my new Astro site!</h2>
+  <section class="section">
+    <div class="container">
+      <section class="hero">
+        <div class="hero-body">
+          <h1 class="title">About Me</h1>
+          <p class="subtitle">Hi, I'm Roger Rajaratnam aka Sourcier</p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="content">
+          <p>
+            Hi, I'm Roger — a software engineer, technical lead, and lifelong
+            builder of things on the web.
+          </p>
 
-  <p>
-    I am working through Astro's introductory tutorial. This is the second page
-    on my website, and it's the first one I built myself!
-  </p>
+          <p>
+            I'm currently a Technical Lead based in London, where I work on
+            building scalable, user-focused applications. Over the past several
+            years, I've had the opportunity to design and deliver production
+            systems across fintech and consumer technology, working with modern
+            web technologies such as JavaScript, TypeScript, Node.js, and React.
+            My work often sits at the intersection of architecture, product
+            delivery, and engineering leadership.
+          </p>
 
-  <p>
-    This site will update as I complete more of the tutorial, so keep checking
-    back and see how my journey is going!
-  </p>
+          <p>
+            What motivates me most about software engineering is the opportunity
+            to turn ideas into real, usable products. I enjoy solving complex
+            technical problems, but equally value building systems that are
+            maintainable, well-tested, and understandable by the teams who work
+            on them.
+          </p>
 
-  <p>Here are a few facts about me:</p>
-  <ul>
-    <li>My name is {identity.firstName}.</li>
-    <li>
-      I live in {identity.country} and I work as a {identity.occupation}.
-    </li>
-    {
-      identity.hobbies.length >= 2 && (
-        <li>
-          Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}
-        </li>
-      )
-    }
-  </ul>
-  <p>My skills are:</p>
-  <ul>
-    {skills.map((skill) => <li class="skill">{skill}</li>)}
-  </ul>
+          <p>
+            Alongside building software, I'm passionate about helping other
+            developers grow. I've spent time mentoring engineers and teaching at
+            coding bootcamps, where I guide aspiring developers through the
+            fundamentals of modern web development and practical engineering
+            practices. Sharing knowledge and helping others break into tech has
+            become one of the most rewarding parts of my career.
+          </p>
 
-  {happy && <p>I am happy to be learning Astro!</p>}
+          <p>
+            My background includes a degree in Computer Software Engineering
+            from the University of Westminster, where I built the foundations
+            that led me into full-stack development and system design. Since
+            then, my career has taken me through different teams and domains,
+            from startups to established companies, each shaping how I approach
+            engineering, collaboration, and leadership.
+          </p>
 
-  {finished && <p>I finished this tutorial!</p>}
-
-  {
-    goal === 3 ? (
-      <p>My goal is to finish in 3 days.</p>
-    ) : (
-      <p>My goal is not 3 days.</p>
-    )
-  }
+          <p>
+            Outside of work, I'm naturally curious about technology, systems
+            thinking, and the craft of software engineering. This blog is a
+            place where I share lessons learned from building software, leading
+            engineering teams, and exploring the tools and ideas shaping the
+            modern web.
+          </p>
+        </div>
+      </section>
+    </div>
+  </section>
 </BaseLayout>
