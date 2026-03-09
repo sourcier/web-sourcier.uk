@@ -6,24 +6,20 @@ const { frontmatter } = Astro.props;
 <BaseLayout pageTitle={frontmatter.title}>
   <div class="section">
     <div class="container">
+      <h1 class="title">{frontmatter.title}</h1>
       <p>Published on: {frontmatter.pubDate.toString().slice(0, 10)}</p>
       <p><em>{frontmatter.description}</em></p>
       <p>Written by {frontmatter.author}</p>
-      <img
-        src={frontmatter.image.url}
-        width="300"
-        alt={frontmatter.image.alt}
-      />
-
       <div class="tags">
         {
           frontmatter.tags.map((tag: string) => (
-            <p class="tag">
-              <a href={`/tags/${tag}`}>{tag}</a>
-            </p>
+            <a href={`/tags/${tag}`} class="tag">
+              {tag}
+            </a>
           ))
         }
       </div>
+
       <div class="content">
         <slot />
       </div>
