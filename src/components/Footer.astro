@@ -4,10 +4,10 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 <footer class="footer">
   <div class="columns">
-    <div class="column">
+    <div class="column copyright">
       <p>&copy; 2026 Sourcier Ltd, All rights reserved.</p>
     </div>
-    <div class="column is-one-quarter has-text-right">
+    <div class="column is-one-quarter buttons">
       <a href="https://github.com/sourcier" target="_blank" class="button mr-2">
         <span class="icon">
           <FaGithub />
@@ -27,3 +27,19 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
     </div>
   </div>
 </footer>
+
+<style lang="scss">
+  @use "bulma/sass/utilities/mixins";
+
+  .footer {
+    text-align: center;
+    @include mixins.tablet {
+      .copyright {
+        text-align: left;
+      }
+      .buttons {
+        text-align: right;
+      }
+    }
+  }
+</style>

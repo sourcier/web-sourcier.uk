@@ -3,163 +3,66 @@ import avatarImage from "./avatar.jpeg";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 ---
 
-<header class="bg-white dark:bg-gray-900">
-  <nav
-    aria-label="Global"
-    class="flex items-center justify-between p-6 lg:px-8"
-  >
-    <div class="flex lg:flex-1">
-      <a href="/" class="-m-1.5 p-1.5">
-        <span class="sr-only">Sourcier</span>
-        <img src={avatarImage.src} alt="" class="h-8 w-auto rounded-full" />
+<div class="p-4">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <figure class="image">
+          <img
+            src={avatarImage.src}
+            alt="Roger Rajaratnam avatar"
+            class="is-rounded"
+          />
+        </figure>
+      </a>
+
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="mobileMenu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </a>
     </div>
-    <div class="flex lg:hidden">
-      <button
-        type="button"
-        command="show-modal"
-        commandfor="mobile-menu"
-        class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-400"
-      >
-        <span class="sr-only">Open main menu</span>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          data-slot="icon"
-          aria-hidden="true"
-          class="size-6"
-        >
-          <path
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"></path>
-        </svg>
-      </button>
-    </div>
-    <div class="hidden lg:flex lg:gap-x-12">
-      <a
-        href="/about"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
-        >About</a
-      >
-      <a
-        href="/blog"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
-        >Blog</a
-      >
-      <a
-        href="/tags"
-        class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
-        >Tags</a
-      >
-    </div>
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-x-2">
-      <a
-        href="https://github.com/sourcier"
-        target="_blank"
-        class="hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
-      >
-        <FaGithub className="h-6 w-auto" />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/roger-rajaratnam"
-        target="_blank"
-        class="hover:bg-gray-50 dark:hover:bg-white/5 p-3 rounded-lg"
-      >
-        <FaLinkedin className="h-6 w-auto" />
-      </a>
-    </div>
-  </nav>
-  <div>
-    <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
-      <div tabindex="0" class="fixed inset-0 focus:outline-none">
-        <div
-          class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10"
-        >
-          <div class="flex items-center justify-between">
-            <a href="/" class="-m-1.5 p-1.5">
-              <span class="sr-only">Sourcier</span>
-              <img
-                src={avatarImage.src}
-                alt=""
-                class="h-8 w-auto rounded-full"
-              />
-            </a>
-            <button
-              type="button"
-              command="close"
-              commandfor="mobile-menu"
-              class="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-400"
+
+    <div id="mobileMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/about">About</a>
+        <a class="navbar-item" href="/blog">Blog</a>
+        <a class="navbar-item" href="/tags">Tags</a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a
+              href="https://github.com/sourcier"
+              target="_blank"
+              class="button"
             >
-              <span class="sr-only">Close menu</span>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                data-slot="icon"
-                aria-hidden="true"
-                class="size-6"
-              >
-                <path
-                  d="M6 18 18 6M6 6l12 12"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="mt-6 flow-root">
-            <div class="-my-6 divide-y divide-gray-500/10 dark:divide-white/10">
-              <div class="space-y-2 py-6">
-                <a
-                  href="/about"
-                  class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                >
-                  About
-                </a>
-                <a
-                  href="/blog"
-                  class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                >
-                  Blog
-                </a>
-                <a
-                  href="/tags"
-                  class="-mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                >
-                  Tags
-                </a>
-              </div>
-              <div class="py-6">
-                <a
-                  href="https://github.com/sourcier"
-                  class="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                >
-                  <div
-                    class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-700"
-                  >
-                    <FaGithub className="h-6 w-auto" />
-                  </div>
-                  Github
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/roger-rajaratnam"
-                  class="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5"
-                >
-                  <div
-                    class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-700"
-                  >
-                    <FaLinkedin className="h-6 w-auto" />
-                  </div>
-                  LinkedIn
-                </a>
-              </div>
-            </div>
+              <span class="icon">
+                <FaGithub />
+              </span>
+              <span>GitHub</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/roger-rajaratnam"
+              target="_blank"
+              class="button"
+            >
+              <span class="icon">
+                <FaLinkedin />
+              </span>
+              <span>LinkedIn</span>
+            </a>
           </div>
         </div>
       </div>
-    </dialog>
-  </div>
-</header>
+    </div>
+  </nav>
+</div>
