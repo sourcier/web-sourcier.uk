@@ -9,16 +9,25 @@ const pageTitle = "My Astro Learning Blog";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <p>This is where I will post about my journey learning Astro.</p>
-  <ul>
-    {
-      (
-        <ul>
-          {allPosts.map((post: any) => (
-            <BlogPost url={`/blog/${post.id}`} title={post.data.title} />
-          ))}
-        </ul>
-      )
-    }
-  </ul>
+  <section class="section">
+    <div class="container">
+      <div
+        class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
+      >
+        <div class="grid">
+          {
+            allPosts.map((post: any) => (
+              <div class="cell">
+                <BlogPost
+                  title={post.data.title}
+                  description={post.data.description}
+                  url={`/blog/${post.id}`}
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

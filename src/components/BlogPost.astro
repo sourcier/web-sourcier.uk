@@ -1,4 +1,21 @@
 ---
-const { title, url } = Astro.props
+const { description, title, url } = Astro.props;
 ---
-<li><a href={url}>{title}</a></li>
+
+<div class="card card__blog">
+  <div class="card-content">
+    <p class="title">{title}</p>
+    <p class="subtitle">{description}</p>
+  </div>
+  <footer class="card-footer">
+    <p class="card-footer-item">
+      <a href={url}>View</a>
+    </p>
+  </footer>
+</div>
+
+<style lang="scss">
+  .card-content {
+    min-height: 200px;
+  }
+</style>
