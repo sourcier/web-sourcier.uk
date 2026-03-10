@@ -1,15 +1,32 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import avatarImage from "../components/Header/Avatar.jpeg";
 const pageTitle = "Home Page";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <section class="section">
     <div class="card">
-      <div class="card-content">
-        <p class="title">Welcome to my webpage</p>
-        <p class="subtitle">Roger Rajaratnam</p>
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src={avatarImage.src} alt="Avatar image" />
+        </figure>
       </div>
+      <div class="card-content">
+        <p class="title">About Me</p>
+        <p class="subtitle">
+          Engineer, builder, and mentor sharing lessons from the world of
+          software.
+        </p>
+        <p>
+          Learn more about me, a London-based software engineer and technical
+          lead who enjoys building scalable web applications, mentoring
+          developers, and sharing lessons from real-world software engineering.
+        </p>
+      </div>
+      <footer class="card-footer">
+        <a href="/about" class="card-footer-item">View</a>
+      </footer>
     </div>
   </section>
 </BaseLayout>
