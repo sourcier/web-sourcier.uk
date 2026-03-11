@@ -1,13 +1,12 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
+import emoji from "remark-emoji";
 
-// https://astro.build/config
 export default defineConfig({
   site: "https://sourcier.uk",
   integrations: [react()],
-
-  vite: {
-    plugins: [],
+  markdown: {
+    remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
   },
 });
