@@ -1,6 +1,6 @@
 ---
 import avatarImage from "../../assets/images/avatar.jpeg";
-import { FaGithub, FaLinkedin } from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa6";
 ---
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -57,9 +57,74 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
                 <FaLinkedin />
               </span>
             </a>
+            <button
+              class="button"
+              data-theme-toggle
+              aria-label="Change to dark theme"
+            >
+              <span class="icon is-small">
+                <FaMoon className="moonIcon" />
+                <FaSun className="sunIcon" />
+              </span>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </nav>
+
+<script is:inline>
+  const button = document.querySelector("[data-theme-toggle]");
+  const htmlElement = document.documentElement;
+
+  const handleThemeToggle = () => {
+    const isDark = htmlElement.getAttribute("data-theme") === "dark";
+    const newTheme = isDark ? "light" : "dark";
+    const newCta =
+      newTheme === "dark" ? "Change to light theme" : "Change to dark theme";
+
+    button.setAttribute("aria-label", newCta);
+    htmlElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  const theme = (() => {
+    const localStorageTheme = localStorage?.getItem("theme") ?? "";
+    if (["dark", "light"].includes(localStorageTheme)) {
+      return localStorageTheme;
+    }
+
+    return "light";
+  })();
+
+  if (theme === "light") {
+    htmlElement.setAttribute("data-theme", "light");
+    button.setAttribute("aria-label", "Change to dark theme");
+  } else {
+    htmlElement.setAttribute("data-theme", "dark");
+    button.setAttribute("aria-label", "Change to light theme");
+  }
+
+  button?.addEventListener("click", handleThemeToggle);
+</script>
+
+<style lang="scss">
+  html[data-theme="light"] {
+    .moonIcon {
+      display: block;
+    }
+    .sunIcon {
+      display: none;
+    }
+  }
+
+  html[data-theme="dark"] {
+    .moonIcon {
+      display: none;
+    }
+    .sunIcon {
+      display: block;
+    }
+  }
+</style>
