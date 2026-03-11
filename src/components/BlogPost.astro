@@ -4,9 +4,13 @@ const { description, title, subTitle, url, cover } = Astro.props;
 
 <div class="card card__blog">
   <div class="card-image">
-    <figure class="image is-4by3">
-      <img src={cover.image.src} alt={cover.image.alt} />
-    </figure>
+    {
+      cover && (
+        <figure class="image is-4by3">
+          <img src={cover.image.src} alt={cover.image.alt} />
+        </figure>
+      )
+    }
   </div>
   <div class="card-content">
     <p class="title">{title}</p>
