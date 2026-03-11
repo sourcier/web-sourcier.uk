@@ -1,11 +1,17 @@
 ---
-const { description, title, url } = Astro.props;
+const { description, title, subTitle, url, cover } = Astro.props;
 ---
 
 <div class="card card__blog">
+  <div class="card-image">
+    <figure class="image is-4by3">
+      <img src={cover.image.src} alt={cover.image.alt} />
+    </figure>
+  </div>
   <div class="card-content">
     <p class="title">{title}</p>
-    <p class="subtitle">{description}</p>
+    <p class="subtitle">{subTitle}</p>
+    <p class="description">{description}</p>
   </div>
   <footer class="card-footer">
     <p class="card-footer-item">
@@ -15,7 +21,18 @@ const { description, title, url } = Astro.props;
 </div>
 
 <style lang="scss">
-  .card-content {
-    min-height: 200px;
+  .description {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    @supports (-webkit-line-clamp: 3) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: initial;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
   }
 </style>
