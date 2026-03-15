@@ -17,7 +17,12 @@ const pageTitle = "Contact";
         </div>
       </section>
       <section class="section">
-        <form name="contact" method="post" data-netlify="true">
+        <form
+          name="contact"
+          method="post"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
@@ -25,6 +30,7 @@ const pageTitle = "Contact";
                 class="input"
                 type="email"
                 placeholder="Your email"
+                name="email"
                 required
               />
             </div>
@@ -37,6 +43,7 @@ const pageTitle = "Contact";
                 class="input"
                 type="text"
                 placeholder="Your name"
+                name="name"
                 required
               />
             </div>
@@ -49,6 +56,7 @@ const pageTitle = "Contact";
                 class="input"
                 type="text"
                 placeholder="Your subject"
+                name="subject"
                 required
               />
             </div>
@@ -57,8 +65,17 @@ const pageTitle = "Contact";
           <div class="field">
             <label class="label">Message</label>
             <div class="control">
-              <textarea class="textarea" placeholder="Your message" required
-              ></textarea>
+              <textarea
+                class="textarea"
+                placeholder="Your message"
+                name="message"
+                required></textarea>
+            </div>
+          </div>
+          <div class="field is-hidden">
+            <label class="label"> Don't fill this out if you're human:</label>
+            <div class="control">
+              <input name="bot-field" type="text" class="input" />
             </div>
           </div>
           <div class="field">
