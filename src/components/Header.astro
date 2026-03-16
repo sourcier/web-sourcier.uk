@@ -75,9 +75,13 @@ import { FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa6";
   </div>
 </nav>
 
-<script is:inline>
+<script>
   const button = document.querySelector("[data-theme-toggle]");
   const htmlElement = document.documentElement;
+
+  if (!button) {
+    return;
+  }
 
   const handleThemeToggle = () => {
     const isDark = htmlElement.getAttribute("data-theme") === "dark";

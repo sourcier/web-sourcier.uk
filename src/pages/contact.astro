@@ -114,28 +114,38 @@ const pageTitle = "Contact";
   </section>
 </BaseLayout>
 
-<script is:inline>
-  const handleSubmit = (event) => {
+<script>
+  const handleSubmit = (event: Event) => {
     event.preventDefault();
+
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form) as unknown as Record<string, string>;
 
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(new FormData(event.target)).toString(),
+      body: new URLSearchParams(formData).toString(),
     })
       .then(() => {
-        event.target.reset();
-        event.target.style.display = "none";
+        form.reset();
+        form.style.display = "none";
         document
           .querySelector("[data-success-message]")
-          .classList.remove("is-hidden");
+          ?.classList.remove("is-hidden");
       })
       .catch((error) => alert(error));
   };
 
-  const handleSuccessMessageClose = (event) => {
-    document.querySelector("form[name='contact']").style.display = "block";
-    event.target.parentElement.classList.toggle("is-hidden");
+  const handleSuccessMessageClose = (event: Event) => {
+    const form = document.querySelector(
+      "form[name='Contact']",
+    ) as HTMLFormElement;
+    const successMessage = document.querySelector(
+      "[data-success-message]",
+    ) as HTMLElement;
+
+    form.style.display = "block";
+    successMessage.classList.toggle("is-hidden");
   };
 
   document
