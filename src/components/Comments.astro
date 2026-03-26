@@ -166,7 +166,7 @@ const { postId } = Astro.props;
           ? `<img class="comment__avatar-img" src="https://www.gravatar.com/avatar/${c.emailHash}?s=72&d=404" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" /><span class="comment__avatar-initial">${initial}</span>`
           : `<span class="comment__avatar-initial">${initial}</span>`;
         return `
-        <article class="comment">
+        <article class="comment" aria-label="${escapeHtml(c.name)}">
           <div class="comment__avatar">${avatarInner}</div>
           <div class="comment__content">
             <div class="comment__meta">
@@ -174,7 +174,7 @@ const { postId } = Astro.props;
               <span class="comment__meta-sep" aria-hidden="true">&middot;</span>
               <time class="comment__date" datetime="${c.date}">${formatDate(c.date)}</time>
             </div>
-            <blockquote class="comment__body">${escapeHtml(c.comment)}</blockquote>
+            <p class="comment__body">${escapeHtml(c.comment)}</p>
           </div>
         </article>`;
       })

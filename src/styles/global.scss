@@ -31,6 +31,31 @@
   --bulma-text: #f0f0f0;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+
+  &:focus {
+    top: 0;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-pink);
+  outline-offset: 3px;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -425,8 +450,10 @@ h1, h2, h3, h4, h5, h6,
     opacity: 0.6;
   }
 
-  &:focus {
+  &:focus-visible {
     border-color: var(--color-pink);
+    outline: 3px solid var(--color-pink);
+    outline-offset: 0;
   }
 }
 

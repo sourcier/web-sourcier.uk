@@ -143,9 +143,12 @@ const pageTitle = "Contact";
       .then(() => {
         form.reset();
         form.style.display = "none";
-        document
-          .querySelector("[data-success-message]")
-          ?.classList.remove("is-hidden");
+        const successEl = document.querySelector(
+          "[data-success-message]",
+        ) as HTMLElement | null;
+        successEl?.classList.remove("is-hidden");
+        successEl?.setAttribute("tabindex", "-1");
+        successEl?.focus();
       })
       .catch((error) => alert(error));
   };

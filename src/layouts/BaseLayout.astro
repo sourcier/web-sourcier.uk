@@ -21,8 +21,11 @@ const { pageTitle } = Astro.props;
     <title>{pageTitle}</title>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <Header />
-    <slot />
+    <main id="main-content">
+      <slot />
+    </main>
     <Footer />
     <script>
       import "../scripts/menu.js";
