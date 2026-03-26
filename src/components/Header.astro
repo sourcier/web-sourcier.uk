@@ -44,30 +44,28 @@ import { FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa6";
             <a
               href="https://github.com/sourcier"
               target="_blank"
-              class="button"
+              rel="noopener noreferrer"
+              class="social-icon"
+              aria-label="GitHub"
             >
-              <span class="icon">
-                <FaGithub />
-              </span>
+              <FaGithub />
             </a>
             <a
               href="https://www.linkedin.com/in/roger-rajaratnam"
               target="_blank"
-              class="button"
+              rel="noopener noreferrer"
+              class="social-icon"
+              aria-label="LinkedIn"
             >
-              <span class="icon">
-                <FaLinkedin />
-              </span>
+              <FaLinkedin />
             </a>
             <button
-              class="button"
+              class="social-icon"
               data-theme-toggle
               aria-label="Change to dark theme"
             >
-              <span class="icon is-small">
-                <FaMoon className="moonIcon" />
-                <FaSun className="sunIcon" />
-              </span>
+              <FaMoon className="moonIcon" />
+              <FaSun className="sunIcon" />
             </button>
           </div>
         </div>

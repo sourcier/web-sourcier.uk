@@ -8,24 +8,24 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
       <div class="column copyright">
         <p>&copy; 2026 Sourcier Ltd, All rights reserved.</p>
       </div>
-      <div class="column is-one-quarter buttons">
+      <div class="column is-one-quarter social-icons">
         <a
           href="https://github.com/sourcier"
           target="_blank"
-          class="button mr-1"
+          rel="noopener noreferrer"
+          class="social-icon"
+          aria-label="GitHub"
         >
-          <span class="icon">
-            <FaGithub />
-          </span>
+          <FaGithub />
         </a>
         <a
           href="https://www.linkedin.com/in/roger-rajaratnam"
           target="_blank"
-          class="button"
+          rel="noopener noreferrer"
+          class="social-icon"
+          aria-label="LinkedIn"
         >
-          <span class="icon">
-            <FaLinkedin />
-          </span>
+          <FaLinkedin />
         </a>
       </div>
     </div>
@@ -41,8 +41,11 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
       .copyright {
         text-align: left;
       }
-      .buttons {
-        text-align: right;
+      .social-icons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.25rem;
       }
     }
   }
