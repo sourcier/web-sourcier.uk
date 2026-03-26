@@ -50,6 +50,15 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 600;
   font-size: 1rem;
   padding-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.navbar-item:not(.navbar-item:has(img)):not(.navbar-item:has(.buttons)) {
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 // — Homepage hero
