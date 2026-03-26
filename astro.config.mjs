@@ -10,6 +10,10 @@ export default defineConfig({
     remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
     shikiConfig: {
       theme: "dracula",
+      langs: [],
+    },
+    syntaxHighlight: {
+      excludeLangs: ["mermaid"],
     },
   },
 });
