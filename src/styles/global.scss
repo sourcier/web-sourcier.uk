@@ -1,15 +1,20 @@
 @import "bulma/css/bulma.min.css";
 
-// Override Bulma's primary color to indigo
 :root {
-  --bulma-primary-h: 243deg;
-  --bulma-primary-s: 75%;
-  --bulma-primary-l: 59%;
+  // Bold pink primary — hsl(330, 100%, 45%)
+  --bulma-primary-h: 330deg;
+  --bulma-primary-s: 100%;
+  --bulma-primary-l: 45%;
   --bulma-primary-invert-l: 100%;
-  --bulma-link-h: 243deg;
-  --bulma-link-s: 75%;
-  --bulma-link-l: 59%;
+  --bulma-link-h: 330deg;
+  --bulma-link-s: 100%;
+  --bulma-link-l: 45%;
   --bulma-link-invert-l: 100%;
+
+  --color-pink: #e8006a;
+  --color-ink: #0f0f0f;
+  --color-paper: #ffffff;
+  --color-muted: #6b6b6b;
 }
 
 body {
@@ -20,6 +25,8 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -32,18 +39,28 @@ h1, h2, h3, h4, h5, h6,
   text-transform: uppercase;
 }
 
-// — Navbar
+// — Navbar: black bar with pink accent on hover
 .navbar {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  --bulma-navbar-background-color: var(--color-ink);
+  --bulma-navbar-item-color: rgba(255, 255, 255, 0.85);
+  --bulma-navbar-item-hover-color: var(--color-pink);
+  --bulma-navbar-item-hover-background-color: transparent;
+  --bulma-navbar-item-active-color: var(--color-pink);
+  border-bottom: none;
 
   .navbar-item img {
     max-height: 2rem;
     border-radius: 50%;
+    border: 2px solid var(--color-pink);
+  }
+
+  .navbar-burger span {
+    background-color: var(--color-paper);
   }
 }
 
 [data-theme='dark'] .navbar {
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  --bulma-navbar-background-color: #000;
 }
 
 .navbar-brand-name {
@@ -52,6 +69,7 @@ h1, h2, h3, h4, h5, h6,
   padding-left: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  color: var(--color-paper);
 }
 
 .navbar-item:not(.navbar-item:has(img)):not(.navbar-item:has(.buttons)) {
@@ -63,31 +81,61 @@ h1, h2, h3, h4, h5, h6,
 
 // — Homepage hero
 .hero-intro {
-  padding: 4rem 1.5rem 3rem;
+  padding: 5rem 1.5rem 4rem;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
 
   .hero-kicker {
     display: inline-block;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--bulma-primary);
+    letter-spacing: 0.12em;
+    color: var(--color-pink);
     margin-bottom: 1rem;
   }
 
   .hero-title {
-    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-size: clamp(2.75rem, 7vw, 5rem);
     font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.04em;
+    line-height: 1;
+    letter-spacing: -0.02em;
     margin-bottom: 1.25rem;
+    color: var(--color-paper);
   }
 
   .hero-bio {
     font-size: 1.125rem;
     line-height: 1.8;
     max-width: 520px;
-    opacity: 0.82;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .buttons .button.is-primary {
+    background-color: var(--color-pink);
+    border-color: var(--color-pink);
+    color: var(--color-paper);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 0;
+  }
+
+  .buttons .button.is-light {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--color-paper);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 0;
+
+    &:hover {
+      border-color: var(--color-pink);
+      color: var(--color-pink);
+    }
   }
 
   .hero-avatar-col {
@@ -105,9 +153,10 @@ h1, h2, h3, h4, h5, h6,
   .hero-avatar {
     width: 188px;
     height: 188px;
-    border-radius: 50%;
+    border-radius: 0;
     object-fit: cover;
-    border: 3px solid var(--bulma-primary);
+    border: 4px solid var(--color-pink);
+    outline: 1px solid rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -116,28 +165,36 @@ h1, h2, h3, h4, h5, h6,
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0.4;
+  letter-spacing: 0.12em;
+  color: var(--color-pink);
   margin-bottom: 1.5rem;
 }
 
 // — Blog cards
 .card.card__blog {
   height: 100%;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 6px 24px rgba(232, 0, 106, 0.15);
+    border-color: var(--color-pink);
   }
-}
 
-[data-theme='dark'] .card.card__blog:hover {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  .card-footer-item a {
+    color: var(--color-pink);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.875rem;
+  }
 }
 
 .card-meta {
   font-size: 0.8125rem;
-  opacity: 0.5;
+  color: var(--color-muted);
   margin-bottom: 0.375rem;
 }
