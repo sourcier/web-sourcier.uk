@@ -5,111 +5,127 @@ interface Props {
 const { postId } = Astro.props;
 ---
 
-<section class="comments" id="comments">
-  <div class="container">
-
-    <div class="comments__list-section">
-      <h2 class="comments__heading">Comments</h2>
-      <div
-        class="comments__list"
-        id="comments-list"
-        data-post-slug={postId}
-        aria-live="polite"
-      >
-        <p class="comments__status-line">Loading comments…</p>
+<section class="section comments" id="comments">
+  <div class="container is-max-desktop">
+    <div class="comments__inner">
+      <div class="comments__list-section">
+        <h2 class="comments__heading">Comments</h2>
+        <div
+          class="comments__list"
+          id="comments-list"
+          data-post-slug={postId}
+          aria-live="polite"
+        >
+          <p class="comments__status-line">Loading comments…</p>
+        </div>
       </div>
-    </div>
 
-    <div class="comments__form-wrapper">
-      <h2 class="comments__heading">Leave a comment</h2>
+      <div class="comments__form-wrapper">
+        <h2 class="comments__heading">Leave a comment</h2>
 
-      <!--
+        <!--
         data-netlify="true" causes Netlify's build bot to register this form.
         The hidden form-name field is required for AJAX submissions.
         The bot-field honeypot helps filter automated spam.
       -->
-      <form
-        id="comment-form"
-        name="blog-comments"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        novalidate
-      >
-        <input type="hidden" name="form-name" value="blog-comments" />
-        <input type="hidden" name="postSlug" value={postId} />
+        <form
+          id="comment-form"
+          name="blog-comments"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="blog-comments" />
+          <input type="hidden" name="postSlug" value={postId} />
 
-        <p class="is-hidden" aria-hidden="true">
-          <label>Leave this blank: <input name="bot-field" tabindex="-1" /></label>
-        </p>
+          <p class="is-hidden" aria-hidden="true">
+            <label
+              >Leave this blank: <input name="bot-field" tabindex="-1" /></label
+            >
+          </p>
 
-        <div class="field">
-          <label class="label" for="comment-name">Name</label>
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              id="comment-name"
-              name="name"
-              required
-              placeholder="Your name"
-              autocomplete="name"
-              maxlength="100"
-            />
+          <div class="field">
+            <label class="label" for="comment-name">Name</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                id="comment-name"
+                name="name"
+                required
+                placeholder="Your name"
+                autocomplete="name"
+                maxlength="100"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="comment-email">
-            Email <span class="comments__optional">(optional — never published)</span>
-          </label>
-          <div class="control">
-            <input
-              class="input"
-              type="email"
-              id="comment-email"
-              name="email"
-              placeholder="you@example.com"
-              autocomplete="email"
-              maxlength="254"
-            />
+          <div class="field">
+            <label class="label" for="comment-email">
+              Email <span class="comments__optional"
+                >(optional — never published)</span
+              >
+            </label>
+            <div class="control">
+              <input
+                class="input"
+                type="email"
+                id="comment-email"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                maxlength="254"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="comment-body">Comment</label>
-          <div class="control">
-            <textarea
-              class="textarea"
-              id="comment-body"
-              name="comment"
-              required
-              rows="5"
-              placeholder="What are your thoughts?"
-              maxlength="5000"
-            ></textarea>
+          <div class="field">
+            <label class="label" for="comment-body">Comment</label>
+            <div class="control">
+              <textarea
+                class="textarea"
+                id="comment-body"
+                name="comment"
+                required
+                rows="5"
+                placeholder="What are your thoughts?"
+                maxlength="5000"></textarea>
+            </div>
           </div>
-        </div>
 
-        <div class="field is-grouped">
-          <div class="control">
-            <button class="button is-primary" type="submit" id="comment-submit">
-              Post comment
-            </button>
+          <div class="field is-grouped">
+            <div class="control">
+              <button
+                class="button is-primary"
+                type="submit"
+                id="comment-submit"
+              >
+                Post comment
+              </button>
+            </div>
+            <p
+              class="comments__form-status"
+              id="comment-form-status"
+              aria-live="polite"
+            >
+            </p>
           </div>
-          <p class="comments__form-status" id="comment-form-status" aria-live="polite"></p>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-
   </div>
 </section>
 
 <script>
   const listEl = document.getElementById("comments-list") as HTMLElement;
   const form = document.getElementById("comment-form") as HTMLFormElement;
-  const submitBtn = document.getElementById("comment-submit") as HTMLButtonElement;
-  const formStatus = document.getElementById("comment-form-status") as HTMLElement;
+  const submitBtn = document.getElementById(
+    "comment-submit",
+  ) as HTMLButtonElement;
+  const formStatus = document.getElementById(
+    "comment-form-status",
+  ) as HTMLElement;
   const postSlug = listEl?.dataset.postSlug ?? "";
 
   function escapeHtml(str: string): string {
@@ -129,10 +145,13 @@ const { postId } = Astro.props;
     });
   }
 
-  function renderComments(comments: { name: string; comment: string; date: string }[]) {
+  function renderComments(
+    comments: { name: string; comment: string; date: string }[],
+  ) {
     if (!listEl) return;
     if (!comments.length) {
-      listEl.innerHTML = '<p class="comments__empty">No comments yet — be the first.</p>';
+      listEl.innerHTML =
+        '<p class="comments__empty">No comments yet — be the first.</p>';
       return;
     }
     listEl.innerHTML = comments
@@ -144,7 +163,7 @@ const { postId } = Astro.props;
             <time class="comment__date" datetime="${c.date}">${formatDate(c.date)}</time>
           </header>
           <p class="comment__body">${escapeHtml(c.comment)}</p>
-        </article>`
+        </article>`,
       )
       .join("");
   }
@@ -153,14 +172,15 @@ const { postId } = Astro.props;
     if (!postSlug || !listEl) return;
     try {
       const res = await fetch(
-        `/.netlify/functions/get-comments?slug=${encodeURIComponent(postSlug)}`
+        `/.netlify/functions/get-comments?slug=${encodeURIComponent(postSlug)}`,
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { comments } = await res.json();
       renderComments(comments);
     } catch {
       if (listEl) {
-        listEl.innerHTML = '<p class="comments__empty">Comments unavailable right now.</p>';
+        listEl.innerHTML =
+          '<p class="comments__empty">Comments unavailable right now.</p>';
       }
     }
   }
@@ -207,8 +227,7 @@ const { postId } = Astro.props;
     border-top: 1px solid var(--color-border);
     background-color: var(--color-surface);
 
-    .container {
-      max-width: 75ch;
+    .comments__inner {
       margin-left: auto;
       margin-right: auto;
     }
