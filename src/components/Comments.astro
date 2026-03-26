@@ -145,21 +145,18 @@ const { postId } = Astro.props;
     });
   }
 
-  function renderComments(
+  function buildCommentsHtml(
     comments: {
       name: string;
       comment: string;
       date: string;
       emailHash?: string | null;
     }[],
-  ) {
-    if (!listEl) return;
+  ): string {
     if (!comments.length) {
-      listEl.innerHTML =
-        '<p class="comments__empty">No comments yet — be the first.</p>';
-      return;
+      return '<p class="comments__empty">No comments yet — be the first.</p>';
     }
-    listEl.innerHTML = comments
+    return comments
       .map((c) => {
         const initial = escapeHtml(c.name.charAt(0).toUpperCase());
         const avatarInner = c.emailHash
@@ -181,6 +178,38 @@ const { postId } = Astro.props;
       .join("");
   }
 
+  function renderComments(
+    comments: {
+      name: string;
+      comment: string;
+      date: string;
+      emailHash?: string | null;
+    }[],
+    animate = false,
+  ) {
+    if (!listEl) return;
+    const html = buildCommentsHtml(comments);
+    if (!animate) {
+      listEl.innerHTML = html;
+      return;
+    }
+    listEl.classList.add("is-fading");
+    listEl.addEventListener(
+      "animationend",
+      () => {
+        listEl.innerHTML = html;
+        listEl.classList.remove("is-fading");
+        listEl.classList.add("is-entering");
+        listEl.addEventListener(
+          "animationend",
+          () => listEl.classList.remove("is-entering"),
+          { once: true },
+        );
+      },
+      { once: true },
+    );
+  }
+
   async function loadComments() {
     if (!postSlug || !listEl) return;
     try {
@@ -189,7 +218,7 @@ const { postId } = Astro.props;
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { comments } = await res.json();
-      renderComments(comments);
+      renderComments(comments, true);
     } catch {
       if (listEl) {
         listEl.innerHTML =
@@ -219,6 +248,7 @@ const { postId } = Astro.props;
         formStatus.textContent =
           "Thanks — your comment has been submitted and will appear once approved.";
         formStatus.className = "comments__form-status is-success";
+        loadComments();
       } else {
         formStatus.textContent = "Something went wrong. Please try again.";
         formStatus.className = "comments__form-status is-error";
@@ -347,6 +377,36 @@ const { postId } = Astro.props;
   .comments__status-line {
     font-size: 0.875rem;
     color: var(--color-muted);
+  }
+
+  @keyframes comments-fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes comments-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  :global(#comments-list.is-fading) {
+    animation: comments-fade-out 0.2s ease forwards;
+  }
+
+  :global(#comments-list.is-entering) {
+    animation: comments-fade-in 0.25s ease forwards;
   }
 
   .comments__form-wrapper {
