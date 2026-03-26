@@ -9,42 +9,34 @@ const formattedDate = pubDate
   : null;
 ---
 
-<div class="card card__blog">
-  <div class="card-image">
-    {
-      cover && (
-        <figure class="image is-4by3">
-          <img src={cover.image.src} alt={cover.image.alt} />
-        </figure>
-      )
-    }
-  </div>
-  <div class="card-content">
+<a href={url} class="card card__blog">
+  {
+    cover && (
+      <div class="card__cover">
+        <img src={cover.image.src} alt={cover.image.alt} />
+        <div class="card__cover-overlay" aria-hidden="true" />
+      </div>
+    )
+  }
+  <div class="card__body">
     {formattedDate && <p class="card-meta">{formattedDate}</p>}
-    <p class="title">{title}</p>
-    <p class="subtitle">{subTitle}</p>
-    <p class="description">{description}</p>
+    <p class="card__title">{title}</p>
+    {subTitle && <p class="card__subtitle">{subTitle}</p>}
+    <p class="card__description">{description}</p>
   </div>
-  <footer class="card-footer">
-    <p class="card-footer-item">
-      <a href={url}>View</a>
-    </p>
-  </footer>
-</div>
+  <div class="card__cta">
+    <span>Read Post</span>
+    <span aria-hidden="true">&rarr;</span>
+  </div>
+</a>
 
 <style lang="scss">
-  .description {
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .card__description {
     overflow: hidden;
-
-    @supports (-webkit-line-clamp: 3) {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: initial;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-    }
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 </style>
