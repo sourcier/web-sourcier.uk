@@ -1,0 +1,360 @@
+---
+interface Props {
+  postId: string;
+}
+const { postId } = Astro.props;
+---
+
+<section class="comments" id="comments">
+  <div class="container">
+
+    <div class="comments__list-section">
+      <h2 class="comments__heading">Comments</h2>
+      <div
+        class="comments__list"
+        id="comments-list"
+        data-post-slug={postId}
+        aria-live="polite"
+      >
+        <p class="comments__status-line">Loading comments…</p>
+      </div>
+    </div>
+
+    <div class="comments__form-wrapper">
+      <h2 class="comments__heading">Leave a comment</h2>
+
+      <!--
+        data-netlify="true" causes Netlify's build bot to register this form.
+        The hidden form-name field is required for AJAX submissions.
+        The bot-field honeypot helps filter automated spam.
+      -->
+      <form
+        id="comment-form"
+        name="blog-comments"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="blog-comments" />
+        <input type="hidden" name="postSlug" value={postId} />
+
+        <p class="is-hidden" aria-hidden="true">
+          <label>Leave this blank: <input name="bot-field" tabindex="-1" /></label>
+        </p>
+
+        <div class="field">
+          <label class="label" for="comment-name">Name</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              id="comment-name"
+              name="name"
+              required
+              placeholder="Your name"
+              autocomplete="name"
+              maxlength="100"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="comment-email">
+            Email <span class="comments__optional">(optional — never published)</span>
+          </label>
+          <div class="control">
+            <input
+              class="input"
+              type="email"
+              id="comment-email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              maxlength="254"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="comment-body">Comment</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              id="comment-body"
+              name="comment"
+              required
+              rows="5"
+              placeholder="What are your thoughts?"
+              maxlength="5000"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary" type="submit" id="comment-submit">
+              Post comment
+            </button>
+          </div>
+          <p class="comments__form-status" id="comment-form-status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const listEl = document.getElementById("comments-list") as HTMLElement;
+  const form = document.getElementById("comment-form") as HTMLFormElement;
+  const submitBtn = document.getElementById("comment-submit") as HTMLButtonElement;
+  const formStatus = document.getElementById("comment-form-status") as HTMLElement;
+  const postSlug = listEl?.dataset.postSlug ?? "";
+
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function formatDate(iso: string): string {
+    return new Date(iso).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  function renderComments(comments: { name: string; comment: string; date: string }[]) {
+    if (!listEl) return;
+    if (!comments.length) {
+      listEl.innerHTML = '<p class="comments__empty">No comments yet — be the first.</p>';
+      return;
+    }
+    listEl.innerHTML = comments
+      .map(
+        (c) => `
+        <article class="comment">
+          <header class="comment__header">
+            <span class="comment__author">${escapeHtml(c.name)}</span>
+            <time class="comment__date" datetime="${c.date}">${formatDate(c.date)}</time>
+          </header>
+          <p class="comment__body">${escapeHtml(c.comment)}</p>
+        </article>`
+      )
+      .join("");
+  }
+
+  async function loadComments() {
+    if (!postSlug || !listEl) return;
+    try {
+      const res = await fetch(
+        `/.netlify/functions/get-comments?slug=${encodeURIComponent(postSlug)}`
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { comments } = await res.json();
+      renderComments(comments);
+    } catch {
+      if (listEl) {
+        listEl.innerHTML = '<p class="comments__empty">Comments unavailable right now.</p>';
+      }
+    }
+  }
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    submitBtn.disabled = true;
+    formStatus.textContent = "Posting…";
+    formStatus.className = "comments__form-status";
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch(window.location.pathname, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams([...(data as any)]).toString(),
+      });
+
+      if (res.ok) {
+        form.reset();
+        formStatus.textContent =
+          "Thanks — your comment has been submitted and will appear once approved.";
+        formStatus.className = "comments__form-status is-success";
+      } else {
+        formStatus.textContent = "Something went wrong. Please try again.";
+        formStatus.className = "comments__form-status is-error";
+        submitBtn.disabled = false;
+      }
+    } catch {
+      formStatus.textContent = "Something went wrong. Please try again.";
+      formStatus.className = "comments__form-status is-error";
+      submitBtn.disabled = false;
+    }
+  });
+
+  loadComments();
+</script>
+
+<style lang="scss">
+  .comments {
+    padding: 4rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+
+    .container {
+      max-width: 75ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .comments__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 1.75rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    margin-bottom: 2rem;
+  }
+
+  .comments__list-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .comment {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--color-border);
+
+    &:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  .comment__header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .comment__author {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-pink);
+  }
+
+  .comment__date {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+
+  .comment__body {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+    white-space: pre-wrap;
+  }
+
+  .comments__empty,
+  .comments__status-line {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .comments__form-wrapper {
+    padding-top: 0.5rem;
+
+    .label {
+      color: var(--color-ink);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input,
+    .textarea {
+      background-color: var(--color-surface);
+      border-color: var(--color-border);
+      color: var(--color-ink);
+      border-radius: 0;
+
+      &:focus {
+        border-color: var(--color-pink);
+        box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.15);
+      }
+    }
+
+    .button.is-primary {
+      background-color: var(--color-pink);
+      border-color: var(--color-pink);
+      color: #fff;
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+
+      &:hover {
+        background-color: #c4005a;
+        border-color: #c4005a;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .comments__optional {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--color-muted);
+  }
+
+  .comments__form-status {
+    align-self: center;
+    font-size: 0.875rem;
+    padding-left: 0.5rem;
+
+    &.is-success {
+      color: #257942;
+    }
+
+    &.is-error {
+      color: var(--color-pink);
+    }
+  }
+
+  [data-theme="dark"] {
+    .comments__form-wrapper {
+      .input,
+      .textarea {
+        background-color: #1c1c1c;
+        border-color: var(--color-border);
+        color: var(--color-ink);
+
+        &::placeholder {
+          color: var(--color-muted);
+        }
+      }
+    }
+
+    .comments__form-status.is-success {
+      color: #48c774;
+    }
+  }
+</style>

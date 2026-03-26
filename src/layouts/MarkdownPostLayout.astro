@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
-const { frontmatter } = Astro.props;
+import Comments from "../components/Comments.astro";
+const { frontmatter, postId } = Astro.props;
 const formattedDate = frontmatter.pubDate
   ? new Date(frontmatter.pubDate).toLocaleDateString("en-GB", {
       year: "numeric",
@@ -31,5 +32,7 @@ const formattedDate = frontmatter.pubDate
         </div>
       </div>
     </div>
+
+    {postId && <Comments postId={postId} />}
   </article>
 </BaseLayout>
