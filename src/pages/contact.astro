@@ -20,8 +20,7 @@ const pageTitle = "Contact";
           <div>
             <p class="contact-reasons__title">Projects</p>
             <p class="contact-reasons__desc">
-              Engineering leadership or full-stack development
-              work.
+              Engineering leadership or full-stack development work.
             </p>
           </div>
         </li>
@@ -282,17 +281,22 @@ const pageTitle = "Contact";
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
-    const formData = new FormData(form) as unknown as Record<string, string>;
+    const formData = new FormData(form);
 
-    if (formData["reason"] === "other" && formData["other-reason"]) {
-      formData["reason"] = formData["other-reason"];
+    const reason = formData.get("reason") as string;
+    const otherReason = formData.get("other-reason") as string;
+
+    if (reason === "other" && otherReason) {
+      formData.set("reason", otherReason);
     }
-    delete formData["other-reason"];
+    formData.delete("other-reason");
 
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData).toString(),
+      body: new URLSearchParams(
+        formData as unknown as Record<string, string>,
+      ).toString(),
     })
       .then(() => {
         form.reset();
