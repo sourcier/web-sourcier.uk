@@ -4,7 +4,7 @@ import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   return posts
-    .filter((post) => !post.data.draft)
+    .filter((post) => !post.data.draft || import.meta.env.DEV)
     .map((post) => ({
       params: { id: post.id },
       props: { post },
