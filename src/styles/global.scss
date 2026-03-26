@@ -15,6 +15,20 @@
   --color-ink: #0f0f0f;
   --color-paper: #ffffff;
   --color-muted: #6b6b6b;
+  --color-surface: #ffffff;
+  --color-border: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --color-ink: #f0f0f0;
+  --color-paper: #111111;
+  --color-muted: #999999;
+  --color-surface: #1c1c1c;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  --bulma-body-background-color: #111111;
+  --bulma-body-color: #f0f0f0;
+  --bulma-text: #f0f0f0;
 }
 
 body {
@@ -75,7 +89,7 @@ h1, h2, h3, h4, h5, h6,
   padding-left: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-paper);
+  color: #ffffff;
 }
 
 .navbar-item:not(.navbar-item:has(img)):not(.navbar-item:has(.buttons)) {
@@ -106,8 +120,8 @@ h1, h2, h3, h4, h5, h6,
 // — Homepage hero
 .hero-intro {
   padding: 5rem 1.5rem 4rem;
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+  background-color: #0f0f0f;
+  color: #ffffff;
 
   .hero-kicker {
     display: inline-block;
@@ -125,14 +139,14 @@ h1, h2, h3, h4, h5, h6,
     line-height: 1;
     letter-spacing: -0.02em;
     margin-bottom: 1.25rem;
-    color: var(--color-paper);
+    color: #ffffff;
   }
 
   .hero-bio {
     font-size: 1.125rem;
     line-height: 1.8;
     max-width: 520px;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.78);
   }
 
   .buttons .button.is-primary {
@@ -149,7 +163,7 @@ h1, h2, h3, h4, h5, h6,
   .buttons .button.is-light {
     background-color: transparent;
     border-color: rgba(255, 255, 255, 0.3);
-    color: var(--color-paper);
+    color: #ffffff;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
@@ -200,7 +214,8 @@ h1, h2, h3, h4, h5, h6,
   flex-direction: column;
   height: 100%;
   border-radius: 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
   text-decoration: none;
   color: inherit;
   overflow: hidden;
@@ -284,7 +299,7 @@ h1, h2, h3, h4, h5, h6,
   justify-content: space-between;
   align-items: center;
   padding: 0.625rem 1.25rem;
-  background-color: var(--color-ink);
+  background-color: #0f0f0f;
   color: rgba(255, 255, 255, 0.8);
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
