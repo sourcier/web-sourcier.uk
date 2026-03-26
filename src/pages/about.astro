@@ -4,16 +4,20 @@ const pageTitle = "About Me";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <header class="post__header">
+    <div class="container">
+      <div class="post__header-inner">
+        <p class="hero-kicker">About</p>
+        <h1 class="post__title">Roger Rajaratnam</h1>
+        <p class="post__subtitle">Software engineer &amp; technical lead based in London</p>
+      </div>
+    </div>
+  </header>
+
   <section class="section">
     <div class="container">
-      <section class="hero">
-        <div class="hero-body">
-          <h1 class="title">About Me</h1>
-          <p class="subtitle">Hi, I'm Roger Rajaratnam aka Sourcier</p>
-        </div>
-      </section>
-      <section class="section">
-        <div class="content">
+      <section class="section" style="padding-top: 0">
+        <div class="content post__content">
           <section id="about">
             <p>
               I'm a software engineer and technical lead based in London,
@@ -66,7 +70,6 @@ const pageTitle = "About Me";
               about better ways to build software, and staying curious about how
               the web continues to evolve.
             </p>
-          </section>
         </div>
       </section>
     </div>

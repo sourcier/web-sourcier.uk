@@ -4,18 +4,21 @@ const pageTitle = "Contact";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <header class="post__header">
+    <div class="container">
+      <div class="post__header-inner">
+        <p class="hero-kicker">Get in touch</p>
+        <h1 class="post__title">Contact</h1>
+        <p class="post__subtitle">
+          Got a question, a project idea, or just want to say hello? I'd love to
+          hear from you.
+        </p>
+      </div>
+    </div>
+  </header>
+
   <section class="section">
     <div class="container">
-      <section class="hero">
-        <div class="hero-body">
-          <h1 class="title">Contact</h1>
-          <p class="subtitle">
-            Got a question about software engineering, a project idea to
-            explore, or just want to say hello? I'd love to hear from you. Drop
-            me a message!
-          </p>
-        </div>
-      </section>
       <section class="section">
         <form
           name="Contact"
@@ -93,20 +96,27 @@ const pageTitle = "Contact";
         </div>
       </section>
       <section class="section">
-        <div class="content">
-          <h1 class="title">Socials</h1>
+        <div class="content post__content">
+          <h2>Socials</h2>
           <p>
             You can also find me on
             <a
               href="https://www.linkedin.com/in/roger-rajaratnam"
               target="_blank"
+              rel="noopener noreferrer"
             >
               LinkedIn
             </a> where I share thoughts on software engineering, system design, and
             technical leadership. If you're interested in seeing what I'm building
             or exploring, head over to
-            <a href="https://github.com/sourcier" target="_blank"> GitHub </a> where
-            I contribute to open source projects and share code from my blog posts.
+            <a
+              href="https://github.com/sourcier"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a> where I contribute to open source projects and share code from my
+            blog posts.
           </p>
         </div>
       </section>
