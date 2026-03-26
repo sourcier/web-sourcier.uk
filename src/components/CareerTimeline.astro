@@ -252,9 +252,13 @@
     }
 
     .career-timeline__header {
-      text-align: center;
+      text-align: left;
       position: relative;
       margin-bottom: 3rem;
+
+      @media (min-width: 640px) {
+        text-align: center;
+      }
 
       span {
         display: inline-block;
@@ -266,6 +270,13 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
         padding: 0.35rem 1rem;
+        margin-left: 11px;
+        transform: translateX(-50%);
+
+        @media (min-width: 640px) {
+          margin-left: 0;
+          transform: none;
+        }
       }
     }
 
@@ -289,7 +300,7 @@
 
     .career-timeline__marker {
       position: absolute;
-      left: calc(1.5rem - 1px);
+      left: -1px;
       top: 4px;
       width: 22px;
       height: 22px;
