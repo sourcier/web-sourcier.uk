@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogPost from "../../components/BlogPost.astro";
+import PageHero from "../../components/PageHero.astro";
 const allPosts = (await getCollection("posts")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
@@ -9,17 +10,11 @@ const pageTitle = "Blog";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <header class="post__header">
-    <div class="container">
-      <div class="post__header-inner">
-        <p class="hero-kicker">Writing</p>
-        <h1 class="post__title">Blog</h1>
-        <p class="post__subtitle">
-          Software engineering, architecture, and lessons learned along the way.
-        </p>
-      </div>
-    </div>
-  </header>
+  <PageHero
+    kicker="Writing"
+    title="Blog"
+    subtitle="Software engineering, architecture, and lessons learned along the way."
+  />
 
   <section class="section">
     <div class="container is-max-desktop">

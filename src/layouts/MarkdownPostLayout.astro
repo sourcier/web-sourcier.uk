@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 const { frontmatter } = Astro.props;
 const formattedDate = frontmatter.pubDate
   ? new Date(frontmatter.pubDate).toLocaleDateString("en-GB", {
@@ -12,37 +13,16 @@ const formattedDate = frontmatter.pubDate
 
 <BaseLayout pageTitle={frontmatter.title}>
   <article class="post">
-    <header
-      class="post__header"
-      style={frontmatter.cover
-        ? `--cover-image: url('${frontmatter.cover.image.src}')`
-        : ""}
-      data-has-cover={frontmatter.cover ? "true" : "false"}
-    >
-      <div class="container">
-        <div class="post__header-inner">
-          <div class="post__tags">
-            {
-              frontmatter.tags.map((tag: string) => (
-                <a href={`/tags/${tag}`} class="post__tag">
-                  {tag}
-                </a>
-              ))
-            }
-          </div>
-          <h1 class="post__title">{frontmatter.title}</h1>
-          {
-            frontmatter.subTitle && (
-              <p class="post__subtitle">{frontmatter.subTitle}</p>
-            )
-          }
-          <div class="post__meta">
-            <span class="post__author">{frontmatter.author}</span>
-            {formattedDate && <span class="post__date">{formattedDate}</span>}
-          </div>
-        </div>
-      </div>
-    </header>
+    <PageHero
+      title={frontmatter.title}
+      subtitle={frontmatter.subTitle}
+      coverImage={frontmatter.cover
+        ? { src: frontmatter.cover.image.src }
+        : undefined}
+      tags={frontmatter.tags}
+      author={frontmatter.author}
+      date={formattedDate ?? undefined}
+    />
 
     <div class="post__body">
       <div class="container">

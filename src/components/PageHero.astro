@@ -1,0 +1,174 @@
+---
+interface Props {
+  kicker?: string;
+  title: string;
+  subtitle?: string;
+  coverImage?: { src: string; alt?: string };
+  tags?: string[];
+  author?: string;
+  date?: string;
+}
+
+const { kicker, title, subtitle, coverImage, tags, author, date } = Astro.props;
+---
+
+<header
+  class="post__header"
+  style={coverImage ? `--cover-image: url('${coverImage.src}')` : ""}
+  data-has-cover={coverImage ? "true" : "false"}
+>
+  <div class="container">
+    <div class="post__header-inner">
+      {
+        tags && tags.length > 0 && (
+          <div class="post__tags">
+            {tags.map((tag) => (
+              <a href={`/tags/${tag}`} class="post__tag">
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+      {kicker && <p class="hero-kicker">{kicker}</p>}
+      <h1 class="post__title">{title}</h1>
+      {subtitle && <p class="post__subtitle">{subtitle}</p>}
+      {
+        (author || date) && (
+          <div class="post__meta">
+            {author && <span class="post__author">{author}</span>}
+            {date && <span class="post__date">{date}</span>}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</header>
+
+<style lang="scss">
+  .post__header {
+    min-height: 420px;
+    display: flex;
+    align-items: flex-end;
+    padding: 5rem 1.5rem 4rem;
+    background-color: #0f0f0f;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+
+    &[data-has-cover="true"] {
+      background-image: var(--cover-image);
+      background-size: cover;
+      background-position: center;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.35) 0%,
+          rgba(0, 0, 0, 0.7) 55%,
+          rgba(0, 0, 0, 0.92) 100%
+        );
+      }
+
+      .post__tag {
+        background-color: var(--color-pink);
+        border-color: var(--color-pink);
+        color: #ffffff;
+
+        &:hover {
+          background-color: #ffffff;
+          color: var(--color-pink);
+          border-color: #ffffff;
+        }
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+  }
+
+  .post__header-inner {
+    max-width: 780px;
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .post__tag {
+    display: inline-block;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    border: 1px solid rgba(232, 0, 106, 0.4);
+    padding: 0.2rem 0.6rem;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+
+    &:hover {
+      background-color: var(--color-pink);
+      color: #ffffff;
+    }
+  }
+
+  .post__title {
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+
+  .post__subtitle {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1.75rem;
+    font-weight: 300;
+  }
+
+  .post__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    font-family: "Barlow Condensed", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .post__author {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .hero-kicker {
+    display: inline-block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-pink);
+    margin-bottom: 1rem;
+  }
+
+  .post__date::before {
+    content: "\2014";
+    margin-right: 1rem;
+    color: var(--color-pink);
+  }
+</style>

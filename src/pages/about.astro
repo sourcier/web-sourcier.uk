@@ -1,20 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 const pageTitle = "About Me";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <header class="post__header">
-    <div class="container">
-      <div class="post__header-inner">
-        <p class="hero-kicker">About</p>
-        <h1 class="post__title">Roger Rajaratnam</h1>
-        <p class="post__subtitle">
-          Software engineer &amp; technical lead based in London
-        </p>
-      </div>
-    </div>
-  </header>
+  <PageHero
+    kicker="About"
+    title="Roger Rajaratnam"
+    subtitle="Software engineer & technical lead based in London"
+  />
 
   <section class="section">
     <div class="container is-max-desktop">

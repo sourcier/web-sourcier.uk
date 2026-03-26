@@ -1,21 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
 const pageTitle = "Contact";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <header class="post__header">
-    <div class="container">
-      <div class="post__header-inner">
-        <p class="hero-kicker">Get in touch</p>
-        <h1 class="post__title">Contact</h1>
-        <p class="post__subtitle">
-          Got a question, a project idea, or just want to say hello? I'd love to
-          hear from you.
-        </p>
-      </div>
-    </div>
-  </header>
+  <PageHero
+    kicker="Get in touch"
+    title="Contact"
+    subtitle="Got a question, a project idea, or just want to say hello? I'd love to hear from you."
+  />
 
   <section class="section">
     <div class="container is-max-desktop">
