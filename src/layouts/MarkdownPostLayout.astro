@@ -11,9 +11,20 @@ const formattedDate = frontmatter.pubDate
       day: "numeric",
     })
   : null;
+
+const ogImage = frontmatter.cover?.image?.src ?? undefined;
+const pageTitle = `${frontmatter.title} — Sourcier`;
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
+<BaseLayout
+  pageTitle={pageTitle}
+  description={frontmatter.description}
+  ogImage={ogImage}
+  ogType="article"
+  pubDate={frontmatter.pubDate}
+  author={frontmatter.author}
+  tags={frontmatter.tags}
+>
   <article class="post">
     <PageHero
       title={frontmatter.title}

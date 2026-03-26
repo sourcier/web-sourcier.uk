@@ -6,10 +6,13 @@ import PageHero from "../../components/PageHero.astro";
 const allPosts = (await getCollection("posts"))
   .filter((post) => !post.data.draft || import.meta.env.DEV)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const pageTitle = "Blog";
+const pageTitle = "Blog — Sourcier";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout
+  pageTitle={pageTitle}
+  description="Writing on software engineering, architecture, technical leadership, and lessons learned from 20+ years in the craft."
+>
   <PageHero
     kicker="Writing"
     title="Blog"

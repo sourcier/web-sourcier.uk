@@ -2,10 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import CareerTimeline from "../components/CareerTimeline.astro";
-const pageTitle = "About Me";
+const pageTitle = "About — Roger Rajaratnam";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout
+  pageTitle={pageTitle}
+  description="Software engineer and technical lead based in London with 20+ years across fintech, media, and consumer technology."
+>
   <PageHero
     kicker="About"
     title="Roger Rajaratnam"
