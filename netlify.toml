@@ -2,7 +2,7 @@
   framework = "astro"
   command = "astro dev"
   targetPort = 4321
-  browser = "google chrome"
+  autoLaunch = false
 
 [build]
   command = "astro build"
