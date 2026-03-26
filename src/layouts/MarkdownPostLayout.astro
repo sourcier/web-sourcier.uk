@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import Comments from "../components/Comments.astro";
+import PageHistory from "../components/PageHistory.astro";
 const { frontmatter, postId } = Astro.props;
 const formattedDate = frontmatter.pubDate
   ? new Date(frontmatter.pubDate).toLocaleDateString("en-GB", {
@@ -30,6 +31,11 @@ const formattedDate = frontmatter.pubDate
         <div class="post__content content">
           <slot />
         </div>
+        {
+          frontmatter.history && frontmatter.history.length > 0 && (
+            <PageHistory entries={frontmatter.history} />
+          )
+        }
       </div>
     </div>
 

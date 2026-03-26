@@ -19,6 +19,14 @@ const posts = defineCollection({
         .optional(),
       tags: z.array(z.string()),
       draft: z.boolean().default(false),
+      history: z
+        .array(
+          z.object({
+            datetime: z.coerce.date(),
+            note: z.string(),
+          }),
+        )
+        .optional(),
     }),
 });
 

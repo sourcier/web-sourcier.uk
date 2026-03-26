@@ -1,0 +1,92 @@
+---
+interface HistoryEntry {
+  datetime: Date;
+  note: string;
+}
+
+interface Props {
+  entries: HistoryEntry[];
+}
+
+const { entries } = Astro.props;
+
+function formatDatetime(date: Date): string {
+  const d = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  const t = date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  return `${d} · ${t}`;
+}
+---
+
+<div class="page-history">
+  <p class="page-history__heading">Page history</p>
+  <dl class="page-history__log">
+    {
+      entries.map((entry) => (
+        <div class="page-history__entry">
+          <dt>
+            <time datetime={entry.datetime.toISOString()}>
+              {formatDatetime(entry.datetime)}
+            </time>
+          </dt>
+          <dd set:html={entry.note} />
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style lang="scss">
+  .page-history {
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    border-left: 2px solid var(--color-border);
+    opacity: 0.65;
+  }
+
+  .page-history__heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin: 0 0 1rem;
+  }
+
+  .page-history__log {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .page-history__entry {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0 1.25rem;
+    align-items: baseline;
+  }
+
+  .page-history__entry dt {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .page-history__entry dd {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+</style>
