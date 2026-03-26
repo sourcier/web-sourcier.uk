@@ -55,3 +55,91 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     {postId && <Comments postId={postId} />}
   </article>
 </BaseLayout>
+
+<style>
+  :global(.post__content pre) {
+    position: relative;
+  }
+
+  :global(.code-lang-label) {
+    position: absolute;
+    top: 0.625rem;
+    left: 1rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  :global(.code-copy-btn) {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+    line-height: 1;
+  }
+
+  :global(.code-copy-btn:hover) {
+    background: rgba(232, 0, 106, 0.2);
+    border-color: rgba(232, 0, 106, 0.5);
+    color: #e8006a;
+  }
+
+  :global(.code-copy-btn.is-copied) {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.4);
+  }
+</style>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>(".post__content pre")
+    .forEach((pre) => {
+      const lang = pre.getAttribute("data-language");
+      if (lang) {
+        const label = document.createElement("span");
+        label.className = "code-lang-label";
+        label.textContent = lang;
+        pre.appendChild(label);
+      }
+
+      const btn = document.createElement("button");
+      btn.className = "code-copy-btn";
+      btn.setAttribute("aria-label", "Copy code");
+      btn.textContent = "Copy";
+
+      btn.addEventListener("click", async () => {
+        const code = pre.querySelector("code")?.innerText ?? pre.innerText;
+        await navigator.clipboard.writeText(code);
+        btn.textContent = "Copied!";
+        btn.classList.add("is-copied");
+        setTimeout(() => {
+          btn.textContent = "Copy";
+          btn.classList.remove("is-copied");
+        }, 2000);
+      });
+
+      pre.appendChild(btn);
+    });
+</script>

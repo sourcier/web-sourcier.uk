@@ -8,5 +8,8 @@ export default defineConfig({
   integrations: [react()],
   markdown: {
     remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
+    shikiConfig: {
+      theme: "dracula",
+    },
   },
 });
