@@ -80,17 +80,13 @@ import { FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa6";
   const button = document.querySelector("[data-theme-toggle]");
   const htmlElement = document.documentElement;
 
-  if (!button) {
-    return;
-  }
-
   const handleThemeToggle = () => {
     const isDark = htmlElement.getAttribute("data-theme") === "dark";
     const newTheme = isDark ? "light" : "dark";
     const newCta =
       newTheme === "dark" ? "Change to light theme" : "Change to dark theme";
 
-    button.setAttribute("aria-label", newCta);
+    button?.setAttribute("aria-label", newCta);
     htmlElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
   };
@@ -106,10 +102,10 @@ import { FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa6";
 
   if (theme === "light") {
     htmlElement.setAttribute("data-theme", "light");
-    button.setAttribute("aria-label", "Change to dark theme");
+    button?.setAttribute("aria-label", "Change to dark theme");
   } else {
     htmlElement.setAttribute("data-theme", "dark");
-    button.setAttribute("aria-label", "Change to light theme");
+    button?.setAttribute("aria-label", "Change to light theme");
   }
 
   button?.addEventListener("click", handleThemeToggle);
