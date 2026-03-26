@@ -5,7 +5,7 @@ import BlogPost from "../../components/BlogPost.astro";
 const allPosts = (await getCollection("posts")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const pageTitle = "My Astro Learning Blog";
+const pageTitle = "Blog";
 ---
 
 <BaseLayout pageTitle={pageTitle}>

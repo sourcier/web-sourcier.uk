@@ -3,30 +3,42 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 import avatarImage from "../../assets/images/avatar.jpeg";
-const pageTitle = "Home Page";
+
 const allPosts = (await getCollection("posts"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle="Sourcier — Software Engineering by Roger Rajaratnam">
+  <section class="hero-intro">
+    <div class="container">
+      <div class="columns is-vcentered">
+        <div class="column">
+          <span class="hero-kicker">Software Engineer &amp; Technical Lead</span
+          >
+          <h1 class="hero-title">Hi, I'm Roger<br />Rajaratnam</h1>
+          <p class="hero-bio">
+            London-based engineer building scalable web systems, mentoring
+            developers, and sharing real-world lessons from a decade in the
+            craft.
+          </p>
+          <div class="buttons mt-5">
+            <a href="/blog" class="button is-primary is-medium">Read the blog</a
+            >
+            <a href="/about" class="button is-light is-medium">About me</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <h1 class="title">Latest Blog Posts</h1>
-      <h2 class="subtitle">
-        Sharing insights and lessons from the world of software engineering.
-      </h2>
+      <p class="section-label">Recent Posts</p>
       <div
         class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
       >
         <div class="grid">
-          <BlogPost
-            title="About Me"
-            subTitle="Engineer, builder, and mentor"
-            description="Learn more about me, a London-based software engineer and technical lead who enjoys building scalable web applications, mentoring developers, and sharing lessons from real-world software engineering."
-            url="/about"
-            cover={{ image: { src: avatarImage.src, alt: "Avatar image" } }}
-          />
           {
             allPosts.map((post: any) => (
               <div class="cell">
@@ -36,6 +48,7 @@ const allPosts = (await getCollection("posts"))
                   description={post.data.description}
                   url={`/blog/${post.id}`}
                   cover={post.data.cover}
+                  pubDate={post.data.pubDate}
                 />
               </div>
             ))

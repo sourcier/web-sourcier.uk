@@ -1,5 +1,12 @@
 ---
-const { description, title, subTitle, url, cover } = Astro.props;
+const { description, title, subTitle, url, cover, pubDate } = Astro.props;
+const formattedDate = pubDate
+  ? new Date(pubDate).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  : null;
 ---
 
 <div class="card card__blog">
@@ -13,6 +20,7 @@ const { description, title, subTitle, url, cover } = Astro.props;
     }
   </div>
   <div class="card-content">
+    {formattedDate && <p class="card-meta">{formattedDate}</p>}
     <p class="title">{title}</p>
     <p class="subtitle">{subTitle}</p>
     <p class="description">{description}</p>
