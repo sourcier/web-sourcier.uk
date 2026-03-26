@@ -115,7 +115,23 @@ const { postId } = Astro.props;
       </div>
     </div>
   </div>
-</section>
+<!--
+  Hidden form registered with Netlify at build time so the edge knows the
+  approved-comments form schema. Data is submitted here programmatically by
+  the approve-comment Netlify Function — it is never shown to users.
+-->
+<form
+  name="approved-comments"
+  data-netlify="true"
+  hidden
+  aria-hidden="true"
+>
+  <input type="hidden" name="postSlug" />
+  <input type="hidden" name="name" />
+  <input type="hidden" name="email" />
+  <input type="hidden" name="comment" />
+  <input type="hidden" name="originalDate" />
+</form>
 
 <script>
   const listEl = document.getElementById("comments-list") as HTMLElement;

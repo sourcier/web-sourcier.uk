@@ -11,18 +11,30 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-  ## Uncomment to use this redirect for Single Page Applications like create-react-app.
-  ## Not needed for static site generators.
-  #[[redirects]]
-  #  from = "/*"
-  #  to = "/index.html"
-  #  status = 200
-
-  ## (optional) Settings for Netlify Dev
-  ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
-  #[dev]
-  #  command = "yarn start" # Command to start your dev server
-  #  port = 3000 # Port that the dev server will be listening on
-  #  publish = "dist" # Folder with the static content for _redirect file
-
-  ## more info on configuring this file: https://ntl.fyi/file-based-build-config
+# ── Comment approval system ────────────────────────────────────────────────────
+#
+# Required environment variables (Netlify → Site configuration → Environment variables):
+#
+#   NETLIFY_ACCESS_TOKEN      Personal access token
+#                             https://app.netlify.com/user/applications
+#
+#   APPROVED_COMMENTS_FORM_ID Form ID for the "approved-comments" form.
+#                             Visible in the Netlify Forms dashboard URL after
+#                             the first comment is approved.
+#
+#   APPROVAL_SECRET           Random secret for HMAC-signing approve/delete links.
+#                             Generate with: openssl rand -hex 32
+#
+#   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
+#
+#   RESEND_API_KEY            API key from https://resend.com
+#                             (free tier: 3 000 emails/month)
+#
+#   NOTIFY_FROM_EMAIL         Verified Resend sender address, e.g. comments@sourcier.uk
+#
+#   NOTIFY_EMAIL              Address to receive comment notifications
+#
+# One-time Netlify dashboard setup:
+#   Forms → blog-comments → Form notifications → Add notification
+#   → Outgoing webhook → URL: https://{your-site}/.netlify/functions/comment-handler
+# ──────────────────────────────────────────────────────────────────────────────

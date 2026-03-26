@@ -1,7 +1,8 @@
 // Fetches approved comment submissions from Netlify Forms API.
 // Requires two environment variables set in Netlify site settings:
-//   NETLIFY_ACCESS_TOKEN — personal access token from https://app.netlify.com/user/applications
-//   COMMENTS_FORM_ID     — form ID visible in the Netlify Forms dashboard after the first submission
+//   NETLIFY_ACCESS_TOKEN      — personal access token from https://app.netlify.com/user/applications
+//   APPROVED_COMMENTS_FORM_ID — form ID for the "approved-comments" form in the Netlify Forms dashboard
+//                               (visible in the URL after the first approved comment is posted)
 
 import crypto from "node:crypto";
 
@@ -32,11 +33,11 @@ export const handler = async (event) => {
   }
 
   const token = process.env.NETLIFY_ACCESS_TOKEN;
-  const formId = process.env.COMMENTS_FORM_ID;
+  const formId = process.env.APPROVED_COMMENTS_FORM_ID;
 
   if (!token || !formId) {
     console.warn(
-      "NETLIFY_ACCESS_TOKEN or COMMENTS_FORM_ID not configured — returning empty comments"
+      "NETLIFY_ACCESS_TOKEN or APPROVED_COMMENTS_FORM_ID not configured — returning empty comments",
     );
     return {
       statusCode: 200,
@@ -69,7 +70,9 @@ export const handler = async (event) => {
     .map((s) => ({
       name: s.data.name,
       comment: s.data.comment,
-      date: s.created_at,
+      // Use the original submission date when available so ordering reflects
+      // when the comment was written, not when it was approved.
+      date: s.data.originalDate || s.created_at,
       emailHash: s.data.email ? gravatarHash(s.data.email) : null,
     }))
     .sort((a, b) => new Date(a.date) - new Date(b.date));
