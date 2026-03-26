@@ -61,7 +61,7 @@ const pageTitle = "Contact — Sourcier";
 
           <form
             class="contact-form"
-            name="Contact"
+            name="contact"
             method="post"
             data-netlify="true"
             netlify-honeypot="bot-field"
@@ -308,7 +308,7 @@ const pageTitle = "Contact — Sourcier";
 
   const handleSuccessMessageClose = () => {
     const form = document.querySelector(
-      "form[name='Contact']",
+      "form[name='contact']",
     ) as HTMLFormElement;
     const successMessage = document.querySelector(
       "[data-success-message]",
@@ -319,7 +319,7 @@ const pageTitle = "Contact — Sourcier";
   };
 
   document
-    .querySelector("form[name='Contact']")
+    .querySelector("form[name='contact']")
     ?.addEventListener("submit", handleSubmit);
 
   const reasonSelect = document.querySelector(
