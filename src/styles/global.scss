@@ -48,6 +48,12 @@ h1, h2, h3, h4, h5, h6,
   --bulma-navbar-item-active-color: var(--color-pink);
   border-bottom: none;
 
+  .navbar-item:hover,
+  .navbar-item:focus,
+  .navbar-item:focus-within {
+    background-color: transparent;
+  }
+
   .navbar-item img {
     max-height: 2rem;
     border-radius: 50%;
@@ -77,6 +83,24 @@ h1, h2, h3, h4, h5, h6,
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.08em;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0.5rem;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: var(--color-pink);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 // — Homepage hero
