@@ -10,7 +10,6 @@ const posts = defineCollection({
       subTitle: z.string(),
       description: z.string(),
       pubDate: z.coerce.date(),
-      updatedDate: z.coerce.date().optional(),
       author: z.string(),
       cover: z
         .object({
