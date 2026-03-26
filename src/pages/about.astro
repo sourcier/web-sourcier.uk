@@ -12,63 +12,358 @@ const pageTitle = "About Me";
     subtitle="Software engineer & technical lead based in London"
   />
 
-  <section class="section">
+  <!-- Stats bar -->
+  <div class="about-stats">
     <div class="container is-max-desktop">
-      <div class="content post__content">
-        <p>
-          I'm a software engineer and technical lead based in London, passionate
-          about building things on the web and solving problems through
-          technology. My journey into software engineering started with a
-          curiosity about how digital products work behind the scenes — that
-          curiosity eventually turned into a career focused on designing and
-          building scalable applications.
-        </p>
+      <ul class="about-stats__list" role="list">
+        <li class="about-stats__item">
+          <span class="about-stats__value">14+</span>
+          <span class="about-stats__label">Years experience</span>
+        </li>
+        <li class="about-stats__item">
+          <span class="about-stats__value">Fintech</span>
+          <span class="about-stats__label">Primary domain</span>
+        </li>
+        <li class="about-stats__item">
+          <span class="about-stats__value">Full-stack</span>
+          <span class="about-stats__label">Discipline</span>
+        </li>
+        <li class="about-stats__item">
+          <span class="about-stats__value">London</span>
+          <span class="about-stats__label">Based in</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-        <p>
-          Over the years, I've worked across a range of projects in fintech and
-          consumer technology, primarily as a full-stack engineer. I enjoy
-          working across the entire stack, from crafting intuitive front-end
-          experiences to designing backend systems that are reliable, scalable,
-          and maintainable. Much of my work today sits at the intersection of
-          engineering, architecture, and leadership — helping teams build
-          high-quality software while also thinking about the bigger technical
-          picture.
-        </p>
+  <!-- Bio sections -->
+  <section class="section about-bio" aria-labelledby="bio-heading">
+    <div class="container is-max-desktop">
+      <div class="about-bio__grid">
+        <!-- Left: labelled narrative blocks -->
+        <div class="about-bio__main">
+          <div class="about-bio__block">
+            <p class="about-bio__kicker">Background</p>
+            <p class="about-bio__text">
+              I'm a software engineer and technical lead based in London,
+              passionate about building things on the web and solving problems
+              through technology. My journey started with a curiosity about how
+              digital products work behind the scenes — that curiosity
+              eventually turned into a career focused on designing and building
+              scalable applications.
+            </p>
+          </div>
 
-        <p>
-          One of the most rewarding aspects of my career has been helping other
-          developers grow. I've spent time mentoring engineers and teaching at
-          coding bootcamps, supporting people as they transition into software
-          engineering and develop their skills. Watching someone go from writing
-          their first lines of code to confidently building applications is
-          incredibly fulfilling.
-        </p>
+          <div class="about-bio__block">
+            <p class="about-bio__kicker">What I do</p>
+            <p class="about-bio__text">
+              I've worked across a range of projects in fintech and consumer
+              technology as a full-stack engineer. I enjoy working across the
+              entire stack — from crafting intuitive front-end experiences to
+              designing backend systems that are reliable, scalable, and
+              maintainable. Much of my work today sits at the intersection of
+              engineering, architecture, and leadership.
+            </p>
+          </div>
 
-        <p>
-          I studied Computer Software Engineering at the University of
-          Westminster, which gave me the foundations that shaped my path into
-          full-stack development. Since then, I've had the opportunity to work
-          with different teams, technologies, and products — each experience
-          teaching me something new about building software and collaborating
-          with others.
-        </p>
+          <div class="about-bio__block">
+            <p class="about-bio__kicker">Teaching &amp; mentoring</p>
+            <p class="about-bio__text">
+              One of the most rewarding aspects of my career has been helping
+              other developers grow. I've spent time mentoring engineers and
+              teaching at coding bootcamps, supporting people as they transition
+              into software engineering. Watching someone go from writing their
+              first lines of code to confidently building full applications is
+              incredibly fulfilling.
+            </p>
+          </div>
+        </div>
 
-        <p>
-          This blog is a place where I share ideas, lessons learned, and
-          practical insights from my experience in software engineering.
-          Sometimes that might mean writing about system design, web
-          development, or technical leadership. Other times it might simply be
-          reflections on things I've learned along the way.
-        </p>
+        <!-- Right: sidebar cards -->
+        <aside class="about-bio__sidebar" aria-label="Quick facts">
+          <div class="about-sidebar-card about-sidebar-card--highlight">
+            <p class="about-sidebar-card__label">Currently</p>
+            <p class="about-sidebar-card__title">Technical Lead</p>
+            <p class="about-sidebar-card__sub">NewDay · London</p>
+          </div>
 
-        <p>
-          Outside of work, I'm always exploring new technologies, thinking about
-          better ways to build software, and staying curious about how the web
-          continues to evolve.
-        </p>
+          <div class="about-sidebar-card">
+            <p class="about-sidebar-card__label">Education</p>
+            <p class="about-sidebar-card__title">
+              BSc Computer Software Engineering
+            </p>
+            <p class="about-sidebar-card__sub">University of Westminster</p>
+          </div>
+
+          <div class="about-sidebar-card">
+            <p class="about-sidebar-card__label">Focus areas</p>
+            <ul class="about-tag-list" role="list">
+              <li>Full-stack development</li>
+              <li>System design</li>
+              <li>Technical leadership</li>
+              <li>Engineering mentorship</li>
+              <li>Web performance</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
 
+  <!-- Pullquote -->
+  <div class="about-pullquote" aria-hidden="false">
+    <div class="container is-max-desktop">
+      <blockquote class="about-pullquote__inner">
+        <p>
+          This blog is where I share ideas, lessons learned, and practical
+          insights from my experience in software engineering — system design,
+          web development, technical leadership, and whatever else is on my
+          mind.
+        </p>
+      </blockquote>
+    </div>
+  </div>
+
   <CareerTimeline />
 </BaseLayout>
+
+<style lang="scss">
+  /* ── Stats bar ─────────────────────────────────────────────── */
+  .about-stats {
+    background-color: var(--color-ink);
+    color: #fff;
+    padding: 2rem 1.5rem;
+
+    [data-theme="dark"] & {
+      background-color: #000;
+    }
+  }
+
+  .about-stats__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .about-stats__item {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:nth-child(even) {
+      border-right: none;
+    }
+
+    &:nth-last-child(-n + 2) {
+      border-bottom: none;
+    }
+
+    @media (min-width: 640px) {
+      flex: 1 1 25%;
+      border-bottom: none;
+
+      &:nth-child(even) {
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  .about-stats__value {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--color-pink);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .about-stats__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ── Bio grid ──────────────────────────────────────────────── */
+  .about-bio {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .about-bio__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 280px;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  .about-bio__main {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-bio__block {
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--color-pink);
+  }
+
+  .about-bio__kicker {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-pink);
+    margin-bottom: 0.75rem;
+  }
+
+  .about-bio__text {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  /* ── Sidebar cards ─────────────────────────────────────────── */
+  .about-bio__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background-color: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  .about-sidebar-card {
+    background-color: var(--color-surface);
+    padding: 1.25rem 1.5rem;
+
+    &--highlight {
+      background-color: var(--color-ink);
+
+      [data-theme="dark"] & {
+        background-color: #1a1a1a;
+      }
+
+      .about-sidebar-card__label {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .about-sidebar-card__title {
+        color: #ffffff;
+      }
+
+      .about-sidebar-card__sub {
+        color: rgba(255, 255, 255, 0.55);
+      }
+    }
+  }
+
+  .about-sidebar-card__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-pink);
+    margin-bottom: 0.5rem;
+  }
+
+  .about-sidebar-card__title {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .about-sidebar-card__sub {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+
+  .about-tag-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    li {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-ink);
+      padding-left: 0.875rem;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.45em;
+        width: 5px;
+        height: 5px;
+        background-color: var(--color-pink);
+      }
+    }
+  }
+
+  /* ── Pullquote ─────────────────────────────────────────────── */
+  .about-pullquote {
+    padding: 4rem 1.5rem;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .about-pullquote__inner {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    padding-left: 2rem;
+
+    &::before {
+      content: "\201C";
+      position: absolute;
+      left: 0;
+      top: -0.1em;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--color-pink);
+    }
+
+    p {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--color-ink);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+  }
+</style>
