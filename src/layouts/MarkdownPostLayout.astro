@@ -33,7 +33,9 @@ const formattedDate = frontmatter.pubDate
         </div>
         {
           frontmatter.history && frontmatter.history.length > 0 && (
-            <PageHistory entries={frontmatter.history} />
+            <div class="post__content">
+              <PageHistory entries={frontmatter.history} />
+            </div>
           )
         }
       </div>
