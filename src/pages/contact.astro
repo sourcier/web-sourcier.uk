@@ -286,14 +286,6 @@ const pageTitle = "Contact — Sourcier";
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    const reason = formData.get("reason") as string;
-    const otherReason = formData.get("other-reason") as string;
-
-    if (reason === "other" && otherReason) {
-      formData.set("reason", otherReason);
-    }
-    formData.delete("other-reason");
-
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
