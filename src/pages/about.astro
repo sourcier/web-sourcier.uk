@@ -25,7 +25,7 @@ const pageTitle = "About Me";
           <span class="about-stats__label">Primary domain</span>
         </li>
         <li class="about-stats__item">
-          <span class="about-stats__value">Full-stack</span>
+          <span class="about-stats__value">Full&#8209;stack</span>
           <span class="about-stats__label">Discipline</span>
         </li>
         <li class="about-stats__item">
@@ -43,7 +43,7 @@ const pageTitle = "About Me";
         <!-- Left: labelled narrative blocks -->
         <div class="about-bio__main">
           <div class="about-bio__block">
-            <p class="about-bio__kicker">Background</p>
+            <h2 class="about-bio__kicker">Background</h2>
             <p class="about-bio__text">
               I'm a software engineer and technical lead based in London,
               passionate about building things on the web and solving problems
@@ -55,7 +55,7 @@ const pageTitle = "About Me";
           </div>
 
           <div class="about-bio__block">
-            <p class="about-bio__kicker">What I do</p>
+            <h2 class="about-bio__kicker">What I do</h2>
             <p class="about-bio__text">
               I've worked across a range of projects in fintech and consumer
               technology as a full-stack engineer. I enjoy working across the
@@ -67,7 +67,7 @@ const pageTitle = "About Me";
           </div>
 
           <div class="about-bio__block">
-            <p class="about-bio__kicker">Teaching &amp; mentoring</p>
+            <h2 class="about-bio__kicker">Teaching &amp; mentoring</h2>
             <p class="about-bio__text">
               One of the most rewarding aspects of my career has been helping
               other developers grow. I've spent time mentoring engineers and
@@ -130,71 +130,58 @@ const pageTitle = "About Me";
 <style lang="scss">
   /* ── Stats bar ─────────────────────────────────────────────── */
   .about-stats {
-    background-color: var(--color-ink);
-    color: #fff;
-    padding: 2rem 1.5rem;
-
-    [data-theme="dark"] & {
-      background-color: #000;
-    }
+    padding: 0 1.5rem;
+    margin-top: 3rem;
   }
 
   .about-stats__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   .about-stats__item {
-    flex: 1 1 50%;
     display: flex;
     flex-direction: column;
-    padding: 1.25rem 1.5rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 0.5rem;
+    padding: 1.5rem 1.25rem 1.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    position: relative;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
 
-    &:nth-child(even) {
-      border-right: none;
-    }
-
-    &:nth-last-child(-n + 2) {
-      border-bottom: none;
-    }
-
-    @media (min-width: 640px) {
-      flex: 1 1 25%;
-      border-bottom: none;
-
-      &:nth-child(even) {
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      &:last-child {
-        border-right: none;
-      }
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
     }
   }
 
   .about-stats__value {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -0.01em;
-    color: var(--color-pink);
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
     line-height: 1;
-    margin-bottom: 0.35rem;
   }
 
   .about-stats__label {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
   }
 
   /* ── Bio grid ──────────────────────────────────────────────── */
