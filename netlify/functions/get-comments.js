@@ -3,6 +3,15 @@
 //   NETLIFY_ACCESS_TOKEN — personal access token from https://app.netlify.com/user/applications
 //   COMMENTS_FORM_ID     — form ID visible in the Netlify Forms dashboard after the first submission
 
+import crypto from "node:crypto";
+
+function gravatarHash(email) {
+  return crypto
+    .createHash("md5")
+    .update(email.trim().toLowerCase())
+    .digest("hex");
+}
+
 export const handler = async (event) => {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -61,6 +70,7 @@ export const handler = async (event) => {
       name: s.data.name,
       comment: s.data.comment,
       date: s.created_at,
+      emailHash: s.data.email ? gravatarHash(s.data.email) : null,
     }))
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 

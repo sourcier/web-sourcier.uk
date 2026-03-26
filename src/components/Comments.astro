@@ -146,7 +146,12 @@ const { postId } = Astro.props;
   }
 
   function renderComments(
-    comments: { name: string; comment: string; date: string }[],
+    comments: {
+      name: string;
+      comment: string;
+      date: string;
+      emailHash?: string | null;
+    }[],
   ) {
     if (!listEl) return;
     if (!comments.length) {
@@ -155,16 +160,24 @@ const { postId } = Astro.props;
       return;
     }
     listEl.innerHTML = comments
-      .map(
-        (c) => `
+      .map((c) => {
+        const initial = escapeHtml(c.name.charAt(0).toUpperCase());
+        const avatarInner = c.emailHash
+          ? `<img class="comment__avatar-img" src="https://www.gravatar.com/avatar/${c.emailHash}?s=72&d=404" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" /><span class="comment__avatar-initial">${initial}</span>`
+          : `<span class="comment__avatar-initial">${initial}</span>`;
+        return `
         <article class="comment">
-          <header class="comment__header">
-            <span class="comment__author">${escapeHtml(c.name)}</span>
-            <time class="comment__date" datetime="${c.date}">${formatDate(c.date)}</time>
-          </header>
-          <p class="comment__body">${escapeHtml(c.comment)}</p>
-        </article>`,
-      )
+          <div class="comment__avatar">${avatarInner}</div>
+          <div class="comment__content">
+            <div class="comment__meta">
+              <span class="comment__author">${escapeHtml(c.name)}</span>
+              <span class="comment__meta-sep" aria-hidden="true">&middot;</span>
+              <time class="comment__date" datetime="${c.date}">${formatDate(c.date)}</time>
+            </div>
+            <blockquote class="comment__body">${escapeHtml(c.comment)}</blockquote>
+          </div>
+        </article>`;
+      })
       .join("");
   }
 
@@ -247,44 +260,90 @@ const { postId } = Astro.props;
     margin-bottom: 3.5rem;
   }
 
-  .comment {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--color-border);
-
-    &:first-child {
-      border-top: 1px solid var(--color-border);
-    }
-  }
-
-  .comment__header {
+  :global(.comment) {
     display: flex;
-    align-items: baseline;
     gap: 1rem;
-    margin-bottom: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-pink);
   }
 
-  .comment__author {
+  :global(.comment__avatar) {
+    flex-shrink: 0;
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: var(--color-pink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  :global(.comment__avatar-initial) {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  :global(.comment__avatar-img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  :global(.comment__content) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.comment__meta) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.625rem;
+  }
+
+  :global(.comment__author) {
     font-family: "Barlow Condensed", sans-serif;
     font-weight: 700;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-pink);
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
   }
 
-  .comment__date {
+  :global(.comment__meta-sep) {
+    color: var(--color-pink);
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+
+  :global(.comment__date) {
     font-size: 0.8125rem;
     color: var(--color-muted);
+    letter-spacing: 0.02em;
   }
 
-  .comment__body {
+  :global(.comment__body) {
+    margin: 0;
+    padding: 0;
+    border: none;
     font-size: 0.9375rem;
-    line-height: 1.7;
+    line-height: 1.8;
     color: var(--color-ink);
     white-space: pre-wrap;
   }
 
-  .comments__empty,
   .comments__status-line {
     font-size: 0.875rem;
     color: var(--color-muted);
@@ -359,6 +418,12 @@ const { postId } = Astro.props;
   }
 
   [data-theme="dark"] {
+    :global(.comment) {
+      background-color: #1a1a1a;
+      border-color: var(--color-border);
+      border-left-color: var(--color-pink);
+    }
+
     .comments__form-wrapper {
       .input,
       .textarea {
