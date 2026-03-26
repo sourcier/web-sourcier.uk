@@ -52,6 +52,7 @@ const allPosts = (await getCollection("posts"))
                   url={`/blog/${post.id}`}
                   cover={post.data.cover}
                   pubDate={post.data.pubDate}
+                  draft={post.data.draft}
                 />
               </div>
             ))

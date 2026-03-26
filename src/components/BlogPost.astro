@@ -1,5 +1,6 @@
 ---
-const { description, title, subTitle, url, cover, pubDate } = Astro.props;
+const { description, title, subTitle, url, cover, pubDate, draft } =
+  Astro.props;
 const formattedDate = pubDate
   ? new Date(pubDate).toLocaleDateString("en-GB", {
       year: "numeric",
@@ -9,7 +10,14 @@ const formattedDate = pubDate
   : null;
 ---
 
-<a href={url} class="card card__blog">
+<a href={url} class={`card card__blog${draft ? " card__blog--draft" : ""}`}>
+  {
+    draft && (
+      <span class="card__draft-badge" aria-label="Draft">
+        Draft
+      </span>
+    )
+  }
   {
     cover && (
       <div class="card__cover">
@@ -38,5 +46,35 @@ const formattedDate = pubDate
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+  }
+
+  .card__draft-badge {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
+    z-index: 2;
+    padding: 0.2rem 0.55rem;
+    background-color: var(--color-pink);
+    color: #ffffff;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
+  .card__blog--draft {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: var(--color-paper);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 </style>
