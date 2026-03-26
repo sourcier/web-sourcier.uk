@@ -7,14 +7,56 @@ const pageTitle = "Contact";
 <BaseLayout pageTitle={pageTitle}>
   <PageHero
     kicker="Get in touch"
-    title="Contact"
-    subtitle="Got a question, a project idea, or just want to say hello? I'd love to hear from you."
+    title="Let's work together"
+    subtitle="Open to projects, speaking opportunities, and mentoring conversations."
   />
+
+  <!-- Contact reasons -->
+  <div class="contact-reasons">
+    <div class="container is-max-desktop">
+      <ul class="contact-reasons__list" role="list">
+        <li class="contact-reasons__item">
+          <span class="contact-reasons__icon" aria-hidden="true">⬡</span>
+          <div>
+            <p class="contact-reasons__title">Projects</p>
+            <p class="contact-reasons__desc">
+              Engineering leadership or full-stack development
+              work.
+            </p>
+          </div>
+        </li>
+        <li class="contact-reasons__item">
+          <span class="contact-reasons__icon" aria-hidden="true">⬡</span>
+          <div>
+            <p class="contact-reasons__title">Speaking</p>
+            <p class="contact-reasons__desc">
+              Talks on software engineering, technical leadership, or career
+              growth.
+            </p>
+          </div>
+        </li>
+        <li class="contact-reasons__item">
+          <span class="contact-reasons__icon" aria-hidden="true">⬡</span>
+          <div>
+            <p class="contact-reasons__title">Mentoring</p>
+            <p class="contact-reasons__desc">
+              Supporting engineers looking to grow their skills or break into
+              the field.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <section class="section">
     <div class="container is-max-desktop">
       <div class="contact-layout">
         <div class="contact-form-col">
+          <p class="contact-form__intro">
+            Use the form below and I'll get back to you as soon as I can.
+          </p>
+
           <form
             class="contact-form"
             name="Contact"
@@ -52,16 +94,33 @@ const pageTitle = "Contact";
             </div>
 
             <div class="contact-form__field">
-              <label class="contact-form__label" for="contact-subject"
-                >Subject</label
+              <label class="contact-form__label" for="contact-reason"
+                >Reason</label
+              >
+              <select
+                class="contact-form__input"
+                id="contact-reason"
+                name="reason"
+                required
+              >
+                <option value="" disabled selected>Select a reason…</option>
+                <option value="project">Project</option>
+                <option value="speaking">Speaking</option>
+                <option value="mentoring">Mentoring</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="contact-form__field is-hidden" id="other-reason-field">
+              <label class="contact-form__label" for="contact-other-reason"
+                >Please specify</label
               >
               <input
                 class="contact-form__input"
-                id="contact-subject"
+                id="contact-other-reason"
                 type="text"
-                placeholder="What's this about?"
-                name="subject"
-                required
+                placeholder="Please specify your reason…"
+                name="other-reason"
               />
             </div>
 
@@ -72,7 +131,7 @@ const pageTitle = "Contact";
               <textarea
                 class="contact-form__textarea"
                 id="contact-message"
-                placeholder="Your message…"
+                placeholder="Tell me a bit about what you have in mind…"
                 name="message"
                 rows="6"
                 required></textarea>
@@ -128,12 +187,107 @@ const pageTitle = "Contact";
   </section>
 </BaseLayout>
 
+<style lang="scss">
+  /* ── Contact reasons bar ───────────────────────────────────── */
+  .contact-reasons {
+    margin-top: 3rem;
+    padding: 0 1.5rem;
+  }
+
+  .contact-reasons__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .contact-reasons__item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.5rem 1.25rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+    }
+  }
+
+  .contact-reasons__icon {
+    font-size: 1.25rem;
+    color: var(--color-pink);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .contact-reasons__title {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-reasons__desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  /* ── Form intro ────────────────────────────────────────────── */
+  .contact-form__intro {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+  }
+
+  /* ── Select styling ────────────────────────────────────────── */
+  select.contact-form__input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    cursor: pointer;
+
+    &.is-placeholder {
+      color: var(--color-muted);
+      opacity: 0.6;
+    }
+
+    option {
+      color: var(--color-ink);
+      opacity: 1;
+    }
+  }
+</style>
+
 <script>
   const handleSubmit = (event: Event) => {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form) as unknown as Record<string, string>;
+
+    if (formData["reason"] === "other" && formData["other-reason"]) {
+      formData["reason"] = formData["other-reason"];
+    }
+    delete formData["other-reason"];
 
     fetch("/", {
       method: "POST",
@@ -168,6 +322,30 @@ const pageTitle = "Contact";
   document
     .querySelector("form[name='Contact']")
     ?.addEventListener("submit", handleSubmit);
+
+  const reasonSelect = document.querySelector(
+    "#contact-reason",
+  ) as HTMLSelectElement | null;
+  const otherReasonField = document.querySelector(
+    "#other-reason-field",
+  ) as HTMLElement | null;
+  const otherReasonInput = document.querySelector(
+    "#contact-other-reason",
+  ) as HTMLInputElement | null;
+
+  reasonSelect?.addEventListener("change", () => {
+    const isOther = reasonSelect.value === "other";
+    otherReasonField?.classList.toggle("is-hidden", !isOther);
+    if (otherReasonInput) {
+      otherReasonInput.required = isOther;
+    }
+    reasonSelect.classList.toggle("is-placeholder", reasonSelect.value === "");
+  });
+
+  // Set initial placeholder state
+  if (reasonSelect) {
+    reasonSelect.classList.add("is-placeholder");
+  }
 
   document
     .querySelector("[data-success-message] .contact-success__close")
