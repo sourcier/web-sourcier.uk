@@ -19,107 +19,117 @@ const pageTitle = "Contact";
 
   <section class="section">
     <div class="container">
-      <section class="section">
-        <form
-          name="Contact"
-          method="post"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-        >
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-              <input
-                class="input"
-                type="email"
-                placeholder="Your email"
-                name="email"
-                required
-              />
+      <div class="contact-layout">
+        <div class="contact-form-col">
+          <form
+            class="contact-form"
+            name="Contact"
+            method="post"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            <div class="contact-form__row">
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="contact-name"
+                  >Name</label
+                >
+                <input
+                  class="contact-form__input"
+                  id="contact-name"
+                  type="text"
+                  placeholder="Your name"
+                  name="name"
+                  required
+                />
+              </div>
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="contact-email"
+                  >Email</label
+                >
+                <input
+                  class="contact-form__input"
+                  id="contact-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  name="email"
+                  required
+                />
+              </div>
             </div>
-          </div>
 
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
+            <div class="contact-form__field">
+              <label class="contact-form__label" for="contact-subject"
+                >Subject</label
+              >
               <input
-                class="input"
+                class="contact-form__input"
+                id="contact-subject"
                 type="text"
-                placeholder="Your name"
-                name="name"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label">Subject</label>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                placeholder="Your subject"
+                placeholder="What's this about?"
                 name="subject"
                 required
               />
             </div>
-          </div>
 
-          <div class="field">
-            <label class="label">Message</label>
-            <div class="control">
+            <div class="contact-form__field">
+              <label class="contact-form__label" for="contact-message"
+                >Message</label
+              >
               <textarea
-                class="textarea"
-                placeholder="Your message"
+                class="contact-form__textarea"
+                id="contact-message"
+                placeholder="Your message…"
                 name="message"
+                rows="6"
                 required></textarea>
             </div>
-          </div>
-          <div class="field is-hidden">
-            <label class="label"> Don't fill this out if you're human:</label>
-            <div class="control">
-              <input name="bot-field" type="text" class="input" />
+
+            <div class="field is-hidden" aria-hidden="true">
+              <input name="bot-field" type="text" />
             </div>
+
+            <button class="contact-form__submit" type="submit"
+              >Send Message &rarr;</button
+            >
+          </form>
+
+          <div class="contact-success is-hidden" data-success-message>
+            <p class="contact-success__text">
+              &#10003; Message sent — I'll get back to you soon.
+            </p>
+            <button class="contact-success__close" type="button">Dismiss</button
+            >
           </div>
-          <div class="field">
-            <div class="control">
-              <button class="button is-primary">Send Message</button>
-            </div>
-          </div>
-        </form>
-        <div
-          class="notification is-success mt-3 is-hidden"
-          data-success-message
-        >
-          <button class="delete"></button>
-          Thank you for your message! I'll get back to you as soon as I can.
         </div>
-      </section>
-      <section class="section">
-        <div class="content post__content">
-          <h2>Socials</h2>
-          <p>
-            You can also find me on
+
+        <aside class="contact-sidebar">
+          <h2 class="contact-sidebar__heading">Find me online</h2>
+          <div class="contact-sidebar__links">
             <a
+              class="contact-sidebar__link"
               href="https://www.linkedin.com/in/roger-rajaratnam"
               target="_blank"
               rel="noopener noreferrer"
             >
-              LinkedIn
-            </a> where I share thoughts on software engineering, system design, and
-            technical leadership. If you're interested in seeing what I'm building
-            or exploring, head over to
+              <span class="contact-sidebar__link-label">LinkedIn</span>
+              <span class="contact-sidebar__link-desc"
+                >Software engineering &amp; leadership</span
+              >
+            </a>
             <a
+              class="contact-sidebar__link"
               href="https://github.com/sourcier"
               target="_blank"
               rel="noopener noreferrer"
             >
-              GitHub
-            </a> where I contribute to open source projects and share code from my
-            blog posts.
-          </p>
-        </div>
-      </section>
+              <span class="contact-sidebar__link-label">GitHub</span>
+              <span class="contact-sidebar__link-desc"
+                >Open source &amp; blog code</span
+              >
+            </a>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -146,7 +156,7 @@ const pageTitle = "Contact";
       .catch((error) => alert(error));
   };
 
-  const handleSuccessMessageClose = (event: Event) => {
+  const handleSuccessMessageClose = () => {
     const form = document.querySelector(
       "form[name='Contact']",
     ) as HTMLFormElement;
@@ -154,8 +164,8 @@ const pageTitle = "Contact";
       "[data-success-message]",
     ) as HTMLElement;
 
-    form.style.display = "block";
-    successMessage.classList.toggle("is-hidden");
+    form.style.display = "";
+    successMessage.classList.add("is-hidden");
   };
 
   document
@@ -163,6 +173,7 @@ const pageTitle = "Contact";
     ?.addEventListener("submit", handleSubmit);
 
   document
-    .querySelector("[data-success-message] .delete")
+    .querySelector("[data-success-message] .contact-success__close")
     ?.addEventListener("click", handleSuccessMessageClose);
 </script>
+.querySelector("[data-success-message] .delete") ?.addEventListener("click", handleSuccessMessageClose);
