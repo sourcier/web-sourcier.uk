@@ -601,8 +601,8 @@ h1, h2, h3, h4, h5, h6,
 
   @media (min-width: 1280px) {
     display: grid;
-    grid-template-columns: minmax(0, 75ch) 220px;
-    gap: 5rem;
+    grid-template-columns: minmax(0, 80ch) 260px;
+    gap: 4rem;
     align-items: start;
     justify-content: center;
   }
@@ -622,11 +622,8 @@ h1, h2, h3, h4, h5, h6,
     top: 6rem;
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
+    padding-left: 0;
   }
-}
-
-.toc {
-  // sticky is now on .post__sidebar; no need to repeat it here
 }
 
 .toc__heading {
@@ -635,9 +632,9 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-muted);
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--color-border);
+  color: var(--color-pink);
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--color-pink);
   margin-bottom: 0.75rem;
 }
 
@@ -655,18 +652,20 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.4;
   color: var(--color-muted);
   text-decoration: none;
-  padding: 0.3rem 0;
+  padding: 0.45rem 0.5rem 0.45rem 0.75rem;
   border-left: 2px solid transparent;
-  padding-left: 0.75rem;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  border-radius: 0 3px 3px 0;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 
   &:hover {
     color: var(--color-ink);
+    background-color: var(--color-surface);
   }
 
   &.is-active {
     color: var(--color-pink);
     border-left-color: var(--color-pink);
+    background-color: rgba(232, 0, 106, 0.06);
   }
 }
 
@@ -676,7 +675,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .post__content {
-  max-width: 75ch;
+  max-width: 80ch;
   margin-left: auto;
   margin-right: auto;
 
@@ -690,6 +689,10 @@ h1, h2, h3, h4, h5, h6,
   font-size: 1.125rem;
   line-height: 1.85;
   color: var(--color-ink);
+
+  > *:first-child {
+    margin-top: 0;
+  }
 
   h1, h2, h3, h4, h5, h6 {
     color: var(--color-ink);

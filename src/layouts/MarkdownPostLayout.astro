@@ -4,9 +4,9 @@ import PageHero from "../components/PageHero.astro";
 import Comments from "../components/Comments.astro";
 import PageHistory from "../components/PageHistory.astro";
 const { frontmatter, postId, headings = [] } = Astro.props;
-const tocHeadings = (headings as { depth: number; slug: string; text: string }[]).filter(
-  (h) => h.depth === 2 || h.depth === 3
-);
+const tocHeadings = (
+  headings as { depth: number; slug: string; text: string }[]
+).filter((h) => h.depth === 2 || h.depth === 3);
 const formattedDate = frontmatter.pubDate
   ? new Date(frontmatter.pubDate).toLocaleDateString("en-GB", {
       year: "numeric",
@@ -54,20 +54,24 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
             )
           }
         </div>
-        {tocHeadings.length > 1 && (
-          <aside class="post__sidebar" aria-label="Table of contents">
-            <nav class="toc">
-              <p class="toc__heading">On this page</p>
-              <ol class="toc__list">
-                {tocHeadings.map((h) => (
-                  <li class={`toc__item toc__item--h${h.depth}`}>
-                    <a class="toc__link" href={`#${h.slug}`}>{h.text}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
-          </aside>
-        )}
+        {
+          tocHeadings.length > 1 && (
+            <aside class="post__sidebar" aria-label="Table of contents">
+              <nav class="toc">
+                <p class="toc__heading">On this page</p>
+                <ol class="toc__list">
+                  {tocHeadings.map((h) => (
+                    <li class={`toc__item toc__item--h${h.depth}`}>
+                      <a class="toc__link" href={`#${h.slug}`}>
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </aside>
+          )
+        }
       </div>
     </div>
 
@@ -143,7 +147,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
   :global(.mermaid-diagram) {
     position: relative;
-    margin: 2rem -4rem;
+    margin: 2rem -2rem;
     display: flex;
     justify-content: center;
     overflow-x: auto;
@@ -421,12 +425,12 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
   if (tocLinks.length) {
     const setActive = (id: string) => {
       tocLinks.forEach((l) =>
-        l.classList.toggle("is-active", l.getAttribute("href") === `#${id}`)
+        l.classList.toggle("is-active", l.getAttribute("href") === `#${id}`),
       );
     };
 
     const headingEls = document.querySelectorAll<HTMLElement>(
-      ".post__content h2, .post__content h3"
+      ".post__content h2, .post__content h3",
     );
     const obs = new IntersectionObserver(
       (entries) => {
@@ -437,7 +441,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
           }
         }
       },
-      { rootMargin: "0px 0px -80% 0px" }
+      { rootMargin: "0px 0px -80% 0px" },
     );
     headingEls.forEach((h) => obs.observe(h));
   }
