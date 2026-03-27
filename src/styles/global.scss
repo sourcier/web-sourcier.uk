@@ -107,6 +107,28 @@ h1, h2, h3, h4, h5, h6,
   .navbar-burger span {
     background-color: var(--color-paper);
   }
+
+  @media (max-width: 1023px) {
+    .navbar-item:not(.navbar-item:has(img)):not(.navbar-item:has(.buttons)) {
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
+
+    .navbar-end {
+      padding-top: 0;
+    }
+
+    .navbar-item:has(.buttons) {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 0.75rem;
+
+      .buttons {
+        justify-content: center;
+      }
+    }
+  }
 }
 
 [data-theme='dark'] .navbar {
@@ -370,6 +392,16 @@ h1, h2, h3, h4, h5, h6,
   justify-content: center;
   width: 2rem;
   height: 2rem;
+
+  @media (max-width: 1023px) {
+    width: 2.75rem;
+    height: 2.75rem;
+
+    svg {
+      width: 1.375rem;
+      height: 1.375rem;
+    }
+  }
   background: transparent;
   border: none;
   border-radius: 0;
