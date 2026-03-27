@@ -86,6 +86,9 @@ h1, h2, h3, h4, h5, h6,
   --bulma-navbar-item-hover-background-color: transparent;
   --bulma-navbar-item-active-color: var(--color-pink);
   border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
   .navbar-item:hover,
   .navbar-item:focus,
@@ -648,7 +651,7 @@ h1, h2, h3, h4, h5, h6,
 
 .toc__link {
   display: block;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   line-height: 1.4;
   color: var(--color-muted);
   text-decoration: none;
@@ -669,7 +672,7 @@ h1, h2, h3, h4, h5, h6,
 
 .toc__item--h3 .toc__link {
   padding-left: 1.5rem;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .post__content {
