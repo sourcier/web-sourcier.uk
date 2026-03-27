@@ -69,16 +69,10 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
                   class="card card__blog card__blog--placeholder"
                   aria-hidden="true"
                 >
-                  <div class="card__body">
-                    <div class="skeleton-line skeleton-line--date" />
-                    <div class="skeleton-line skeleton-line--title" />
-                    <div class="skeleton-line skeleton-line--title skeleton-line--title-short" />
-                    <div class="skeleton-line" />
-                    <div class="skeleton-line" />
-                    <div class="skeleton-line skeleton-line--short" />
-                  </div>
-                  <div class="card__cta card__cta--placeholder">
-                    <div class="skeleton-line skeleton-line--cta" />
+                  <div class="card__blog--placeholder-inner">
+                    <span class="card__blog--placeholder-label">
+                      More posts coming soon
+                    </span>
                   </div>
                 </div>
               </div>
@@ -94,57 +88,28 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 </BaseLayout>
 
 <style lang="scss">
-  @keyframes skeleton-shimmer {
-    from {
-      background-position: -400px 0;
-    }
-    to {
-      background-position: 400px 0;
-    }
-  }
-
-  .skeleton-line {
-    height: 0.875rem;
-    border-radius: 4px;
-    margin-bottom: 0.6rem;
-    background: linear-gradient(
-      90deg,
-      var(--color-border) 25%,
-      var(--color-surface) 50%,
-      var(--color-border) 75%
-    );
-    background-size: 400px 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
-    width: 100%;
-
-    &--date {
-      width: 30%;
-      margin-bottom: 0.75rem;
-    }
-    &--title {
-      height: 1.25rem;
-      width: 90%;
-    }
-    &--title-short {
-      width: 60%;
-      margin-bottom: 0.75rem;
-    }
-    &--short {
-      width: 50%;
-    }
-    &--cta {
-      width: 5rem;
-      height: 0.875rem;
-    }
-  }
-
   .card__blog--placeholder {
     pointer-events: none;
-    opacity: 0.6;
-  }
+    border: 2px dashed var(--color-border);
+    border-top: 2px dashed var(--color-border);
+    background: transparent;
+    box-shadow: none;
 
-  .card__cta--placeholder {
-    display: flex;
-    align-items: center;
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 2rem 1.5rem;
+    }
+
+    &-label {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-border);
+    }
   }
 </style>
