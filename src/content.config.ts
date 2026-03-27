@@ -27,6 +27,15 @@ const posts = defineCollection({
           }),
         )
         .optional(),
+      credits: z
+        .array(
+          z.object({
+            label: z.string(),
+            text: z.string(),
+            url: z.string().url().optional(),
+          }),
+        )
+        .optional(),
     }),
 });
 

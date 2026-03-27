@@ -1,0 +1,93 @@
+---
+interface CreditEntry {
+  label: string;
+  text: string;
+  url?: string;
+}
+
+interface Props {
+  entries: CreditEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="page-credits">
+  <p class="page-credits__heading">Credits</p>
+  <dl class="page-credits__list">
+    {
+      entries.map((entry) => (
+        <div class="page-credits__entry">
+          <dt>{entry.label}</dt>
+          <dd>
+            {entry.url ? (
+              <a href={entry.url} target="_blank" rel="noopener noreferrer">
+                {entry.text}
+              </a>
+            ) : (
+              entry.text
+            )}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style lang="scss">
+  .page-credits {
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    border-left: 2px solid var(--color-border);
+    opacity: 0.65;
+  }
+
+  .page-credits__heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin: 0 0 1rem;
+  }
+
+  .page-credits__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .page-credits__entry {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0 1.25rem;
+    align-items: baseline;
+  }
+
+  .page-credits__entry dt {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .page-credits__entry dd {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 0;
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: var(--color-ink);
+      }
+    }
+  }
+</style>
