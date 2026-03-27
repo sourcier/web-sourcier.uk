@@ -19,6 +19,19 @@ const pageTitle = "Blog — Sourcier";
     subtitle="Software engineering, architecture, and lessons learned along the way."
   />
 
+  <div class="blog-intro">
+    <div class="container is-max-desktop">
+      <blockquote class="blog-intro__quote">
+        <p>
+          This blog is where I share ideas, lessons learned, and practical
+          insights from my experience in software engineering — system design,
+          web development, technical leadership, and whatever else is on my
+          mind.
+        </p>
+      </blockquote>
+    </div>
+  </div>
+
   <section class="section">
     <div class="container is-max-desktop">
       <div
@@ -44,3 +57,27 @@ const pageTitle = "Blog — Sourcier";
     </div>
   </section>
 </BaseLayout>
+
+<style lang="scss">
+  .blog-intro {
+    padding: 3.5rem 1.5rem 0;
+  }
+
+  .blog-intro__quote {
+    margin: 0;
+    padding: 0 0 0 2rem;
+    border-left: 3px solid var(--color-pink);
+    position: relative;
+
+    p {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--color-ink);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+  }
+</style>
