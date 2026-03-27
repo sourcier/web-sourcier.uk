@@ -344,6 +344,20 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 0.5rem;
 }
 
+// — Shiki dual-theme switching (light: github-light, dark: dracula)
+// Applies the correct set of CSS variables emitted by Shiki based on data-theme
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+
+[data-theme='dark'] .astro-code,
+[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
 // — Social icon buttons
 .social-icon {
   display: inline-flex;
@@ -662,8 +676,7 @@ h1, h2, h3, h4, h5, h6,
   }
 
   pre {
-    background-color: #0f0f0f;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border);
     border-radius: 0;
     padding: 1.5rem;
     overflow-x: auto;
@@ -673,7 +686,6 @@ h1, h2, h3, h4, h5, h6,
       font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
       font-size: 0.875rem;
       line-height: 1.7;
-      color: #e2e8f0;
       background: none;
       border: none;
       padding: 0;

@@ -9,7 +9,11 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
     shikiConfig: {
-      theme: "dracula",
+      themes: {
+        light: "one-light",
+        dark: "one-dark-pro",
+      },
+      defaultColor: false,
       langs: [],
     },
     syntaxHighlight: {
