@@ -261,12 +261,8 @@ const pageTitle = "About — Roger Rajaratnam";
     &--highlight {
       background-color: var(--color-ink);
 
-      [data-theme="dark"] & {
-        background-color: #1a1a1a;
-      }
-
       .about-sidebar-card__label {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.65);
       }
 
       .about-sidebar-card__title {
@@ -274,9 +270,13 @@ const pageTitle = "About — Roger Rajaratnam";
       }
 
       .about-sidebar-card__sub {
-        color: rgba(255, 255, 255, 0.55);
+        color: rgba(255, 255, 255, 0.7);
       }
     }
+  }
+
+  :global([data-theme="dark"]) .about-sidebar-card--highlight {
+    background-color: var(--color-pink);
   }
 
   .about-sidebar-card__label {
