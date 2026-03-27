@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "astro": "^5.18.0",
     "bulma": "^1.0.4",
     "mermaid": "^11.13.0",
