@@ -11,6 +11,7 @@ const testimonials = [
     title: "Product Designer",
     company: "NewDay",
     logo: newdayLogo,
+    website: "https://www.newday.co.uk",
     placeholder: false,
   },
   {
@@ -20,6 +21,7 @@ const testimonials = [
     title: "Lead Engineer",
     company: "Into Film",
     logo: intofilmLogo,
+    website: "https://www.intofilm.org",
     placeholder: false,
   },
   {
@@ -29,6 +31,7 @@ const testimonials = [
     title: "Senior Security Engineer",
     company: "Treatwell",
     logo: treatwellLogo,
+    website: "https://www.treatwell.co.uk",
     placeholder: false,
   },
 ];
@@ -65,14 +68,22 @@ const testimonials = [
                     </p>
                   </div>
                   {t.logo && (
-                    <img
-                      src={t.logo.src}
-                      alt={t.company}
-                      class="testimonials__logo"
-                      width="64"
-                      height="64"
-                      loading="lazy"
-                    />
+                    <a
+                      href={t.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="testimonials__logo-link"
+                      aria-label={`Visit ${t.company} website`}
+                    >
+                      <img
+                        src={t.logo.src}
+                        alt={t.company}
+                        class="testimonials__logo"
+                        width="64"
+                        height="64"
+                        loading="lazy"
+                      />
+                    </a>
                   )}
                 </div>
               </footer>
@@ -145,6 +156,12 @@ const testimonials = [
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  .testimonials__logo-link {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
   }
 
   .testimonials__logo {
