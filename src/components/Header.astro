@@ -6,8 +6,8 @@ import { faIcon } from "../utils/icons";
 
 const githubIcon = faIcon(faGithub);
 const linkedinIcon = faIcon(faLinkedin);
-const moonIcon = faIcon(faMoon, { class: "moonIcon", size: 18 });
-const sunIcon = faIcon(faSun, { class: "sunIcon", size: 18 });
+const moonIcon = faIcon(faMoon, { size: 18 });
+const sunIcon = faIcon(faSun, { size: 18 });
 ---
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -71,8 +71,8 @@ const sunIcon = faIcon(faSun, { class: "sunIcon", size: 18 });
               data-theme-toggle
               aria-label="Change to dark theme"
             >
-              <Fragment set:html={moonIcon} />
-              <Fragment set:html={sunIcon} />
+              <span class="moonIcon" set:html={moonIcon} />
+              <span class="sunIcon" set:html={sunIcon} />
             </button>
           </div>
         </div>
