@@ -1,0 +1,178 @@
+---
+const testimonials = [
+  {
+    quote:
+      "When we hired Roger a decade ago at Into Film, we couldn't decide between him and another candidate—so naturally, we took them both. Turns out Roger was worth it. As a principal software engineer, he solves problems I didn't even know existed, with a calm that makes the chaos of charity work look orderly. Ten years later, I still think hiring him was the smarter half of that indecision.",
+    name: "Chris Breen",
+    title: "",
+    company: "Into Film",
+    placeholder: false,
+  },
+  { placeholder: true },
+  { placeholder: true },
+];
+---
+
+<section class="testimonials" aria-labelledby="testimonials-heading">
+  <div class="container is-max-desktop">
+    <p class="section-label" id="testimonials-heading">What people say</p>
+    <ul class="testimonials__list" role="list">
+      {
+        testimonials.map((t) =>
+          t.placeholder ? (
+            <li class="testimonials__item testimonials__item--placeholder" aria-hidden="true">
+              <div class="testimonials__quote">
+                <p class="skeleton-lines">
+                  <span class="skeleton-line" />
+                  <span class="skeleton-line" />
+                  <span class="skeleton-line" />
+                  <span class="skeleton-line is-narrow" />
+                </p>
+              </div>
+              <footer class="testimonials__footer">
+                <p class="skeleton-lines">
+                  <span class="skeleton-line is-medium" />
+                  <span class="skeleton-line is-narrow" />
+                </p>
+              </footer>
+            </li>
+          ) : (
+            <li class="testimonials__item">
+              <blockquote class="testimonials__quote">
+                <p>&ldquo;{t.quote}&rdquo;</p>
+              </blockquote>
+              <footer class="testimonials__footer">
+                <p class="testimonials__name">{t.name}</p>
+                <p class="testimonials__meta">
+                  {t.title ? `${t.title} · ${t.company}` : t.company}
+                </p>
+              </footer>
+            </li>
+          )
+        )
+      }
+    </ul>
+  </div>
+</section>
+
+<style lang="scss">
+  .testimonials {
+    padding: 4rem 1.5rem;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .testimonials__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .testimonials__item {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    background-color: var(--color-paper);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+    }
+  }
+
+  .testimonials__quote {
+    flex: 1;
+    margin: 0 0 1.5rem;
+
+    p {
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--color-ink);
+      margin: 0;
+      font-style: italic;
+    }
+  }
+
+  .testimonials__footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+  }
+
+  .testimonials__item--placeholder {
+    cursor: default;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .testimonials__footer {
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+    }
+  }
+
+  .skeleton-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .skeleton-line {
+    display: block;
+    height: 0.75rem;
+    border-radius: 2px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      var(--color-surface) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+
+    &.is-medium {
+      width: 55%;
+    }
+
+    &.is-narrow {
+      width: 35%;
+    }
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .testimonials__name {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink);
+    margin: 0 0 0.2rem;
+  }
+
+  .testimonials__meta {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+</style>
