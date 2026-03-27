@@ -32,8 +32,6 @@ export default defineConfig({
         },
         transformerNotationDiff(),
       ],
-      // },
-      // ],
     },
     syntaxHighlight: {
       excludeLangs: ["mermaid"],
