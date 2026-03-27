@@ -1,0 +1,233 @@
+---
+import BlogPost from "./BlogPost.astro";
+
+interface Props {
+  posts: any[];
+  currentPage: number;
+  totalPages: number;
+  prevUrl: string | null;
+  nextUrl: string | null;
+}
+
+const { posts, currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
+
+const COLS = 3;
+const placeholderCount =
+  currentPage === totalPages ? (COLS - (posts.length % COLS)) % COLS : 0;
+
+function pageUrl(n: number) {
+  return n === 1 ? "/blog" : `/blog/page/${n}`;
+}
+---
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div
+      class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
+    >
+      <div class="grid">
+        {
+          posts.map((post: any) => (
+            <div class="cell">
+              <BlogPost
+                title={post.data.title}
+                subTitle={post.data.subTitle}
+                description={post.data.description}
+                url={`/blog/${post.id}`}
+                cover={post.data.cover}
+                pubDate={post.data.pubDate}
+                draft={post.data.draft}
+              />
+            </div>
+          ))
+        }
+        {
+          Array.from({ length: placeholderCount }).map(() => (
+            <div class="cell">
+              <div
+                class="card card__blog card__blog--placeholder"
+                aria-hidden="true"
+              >
+                <div class="card__body">
+                  <div class="skeleton-line skeleton-line--date" />
+                  <div class="skeleton-line skeleton-line--title" />
+                  <div class="skeleton-line skeleton-line--title skeleton-line--title-short" />
+                  <div class="skeleton-line" />
+                  <div class="skeleton-line" />
+                  <div class="skeleton-line skeleton-line--short" />
+                </div>
+                <div class="card__cta card__cta--placeholder">
+                  <div class="skeleton-line skeleton-line--cta" />
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      totalPages > 1 && (
+        <nav class="pagination-nav" aria-label="Blog pagination">
+          <a
+            href={prevUrl}
+            class={`pagination-nav__btn${!prevUrl ? " pagination-nav__btn--disabled" : ""}`}
+            aria-disabled={!prevUrl}
+            tabindex={!prevUrl ? -1 : 0}
+          >
+            &larr; Previous
+          </a>
+
+          <div class="pagination-nav__pages" role="list">
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const n = i + 1;
+              return (
+                <a
+                  href={pageUrl(n)}
+                  role="listitem"
+                  class={`pagination-nav__page${n === currentPage ? " pagination-nav__page--active" : ""}`}
+                  aria-current={n === currentPage ? "page" : undefined}
+                >
+                  {n}
+                </a>
+              );
+            })}
+          </div>
+
+          <a
+            href={nextUrl}
+            class={`pagination-nav__btn${!nextUrl ? " pagination-nav__btn--disabled" : ""}`}
+            aria-disabled={!nextUrl}
+            tabindex={!nextUrl ? -1 : 0}
+          >
+            Next &rarr;
+          </a>
+        </nav>
+      )
+    }
+  </div>
+</section>
+
+<style lang="scss">
+  /* ── Pagination ───────────────────────────────────────────── */
+  .pagination-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pagination-nav__pages {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .pagination-nav__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+
+    &:hover {
+      background-color: var(--color-surface);
+    }
+
+    &--active {
+      background-color: var(--color-pink);
+      color: #fff;
+
+      &:hover {
+        background-color: var(--color-pink);
+      }
+    }
+  }
+
+  .pagination-nav__btn {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+    }
+
+    &--disabled {
+      color: var(--color-muted);
+      pointer-events: none;
+    }
+  }
+
+  /* ── Skeleton ─────────────────────────────────────────────── */
+  @keyframes skeleton-shimmer {
+    from {
+      background-position: -400px 0;
+    }
+    to {
+      background-position: 400px 0;
+    }
+  }
+
+  .skeleton-line {
+    height: 0.875rem;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      var(--color-surface) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 400px 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+    width: 100%;
+
+    &--date {
+      width: 30%;
+      margin-bottom: 0.75rem;
+    }
+    &--title {
+      height: 1.25rem;
+      width: 90%;
+    }
+    &--title-short {
+      width: 60%;
+      margin-bottom: 0.75rem;
+    }
+    &--short {
+      width: 50%;
+    }
+    &--cta {
+      width: 5rem;
+      height: 0.875rem;
+    }
+  }
+
+  .card__blog--placeholder {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .card__cta--placeholder {
+    display: flex;
+    align-items: center;
+  }
+</style>
