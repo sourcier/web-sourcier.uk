@@ -1,4 +1,8 @@
 ---
+import newdayLogo from "../../assets/images/newday-favicon.png";
+import intofilmLogo from "../../assets/images/intofilm-favicon.png";
+import treatwellLogo from "../../assets/images/treatwell-favicon.png";
+
 const testimonials = [
   {
     quote:
@@ -6,6 +10,7 @@ const testimonials = [
     name: "Elise Ten Cate",
     title: "Product Designer",
     company: "NewDay",
+    logo: newdayLogo,
     placeholder: false,
   },
   {
@@ -14,6 +19,7 @@ const testimonials = [
     name: "Chris Breen",
     title: "Lead Engineer",
     company: "Into Film",
+    logo: intofilmLogo,
     placeholder: false,
   },
   {
@@ -22,6 +28,7 @@ const testimonials = [
     name: "Syed Shah",
     title: "Senior Security Engineer",
     company: "Treatwell",
+    logo: treatwellLogo,
     placeholder: false,
   },
 ];
@@ -50,10 +57,24 @@ const testimonials = [
                 <p>&ldquo;{t.quote}&rdquo;</p>
               </blockquote>
               <footer class="testimonials__footer">
-                <p class="testimonials__name">{t.name}</p>
-                <p class="testimonials__meta">
-                  {t.title ? `${t.title} · ${t.company}` : t.company}
-                </p>
+                <div class="testimonials__attribution">
+                  <div>
+                    <p class="testimonials__name">{t.name}</p>
+                    <p class="testimonials__meta">
+                      {t.title ? `${t.title} · ${t.company}` : t.company}
+                    </p>
+                  </div>
+                  {t.logo && (
+                    <img
+                      src={t.logo.src}
+                      alt={t.company}
+                      class="testimonials__logo"
+                      width="64"
+                      height="64"
+                      loading="lazy"
+                    />
+                  )}
+                </div>
               </footer>
             </li>
           ),
@@ -117,6 +138,40 @@ const testimonials = [
   .testimonials__footer {
     border-top: 1px solid var(--color-border);
     padding-top: 1rem;
+  }
+
+  .testimonials__attribution {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .testimonials__logo {
+    flex-shrink: 0;
+    max-width: 64px;
+    max-height: 32px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    opacity: 0.65;
+    filter: grayscale(1);
+    transition:
+      opacity 0.18s ease,
+      filter 0.18s ease;
+
+    html[data-theme="dark"] & {
+      filter: grayscale(1) invert(1);
+    }
+  }
+
+  .testimonials__item:hover .testimonials__logo {
+    opacity: 1;
+    filter: grayscale(0);
+
+    html[data-theme="dark"] & {
+      filter: grayscale(0) invert(0);
+    }
   }
 
   .testimonials__item--placeholder {
