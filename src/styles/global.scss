@@ -17,6 +17,7 @@
   --color-muted: #6b6b6b;
   --color-surface: #ffffff;
   --color-border: rgba(0, 0, 0, 0.1);
+  --code-bg: #fafafa;
 }
 
 [data-theme='dark'] {
@@ -25,6 +26,7 @@
   --color-muted: #999999;
   --color-surface: #1c1c1c;
   --color-border: rgba(255, 255, 255, 0.1);
+  --code-bg: #282c34;
 
   --bulma-body-background-color: #111111;
   --bulma-body-color: #f0f0f0;
@@ -352,13 +354,13 @@ h1, h2, h3, h4, h5, h6,
 .astro-code,
 .astro-code span {
   color: var(--shiki-light) !important;
-  background-color: var(--shiki-light-bg) !important;
+  background-color: var(--code-bg) !important;
 }
 
 [data-theme='dark'] .astro-code,
 [data-theme='dark'] .astro-code span {
   color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
+  background-color: var(--code-bg) !important;
 }
 
 // — Social icon buttons
