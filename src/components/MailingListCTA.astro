@@ -1,0 +1,249 @@
+---
+
+---
+
+<section class="mailing-cta">
+  <div class="container is-max-desktop">
+    <div class="mailing-cta__card" aria-labelledby="mailing-cta-heading">
+      <div class="mailing-cta__inner">
+        <div class="mailing-cta__copy">
+          <h2 class="mailing-cta__heading" id="mailing-cta-heading">
+            Stay in the loop
+          </h2>
+          <p class="mailing-cta__body">
+            New posts, ideas, and the occasional deep-dive — straight to your
+            inbox. No spam, unsubscribe any time.
+          </p>
+        </div>
+
+        <form
+          class="mailing-cta__form"
+          id="mailing-cta-form"
+          novalidate
+          aria-label="Newsletter sign up"
+        >
+          <p class="mailing-cta__honeypot" aria-hidden="true">
+            <label for="mailing-cta-website">Leave this blank</label>
+            <input
+              id="mailing-cta-website"
+              name="website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </p>
+          <div class="mailing-cta__field">
+            <label for="mailing-cta-email" class="is-sr-only"
+              >Email address</label
+            >
+            <input
+              id="mailing-cta-email"
+              name="email"
+              type="email"
+              class="input mailing-cta__input"
+              placeholder="your@email.com"
+              autocomplete="email"
+              required
+            />
+            <button type="submit" class="button mailing-cta__btn">
+              Subscribe
+            </button>
+          </div>
+          <p
+            class="mailing-cta__feedback"
+            id="mailing-cta-feedback"
+            aria-live="polite"
+            hidden
+          >
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById(
+    "mailing-cta-form",
+  ) as HTMLFormElement | null;
+  const feedback = document.getElementById(
+    "mailing-cta-feedback",
+  ) as HTMLElement | null;
+  const input = document.getElementById(
+    "mailing-cta-email",
+  ) as HTMLInputElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!input || !feedback) return;
+
+    const email = input.value.trim();
+    if (!email) return;
+
+    const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = "Subscribing…";
+
+    feedback.hidden = true;
+    feedback.className = "mailing-cta__feedback";
+
+    try {
+      const res = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          website:
+            (form.elements.namedItem("website") as HTMLInputElement)?.value ??
+            "",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        feedback.textContent = "You're subscribed! Thanks for signing up.";
+        feedback.classList.add("mailing-cta__feedback--success");
+        form.reset();
+      } else {
+        feedback.textContent =
+          data.error ?? "Something went wrong. Please try again.";
+        feedback.classList.add("mailing-cta__feedback--error");
+        btn.disabled = false;
+        btn.textContent = "Subscribe";
+      }
+    } catch {
+      feedback.textContent = "Something went wrong. Please try again.";
+      feedback.classList.add("mailing-cta__feedback--error");
+      btn.disabled = false;
+      btn.textContent = "Subscribe";
+    } finally {
+      feedback.hidden = false;
+    }
+  });
+</script>
+
+<style lang="scss">
+  .mailing-cta {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .mailing-cta__card {
+    background-color: #0f0f0f;
+    border-radius: 8px;
+    padding: 2.5rem;
+    border-top: 3px solid var(--color-pink);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mailing-cta__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  .mailing-cta__copy {
+    flex: 1;
+  }
+
+  .mailing-cta__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+
+  .mailing-cta__body {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .mailing-cta__form {
+    flex-shrink: 0;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      width: 22rem;
+    }
+  }
+
+  .mailing-cta__field {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .mailing-cta__input {
+    flex: 1;
+    min-width: 0;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-radius: 4px;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    &:focus {
+      border-color: var(--color-pink);
+      box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.2);
+      outline: none;
+    }
+  }
+
+  .mailing-cta__btn {
+    background-color: var(--color-pink);
+    border-color: var(--color-pink);
+    color: #ffffff;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+      border-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+      color: #ffffff;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  .mailing-cta__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mailing-cta__feedback {
+    margin-top: 0.625rem;
+    font-size: 0.875rem;
+
+    &--success {
+      color: #4ade80;
+    }
+
+    &--error {
+      color: #f87171;
+    }
+  }
+</style>

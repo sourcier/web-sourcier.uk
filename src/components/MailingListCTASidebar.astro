@@ -1,0 +1,185 @@
+---
+---
+
+<div class="sidebar-subscribe" aria-labelledby="sidebar-subscribe-heading">
+  <p class="sidebar-subscribe__heading" id="sidebar-subscribe-heading">
+    Stay in the loop
+  </p>
+  <p class="sidebar-subscribe__body">
+    New posts straight to your inbox. No spam.
+  </p>
+
+  <form id="sidebar-subscribe-form" novalidate aria-label="Newsletter sign up">
+    <p class="sidebar-subscribe__honeypot" aria-hidden="true">
+      <label for="sidebar-subscribe-website">Leave this blank</label>
+      <input id="sidebar-subscribe-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </p>
+    <label for="sidebar-subscribe-email" class="is-sr-only">Email address</label>
+    <input
+      id="sidebar-subscribe-email"
+      name="email"
+      type="email"
+      class="sidebar-subscribe__input"
+      placeholder="your@email.com"
+      autocomplete="email"
+      required
+    />
+    <button type="submit" class="sidebar-subscribe__btn">
+      Subscribe
+    </button>
+    <p class="sidebar-subscribe__feedback" id="sidebar-subscribe-feedback" aria-live="polite" hidden></p>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById("sidebar-subscribe-form") as HTMLFormElement | null;
+  const feedback = document.getElementById("sidebar-subscribe-feedback") as HTMLElement | null;
+  const input = document.getElementById("sidebar-subscribe-email") as HTMLInputElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!input || !feedback) return;
+
+    const email = input.value.trim();
+    if (!email) return;
+
+    const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = "Subscribing…";
+    feedback.hidden = true;
+    feedback.className = "sidebar-subscribe__feedback";
+
+    try {
+      const res = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          website: (form.elements.namedItem("website") as HTMLInputElement)?.value ?? "",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        feedback.textContent = "You're subscribed!";
+        feedback.classList.add("sidebar-subscribe__feedback--success");
+        form.reset();
+        btn.textContent = "Subscribe";
+      } else {
+        feedback.textContent = data.error ?? "Something went wrong.";
+        feedback.classList.add("sidebar-subscribe__feedback--error");
+        btn.disabled = false;
+        btn.textContent = "Subscribe";
+      }
+    } catch {
+      feedback.textContent = "Something went wrong.";
+      feedback.classList.add("sidebar-subscribe__feedback--error");
+      btn.disabled = false;
+      btn.textContent = "Subscribe";
+    } finally {
+      feedback.hidden = false;
+    }
+  });
+</script>
+
+<style lang="scss">
+  .sidebar-subscribe {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background-color: #0f0f0f;
+    border-radius: 8px;
+    border-top: 3px solid var(--color-pink);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .sidebar-subscribe__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-subscribe__body {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-subscribe__input {
+    display: block;
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    &:focus {
+      border-color: var(--color-pink);
+      box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.2);
+    }
+  }
+
+  .sidebar-subscribe__btn {
+    display: block;
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    background-color: var(--color-pink);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  .sidebar-subscribe__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-subscribe__feedback {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+
+    &--success {
+      color: #4ade80;
+    }
+
+    &--error {
+      color: #f87171;
+    }
+  }
+</style>

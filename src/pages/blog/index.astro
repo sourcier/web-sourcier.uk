@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogPost from "../../components/BlogPost.astro";
 import PageHero from "../../components/PageHero.astro";
+import MailingListCTA from "../../components/MailingListCTA.astro";
 const allPosts = (await getCollection("posts"))
   .filter((post) => !post.data.draft || import.meta.env.DEV)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -56,6 +57,8 @@ const pageTitle = "Blog — Sourcier";
       </div>
     </div>
   </section>
+
+  <MailingListCTA />
 </BaseLayout>
 
 <style lang="scss">

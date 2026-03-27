@@ -4,6 +4,8 @@ import PageHero from "../components/PageHero.astro";
 import Comments from "../components/Comments.astro";
 import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
+import MailingListCTA from "../components/MailingListCTA.astro";
+import MailingListCTASidebar from "../components/MailingListCTASidebar.astro";
 const { frontmatter, postId, headings = [] } = Astro.props;
 const tocHeadings = (
   headings as { depth: number; slug: string; text: string }[]
@@ -77,6 +79,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
                   ))}
                 </ol>
               </nav>
+              <MailingListCTASidebar />
             </aside>
           )
         }
@@ -85,6 +88,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
     {postId && <Comments postId={postId} />}
   </article>
+  <MailingListCTA />
 </BaseLayout>
 
 <style>
