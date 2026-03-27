@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import emoji from "remark-emoji";
+import { transformerNotationDiff } from "@shikijs/transformers";
 
 export default defineConfig({
   site: "https://sourcier.uk",
@@ -29,7 +30,10 @@ export default defineConfig({
             }
           },
         },
+        transformerNotationDiff(),
       ],
+      // },
+      // ],
     },
     syntaxHighlight: {
       excludeLangs: ["mermaid"],

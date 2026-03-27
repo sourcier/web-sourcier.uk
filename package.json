@@ -19,6 +19,7 @@
     "sass": "^1.97.3"
   },
   "devDependencies": {
+    "@shikijs/transformers": "^3.0.0",
     "remark-emoji": "^5.0.2"
   }
 }
