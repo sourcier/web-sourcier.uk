@@ -9,16 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.15",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
     "astro": "^5.18.0",
     "bulma": "^1.0.4",
     "mermaid": "^11.13.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-icons": "^5.6.0",
     "sass": "^1.97.3"
   },
   "devDependencies": {
