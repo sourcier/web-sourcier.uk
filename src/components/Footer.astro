@@ -3,12 +3,23 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
 ---
 
 <footer class="footer mt-auto">
-  <div class="container">
-    <div class="columns">
-      <div class="column copyright">
-        <p>&copy; 2026 Sourcier Ltd, All rights reserved.</p>
-      </div>
-      <div class="column is-one-quarter social-icons">
+  <div class="footer__inner">
+    <div class="footer__tagline">
+      <span class="footer__word">Make things</span>
+      <span class="footer__divider">/</span>
+      <span class="footer__word">Break things</span>
+      <span class="footer__divider">/</span>
+      <span class="footer__word">Fix things</span>
+      <span class="footer__divider">/</span>
+      <span class="footer__word"
+        >Repeat <span class="footer__arrow" aria-hidden="true">&#x21BA;</span
+        ></span
+      >
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2026 Roger Rajaratnam</p>
+      <div class="footer__social">
         <a
           href="https://github.com/sourcier"
           target="_blank"
@@ -33,20 +44,120 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
 </footer>
 
 <style lang="scss">
-  @use "bulma/sass/utilities/mixins";
-
   .footer {
-    text-align: center;
-    @include mixins.tablet {
-      .copyright {
-        text-align: left;
-      }
-      .social-icons {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 0.25rem;
-      }
+    background-color: #0f0f0f;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 3rem 1.5rem 2rem;
+    border-top: 3px solid var(--color-pink);
+  }
+
+  .footer__inner {
+    max-width: 75rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer__tagline {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.15);
+    line-height: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  // Total cycle: 4 words × 1s on + 3s off = 16s loop
+  @keyframes word-highlight {
+    0%,
+    100% {
+      color: rgba(255, 255, 255, 0.15);
+    }
+    5% {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    20% {
+      color: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .footer__word {
+    color: rgba(255, 255, 255, 0.15);
+    animation: word-highlight 16s ease-in-out infinite;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    &:nth-child(3) {
+      animation-delay: 4s;
+    }
+    &:nth-child(5) {
+      animation-delay: 8s;
+    }
+    &:nth-child(7) {
+      animation-delay: 12s;
+    }
+  }
+
+  @keyframes arrow-opacity {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    5% {
+      opacity: 1;
+    }
+    20% {
+      opacity: 0.25;
+    }
+  }
+
+  .footer__arrow {
+    color: var(--color-pink);
+    opacity: 0.25;
+    animation: arrow-opacity 16s ease-in-out infinite;
+    animation-delay: 12s;
+  }
+
+  .footer__divider {
+    color: var(--color-pink);
+    opacity: 0.4;
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer__copy {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin: 0;
+  }
+
+  .footer__social {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  // Override global social icon colours for the dark footer
+  .social-icon {
+    color: rgba(255, 255, 255, 0.4);
+
+    &:hover {
+      color: var(--color-pink);
     }
   }
 </style>
