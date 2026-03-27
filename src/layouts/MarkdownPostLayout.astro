@@ -141,7 +141,10 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     letter-spacing: 0.08em;
     cursor: pointer;
     line-height: 1;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
 
     &:hover {
       background: rgba(232, 0, 106, 0.1);
@@ -260,59 +263,19 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     });
 
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
-  import mermaid from "mermaid";
+  import mermaid, { type MermaidConfig } from "mermaid";
 
-  const isDark = document.documentElement.dataset.theme === "dark";
+  function getMermaidConfig(isDark: boolean): MermaidConfig {
+    return {
+      startOnLoad: false,
+      theme: isDark ? "dark" : "forest",
+      darkMode: isDark,
+      look: "handDrawn",
+    };
+  }
 
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: isDark ? "base" : "default",
-    themeVariables: isDark ? {
-      primaryColor: "#2a1a2e",
-      primaryTextColor: "#f0f0f0",
-      primaryBorderColor: "#e8006a",
-      lineColor: "#e8006a",
-      secondaryColor: "#1c1c1c",
-      tertiaryColor: "#1c1c1c",
-      actorBkg: "#2a1a2e",
-      actorBorder: "#e8006a",
-      actorTextColor: "#f0f0f0",
-      actorLineColor: "#f0f0f0",
-      signalColor: "#f0f0f0",
-      signalTextColor: "#f0f0f0",
-      labelBoxBkgColor: "#2a1a2e",
-      labelBoxBorderColor: "#e8006a",
-      labelTextColor: "#f0f0f0",
-      loopTextColor: "#f0f0f0",
-      noteBorderColor: "#e8006a",
-      noteBkgColor: "#1e1030",
-      noteTextColor: "#f0f0f0",
-      fontFamily: "Barlow, sans-serif",
-      fontSize: "14px",
-    } : {
-      primaryColor: "#fce4f0",
-      primaryTextColor: "#0f0f0f",
-      primaryBorderColor: "#e8006a",
-      lineColor: "#e8006a",
-      secondaryColor: "#f9f9f9",
-      tertiaryColor: "#ffffff",
-      actorBkg: "#fce4f0",
-      actorBorder: "#e8006a",
-      actorTextColor: "#0f0f0f",
-      actorLineColor: "#0f0f0f",
-      signalColor: "#0f0f0f",
-      signalTextColor: "#0f0f0f",
-      labelBoxBkgColor: "#fce4f0",
-      labelBoxBorderColor: "#e8006a",
-      labelTextColor: "#0f0f0f",
-      loopTextColor: "#0f0f0f",
-      noteBorderColor: "#e8006a",
-      noteBkgColor: "#fff0f7",
-      noteTextColor: "#0f0f0f",
-      fontFamily: "Barlow, sans-serif",
-      fontSize: "14px",
-    },
-  });
+  // Store original definitions so we can re-render on theme change
+  const definitions = new Map<HTMLElement, string>();
 
   document
     .querySelectorAll<HTMLElement>(".post__content pre code.language-mermaid")
@@ -323,13 +286,28 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       container.className = "mermaid-diagram";
       container.textContent = definition;
       pre.replaceWith(container);
+      definitions.set(container, definition);
     });
 
-  await mermaid.run({
-    nodes: document.querySelectorAll(".mermaid-diagram"),
-  });
+  async function renderDiagrams() {
+    const isDark = document.documentElement.dataset.theme === "dark";
+    mermaid.initialize(getMermaidConfig(isDark));
 
-  // Add expand button + lightbox to each diagram
+    // Reset each container to its original definition before re-rendering
+    definitions.forEach((definition, container) => {
+      container.removeAttribute("data-processed");
+      container.innerHTML = "";
+      container.textContent = definition;
+    });
+
+    await mermaid.run({
+      nodes: document.querySelectorAll(".mermaid-diagram"),
+    });
+  }
+
+  await renderDiagrams();
+
+  // Lightbox — created once, shared across all diagrams
   const lightbox = document.createElement("div");
   lightbox.className = "mermaid-lightbox";
   lightbox.setAttribute("role", "dialog");
@@ -359,27 +337,52 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     if (e.key === "Escape") closeLightbox();
   });
 
-  document.querySelectorAll<HTMLElement>(".mermaid-diagram").forEach((diagram) => {
-    const expandBtn = document.createElement("button");
-    expandBtn.className = "mermaid-expand-btn";
-    expandBtn.textContent = "Expand";
-    expandBtn.setAttribute("aria-label", "View diagram fullscreen");
-    diagram.appendChild(expandBtn);
+  function attachExpandButtons() {
+    document
+      .querySelectorAll<HTMLElement>(".mermaid-diagram")
+      .forEach((diagram) => {
+        // Avoid duplicating buttons if already present
+        if (diagram.querySelector(".mermaid-expand-btn")) return;
 
-    expandBtn.addEventListener("click", () => {
-      const svgClone = diagram.querySelector("svg")!.cloneNode(true) as SVGElement;
-      svgClone.classList.add("mermaid-lightbox__svg");
-      // Remove constrained sizing so the SVG fills the lightbox naturally
-      svgClone.removeAttribute("style");
-      svgClone.removeAttribute("width");
-      svgClone.removeAttribute("height");
-      svgClone.style.width = "100%";
-      svgClone.style.height = "auto";
-      svgClone.style.display = "block";
-      lightboxInner.appendChild(svgClone);
-      lightbox.classList.add("is-open");
-      document.body.style.overflow = "hidden";
-      closeBtn.focus();
-    });
+        const expandBtn = document.createElement("button");
+        expandBtn.className = "mermaid-expand-btn";
+        expandBtn.textContent = "Expand";
+        expandBtn.setAttribute("aria-label", "View diagram fullscreen");
+        diagram.appendChild(expandBtn);
+
+        expandBtn.addEventListener("click", () => {
+          const svgClone = diagram
+            .querySelector("svg")!
+            .cloneNode(true) as SVGElement;
+          svgClone.classList.add("mermaid-lightbox__svg");
+          // Remove constrained sizing so the SVG fills the lightbox naturally
+          svgClone.removeAttribute("style");
+          svgClone.removeAttribute("width");
+          svgClone.removeAttribute("height");
+          svgClone.style.width = "100%";
+          svgClone.style.height = "auto";
+          svgClone.style.display = "block";
+          lightboxInner.appendChild(svgClone);
+          lightbox.classList.add("is-open");
+          document.body.style.overflow = "hidden";
+          closeBtn.focus();
+        });
+      });
+  }
+
+  attachExpandButtons();
+
+  // Re-render diagrams when the theme changes (Header.astro uses setAttribute)
+  new MutationObserver(async (mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === "data-theme") {
+        await renderDiagrams();
+        attachExpandButtons();
+        break;
+      }
+    }
+  }).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
   });
 </script>
