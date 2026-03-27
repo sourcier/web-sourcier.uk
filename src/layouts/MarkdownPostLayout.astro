@@ -165,9 +165,9 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     gap: 0.35rem;
     padding: 0.3rem 0.65rem;
     background: rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.18);
     border-radius: 3px;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.55);
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -179,12 +179,18 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       background 0.15s ease,
       color 0.15s ease,
       border-color 0.15s ease;
+  }
 
-    &:hover {
-      background: rgba(232, 0, 106, 0.1);
-      border-color: rgba(232, 0, 106, 0.4);
-      color: #e8006a;
-    }
+  :global([data-theme="dark"] .mermaid-expand-btn) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  :global(.mermaid-expand-btn:hover) {
+    background: rgba(232, 0, 106, 0.12);
+    border-color: rgba(232, 0, 106, 0.5);
+    color: #e8006a;
   }
 
   :global(.mermaid-lightbox) {
