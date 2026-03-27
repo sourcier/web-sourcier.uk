@@ -6,7 +6,7 @@ import BlogPost from "../components/BlogPost.astro";
 const allPosts = (await getCollection("posts"))
   .filter((post) => !post.data.draft || import.meta.env.DEV)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 6);
 ---
 
 <BaseLayout
