@@ -92,78 +92,13 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 </BaseLayout>
 
 <style>
-  :global(.post__content pre) {
-    position: relative;
-  }
-
-  :global(.code-lang-label) {
-    position: absolute;
-    top: 0.625rem;
-    left: 1rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.3);
-    pointer-events: none;
-    line-height: 1;
-  }
-
-  :global(.code-copy-btn) {
-    position: absolute;
-    top: 0.625rem;
-    right: 0.625rem;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.65rem;
-    background: rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.18);
-    border-radius: 3px;
-    color: rgba(0, 0, 0, 0.55);
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition:
-      background 0.15s ease,
-      color 0.15s ease,
-      border-color 0.15s ease;
-    line-height: 1;
-  }
-
-  :global([data-theme="dark"] .code-copy-btn) {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  :global(.code-copy-btn:hover) {
-    background: rgba(232, 0, 106, 0.12);
-    border-color: rgba(232, 0, 106, 0.5);
-    color: #e8006a;
-  }
-
-  :global(.code-copy-btn.is-copied) {
-    color: #16a34a;
-    border-color: rgba(22, 163, 74, 0.4);
-  }
-
-  :global([data-theme="dark"] .code-copy-btn.is-copied) {
-    color: #4ade80;
-    border-color: rgba(74, 222, 128, 0.4);
-  }
-
   :global(.mermaid-diagram) {
     position: relative;
     margin: 2rem -2rem;
     display: flex;
     justify-content: center;
     overflow-x: auto;
-    background: var(--code-bg);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     padding: 2rem 1.5rem;
   }
@@ -222,7 +157,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
   :global(.mermaid-lightbox__inner) {
     position: relative;
-    background: var(--code-bg);
+    background: var(--color-surface);
     padding: 2rem;
     width: 98vw;
     max-width: 98vw;
@@ -284,36 +219,6 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 </style>
 
 <script>
-  document
-    .querySelectorAll<HTMLElement>(".post__content pre")
-    .forEach((pre) => {
-      const lang = pre.getAttribute("data-language");
-      if (lang) {
-        const label = document.createElement("span");
-        label.className = "code-lang-label";
-        label.textContent = lang;
-        pre.appendChild(label);
-      }
-
-      const btn = document.createElement("button");
-      btn.className = "code-copy-btn";
-      btn.setAttribute("aria-label", "Copy code");
-      btn.textContent = "Copy";
-
-      btn.addEventListener("click", async () => {
-        const code = pre.querySelector("code")?.innerText ?? pre.innerText;
-        await navigator.clipboard.writeText(code);
-        btn.textContent = "Copied!";
-        btn.classList.add("is-copied");
-        setTimeout(() => {
-          btn.textContent = "Copy";
-          btn.classList.remove("is-copied");
-        }, 2000);
-      });
-
-      pre.appendChild(btn);
-    });
-
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
   import mermaid, { type MermaidConfig } from "mermaid";
 

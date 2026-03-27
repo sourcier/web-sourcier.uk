@@ -10,16 +10,17 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
+    "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "astro": "^5.18.0",
+    "astro-expressive-code": "^0.41.7",
     "bulma": "^1.0.4",
     "mermaid": "^11.13.0",
     "sass": "^1.97.3"
   },
   "devDependencies": {
-    "@shikijs/transformers": "^3.0.0",
     "remark-emoji": "^5.0.2"
   }
 }

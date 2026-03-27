@@ -17,7 +17,6 @@
   --color-muted: #6b6b6b;
   --color-surface: #ffffff;
   --color-border: rgba(0, 0, 0, 0.1);
-  --code-bg: #fafafa;
 }
 
 [data-theme='dark'] {
@@ -26,7 +25,6 @@
   --color-muted: #999999;
   --color-surface: #1c1c1c;
   --color-border: rgba(255, 255, 255, 0.1);
-  --code-bg: #282c34;
 
   --bulma-body-background-color: #111111;
   --bulma-body-color: #f0f0f0;
@@ -369,20 +367,6 @@ h1, h2, h3, h4, h5, h6,
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
-}
-
-// — Shiki dual-theme switching (light: github-light, dark: dracula)
-// Applies the correct set of CSS variables emitted by Shiki based on data-theme
-.astro-code,
-.astro-code span {
-  color: var(--shiki-light) !important;
-  background-color: var(--code-bg) !important;
-}
-
-[data-theme='dark'] .astro-code,
-[data-theme='dark'] .astro-code span {
-  color: var(--shiki-dark) !important;
-  background-color: var(--code-bg) !important;
 }
 
 // — Social icon buttons
@@ -801,115 +785,6 @@ h1, h2, h3, h4, h5, h6,
 
     p:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  code:not(pre code) {
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
-    font-size: 0.875em;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: var(--color-pink);
-    padding: 0.15em 0.4em;
-    border-radius: 3px;
-  }
-
-  pre {
-    border: 1px solid var(--color-border);
-    border-radius: 0;
-    padding: 1.5rem;
-    overflow-x: auto;
-    margin: 2rem 0;
-
-    code {
-      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
-      font-size: 0.875rem;
-      line-height: 1.7;
-      background: none;
-      border: none;
-      padding: 0;
-
-      // CSS counter line numbers — each line is wrapped in <span class="line"> by Shiki
-      // --start is set by the Shiki transformer when start=N is on the code fence
-      counter-reset: step calc(var(--start, 1) - 1);
-      counter-increment: step 0;
-
-      .line::before {
-        content: counter(step);
-        counter-increment: step;
-        width: 1.5rem;
-        margin-right: 1.5rem;
-        display: inline-block;
-        text-align: right;
-        color: var(--color-muted);
-        opacity: 0.4;
-        user-select: none;
-      }
-
-      // Diff lines: inline-block + explicit width fills the full row without
-      // breaking the white-space: pre newline handling that block display breaks
-      .line.diff.add,
-      .line.diff.remove {
-        display: inline-block;
-        position: relative;
-        // stretch to full pre width, compensating for the 1.5rem padding on each side
-        width: calc(100% + 3rem);
-        margin-left: -1.5rem;
-        padding-left: 1.5rem;
-
-        // Shiki sets per-token background-color — clear it so row colour shows
-        span {
-          background-color: transparent !important;
-        }
-      }
-
-      .line.diff.add {
-        background-color: rgba(34, 197, 94, 0.12) !important;
-        box-shadow: inset 3px 0 0 #22c55e;
-
-        // Keep the line number; recolour it so it reads as an addition
-        &::before {
-          color: #22c55e !important;
-          opacity: 1 !important;
-        }
-
-        // +/- indicator sits in the 1.5rem left-margin space, left of the line number
-        &::after {
-          content: '+';
-          position: absolute;
-          left: 0;
-          width: 1.5rem;
-          text-align: center;
-          color: #22c55e;
-          user-select: none;
-        }
-      }
-
-      .line.diff.remove {
-        background-color: rgba(239, 68, 68, 0.12) !important;
-        box-shadow: inset 3px 0 0 #ef4444;
-        opacity: 0.75;
-
-        &::before {
-          color: #ef4444 !important;
-          opacity: 1 !important;
-        }
-
-        &::after {
-          content: '-';
-          position: absolute;
-          left: 0;
-          width: 1.5rem;
-          text-align: center;
-          color: #ef4444;
-          user-select: none;
-        }
-      }
-
-      .line:last-child:empty::before {
-        content: none;
-        counter-increment: none;
-      }
     }
   }
 

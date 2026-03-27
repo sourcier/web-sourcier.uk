@@ -1,40 +1,28 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import emoji from "remark-emoji";
-import { transformerNotationDiff } from "@shikijs/transformers";
+import expressiveCode from "astro-expressive-code";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 
 export default defineConfig({
   site: "https://sourcier.uk",
+  integrations: [
+    expressiveCode({
+      themes: ["one-light", "one-dark-pro"],
+      plugins: [pluginLineNumbers()],
+      defaultProps: {
+        showLineNumbers: true,
+        wrap: true,
+      },
+      useDarkModeMediaQuery: false,
+      themeCssSelector: (theme) =>
+        theme.type === "dark"
+          ? '[data-theme="dark"]'
+          : ':root:not([data-theme="dark"])',
+    }),
+  ],
   markdown: {
     remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
-    shikiConfig: {
-      themes: {
-        light: "one-light",
-        dark: "one-dark-pro",
-      },
-      defaultColor: false,
-      langs: [],
-      transformers: [
-        {
-          // Strip trailing newline to prevent a phantom empty line at the bottom
-          preprocess(code) {
-            return code.endsWith("\n") ? code.slice(0, -1) : code;
-          },
-          // Read start=N from the code fence meta and set --start CSS variable
-          // Usage: ```js start=10
-          code(node) {
-            const match = this.options.meta?.__raw?.match(/\bstart=(\d+)\b/);
-            if (match) {
-              const existing = node.properties.style ?? "";
-              node.properties.style = `${existing}--start: ${match[1]};`.trim();
-            }
-          },
-        },
-        transformerNotationDiff(),
-      ],
-    },
-    syntaxHighlight: {
-      excludeLangs: ["mermaid"],
-    },
+    syntaxHighlight: false,
   },
 });
