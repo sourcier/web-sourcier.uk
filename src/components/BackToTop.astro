@@ -9,7 +9,7 @@ const backToTopIcon = faIcon(faCircleUp, {
 ---
 
 <button id="back-to-top" class="back-to-top" aria-label="Back to top" hidden>
-  <span set:html={backToTopIcon} />
+  <span class="back-to-top__icon-wrap" set:html={backToTopIcon} />
   <span class="back-to-top__label">Top</span>
 </button>
 
@@ -88,18 +88,20 @@ const backToTopIcon = faIcon(faCircleUp, {
     }
   }
 
+  .back-to-top__icon-wrap {
+    display: flex;
+    align-items: center;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
   .back-to-top__label {
     line-height: 1;
 
     @media (max-width: 768px) {
       display: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .back-to-top :global(.back-to-top__icon) {
-      width: 18px;
-      height: 18px;
     }
   }
 </style>
