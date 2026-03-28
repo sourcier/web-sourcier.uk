@@ -1,14 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import BaseLayout from "../../../../layouts/BaseLayout.astro";
-import PageHero from "../../../../components/PageHero.astro";
-import BlogGrid from "../../../../components/BlogGrid.astro";
-import MailingListCTA from "../../../../components/MailingListCTA.astro";
-import { tagSlug } from "../../../../utils/tags";
-
-const PAGE_SIZE = 9;
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHero from "../../../components/PageHero.astro";
+import BlogGrid from "../../../components/BlogGrid.astro";
+import MailingListCTA from "../../../components/MailingListCTA.astro";
+import { tagSlug } from "../../../utils/tags";
 
 export async function getStaticPaths() {
+  const PAGE_SIZE = 9;
   const allPosts = (await getCollection("posts")).filter(
     (post) => !post.data.draft || import.meta.env.DEV,
   );
@@ -40,7 +39,8 @@ export async function getStaticPaths() {
           posts: sorted.slice(start, start + PAGE_SIZE),
           currentPage: pageNum,
           totalPages,
-          prevUrl: pageNum === 2 ? `/tags/${slug}` : `/tags/${slug}/${pageNum - 1}`,
+          prevUrl:
+            pageNum === 2 ? `/tags/${slug}` : `/tags/${slug}/${pageNum - 1}`,
           nextUrl: pageNum < totalPages ? `/tags/${slug}/${pageNum + 1}` : null,
         },
       });
