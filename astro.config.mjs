@@ -17,6 +17,14 @@ export default defineConfig({
           "bash,sh,zsh": { preserveIndent: false },
         },
       },
+      styleOverrides: {
+        borderRadius: "0",
+        borderColor: "var(--color-border)",
+        codePaddingInline: "1.5rem",
+        frames: {
+          frameBoxShadowCssValue: "none",
+        },
+      },
       useDarkModeMediaQuery: false,
       themeCssSelector: (theme) =>
         theme.type === "dark"
