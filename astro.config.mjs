@@ -4,6 +4,7 @@ import emoji from "remark-emoji";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
+import { expressiveCodeCopyIcon } from "./src/utils/expressive-code-copy-icon.js";
 
 export default defineConfig({
   site: "https://sourcier.uk",
@@ -23,6 +24,7 @@ export default defineConfig({
         borderColor: "var(--color-border)",
         codePaddingInline: "1.5rem",
         frames: {
+          copyIcon: expressiveCodeCopyIcon,
           frameBoxShadowCssValue: "none",
           inlineButtonBackground: "#e8006a",
           inlineButtonBackgroundHoverOrFocusOpacity: "0.15",

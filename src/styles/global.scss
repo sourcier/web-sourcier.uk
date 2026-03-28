@@ -863,6 +863,13 @@ h1, h2, h3, h4, h5, h6,
   width: 2rem !important;
   height: 2rem !important;
 
+  &::after {
+    -webkit-mask-size: contain !important;
+    mask-size: contain !important;
+    -webkit-mask-position: center !important;
+    mask-position: center !important;
+  }
+
   &::before {
     border-width: 1px !important;
   }
