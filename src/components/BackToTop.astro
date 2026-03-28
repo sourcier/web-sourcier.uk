@@ -1,9 +1,4 @@
-<button
-  id="back-to-top"
-  class="back-to-top"
-  aria-label="Back to top"
-  hidden
->
+<button id="back-to-top" class="back-to-top" aria-label="Back to top" hidden>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="16"
@@ -93,11 +88,22 @@
     @media (max-width: 768px) {
       bottom: 1.25rem;
       right: 1.25rem;
-      padding: 0.45rem 0.7rem;
+      padding: 0.75rem;
     }
   }
 
   .back-to-top__label {
     line-height: 1;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .back-to-top svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 </style>
