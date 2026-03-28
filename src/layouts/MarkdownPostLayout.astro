@@ -100,9 +100,13 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     display: flex;
     justify-content: center;
     overflow-x: auto;
-    background: var(--color-surface);
+    background: #fafafa;
     border: 1px solid var(--color-border);
     padding: 2rem 1.5rem;
+  }
+
+  :global([data-theme="dark"] .mermaid-diagram) {
+    background: #282c34;
   }
 
   :global(.mermaid-expand-btn) {
@@ -255,9 +259,36 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
   function getMermaidConfig(isDark: boolean): MermaidConfig {
     return {
       startOnLoad: false,
-      theme: isDark ? "dark" : "forest",
+      theme: "base",
       darkMode: isDark,
       look: "handDrawn",
+      themeVariables: isDark
+        ? {
+            background: "#282c34",
+            primaryColor: "#3a3f4b",
+            primaryTextColor: "#abb2bf",
+            primaryBorderColor: "rgba(255,255,255,0.1)",
+            lineColor: "#767c89",
+            secondaryColor: "#2c313a",
+            tertiaryColor: "#282c34",
+            edgeLabelBackground: "#282c34",
+            clusterBkg: "#2c313a",
+            titleColor: "#dcdcdc",
+            nodeTextColor: "#abb2bf",
+          }
+        : {
+            background: "#fafafa",
+            primaryColor: "#e8eaed",
+            primaryTextColor: "#383a42",
+            primaryBorderColor: "rgba(0,0,0,0.12)",
+            lineColor: "#6b6b6b",
+            secondaryColor: "#f0f0f0",
+            tertiaryColor: "#fafafa",
+            edgeLabelBackground: "#fafafa",
+            clusterBkg: "#f0f0f0",
+            titleColor: "#383a42",
+            nodeTextColor: "#383a42",
+          },
     };
   }
 
