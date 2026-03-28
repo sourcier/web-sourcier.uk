@@ -3,6 +3,51 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import CareerTimeline from "../components/CareerTimeline.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
+import {
+  faHtml5,
+  faCss3Alt,
+  faJs,
+  faTypescript,
+  faReact,
+  faNodeJs,
+  faGitAlt,
+  faDocker,
+  faAws,
+  faMicrosoft,
+  faPostgresql,
+} from "@fortawesome/free-brands-svg-icons";
+import {
+  faRocket,
+  faPlug,
+  faDiagramProject,
+  faCloud,
+} from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+const frontendStack = [
+  { label: "Astro", icon: faIcon(faRocket, { size: 18 }) },
+  { label: "CSS / Sass", icon: faIcon(faCss3Alt, { size: 18 }) },
+  { label: "HTML", icon: faIcon(faHtml5, { size: 18 }) },
+  { label: "JavaScript", icon: faIcon(faJs, { size: 18 }) },
+  { label: "React", icon: faIcon(faReact, { size: 18 }) },
+  { label: "TypeScript", icon: faIcon(faTypescript, { size: 18 }) },
+];
+
+const backendStack = [
+  { label: "GraphQL", icon: faIcon(faDiagramProject, { size: 18 }) },
+  { label: "Node.js", icon: faIcon(faNodeJs, { size: 18 }) },
+  { label: "PostgreSQL", icon: faIcon(faPostgresql, { size: 18 }) },
+  { label: "REST APIs", icon: faIcon(faPlug, { size: 18 }) },
+];
+
+const toolingStack = [
+  { label: "AWS", icon: faIcon(faAws, { size: 18 }) },
+  { label: "Azure", icon: faIcon(faMicrosoft, { size: 18 }) },
+  { label: "Docker", icon: faIcon(faDocker, { size: 18 }) },
+  { label: "Git", icon: faIcon(faGitAlt, { size: 18 }) },
+  { label: "Netlify", icon: faIcon(faCloud, { size: 18 }) },
+];
+
 const pageTitle = "About — Roger Rajaratnam";
 ---
 
@@ -113,12 +158,12 @@ const pageTitle = "About — Roger Rajaratnam";
           <div class="about-sidebar-card">
             <p class="about-sidebar-card__label">Tech stack</p>
             <ul class="about-tag-list" role="list">
-              <li>HTML</li>
               <li>CSS</li>
+              <li>HTML</li>
               <li>JavaScript</li>
-              <li>TypeScript</li>
-              <li>React</li>
               <li>Node.js</li>
+              <li>React</li>
+              <li>TypeScript</li>
             </ul>
           </div>
         </aside>
@@ -148,30 +193,40 @@ const pageTitle = "About — Roger Rajaratnam";
         <div class="about-stack__group">
           <h2 class="about-stack__category">Frontend</h2>
           <ul class="about-stack__list" role="list">
-            <li>HTML</li>
-            <li>CSS / Sass</li>
-            <li>JavaScript</li>
-            <li>TypeScript</li>
-            <li>React</li>
-            <li>Astro</li>
+            {
+              frontendStack.map(({ label, icon }) => (
+                <li>
+                  <span class="stack-icon" set:html={icon} />
+                  {label}
+                </li>
+              ))
+            }
           </ul>
         </div>
         <div class="about-stack__group">
           <h2 class="about-stack__category">Backend</h2>
           <ul class="about-stack__list" role="list">
-            <li>Node.js</li>
-            <li>REST APIs</li>
-            <li>GraphQL</li>
-            <li>PostgreSQL</li>
+            {
+              backendStack.map(({ label, icon }) => (
+                <li>
+                  <span class="stack-icon" set:html={icon} />
+                  {label}
+                </li>
+              ))
+            }
           </ul>
         </div>
         <div class="about-stack__group">
           <h2 class="about-stack__category">Tooling &amp; Infrastructure</h2>
           <ul class="about-stack__list" role="list">
-            <li>Git</li>
-            <li>Docker</li>
-            <li>AWS / Azure</li>
-            <li>Netlify</li>
+            {
+              toolingStack.map(({ label, icon }) => (
+                <li>
+                  <span class="stack-icon" set:html={icon} />
+                  {label}
+                </li>
+              ))
+            }
           </ul>
         </div>
       </div>
@@ -421,21 +476,23 @@ const pageTitle = "About — Roger Rajaratnam";
     gap: 0.625rem;
 
     li {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
       font-size: 0.9375rem;
       font-weight: 600;
       color: var(--color-ink);
-      padding-left: 1rem;
-      position: relative;
+    }
+  }
 
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0.45em;
-        width: 5px;
-        height: 5px;
-        background-color: var(--color-pink);
-      }
+  .stack-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-pink);
+
+    svg {
+      display: block;
     }
   }
 
