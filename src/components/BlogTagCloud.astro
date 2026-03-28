@@ -1,0 +1,172 @@
+---
+import { getCollection } from "astro:content";
+import { tagSlug } from "../utils/tags";
+
+const allPosts = (await getCollection("posts")).filter(
+  (post) => !post.data.draft || import.meta.env.DEV,
+);
+
+const tagCounts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+
+const counts = [...tagCounts.values()];
+const minCount = Math.min(...counts);
+const maxCount = Math.max(...counts);
+
+function tier(count: number): number {
+  if (maxCount === minCount) return 2;
+  const ratio = (count - minCount) / (maxCount - minCount);
+  if (ratio >= 0.66) return 3;
+  if (ratio >= 0.33) return 2;
+  return 1;
+}
+
+const tags = [...tagCounts.entries()]
+  .sort(([, a], [, b]) => b - a)
+  .map(([tag, count]) => ({
+    tag,
+    count,
+    slug: tagSlug(tag),
+    tier: tier(count),
+  }));
+---
+
+<section class="tag-cloud" aria-labelledby="tag-cloud-heading">
+  <div class="container is-max-desktop">
+    <div class="tag-cloud__header">
+      <span class="tag-cloud__label" id="tag-cloud-heading">Browse by topic</span>
+      <a href="/tags" class="tag-cloud__all-link" aria-label="View all topics">
+        All topics &rarr;
+      </a>
+    </div>
+    <ul class="tag-cloud__list" role="list">
+      {tags.map(({ tag, count, slug, tier }) => (
+        <li>
+          <a
+            href={`/tags/${slug}`}
+            class={`tag-cloud__pill tag-cloud__pill--tier-${tier}`}
+            aria-label={`${tag} — ${count} post${count === 1 ? "" : "s"}`}
+          >
+            {tag}
+            <span class="tag-cloud__count" aria-hidden="true">{count}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style lang="scss">
+  .tag-cloud {
+    padding: 2.5rem 1.5rem 0;
+  }
+
+  .tag-cloud__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-pink);
+  }
+
+  .tag-cloud__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+  }
+
+  .tag-cloud__all-link {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+    }
+  }
+
+  .tag-cloud__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .tag-cloud__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1.5px solid var(--color-border);
+    border-radius: 2px;
+    color: var(--color-muted);
+    background-color: transparent;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+      border-color: var(--color-pink);
+      background-color: rgba(232, 0, 106, 0.06);
+      transform: translateY(-1px);
+    }
+
+    // Small: low-frequency tags
+    &--tier-1 {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.55rem;
+    }
+
+    // Medium: mid-frequency tags
+    &--tier-2 {
+      font-size: 0.85rem;
+      padding: 0.3rem 0.65rem;
+    }
+
+    // Large: high-frequency tags
+    &--tier-3 {
+      font-size: 1rem;
+      padding: 0.35rem 0.75rem;
+      border-width: 2px;
+      color: var(--color-ink);
+    }
+  }
+
+  .tag-cloud__count {
+    font-size: 0.65em;
+    font-weight: 700;
+    color: var(--color-muted);
+    background-color: var(--color-border);
+    padding: 0.05rem 0.35rem;
+    border-radius: 2px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    .tag-cloud__pill:hover & {
+      background-color: rgba(232, 0, 106, 0.15);
+      color: var(--color-pink);
+    }
+  }
+</style>
