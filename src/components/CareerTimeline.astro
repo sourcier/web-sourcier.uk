@@ -1,5 +1,11 @@
 ---
+import { faSquareCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
 
+const careerToggleIcon = faIcon(faSquareCaretDown, {
+  size: 12,
+  class: "career-timeline__more-icon",
+});
 ---
 
 <section class="section" aria-labelledby="career-section-title">
@@ -230,21 +236,7 @@
         aria-controls="career-older"
       >
         Show full history
-        <svg
-          aria-hidden="true"
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2 4l4 4 4-4"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"></path>
-        </svg>
+        <span set:html={careerToggleIcon} />
       </button>
     </div>
   </div>
@@ -443,7 +435,7 @@
         color 0.15s ease,
         border-color 0.15s ease;
 
-      svg {
+      :global(.career-timeline__more-icon) {
         transition: transform 0.2s ease;
       }
 
@@ -452,7 +444,7 @@
         border-color: var(--color-pink);
       }
 
-      &[aria-expanded="true"] svg {
+      &[aria-expanded="true"] :global(.career-timeline__more-icon) {
         transform: rotate(180deg);
       }
     }

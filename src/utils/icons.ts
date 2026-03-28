@@ -7,7 +7,7 @@ interface IconOptions {
 
 export function faIcon(
   iconDef: IconDefinition,
-  { class: className, size = 20 }: IconOptions = {}
+  { class: className, size = 20 }: IconOptions = {},
 ): string {
   return icon(iconDef, {
     attributes: {

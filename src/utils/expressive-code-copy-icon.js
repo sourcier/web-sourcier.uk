@@ -1,13 +1,13 @@
-import { faCopy } from "@fortawesome/free-regular-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 
 const [faCopyWidth, faCopyHeight, , , faCopyPathData] = faCopy.icon;
-const faCopyPath = Array.isArray(faCopyPathData)
-  ? faCopyPathData.join(" ")
-  : faCopyPathData;
+const faCopyPaths = Array.isArray(faCopyPathData)
+  ? faCopyPathData
+  : [faCopyPathData];
 
 const faCopySvg = [
   `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${faCopyWidth} ${faCopyHeight}'>`,
-  `<path fill='black' d='${faCopyPath}'/>`,
+  ...faCopyPaths.map((path) => `<path fill='black' d='${path}'/>`),
   `</svg>`,
 ].join("");
 

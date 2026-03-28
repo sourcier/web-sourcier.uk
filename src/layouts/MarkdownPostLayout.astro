@@ -257,8 +257,17 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 <script>
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
   import mermaid, { type MermaidConfig } from "mermaid";
-  const ICON_EXPAND = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>`;
-  const ICON_XMARK = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+  import { faCircleXmark, faExpand } from "@fortawesome/free-solid-svg-icons";
+
+  const toSvgIcon = (iconDef: typeof faExpand, size = 14): string => {
+    const [width, height, , , pathData] = iconDef.icon;
+    const paths = Array.isArray(pathData) ? pathData : [pathData];
+    const pathElements = paths.map((d) => `<path d="${d}"/>`).join("");
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${width} ${height}" fill="currentColor" aria-hidden="true">${pathElements}</svg>`;
+  };
+
+  const ICON_EXPAND = toSvgIcon(faExpand);
+  const ICON_XMARK = toSvgIcon(faCircleXmark);
 
   function getMermaidConfig(isDark: boolean): MermaidConfig {
     return {

@@ -1,19 +1,15 @@
+---
+import { faCircleUp } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+const backToTopIcon = faIcon(faCircleUp, {
+  size: 18,
+  class: "back-to-top__icon",
+});
+---
+
 <button id="back-to-top" class="back-to-top" aria-label="Back to top" hidden>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <polyline points="18 15 12 9 6 15"></polyline>
-  </svg>
+  <span set:html={backToTopIcon} />
   <span class="back-to-top__label">Top</span>
 </button>
 
@@ -101,7 +97,7 @@
   }
 
   @media (max-width: 768px) {
-    .back-to-top svg {
+    .back-to-top :global(.back-to-top__icon) {
       width: 18px;
       height: 18px;
     }
