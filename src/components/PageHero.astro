@@ -1,4 +1,6 @@
 ---
+import { tagSlug } from "../utils/tags";
+
 interface Props {
   kicker?: string;
   title: string;
@@ -23,7 +25,7 @@ const { kicker, title, subtitle, coverImage, tags, author, date } = Astro.props;
         tags && tags.length > 0 && (
           <div class="post__tags">
             {tags.map((tag) => (
-              <a href={`/tags/${tag}`} class="post__tag">
+              <a href={`/tags/${tagSlug(tag)}`} class="post__tag">
                 {tag}
               </a>
             ))}

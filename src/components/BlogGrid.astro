@@ -7,15 +7,20 @@ interface Props {
   totalPages: number;
   prevUrl: string | null;
   nextUrl: string | null;
+  paginationBase?: string;
 }
 
-const { posts, currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
+const { posts, currentPage, totalPages, prevUrl, nextUrl, paginationBase } =
+  Astro.props;
 
 const COLS = 3;
 const placeholderCount =
   currentPage === totalPages ? (COLS - (posts.length % COLS)) % COLS : 0;
 
 function pageUrl(n: number) {
+  if (paginationBase) {
+    return n === 1 ? paginationBase : `${paginationBase}/${n}`;
+  }
   return n === 1 ? "/blog" : `/blog/page/${n}`;
 }
 ---
