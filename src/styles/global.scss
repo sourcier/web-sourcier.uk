@@ -856,3 +856,26 @@ h1, h2, h3, h4, h5, h6,
     }
   }
 }
+
+// — Expressive Code: square copy buttons with matching hover
+.expressive-code .copy button {
+  border-radius: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+
+  &::before {
+    border-width: 1px !important;
+  }
+
+  &:hover,
+  &:focus:focus-visible {
+    &::after {
+      background-color: #e8006a;
+    }
+
+    &::before {
+      border-color: #e8006a;
+      opacity: 0.5;
+    }
+  }
+}

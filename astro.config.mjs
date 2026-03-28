@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import emoji from "remark-emoji";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 
 export default defineConfig({
   site: "https://sourcier.uk",
@@ -23,6 +24,8 @@ export default defineConfig({
         codePaddingInline: "1.5rem",
         frames: {
           frameBoxShadowCssValue: "none",
+          inlineButtonBackground: "#e8006a",
+          inlineButtonBackgroundHoverOrFocusOpacity: "0.15",
         },
       },
       useDarkModeMediaQuery: false,
@@ -33,7 +36,10 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    remarkPlugins: [[emoji, { emoticon: true, accessible: true }]],
+    remarkPlugins: [
+      remarkMermaid,
+      [emoji, { emoticon: true, accessible: true }],
+    ],
     syntaxHighlight: false,
   },
 });

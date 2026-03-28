@@ -105,37 +105,47 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
   :global(.mermaid-expand-btn) {
     position: absolute;
-    top: 0.625rem;
-    right: 0.625rem;
+    top: 0.5rem;
+    right: 0.5rem;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.65rem;
-    background: rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.18);
-    border-radius: 3px;
-    color: rgba(0, 0, 0, 0.55);
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 0;
+    color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
-    line-height: 1;
     transition:
+      opacity 0.2s ease,
       background 0.15s ease,
       color 0.15s ease,
       border-color 0.15s ease;
   }
 
   :global([data-theme="dark"] .mermaid-expand-btn) {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.18);
-    color: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (hover: hover) {
+    :global(.mermaid-expand-btn) {
+      opacity: 0;
+    }
+
+    :global(.mermaid-diagram:hover .mermaid-expand-btn:not(:hover)) {
+      opacity: 0.75;
+    }
+
+    :global(.mermaid-expand-btn:hover) {
+      opacity: 1;
+    }
   }
 
   :global(.mermaid-expand-btn:hover) {
-    background: rgba(232, 0, 106, 0.12);
+    background: rgba(232, 0, 106, 0.1);
     border-color: rgba(232, 0, 106, 0.5);
     color: #e8006a;
   }
@@ -176,18 +186,34 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
   :global(.mermaid-lightbox__close) {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: var(--color-pink);
-    border: none;
-    color: #ffffff;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.3rem 0.75rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 0;
+    color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  :global([data-theme="dark"] .mermaid-lightbox__close) {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  :global(.mermaid-lightbox__close:hover) {
+    background: rgba(232, 0, 106, 0.1);
+    border-color: rgba(232, 0, 106, 0.5);
+    color: #e8006a;
   }
 
   :global(.mermaid-diagram svg) {
@@ -221,6 +247,8 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 <script>
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
   import mermaid, { type MermaidConfig } from "mermaid";
+  const ICON_EXPAND = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>`;
+  const ICON_XMARK = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
 
   function getMermaidConfig(isDark: boolean): MermaidConfig {
     return {
@@ -274,7 +302,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
   lightboxInner.className = "mermaid-lightbox__inner";
   const closeBtn = document.createElement("button");
   closeBtn.className = "mermaid-lightbox__close";
-  closeBtn.textContent = "Close";
+  closeBtn.innerHTML = ICON_XMARK;
   closeBtn.setAttribute("aria-label", "Close fullscreen diagram");
   lightboxInner.appendChild(closeBtn);
   lightbox.appendChild(lightboxInner);
@@ -303,7 +331,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
         const expandBtn = document.createElement("button");
         expandBtn.className = "mermaid-expand-btn";
-        expandBtn.textContent = "Expand";
+        expandBtn.innerHTML = ICON_EXPAND;
         expandBtn.setAttribute("aria-label", "View diagram fullscreen");
         diagram.appendChild(expandBtn);
 
