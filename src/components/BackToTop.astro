@@ -1,0 +1,103 @@
+<button
+  id="back-to-top"
+  class="back-to-top"
+  aria-label="Back to top"
+  hidden
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+  <span class="back-to-top__label">Top</span>
+</button>
+
+<script>
+  const btn = document.getElementById("back-to-top") as HTMLButtonElement;
+
+  const toggle = () => {
+    const shouldShow = window.scrollY > 400;
+    btn.hidden = !shouldShow;
+    btn.classList.toggle("back-to-top--visible", shouldShow);
+  };
+
+  window.addEventListener("scroll", toggle, { passive: true });
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Return focus to the skip link so keyboard users land somewhere sensible
+    const skipLink = document.querySelector<HTMLAnchorElement>(".skip-link");
+    skipLink?.focus({ preventScroll: true });
+  });
+</script>
+
+<style lang="scss">
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    padding: 0.5rem 0.85rem;
+    border: 2px solid var(--color-pink);
+    border-radius: 2px;
+    background-color: var(--color-paper);
+    color: var(--color-pink);
+    cursor: pointer;
+
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      background-color 0.15s ease,
+      color 0.15s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--color-pink);
+      color: var(--color-paper);
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--color-pink);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      bottom: 1.25rem;
+      right: 1.25rem;
+      padding: 0.45rem 0.7rem;
+    }
+  }
+
+  .back-to-top__label {
+    line-height: 1;
+  }
+</style>
