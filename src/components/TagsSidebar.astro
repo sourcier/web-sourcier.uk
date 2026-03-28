@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content";
+import { tagSlug } from "../utils/tags";
+
+const allPosts = (await getCollection("posts")).filter(
+  (post) => !post.data.draft || import.meta.env.DEV,
+);
+
+const tagCounts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+
+const tags = [...tagCounts.entries()]
+  .sort(([, a], [, b]) => b - a)
+  .map(([tag, count]) => ({ tag, count, slug: tagSlug(tag) }));
+---
+
+<nav class="tags-sidebar" aria-labelledby="tags-sidebar-heading">
+  <p class="tags-sidebar__heading" id="tags-sidebar-heading">Browse topics</p>
+  <ul class="tags-sidebar__list" role="list">
+    {tags.map(({ tag, count, slug }) => (
+      <li>
+        <a href={`/tags/${slug}`} class="tags-sidebar__tag">
+          <span class="tags-sidebar__name">{tag}</span>
+          <span class="tags-sidebar__count" aria-label={`${count} post${count === 1 ? "" : "s"}`}>
+            {count}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <a href="/tags" class="tags-sidebar__all">All tags →</a>
+</nav>
+
+<style lang="scss">
+  .tags-sidebar {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .tags-sidebar__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--color-pink);
+    margin-bottom: 0.75rem;
+  }
+
+  .tags-sidebar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tags-sidebar__tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-muted);
+    transition: color 0.15s ease, padding-left 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+      padding-left: 0.35rem;
+    }
+  }
+
+  .tags-sidebar__name {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .tags-sidebar__count {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    background-color: var(--color-border);
+    padding: 0.1rem 0.4rem;
+    min-width: 1.4rem;
+    text-align: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    .tags-sidebar__tag:hover & {
+      background-color: rgba(232, 0, 106, 0.12);
+      color: var(--color-pink);
+    }
+  }
+
+  .tags-sidebar__all {
+    display: block;
+    margin-top: 1rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+    }
+  }
+</style>
