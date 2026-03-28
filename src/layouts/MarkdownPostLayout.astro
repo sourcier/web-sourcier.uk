@@ -100,8 +100,9 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     display: flex;
     justify-content: center;
     overflow-x: auto;
-    background: #fafafa;
     border: 1px solid var(--color-border);
+    border-top: 2px solid var(--color-pink);
+    background: #fafafa;
     padding: 2rem 1.5rem;
   }
 
@@ -173,7 +174,8 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
   :global(.mermaid-lightbox__inner) {
     position: relative;
-    background: var(--color-surface);
+    background: #fafafa;
+    border-top: 2px solid var(--color-pink);
     padding: 2rem;
     width: 98vw;
     max-width: 98vw;
@@ -188,6 +190,10 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       max-width: none;
       height: auto;
     }
+  }
+
+  :global([data-theme="dark"] .mermaid-lightbox__inner) {
+    background: #282c34;
   }
 
   :global(.mermaid-lightbox__close) {
@@ -265,9 +271,9 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       themeVariables: isDark
         ? {
             background: "#282c34",
-            primaryColor: "#3a3f4b",
+            primaryColor: "#3d1528",
             primaryTextColor: "#abb2bf",
-            primaryBorderColor: "rgba(255,255,255,0.1)",
+            primaryBorderColor: "rgba(232, 0, 106, 0.4)",
             lineColor: "#767c89",
             secondaryColor: "#2c313a",
             tertiaryColor: "#282c34",
@@ -275,12 +281,13 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
             clusterBkg: "#2c313a",
             titleColor: "#dcdcdc",
             nodeTextColor: "#abb2bf",
+            fontFamily: '"Barlow Condensed", sans-serif',
           }
         : {
             background: "#fafafa",
-            primaryColor: "#e8eaed",
+            primaryColor: "#fce8f2",
             primaryTextColor: "#383a42",
-            primaryBorderColor: "rgba(0,0,0,0.12)",
+            primaryBorderColor: "rgba(232, 0, 106, 0.3)",
             lineColor: "#6b6b6b",
             secondaryColor: "#f0f0f0",
             tertiaryColor: "#fafafa",
@@ -288,42 +295,10 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
             clusterBkg: "#f0f0f0",
             titleColor: "#383a42",
             nodeTextColor: "#383a42",
+            fontFamily: '"Barlow Condensed", sans-serif',
           },
     };
   }
-
-  // Store original definitions so we can re-render on theme change
-  const definitions = new Map<HTMLElement, string>();
-
-  document
-    .querySelectorAll<HTMLElement>(".post__content pre code.language-mermaid")
-    .forEach((codeEl) => {
-      const pre = codeEl.parentElement!;
-      const definition = codeEl.innerText;
-      const container = document.createElement("div");
-      container.className = "mermaid-diagram";
-      container.textContent = definition;
-      pre.replaceWith(container);
-      definitions.set(container, definition);
-    });
-
-  async function renderDiagrams() {
-    const isDark = document.documentElement.dataset.theme === "dark";
-    mermaid.initialize(getMermaidConfig(isDark));
-
-    // Reset each container to its original definition before re-rendering
-    definitions.forEach((definition, container) => {
-      container.removeAttribute("data-processed");
-      container.innerHTML = "";
-      container.textContent = definition;
-    });
-
-    await mermaid.run({
-      nodes: document.querySelectorAll(".mermaid-diagram"),
-    });
-  }
-
-  await renderDiagrams();
 
   // Lightbox — created once, shared across all diagrams
   const lightbox = document.createElement("div");
@@ -355,47 +330,74 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     if (e.key === "Escape") closeLightbox();
   });
 
-  function attachExpandButtons() {
-    document
-      .querySelectorAll<HTMLElement>(".mermaid-diagram")
-      .forEach((diagram) => {
-        // Avoid duplicating buttons if already present
-        if (diagram.querySelector(".mermaid-expand-btn")) return;
+  // Store {definition, expandBtn} keyed by container for theme re-render
+  const definitions = new Map<
+    HTMLElement,
+    { definition: string; btn: HTMLButtonElement }
+  >();
 
-        const expandBtn = document.createElement("button");
-        expandBtn.className = "mermaid-expand-btn";
-        expandBtn.innerHTML = ICON_EXPAND;
-        expandBtn.setAttribute("aria-label", "View diagram fullscreen");
-        diagram.appendChild(expandBtn);
+  document
+    .querySelectorAll<HTMLElement>(".post__content pre code.language-mermaid")
+    .forEach((codeEl) => {
+      const pre = codeEl.parentElement!;
+      const definition = codeEl.innerText;
 
-        expandBtn.addEventListener("click", () => {
-          const svgClone = diagram
-            .querySelector("svg")!
-            .cloneNode(true) as SVGElement;
-          svgClone.classList.add("mermaid-lightbox__svg");
-          // Remove constrained sizing so the SVG fills the lightbox naturally
-          svgClone.removeAttribute("style");
-          svgClone.removeAttribute("width");
-          svgClone.removeAttribute("height");
-          svgClone.style.width = "100%";
-          svgClone.style.height = "auto";
-          svgClone.style.display = "block";
-          lightboxInner.appendChild(svgClone);
-          lightbox.classList.add("is-open");
-          document.body.style.overflow = "hidden";
-          closeBtn.focus();
-        });
+      const container = document.createElement("div");
+      container.className = "mermaid-diagram";
+      container.textContent = definition;
+
+      const expandBtn = document.createElement("button");
+      expandBtn.className = "mermaid-expand-btn";
+      expandBtn.innerHTML = ICON_EXPAND;
+      expandBtn.setAttribute("aria-label", "View diagram fullscreen");
+
+      expandBtn.addEventListener("click", () => {
+        const svgClone = container
+          .querySelector("svg")!
+          .cloneNode(true) as SVGElement;
+        svgClone.classList.add("mermaid-lightbox__svg");
+        svgClone.removeAttribute("style");
+        svgClone.removeAttribute("width");
+        svgClone.removeAttribute("height");
+        svgClone.style.width = "100%";
+        svgClone.style.height = "auto";
+        svgClone.style.display = "block";
+        lightboxInner.appendChild(svgClone);
+        lightbox.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
       });
+
+      pre.replaceWith(container);
+      definitions.set(container, { definition, btn: expandBtn });
+    });
+
+  async function renderDiagrams() {
+    const isDark = document.documentElement.dataset.theme === "dark";
+    mermaid.initialize(getMermaidConfig(isDark));
+
+    definitions.forEach(({ definition }, container) => {
+      container.removeAttribute("data-processed");
+      container.textContent = definition;
+    });
+
+    await mermaid.run({
+      nodes: document.querySelectorAll(".mermaid-diagram"),
+    });
+
+    // Re-append expand buttons after mermaid.run() replaces container innerHTML
+    definitions.forEach(({ btn }, container) => {
+      container.appendChild(btn);
+    });
   }
 
-  attachExpandButtons();
+  await renderDiagrams();
 
   // Re-render diagrams when the theme changes (Header.astro uses setAttribute)
   new MutationObserver(async (mutations) => {
     for (const m of mutations) {
       if (m.attributeName === "data-theme") {
         await renderDiagrams();
-        attachExpandButtons();
         break;
       }
     }
