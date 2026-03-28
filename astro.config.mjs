@@ -13,6 +13,9 @@ export default defineConfig({
       defaultProps: {
         showLineNumbers: true,
         wrap: true,
+        overridesByLang: {
+          "bash,sh,zsh": { preserveIndent: false },
+        },
       },
       useDarkModeMediaQuery: false,
       themeCssSelector: (theme) =>
