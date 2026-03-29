@@ -24,11 +24,13 @@ const backToTopIcon = faIcon(faCircleUp, {
 
   window.addEventListener("scroll", toggle, { passive: true });
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (e) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // Return focus to the skip link so keyboard users land somewhere sensible
-    const skipLink = document.querySelector<HTMLAnchorElement>(".skip-link");
-    skipLink?.focus({ preventScroll: true });
+    // Only move focus for keyboard users — pointer clicks should not reveal the skip link
+    if (e.detail === 0) {
+      const skipLink = document.querySelector<HTMLAnchorElement>(".skip-link");
+      skipLink?.focus({ preventScroll: true });
+    }
   });
 </script>
 

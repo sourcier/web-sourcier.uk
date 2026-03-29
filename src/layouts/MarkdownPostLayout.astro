@@ -4,6 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import Comments from "../components/Comments.astro";
 import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
+import SharePost from "../components/SharePost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import MailingListCTASidebar from "../components/MailingListCTASidebar.astro";
 import TagsSidebar from "../components/TagsSidebar.astro";
@@ -83,6 +84,11 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
                   ))}
                 </ol>
               </nav>
+              <SharePost
+                title={frontmatter.title}
+                url={Astro.url.href}
+                vertical
+              />
               <TagsSidebar />
               <MailingListCTASidebar />
             </aside>

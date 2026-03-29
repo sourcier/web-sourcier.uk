@@ -6,9 +6,10 @@ import { faIcon } from "../utils/icons";
 interface Props {
   title: string;
   url: string;
+  vertical?: boolean;
 }
 
-const { title, url } = Astro.props;
+const { title, url, vertical = false } = Astro.props;
 
 const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 const emailBody = `I thought you might find this interesting:\n\n"${title}"\n\n${url}`;
@@ -19,7 +20,7 @@ const linkIcon = faIcon(faLink, { size: 16 });
 const emailIcon = faIcon(faEnvelope, { size: 16 });
 ---
 
-<div class="share-post">
+<div class:list={["share-post", { "share-post--vertical": vertical }]}>
   <span class="share-post__label">Share this post</span>
   <div class="share-post__buttons">
     <a
@@ -74,6 +75,27 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
     margin: 2.5rem 0;
+
+    &--vertical {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      border-top: 2px solid var(--color-pink);
+      border-bottom: none;
+      padding-top: 1.25rem;
+      padding-bottom: 0;
+      margin: 2rem 0 2rem;
+
+      .share-post__buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .share-post__btn {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
   }
 
   .share-post__label {
