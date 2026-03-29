@@ -123,14 +123,14 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       }
 
       .page-hero__tag {
-        background-color: var(--color-pink);
-        border-color: var(--color-pink);
-        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.7);
 
         &:hover {
-          background-color: #ffffff;
+          background-color: rgba(232, 0, 106, 0.12);
+          border-color: rgba(232, 0, 106, 0.5);
           color: var(--color-pink);
-          border-color: #ffffff;
         }
       }
     }
@@ -204,19 +204,21 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     display: inline-block;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-pink);
-    border: 1px solid rgba(232, 0, 106, 0.4);
+    color: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 0.15rem 0.55rem;
     transition:
       background-color 0.15s ease,
-      color 0.15s ease;
+      color 0.15s ease,
+      border-color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-pink);
-      color: #ffffff;
+      background-color: rgba(232, 0, 106, 0.12);
+      border-color: rgba(232, 0, 106, 0.5);
+      color: var(--color-pink);
     }
   }
 
@@ -246,12 +248,13 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
 
     :global(.share-post__btn) {
       color: rgba(255, 255, 255, 0.55);
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.18);
+      background-color: rgba(255, 255, 255, 0.06);
 
       &:hover {
         color: var(--color-pink);
-        border-color: rgba(232, 0, 106, 0.6);
-        background-color: rgba(232, 0, 106, 0.08);
+        border-color: rgba(232, 0, 106, 0.5);
+        background-color: rgba(232, 0, 106, 0.12);
       }
     }
   }
