@@ -1,0 +1,125 @@
+---
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faLink, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+const emailBody = `I thought you might find this interesting:\n\n"${title}"\n\n${url}`;
+const emailUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(emailBody)}`;
+
+const linkedinIcon = faIcon(faLinkedin, { size: 16 });
+const linkIcon = faIcon(faLink, { size: 16 });
+const emailIcon = faIcon(faEnvelope, { size: 16 });
+---
+
+<div class="share-post">
+  <span class="share-post__label">Share this post</span>
+  <div class="share-post__buttons">
+    <a
+      href={linkedinUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="share-post__btn"
+      aria-label="Share on LinkedIn"
+    >
+      <Fragment set:html={linkedinIcon} />
+      <span>LinkedIn</span>
+    </a>
+    <a href={emailUrl} class="share-post__btn" aria-label="Share by email">
+      <Fragment set:html={emailIcon} />
+      <span>Email</span>
+    </a>
+    <button
+      class="share-post__btn"
+      id="copy-link-btn"
+      aria-label="Copy link"
+      data-url={url}
+    >
+      <span class="copy-link-icon" set:html={linkIcon} />
+      <span class="copy-link-label">Copy link</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById("copy-link-btn");
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      const url = btn.dataset.url ?? window.location.href;
+      await navigator.clipboard.writeText(url);
+      const label = btn.querySelector(".copy-link-label");
+      if (label) {
+        label.textContent = "Copied!";
+        setTimeout(() => {
+          label.textContent = "Copy link";
+        }, 2000);
+      }
+    });
+  }
+</script>
+
+<style lang="scss">
+  .share-post {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    margin: 2.5rem 0;
+  }
+
+  .share-post__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    flex-shrink: 0;
+  }
+
+  .share-post__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .share-post__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-muted);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+
+    svg {
+      display: block;
+    }
+
+    &:hover {
+      color: var(--color-pink);
+      border-color: var(--color-pink);
+      background-color: rgba(232, 0, 106, 0.05);
+    }
+  }
+</style>

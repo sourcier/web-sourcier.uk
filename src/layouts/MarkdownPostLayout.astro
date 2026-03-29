@@ -43,6 +43,8 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       author={frontmatter.author}
       date={formattedDate ?? undefined}
       crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
+      shareUrl={Astro.url.href}
+      shareTitle={frontmatter.title}
     />
 
     <div class="post__body">

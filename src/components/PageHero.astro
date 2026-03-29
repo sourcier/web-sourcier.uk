@@ -1,6 +1,7 @@
 ---
 import { tagSlug } from "../utils/tags";
 import Breadcrumb from "./Breadcrumb.astro";
+import SharePost from "./SharePost.astro";
 
 interface Crumb {
   label: string;
@@ -16,10 +17,22 @@ interface Props {
   author?: string;
   date?: string;
   crumbs?: Crumb[];
+  shareUrl?: string;
+  shareTitle?: string;
 }
 
-const { kicker, title, subtitle, coverImage, tags, author, date, crumbs } =
-  Astro.props;
+const {
+  kicker,
+  title,
+  subtitle,
+  coverImage,
+  tags,
+  author,
+  date,
+  crumbs,
+  shareUrl,
+  shareTitle,
+} = Astro.props;
 
 function autoCrumbs(path: string): Crumb[] {
   const segments = path.split("/").filter(Boolean);
@@ -65,6 +78,13 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
                 ))}
               </div>
             )}
+          </div>
+        )
+      }
+      {
+        shareUrl && shareTitle && (
+          <div class="page-hero__share">
+            <SharePost url={shareUrl} title={shareTitle} />
           </div>
         )
       }
@@ -208,5 +228,31 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     letter-spacing: 0.12em;
     color: var(--color-pink);
     margin-bottom: 0.75rem;
+  }
+
+  .page-hero__share {
+    margin-top: 1.5rem;
+
+    :global(.share-post) {
+      border-color: rgba(255, 255, 255, 0.15);
+      border-bottom: none;
+      padding: 1.25rem 0 0;
+      margin: 0;
+    }
+
+    :global(.share-post__label) {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    :global(.share-post__btn) {
+      color: rgba(255, 255, 255, 0.55);
+      border-color: rgba(255, 255, 255, 0.2);
+
+      &:hover {
+        color: var(--color-pink);
+        border-color: rgba(232, 0, 106, 0.6);
+        background-color: rgba(232, 0, 106, 0.08);
+      }
+    }
   }
 </style>
