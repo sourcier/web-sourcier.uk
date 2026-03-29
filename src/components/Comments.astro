@@ -115,70 +115,67 @@ const { postId } = Astro.props;
       </div>
     </div>
   </div>
-<!--
+  <!--
   Hidden form registered with Netlify at build time so the edge knows the
   approved-comments form schema. Data is submitted here programmatically by
   the approve-comment Netlify Function — it is never shown to users.
 -->
-<form
-  name="approved-comments"
-  data-netlify="true"
-  hidden
-  aria-hidden="true"
->
-  <input type="hidden" name="postSlug" />
-  <input type="hidden" name="name" />
-  <input type="hidden" name="email" />
-  <input type="hidden" name="comment" />
-  <input type="hidden" name="originalDate" />
-</form>
+  <form name="approved-comments" data-netlify="true" hidden aria-hidden="true">
+    <input type="hidden" name="postSlug" />
+    <input type="hidden" name="name" />
+    <input type="hidden" name="email" />
+    <input type="hidden" name="comment" />
+    <input type="hidden" name="originalDate" />
+  </form>
 
-<script>
-  const listEl = document.getElementById("comments-list") as HTMLElement;
-  const form = document.getElementById("comment-form") as HTMLFormElement;
-  const submitBtn = document.getElementById(
-    "comment-submit",
-  ) as HTMLButtonElement;
-  const formStatus = document.getElementById(
-    "comment-form-status",
-  ) as HTMLElement;
-  const postSlug = listEl?.dataset.postSlug ?? "";
+  <script>
+    const listEl = document.getElementById("comments-list") as HTMLElement;
+    const form = document.getElementById("comment-form") as HTMLFormElement;
+    const submitBtn = document.getElementById(
+      "comment-submit",
+    ) as HTMLButtonElement;
+    const formStatus = document.getElementById(
+      "comment-form-status",
+    ) as HTMLElement;
+    const postSlug = listEl?.dataset.postSlug ?? "";
 
-  function escapeHtml(str: string): string {
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  }
-
-  function buildCommentsHtml(
-    comments: {
-      name: string;
-      comment: string;
-      date: string;
-      emailHash?: string | null;
-    }[],
-  ): string {
-    if (!comments.length) {
-      return '<p class="comments__empty">No comments yet — be the first.</p>';
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
-    return comments
-      .map((c) => {
-        const initial = escapeHtml(c.name.charAt(0).toUpperCase());
-        const avatarInner = c.emailHash
-          ? `<img class="comment__avatar-img" src="https://www.gravatar.com/avatar/${c.emailHash}?s=72&d=404" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" /><span class="comment__avatar-initial">${initial}</span>`
-          : `<span class="comment__avatar-initial">${initial}</span>`;
-        return `
+
+    function formatDate(iso: string): string {
+      return new Date(iso).toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "Europe/London",
+        timeZoneName: "short",
+      });
+    }
+
+    function buildCommentsHtml(
+      comments: {
+        name: string;
+        comment: string;
+        date: string;
+        emailHash?: string | null;
+      }[],
+    ): string {
+      if (!comments.length) {
+        return '<p class="comments__empty">No comments yet — be the first.</p>';
+      }
+      return comments
+        .map((c) => {
+          const initial = escapeHtml(c.name.charAt(0).toUpperCase());
+          const avatarInner = c.emailHash
+            ? `<img class="comment__avatar-img" src="https://www.gravatar.com/avatar/${c.emailHash}?s=72&d=404" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" /><span class="comment__avatar-initial">${initial}</span>`
+            : `<span class="comment__avatar-initial">${initial}</span>`;
+          return `
         <article class="comment" aria-label="${escapeHtml(c.name)}">
           <div class="comment__avatar">${avatarInner}</div>
           <div class="comment__content">
@@ -190,331 +187,332 @@ const { postId } = Astro.props;
             <p class="comment__body">${escapeHtml(c.comment)}</p>
           </div>
         </article>`;
-      })
-      .join("");
-  }
-
-  function renderComments(
-    comments: {
-      name: string;
-      comment: string;
-      date: string;
-      emailHash?: string | null;
-    }[],
-    animate = false,
-  ) {
-    if (!listEl) return;
-    const html = buildCommentsHtml(comments);
-    if (!animate) {
-      listEl.innerHTML = html;
-      return;
+        })
+        .join("");
     }
-    listEl.classList.add("is-fading");
-    listEl.addEventListener(
-      "animationend",
-      () => {
+
+    function renderComments(
+      comments: {
+        name: string;
+        comment: string;
+        date: string;
+        emailHash?: string | null;
+      }[],
+      animate = false,
+    ) {
+      if (!listEl) return;
+      const html = buildCommentsHtml(comments);
+      if (!animate) {
         listEl.innerHTML = html;
-        listEl.classList.remove("is-fading");
-        listEl.classList.add("is-entering");
-        listEl.addEventListener(
-          "animationend",
-          () => listEl.classList.remove("is-entering"),
-          { once: true },
-        );
-      },
-      { once: true },
-    );
-  }
-
-  async function loadComments() {
-    if (!postSlug || !listEl) return;
-    try {
-      const res = await fetch(
-        `/.netlify/functions/get-comments?slug=${encodeURIComponent(postSlug)}`,
+        return;
+      }
+      listEl.classList.add("is-fading");
+      listEl.addEventListener(
+        "animationend",
+        () => {
+          listEl.innerHTML = html;
+          listEl.classList.remove("is-fading");
+          listEl.classList.add("is-entering");
+          listEl.addEventListener(
+            "animationend",
+            () => listEl.classList.remove("is-entering"),
+            { once: true },
+          );
+        },
+        { once: true },
       );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const { comments } = await res.json();
-      renderComments(comments, true);
-    } catch {
-      if (listEl) {
-        listEl.innerHTML =
-          '<p class="comments__empty">Comments unavailable right now.</p>';
-      }
-    }
-  }
-
-  form?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-
-    submitBtn.disabled = true;
-    formStatus.textContent = "Posting…";
-    formStatus.className = "comments__form-status";
-
-    try {
-      const data = new FormData(form);
-      const res = await fetch(window.location.pathname, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams([...(data as any)]).toString(),
-      });
-
-      if (res.ok) {
-        form.reset();
-        formStatus.textContent =
-          "Thanks — your comment has been submitted and will appear once approved.";
-        formStatus.className = "comments__form-status is-success";
-        loadComments();
-      } else {
-        formStatus.textContent = "Something went wrong. Please try again.";
-        formStatus.className = "comments__form-status is-error";
-        submitBtn.disabled = false;
-      }
-    } catch {
-      formStatus.textContent = "Something went wrong. Please try again.";
-      formStatus.className = "comments__form-status is-error";
-      submitBtn.disabled = false;
-    }
-  });
-
-  loadComments();
-</script>
-
-<style lang="scss">
-  .comments {
-    padding: 4rem 1.5rem;
-    border-top: 1px solid var(--color-border);
-    background-color: var(--color-surface);
-
-    .comments__inner {
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  .comments__heading {
-    font-family: "Barlow Condensed", sans-serif;
-    font-weight: 800;
-    font-size: 1.75rem;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
-    margin-bottom: 2rem;
-  }
-
-  .comments__list-section {
-    margin-bottom: 3.5rem;
-  }
-
-  :global(.comment) {
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    background-color: var(--color-paper);
-    border: 1px solid var(--color-border);
-    border-left: 3px solid var(--color-pink);
-  }
-
-  :global(.comment__avatar) {
-    flex-shrink: 0;
-    position: relative;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background-color: var(--color-pink);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    user-select: none;
-  }
-
-  :global(.comment__avatar-initial) {
-    font-family: "Barlow Condensed", sans-serif;
-    font-weight: 800;
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-
-  :global(.comment__avatar-img) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  :global(.comment__content) {
-    flex: 1;
-    min-width: 0;
-  }
-
-  :global(.comment__meta) {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.625rem;
-  }
-
-  :global(.comment__author) {
-    font-family: "Barlow Condensed", sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-ink);
-  }
-
-  :global(.comment__meta-sep) {
-    color: var(--color-pink);
-    font-size: 0.875rem;
-    line-height: 1;
-  }
-
-  :global(.comment__date) {
-    font-size: 0.8125rem;
-    color: var(--color-muted);
-    letter-spacing: 0.02em;
-  }
-
-  :global(.comment__body) {
-    margin: 0;
-    padding: 0;
-    border: none;
-    font-size: 0.9375rem;
-    line-height: 1.8;
-    color: var(--color-ink);
-    white-space: pre-wrap;
-  }
-
-  .comments__status-line {
-    font-size: 0.875rem;
-    color: var(--color-muted);
-  }
-
-  @keyframes comments-fade-out {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    to {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
-  }
-
-  @keyframes comments-fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  :global(#comments-list.is-fading) {
-    animation: comments-fade-out 0.2s ease forwards;
-  }
-
-  :global(#comments-list.is-entering) {
-    animation: comments-fade-in 0.25s ease forwards;
-  }
-
-  .comments__form-wrapper {
-    padding-top: 0.5rem;
-
-    .label {
-      color: var(--color-ink);
-      font-weight: 600;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    .input,
-    .textarea {
-      background-color: var(--color-surface);
-      border-color: var(--color-border);
-      color: var(--color-ink);
-      border-radius: 0;
-
-      &:focus {
-        border-color: var(--color-pink);
-        box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.15);
-      }
-    }
-
-    .button.is-primary {
-      background-color: var(--color-pink);
-      border-color: var(--color-pink);
-      color: #fff;
-      font-family: "Barlow Condensed", sans-serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-radius: 0;
-
-      &:hover {
-        background-color: #c4005a;
-        border-color: #c4005a;
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
-  }
-
-  .comments__optional {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--color-muted);
-  }
-
-  .comments__form-status {
-    align-self: center;
-    font-size: 0.875rem;
-    padding-left: 0.5rem;
-
-    &.is-success {
-      color: #257942;
-    }
-
-    &.is-error {
-      color: var(--color-pink);
-    }
-  }
-
-  [data-theme="dark"] {
-    :global(.comment) {
-      background-color: #1a1a1a;
-      border-color: var(--color-border);
-      border-left-color: var(--color-pink);
-    }
-
-    .comments__form-wrapper {
-      .input,
-      .textarea {
-        background-color: #1c1c1c;
-        border-color: var(--color-border);
-        color: var(--color-ink);
-
-        &::placeholder {
-          color: var(--color-muted);
+    async function loadComments() {
+      if (!postSlug || !listEl) return;
+      try {
+        const res = await fetch(
+          `/.netlify/functions/get-comments?slug=${encodeURIComponent(postSlug)}`,
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { comments } = await res.json();
+        renderComments(comments, true);
+      } catch {
+        if (listEl) {
+          listEl.innerHTML =
+            '<p class="comments__empty">Comments unavailable right now.</p>';
         }
       }
     }
 
-    .comments__form-status.is-success {
-      color: #48c774;
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      submitBtn.disabled = true;
+      formStatus.textContent = "Posting…";
+      formStatus.className = "comments__form-status";
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(window.location.pathname, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams([...(data as any)]).toString(),
+        });
+
+        if (res.ok) {
+          form.reset();
+          formStatus.textContent =
+            "Thanks — your comment has been submitted and will appear once approved.";
+          formStatus.className = "comments__form-status is-success";
+          loadComments();
+        } else {
+          formStatus.textContent = "Something went wrong. Please try again.";
+          formStatus.className = "comments__form-status is-error";
+          submitBtn.disabled = false;
+        }
+      } catch {
+        formStatus.textContent = "Something went wrong. Please try again.";
+        formStatus.className = "comments__form-status is-error";
+        submitBtn.disabled = false;
+      }
+    });
+
+    loadComments();
+  </script>
+
+  <style lang="scss">
+    .comments {
+      padding: 4rem 1.5rem;
+      border-top: 1px solid var(--color-border);
+      background-color: var(--color-surface);
+
+      .comments__inner {
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
-  }
-</style>
+
+    .comments__heading {
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: 1.75rem;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--color-ink);
+      margin-bottom: 2rem;
+    }
+
+    .comments__list-section {
+      margin-bottom: 3.5rem;
+    }
+
+    :global(.comment) {
+      display: flex;
+      gap: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      background-color: var(--color-paper);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-pink);
+    }
+
+    :global(.comment__avatar) {
+      flex-shrink: 0;
+      position: relative;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      background-color: var(--color-pink);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    :global(.comment__avatar-initial) {
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    :global(.comment__avatar-img) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    :global(.comment__content) {
+      flex: 1;
+      min-width: 0;
+    }
+
+    :global(.comment__meta) {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.625rem;
+    }
+
+    :global(.comment__author) {
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-ink);
+    }
+
+    :global(.comment__meta-sep) {
+      color: var(--color-pink);
+      font-size: 0.875rem;
+      line-height: 1;
+    }
+
+    :global(.comment__date) {
+      font-size: 0.8125rem;
+      color: var(--color-muted);
+      letter-spacing: 0.02em;
+    }
+
+    :global(.comment__body) {
+      margin: 0;
+      padding: 0;
+      border: none;
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--color-ink);
+      white-space: pre-wrap;
+    }
+
+    .comments__status-line {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+    }
+
+    @keyframes comments-fade-out {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes comments-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    :global(#comments-list.is-fading) {
+      animation: comments-fade-out 0.2s ease forwards;
+    }
+
+    :global(#comments-list.is-entering) {
+      animation: comments-fade-in 0.25s ease forwards;
+    }
+
+    .comments__form-wrapper {
+      padding-top: 0.5rem;
+
+      .label {
+        color: var(--color-ink);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .input,
+      .textarea {
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+        color: var(--color-ink);
+        border-radius: 0;
+
+        &:focus {
+          border-color: var(--color-pink);
+          box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.15);
+        }
+      }
+
+      .button.is-primary {
+        background-color: var(--color-pink);
+        border-color: var(--color-pink);
+        color: #fff;
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border-radius: 0;
+
+        &:hover {
+          background-color: #c4005a;
+          border-color: #c4005a;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .comments__optional {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--color-muted);
+    }
+
+    .comments__form-status {
+      align-self: center;
+      font-size: 0.875rem;
+      padding-left: 0.5rem;
+
+      &.is-success {
+        color: #257942;
+      }
+
+      &.is-error {
+        color: var(--color-pink);
+      }
+    }
+
+    [data-theme="dark"] {
+      :global(.comment) {
+        background-color: #1a1a1a;
+        border-color: var(--color-border);
+        border-left-color: var(--color-pink);
+      }
+
+      .comments__form-wrapper {
+        .input,
+        .textarea {
+          background-color: #1c1c1c;
+          border-color: var(--color-border);
+          color: var(--color-ink);
+
+          &::placeholder {
+            color: var(--color-muted);
+          }
+        }
+      }
+
+      .comments__form-status.is-success {
+        color: #48c774;
+      }
+    }
+  </style>
+</section>

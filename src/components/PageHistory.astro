@@ -15,11 +15,14 @@ function formatDatetime(date: Date): string {
     day: "2-digit",
     month: "short",
     year: "numeric",
+    timeZone: "Europe/London",
   });
   const t = date.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
+    timeZone: "Europe/London",
+    timeZoneName: "short",
   });
   return `${d} · ${t}`;
 }
