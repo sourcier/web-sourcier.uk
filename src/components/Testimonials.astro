@@ -2,6 +2,10 @@
 import newdayLogo from "../../assets/images/newday-favicon.png";
 import intofilmLogo from "../../assets/images/intofilm-favicon.png";
 import treatwellLogo from "../../assets/images/treatwell-favicon.png";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faIcon } from "../utils/icons";
+
+const linkedinIcon = faIcon(faLinkedin, { size: 14 });
 
 const testimonials = [
   {
@@ -12,6 +16,7 @@ const testimonials = [
     company: "NewDay",
     logo: newdayLogo,
     website: "https://www.newday.co.uk",
+    linkedin: "https://www.linkedin.com/in/elisabethtencate/",
     placeholder: false,
   },
   {
@@ -22,6 +27,7 @@ const testimonials = [
     company: "Into Film",
     logo: intofilmLogo,
     website: "https://www.intofilm.org",
+    linkedin: "https://www.linkedin.com/in/chris-breen-b608aa42/",
     placeholder: false,
   },
   {
@@ -32,6 +38,7 @@ const testimonials = [
     company: "Treatwell",
     logo: treatwellLogo,
     website: "https://www.treatwell.co.uk",
+    linkedin: "https://www.linkedin.com/in/syed-shah-6a881917/",
     placeholder: false,
   },
 ];
@@ -62,7 +69,30 @@ const testimonials = [
               <footer class="testimonials__footer">
                 <div class="testimonials__attribution">
                   <div>
-                    <p class="testimonials__name">{t.name}</p>
+                    <p class="testimonials__name">
+                      {t.linkedin ? (
+                        <span class="testimonials__name-group">
+                          <a
+                            href={t.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="testimonials__name-link"
+                          >
+                            {t.name}
+                          </a>
+                          <a
+                            href={t.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="testimonials__linkedin"
+                            aria-label={`${t.name} on LinkedIn`}
+                            set:html={linkedinIcon}
+                          />
+                        </span>
+                      ) : (
+                        t.name
+                      )}
+                    </p>
                     <p class="testimonials__meta">
                       {t.title ? `${t.title} · ${t.company}` : t.company}
                     </p>
@@ -229,6 +259,34 @@ const testimonials = [
     letter-spacing: 0.04em;
     color: var(--color-ink);
     margin: 0 0 0.2rem;
+  }
+
+  .testimonials__name-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    &:hover .testimonials__name-link {
+      color: var(--color-pink);
+    }
+
+    &:hover .testimonials__linkedin {
+      color: var(--color-pink);
+    }
+  }
+
+  .testimonials__name-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .testimonials__linkedin {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-muted);
+    transition: color 0.15s ease;
+    flex-shrink: 0;
   }
 
   .testimonials__meta {
