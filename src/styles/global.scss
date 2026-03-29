@@ -689,8 +689,9 @@ h1, h2, h3, h4, h5, h6,
   transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 
   &:hover {
-    color: var(--color-ink);
-    background-color: var(--color-surface);
+    color: var(--color-pink);
+    border-left-color: rgba(232, 0, 106, 0.35);
+    background-color: rgba(232, 0, 106, 0.04);
   }
 
   &.is-active {
