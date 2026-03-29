@@ -27,11 +27,15 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
           >
           <h1 class="hero-title">Hi, I'm Roger<br />Rajaratnam</h1>
           <p class="hero-bio">
-            London-based engineer building scalable web systems, mentoring
-            developers, and sharing real-world lessons from a decade in the
-            craft.
+            London-based engineer sharing real-world lessons from twenty years
+            in the craft. Writing about
+            <span class="hero-cycle" aria-live="polite" aria-atomic="true"
+              ><span class="hero-cycle__term" id="heroCycleTerm"
+                >System Design</span
+              ></span
+            >
           </p>
-          <div class="buttons mt-5">
+          <div class="buttons">
             <a href="/blog" class="button is-primary is-medium">Read the blog</a
             >
             <a href="/about" class="button is-light is-medium">About me</a>
@@ -114,3 +118,36 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     }
   }
 </style>
+
+<script>
+  const terms = [
+    "System Design",
+    "Web Development",
+    "Technical Leadership",
+    "Lessons Learned",
+    "Practical Insights",
+  ];
+
+  const el = document.getElementById("heroCycleTerm");
+  if (el) {
+    let current = 0;
+
+    setInterval(() => {
+      current = (current + 1) % terms.length;
+
+      el.classList.add("is-leaving");
+
+      setTimeout(() => {
+        el.classList.remove("is-leaving");
+        el.classList.add("is-entering");
+        el.textContent = terms[current];
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            el.classList.remove("is-entering");
+          });
+        });
+      }, 250);
+    }, 2800);
+  }
+</script>
