@@ -92,6 +92,21 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
   </div>
 </header>
 
+<script>
+  const hero = document.querySelector<HTMLElement>(
+    ".page-hero[data-has-cover='true']",
+  );
+  if (hero) {
+    const update = () => {
+      const offset = window.scrollY;
+      // Move the background at 40% of scroll speed for a subtle parallax
+      hero.style.backgroundPositionY = `calc(50% + ${offset * 0.4}px)`;
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>
+
 <style lang="scss">
   .page-hero {
     min-height: 280px;
