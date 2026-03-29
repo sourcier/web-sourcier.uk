@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../utils/drafts";
 import { tagSlug } from "../utils/tags";
 
 const allPosts = (await getCollection("posts")).filter(
-  (post) => !post.data.draft || import.meta.env.DEV,
+  (post) => !post.data.draft || showDrafts,
 );
 
 const tagCounts = new Map<string, number>();
@@ -38,24 +39,30 @@ const tags = [...tagCounts.entries()]
 <section class="tag-cloud" aria-labelledby="tag-cloud-heading">
   <div class="container is-max-desktop">
     <div class="tag-cloud__header">
-      <span class="tag-cloud__label" id="tag-cloud-heading">Browse by topic</span>
+      <span class="tag-cloud__label" id="tag-cloud-heading"
+        >Browse by topic</span
+      >
       <a href="/tags" class="tag-cloud__all-link" aria-label="View all topics">
         All topics &rarr;
       </a>
     </div>
     <ul class="tag-cloud__list" role="list">
-      {tags.map(({ tag, count, slug, tier }) => (
-        <li>
-          <a
-            href={`/tags/${slug}`}
-            class={`tag-cloud__pill tag-cloud__pill--tier-${tier}`}
-            aria-label={`${tag} — ${count} post${count === 1 ? "" : "s"}`}
-          >
-            {tag}
-            <span class="tag-cloud__count" aria-hidden="true">{count}</span>
-          </a>
-        </li>
-      ))}
+      {
+        tags.map(({ tag, count, slug, tier }) => (
+          <li>
+            <a
+              href={`/tags/${slug}`}
+              class={`tag-cloud__pill tag-cloud__pill--tier-${tier}`}
+              aria-label={`${tag} — ${count} post${count === 1 ? "" : "s"}`}
+            >
+              {tag}
+              <span class="tag-cloud__count" aria-hidden="true">
+                {count}
+              </span>
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>
@@ -162,7 +169,9 @@ const tags = [...tagCounts.entries()]
     background-color: var(--color-border);
     padding: 0.05rem 0.35rem;
     border-radius: 2px;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
 
     .tag-cloud__pill:hover & {
       background-color: rgba(232, 0, 106, 0.15);

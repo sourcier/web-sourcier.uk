@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../../../utils/drafts";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
@@ -9,9 +10,8 @@ import { tagSlug } from "../../../utils/tags";
 export async function getStaticPaths() {
   const PAGE_SIZE = 9;
   const allPosts = (await getCollection("posts")).filter(
-    (post) => !post.data.draft || import.meta.env.DEV,
+    (post) => !post.data.draft || showDrafts,
   );
-
   const tagMap = new Map<string, typeof allPosts>();
   for (const post of allPosts) {
     for (const tag of post.data.tags) {
@@ -20,38 +20,42 @@ export async function getStaticPaths() {
       tagMap.get(slug)!.push(post);
     }
   }
-
   const paths: object[] = [];
-
   for (const [slug, posts] of tagMap.entries()) {
-    const sorted = posts.sort(
-      (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-    );
-    const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
+    const totalPages = Math.ceil(posts.length / PAGE_SIZE);
     const label = posts[0].data.tags.find((t) => tagSlug(t) === slug) ?? slug;
-
     for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
-      const start = (pageNum - 1) * PAGE_SIZE;
       paths.push({
         params: { tag: slug, page: String(pageNum) },
-        props: {
-          label,
-          posts: sorted.slice(start, start + PAGE_SIZE),
-          currentPage: pageNum,
-          totalPages,
-          prevUrl:
-            pageNum === 2 ? `/tags/${slug}` : `/tags/${slug}/${pageNum - 1}`,
-          nextUrl: pageNum < totalPages ? `/tags/${slug}/${pageNum + 1}` : null,
-        },
+        props: { label },
       });
     }
   }
-
   return paths;
 }
 
-const { label, posts, currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
-const { tag } = Astro.params;
+const PAGE_SIZE = 9;
+const { tag, page } = Astro.params;
+const { label } = Astro.props;
+const currentPage = Number(page);
+
+const allTagPosts = (await getCollection("posts"))
+  .filter(
+    (post) =>
+      (!post.data.draft || showDrafts) &&
+      post.data.tags.some((t) => tagSlug(t) === tag),
+  )
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const totalPages = Math.ceil(allTagPosts.length / PAGE_SIZE);
+const posts = allTagPosts.slice(
+  (currentPage - 1) * PAGE_SIZE,
+  currentPage * PAGE_SIZE,
+);
+const prevUrl =
+  currentPage === 2 ? `/tags/${tag}` : `/tags/${tag}/${currentPage - 1}`;
+const nextUrl =
+  currentPage < totalPages ? `/tags/${tag}/${currentPage + 1}` : null;
 ---
 
 <BaseLayout

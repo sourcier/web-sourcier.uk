@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../../../utils/drafts";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
@@ -7,30 +8,30 @@ import BlogGrid from "../../../components/BlogGrid.astro";
 
 export async function getStaticPaths() {
   const PAGE_SIZE = 9;
-
   const allPosts = (await getCollection("posts"))
-    .filter((post) => !post.data.draft || import.meta.env.DEV)
+    .filter((post) => !post.data.draft || showDrafts)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
   const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
-
-  return Array.from({ length: totalPages - 1 }, (_, i) => {
-    const pageNum = i + 2;
-    const start = (pageNum - 1) * PAGE_SIZE;
-    return {
-      params: { page: String(pageNum) },
-      props: {
-        posts: allPosts.slice(start, start + PAGE_SIZE),
-        currentPage: pageNum,
-        totalPages,
-        prevUrl: pageNum === 2 ? "/blog" : `/blog/page/${pageNum - 1}`,
-        nextUrl: pageNum < totalPages ? `/blog/page/${pageNum + 1}` : null,
-      },
-    };
-  });
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
 }
 
-const { posts, currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
+const PAGE_SIZE = 9;
+const currentPage = Number(Astro.params.page);
+
+const allPosts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft || showDrafts)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
+const posts = allPosts.slice(
+  (currentPage - 1) * PAGE_SIZE,
+  currentPage * PAGE_SIZE,
+);
+const prevUrl = currentPage === 2 ? "/blog" : `/blog/page/${currentPage - 1}`;
+const nextUrl =
+  currentPage < totalPages ? `/blog/page/${currentPage + 1}` : null;
 ---
 
 <BaseLayout

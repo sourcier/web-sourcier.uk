@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../../utils/drafts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
@@ -9,7 +10,7 @@ import BlogTagCloud from "../../components/BlogTagCloud.astro";
 const PAGE_SIZE = 9;
 
 const allPosts = (await getCollection("posts"))
-  .filter((post) => !post.data.draft || import.meta.env.DEV)
+  .filter((post) => !post.data.draft || showDrafts)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);

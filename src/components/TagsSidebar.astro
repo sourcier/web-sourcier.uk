@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../utils/drafts";
 import { tagSlug } from "../utils/tags";
 
 const allPosts = (await getCollection("posts")).filter(
-  (post) => !post.data.draft || import.meta.env.DEV,
+  (post) => !post.data.draft || showDrafts,
 );
 
 const tagCounts = new Map<string, number>();
@@ -21,16 +22,21 @@ const tags = [...tagCounts.entries()]
 <nav class="tags-sidebar" aria-labelledby="tags-sidebar-heading">
   <p class="tags-sidebar__heading" id="tags-sidebar-heading">Browse topics</p>
   <ul class="tags-sidebar__list" role="list">
-    {tags.map(({ tag, count, slug }) => (
-      <li>
-        <a href={`/tags/${slug}`} class="tags-sidebar__tag">
-          <span class="tags-sidebar__name">{tag}</span>
-          <span class="tags-sidebar__count" aria-label={`${count} post${count === 1 ? "" : "s"}`}>
-            {count}
-          </span>
-        </a>
-      </li>
-    ))}
+    {
+      tags.map(({ tag, count, slug }) => (
+        <li>
+          <a href={`/tags/${slug}`} class="tags-sidebar__tag">
+            <span class="tags-sidebar__name">{tag}</span>
+            <span
+              class="tags-sidebar__count"
+              aria-label={`${count} post${count === 1 ? "" : "s"}`}
+            >
+              {count}
+            </span>
+          </a>
+        </li>
+      ))
+    }
   </ul>
   <a href="/tags" class="tags-sidebar__all">All tags →</a>
 </nav>
@@ -71,7 +77,9 @@ const tags = [...tagCounts.entries()]
     border-bottom: 1px solid var(--color-border);
     text-decoration: none;
     color: var(--color-muted);
-    transition: color 0.15s ease, padding-left 0.15s ease;
+    transition:
+      color 0.15s ease,
+      padding-left 0.15s ease;
 
     &:hover {
       color: var(--color-pink);
@@ -96,7 +104,9 @@ const tags = [...tagCounts.entries()]
     padding: 0.1rem 0.4rem;
     min-width: 1.4rem;
     text-align: center;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
 
     .tags-sidebar__tag:hover & {
       background-color: rgba(232, 0, 106, 0.12);

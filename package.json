@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "netlify dev",
+    "dev:with-drafts": "SHOW_DRAFTS=true netlify dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

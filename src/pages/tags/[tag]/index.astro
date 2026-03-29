@@ -1,18 +1,16 @@
 ---
 import { getCollection } from "astro:content";
+import { showDrafts } from "../../../utils/drafts";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
 import { tagSlug } from "../../../utils/tags";
 
-const PAGE_SIZE = 9;
-
 export async function getStaticPaths() {
   const allPosts = (await getCollection("posts")).filter(
-    (post) => !post.data.draft || import.meta.env.DEV,
+    (post) => !post.data.draft || showDrafts,
   );
-
   const tagMap = new Map<string, typeof allPosts>();
   for (const post of allPosts) {
     for (const tag of post.data.tags) {
@@ -21,27 +19,27 @@ export async function getStaticPaths() {
       tagMap.get(slug)!.push(post);
     }
   }
-
   return [...tagMap.entries()].map(([slug, posts]) => {
-    const sorted = posts.sort(
-      (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-    );
-    const totalPages = Math.ceil(sorted.length / 9);
     const label = posts[0].data.tags.find((t) => tagSlug(t) === slug) ?? slug;
-    return {
-      params: { tag: slug },
-      props: {
-        label,
-        posts: sorted.slice(0, 9),
-        totalPages,
-        nextUrl: totalPages > 1 ? `/tags/${slug}/2` : null,
-      },
-    };
+    return { params: { tag: slug }, props: { label } };
   });
 }
 
-const { label, posts, totalPages, nextUrl } = Astro.props;
+const PAGE_SIZE = 9;
 const { tag } = Astro.params;
+const { label } = Astro.props;
+
+const allTagPosts = (await getCollection("posts"))
+  .filter(
+    (post) =>
+      (!post.data.draft || showDrafts) &&
+      post.data.tags.some((t) => tagSlug(t) === tag),
+  )
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const totalPages = Math.ceil(allTagPosts.length / PAGE_SIZE);
+const posts = allTagPosts.slice(0, PAGE_SIZE);
+const nextUrl = totalPages > 1 ? `/tags/${tag}/2` : null;
 ---
 
 <BaseLayout
