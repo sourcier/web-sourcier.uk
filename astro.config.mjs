@@ -22,6 +22,7 @@ export default defineConfig({
       styleOverrides: {
         borderRadius: "0",
         borderColor: "var(--color-border)",
+        borderWidth: "1px",
         codePaddingInline: "1.5rem",
         frames: {
           copyIcon: expressiveCodeCopyIcon,
