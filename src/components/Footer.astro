@@ -1,9 +1,5 @@
 ---
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faIcon } from "../utils/icons";
 
-const githubIcon = faIcon(faGithub, { size: 18 });
-const linkedinIcon = faIcon(faLinkedin, { size: 18 });
 ---
 
 <footer class="footer mt-auto">
@@ -23,26 +19,6 @@ const linkedinIcon = faIcon(faLinkedin, { size: 18 });
 
     <div class="footer__bottom">
       <p class="footer__copy">&copy; 2026 Roger Rajaratnam</p>
-      <div class="footer__social">
-        <a
-          href="https://github.com/sourcier"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="social-icon"
-          aria-label="GitHub"
-        >
-          <Fragment set:html={githubIcon} />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/roger-rajaratnam"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="social-icon"
-          aria-label="LinkedIn"
-        >
-          <Fragment set:html={linkedinIcon} />
-        </a>
-      </div>
     </div>
   </div>
 </footer>
@@ -138,9 +114,7 @@ const linkedinIcon = faIcon(faLinkedin, { size: 18 });
   .footer__bottom {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+    justify-content: center;
     padding-top: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
@@ -149,20 +123,6 @@ const linkedinIcon = faIcon(faLinkedin, { size: 18 });
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.3);
     margin: 0;
-  }
-
-  .footer__social {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  // Override global social icon colours for the dark footer
-  .social-icon {
-    color: rgba(255, 255, 255, 0.4);
-
-    &:hover {
-      color: var(--color-pink);
-    }
+    text-align: center;
   }
 </style>
