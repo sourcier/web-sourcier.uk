@@ -7,12 +7,15 @@
     <div class="mailing-cta__card" aria-labelledby="mailing-cta-heading">
       <div class="mailing-cta__inner">
         <div class="mailing-cta__copy">
+          <p class="mailing-cta__kicker">
+            Free · No spam · Unsubscribe any time
+          </p>
           <h2 class="mailing-cta__heading" id="mailing-cta-heading">
-            Stay in the loop
+            Get new posts in your inbox
           </h2>
           <p class="mailing-cta__body">
-            New posts, ideas, and the occasional deep-dive — straight to your
-            inbox. No spam, unsubscribe any time.
+            When the next article drops, I'll send a short note — a link and a
+            summary, nothing else. One email per post.
           </p>
         </div>
 
@@ -46,7 +49,7 @@
               required
             />
             <button type="submit" class="button mailing-cta__btn">
-              Subscribe
+              Yes, keep me posted
             </button>
           </div>
           <p
@@ -102,9 +105,12 @@
       const data = await res.json();
 
       if (res.ok) {
-        feedback.textContent = "You're subscribed! Thanks for signing up.";
+        feedback.textContent =
+          "You're subscribed! Check your inbox for a confirmation.";
         feedback.classList.add("mailing-cta__feedback--success");
         form.reset();
+        btn.textContent = "You're in";
+        btn.disabled = true;
       } else {
         feedback.textContent =
           data.error ?? "Something went wrong. Please try again.";
@@ -116,7 +122,7 @@
       feedback.textContent = "Something went wrong. Please try again.";
       feedback.classList.add("mailing-cta__feedback--error");
       btn.disabled = false;
-      btn.textContent = "Subscribe";
+      btn.textContent = "Yes, keep me posted";
     } finally {
       feedback.hidden = false;
     }
@@ -153,6 +159,16 @@
 
   .mailing-cta__copy {
     flex: 1;
+  }
+
+  .mailing-cta__kicker {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    margin-bottom: 0.4rem;
   }
 
   .mailing-cta__heading {

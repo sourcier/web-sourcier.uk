@@ -1,20 +1,30 @@
 ---
+
 ---
 
 <div class="sidebar-subscribe" aria-labelledby="sidebar-subscribe-heading">
+  <p class="sidebar-subscribe__kicker">Free · No spam · Unsubscribe any time</p>
   <p class="sidebar-subscribe__heading" id="sidebar-subscribe-heading">
-    Stay in the loop
+    Get new posts in your inbox
   </p>
   <p class="sidebar-subscribe__body">
-    New posts straight to your inbox. No spam.
+    When the next article in this series drops, I'll send a short note with a
+    link and a summary. Nothing else.
   </p>
 
   <form id="sidebar-subscribe-form" novalidate aria-label="Newsletter sign up">
     <p class="sidebar-subscribe__honeypot" aria-hidden="true">
       <label for="sidebar-subscribe-website">Leave this blank</label>
-      <input id="sidebar-subscribe-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      <input
+        id="sidebar-subscribe-website"
+        name="website"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+      />
     </p>
-    <label for="sidebar-subscribe-email" class="is-sr-only">Email address</label>
+    <label for="sidebar-subscribe-email" class="is-sr-only">Email address</label
+    >
     <input
       id="sidebar-subscribe-email"
       name="email"
@@ -25,16 +35,28 @@
       required
     />
     <button type="submit" class="sidebar-subscribe__btn">
-      Subscribe
+      Yes, keep me posted
     </button>
-    <p class="sidebar-subscribe__feedback" id="sidebar-subscribe-feedback" aria-live="polite" hidden></p>
+    <p
+      class="sidebar-subscribe__feedback"
+      id="sidebar-subscribe-feedback"
+      aria-live="polite"
+      hidden
+    >
+    </p>
   </form>
 </div>
 
 <script>
-  const form = document.getElementById("sidebar-subscribe-form") as HTMLFormElement | null;
-  const feedback = document.getElementById("sidebar-subscribe-feedback") as HTMLElement | null;
-  const input = document.getElementById("sidebar-subscribe-email") as HTMLInputElement | null;
+  const form = document.getElementById(
+    "sidebar-subscribe-form",
+  ) as HTMLFormElement | null;
+  const feedback = document.getElementById(
+    "sidebar-subscribe-feedback",
+  ) as HTMLElement | null;
+  const input = document.getElementById(
+    "sidebar-subscribe-email",
+  ) as HTMLInputElement | null;
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -55,17 +77,21 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          website: (form.elements.namedItem("website") as HTMLInputElement)?.value ?? "",
+          website:
+            (form.elements.namedItem("website") as HTMLInputElement)?.value ??
+            "",
         }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        feedback.textContent = "You're subscribed!";
+        feedback.textContent =
+          "You're subscribed! Check your inbox for a confirmation.";
         feedback.classList.add("sidebar-subscribe__feedback--success");
         form.reset();
-        btn.textContent = "Subscribe";
+        btn.textContent = "You're in";
+        btn.disabled = true;
       } else {
         feedback.textContent = data.error ?? "Something went wrong.";
         feedback.classList.add("sidebar-subscribe__feedback--error");
@@ -76,7 +102,7 @@
       feedback.textContent = "Something went wrong.";
       feedback.classList.add("sidebar-subscribe__feedback--error");
       btn.disabled = false;
-      btn.textContent = "Subscribe";
+      btn.textContent = "Yes, keep me posted";
     } finally {
       feedback.hidden = false;
     }
@@ -95,21 +121,32 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .sidebar-subscribe__heading {
+  .sidebar-subscribe__kicker {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-pink);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .sidebar-subscribe__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 0.6rem;
   }
 
   .sidebar-subscribe__body {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.55);
     line-height: 1.5;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
   }
 
   .sidebar-subscribe__input {
@@ -123,7 +160,9 @@
     border-radius: 4px;
     margin-bottom: 0.5rem;
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
 
     &::placeholder {
       color: rgba(255, 255, 255, 0.35);
