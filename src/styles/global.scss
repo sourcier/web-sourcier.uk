@@ -629,6 +629,25 @@ h1, h2, h3, h4, h5, h6,
   padding: 2rem 1.5rem 2rem;
 }
 
+.post__body--meta {
+  padding-top: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.post__meta-inner {
+  max-width: 80ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post__meta {
+  padding: 2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: start;
+}
+
 .post__layout {
   margin: 0 auto;
 

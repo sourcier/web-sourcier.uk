@@ -56,20 +56,6 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
           <div class="post__content content">
             <slot />
           </div>
-          {
-            frontmatter.history && frontmatter.history.length > 0 && (
-              <div class="post__content">
-                <PageHistory entries={frontmatter.history} />
-              </div>
-            )
-          }
-          {
-            frontmatter.credits && frontmatter.credits.length > 0 && (
-              <div class="post__content">
-                <PageCredits entries={frontmatter.credits} />
-              </div>
-            )
-          }
         </div>
         <aside class="post__sidebar" aria-label="Post sidebar">
           {
@@ -97,6 +83,22 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 
     <MailingListCTA />
     {postId && <Comments postId={postId} />}
+    {
+      (frontmatter.history?.length > 0 || frontmatter.credits?.length > 0) && (
+        <div class="post__body post__body--meta">
+          <div class="post__meta-inner">
+            <div class="post__meta">
+              {frontmatter.credits && frontmatter.credits.length > 0 && (
+                <PageCredits entries={frontmatter.credits} />
+              )}
+              {frontmatter.history && frontmatter.history.length > 0 && (
+                <PageHistory entries={frontmatter.history} />
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    }
   </article>
 </BaseLayout>
 

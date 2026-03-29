@@ -14,32 +14,33 @@ const { entries } = Astro.props;
 
 <div class="page-credits">
   <p class="page-credits__heading">Credits</p>
-  <dl class="page-credits__list">
+  <ul class="page-credits__list" role="list">
     {
       entries.map((entry) => (
-        <div class="page-credits__entry">
-          <dt>{entry.label}</dt>
-          <dd>
-            {entry.url ? (
-              <a href={entry.url} target="_blank" rel="noopener noreferrer">
-                {entry.text}
-              </a>
-            ) : (
-              entry.text
-            )}
-          </dd>
-        </div>
+        <li class="page-credits__item">
+          <span class="page-credits__label">{entry.label}</span>
+          {entry.url ? (
+            <a
+              class="page-credits__value"
+              href={entry.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {entry.text}
+            </a>
+          ) : (
+            <span class="page-credits__value">{entry.text}</span>
+          )}
+        </li>
       ))
     }
-  </dl>
+  </ul>
 </div>
 
 <style lang="scss">
   .page-credits {
-    margin-top: 3rem;
-    padding: 1.25rem 1.5rem;
-    border-left: 2px solid var(--color-border);
-    opacity: 0.65;
+    flex: 1 1 200px;
+    min-width: 0;
   }
 
   .page-credits__heading {
@@ -48,46 +49,54 @@ const { entries } = Astro.props;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--color-muted);
-    margin: 0 0 1rem;
+    margin: 0 0 0.75rem;
   }
 
   .page-credits__list {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
     margin: 0;
+    padding: 0;
   }
 
-  .page-credits__entry {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0 1.25rem;
-    align-items: baseline;
-  }
-
-  .page-credits__entry dt {
-    font-family: "Barlow Condensed", sans-serif;
+  .page-credits__item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--color-border);
     font-size: 0.75rem;
+    line-height: 1.3;
+    transition: border-color 0.15s ease;
+
+    &:has(a):hover {
+      border-color: var(--color-pink);
+      cursor: pointer;
+    }
+  }
+
+  .page-credits__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-muted);
-    white-space: nowrap;
+
+    &::after {
+      content: "·";
+      margin: 0 0.3rem;
+      opacity: 0.4;
+    }
   }
 
-  .page-credits__entry dd {
-    font-size: 0.85rem;
+  .page-credits__value {
     color: var(--color-muted);
-    margin: 0;
+    text-decoration: none;
 
-    a {
-      color: inherit;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-
-      &:hover {
-        color: var(--color-ink);
-      }
+    .page-credits__item:has(a):hover & {
+      color: var(--color-pink);
     }
   }
 </style>
