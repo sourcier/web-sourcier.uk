@@ -12,9 +12,18 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Rebuild the site daily at 07:00 UTC so future-dated posts go live automatically.
+# Requires BUILD_HOOK_ID environment variable — see netlify/functions/scheduled-build.mjs.
+[functions."scheduled-build"]
+  schedule = "45 7 * * *" # always before 09:00 UK time: 07:45 GMT in winter, 08:45 BST in summer
+
 # ── Comment approval system ────────────────────────────────────────────────────
 #
 # Required environment variables (Netlify → Site configuration → Environment variables):
+#
+#   BUILD_HOOK_ID             Build hook ID for scheduled deploys.
+#                             Netlify → Site configuration → Build & deploy → Build hooks
+#                             Create a hook named "Scheduled publish", copy the ID from the URL.
 #
 #   NETLIFY_ACCESS_TOKEN      Personal access token
 #                             https://app.netlify.com/user/applications

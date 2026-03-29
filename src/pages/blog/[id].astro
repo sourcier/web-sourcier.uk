@@ -1,15 +1,13 @@
 ---
 import { getCollection, render } from "astro:content";
-import { showDrafts } from "../../utils/drafts";
+import { isPublished } from "../../utils/drafts";
 import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
-  return posts
-    .filter((post) => !post.data.draft || showDrafts)
-    .map((post) => ({
-      params: { id: post.id },
-      props: { post },
-    }));
+  return posts.filter(isPublished).map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
 }
 const { post } = Astro.props;
 const { Content, headings } = await render(post);

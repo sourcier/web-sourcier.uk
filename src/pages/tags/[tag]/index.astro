@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { showDrafts } from "../../../utils/drafts";
+import { isPublished } from "../../../utils/drafts";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
@@ -8,9 +8,7 @@ import MailingListCTA from "../../../components/MailingListCTA.astro";
 import { tagSlug } from "../../../utils/tags";
 
 export async function getStaticPaths() {
-  const allPosts = (await getCollection("posts")).filter(
-    (post) => !post.data.draft || showDrafts,
-  );
+  const allPosts = (await getCollection("posts")).filter(isPublished);
   const tagMap = new Map<string, typeof allPosts>();
   for (const post of allPosts) {
     for (const tag of post.data.tags) {
@@ -32,8 +30,7 @@ const { label } = Astro.props;
 const allTagPosts = (await getCollection("posts"))
   .filter(
     (post) =>
-      (!post.data.draft || showDrafts) &&
-      post.data.tags.some((t) => tagSlug(t) === tag),
+      isPublished(post) && post.data.tags.some((t) => tagSlug(t) === tag),
   )
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 

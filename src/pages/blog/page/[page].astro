@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { showDrafts } from "../../../utils/drafts";
+import { isPublished } from "../../../utils/drafts";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
@@ -9,7 +9,7 @@ import BlogGrid from "../../../components/BlogGrid.astro";
 export async function getStaticPaths() {
   const PAGE_SIZE = 9;
   const allPosts = (await getCollection("posts"))
-    .filter((post) => !post.data.draft || showDrafts)
+    .filter(isPublished)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
   return Array.from({ length: totalPages - 1 }, (_, i) => ({
@@ -21,7 +21,7 @@ const PAGE_SIZE = 9;
 const currentPage = Number(Astro.params.page);
 
 const allPosts = (await getCollection("posts"))
-  .filter((post) => !post.data.draft || showDrafts)
+  .filter(isPublished)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);

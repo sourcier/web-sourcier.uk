@@ -1,13 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import { showDrafts } from "../utils/drafts";
+import { isPublished } from "../utils/drafts";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import Testimonials from "../components/Testimonials.astro";
 
 const allPosts = (await getCollection("posts"))
-  .filter((post) => !post.data.draft || showDrafts)
+  .filter(isPublished)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 6);
 
