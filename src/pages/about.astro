@@ -19,22 +19,25 @@ import {
 import {
   faPaperPlane,
   faRectangleList,
-  faObjectGroup,
+  faHexagonNodes,
   faCloud,
 } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 const frontendStack = [
-  { label: "Astro", icon: faIcon(faPaperPlane, { size: 18 }) },
   { label: "CSS / Sass", icon: faIcon(faCss3Alt, { size: 18 }) },
   { label: "HTML", icon: faIcon(faHtml5, { size: 18 }) },
   { label: "JavaScript", icon: faIcon(faJs, { size: 18 }) },
-  { label: "React", icon: faIcon(faReact, { size: 18 }) },
   { label: "TypeScript", icon: faIcon(faTypescript, { size: 18 }) },
 ];
 
+const frameworksStack = [
+  { label: "Astro", icon: faIcon(faPaperPlane, { size: 18 }) },
+  { label: "React", icon: faIcon(faReact, { size: 18 }) },
+];
+
 const backendStack = [
-  { label: "GraphQL", icon: faIcon(faObjectGroup, { size: 18 }) },
+  { label: "GraphQL", icon: faIcon(faHexagonNodes, { size: 18 }) },
   { label: "Node.js", icon: faIcon(faNodeJs, { size: 18 }) },
   { label: "PostgreSQL", icon: faIcon(faPostgresql, { size: 18 }) },
   { label: "REST APIs", icon: faIcon(faRectangleList, { size: 18 }) },
@@ -195,6 +198,17 @@ const pageTitle = "About — Roger Rajaratnam";
           <ul class="about-stack__list" role="list">
             {
               frontendStack.map(({ label, icon }) => (
+                <li>
+                  <span class="stack-icon" set:html={icon} />
+                  {label}
+                </li>
+              ))
+            }
+          </ul>
+          <h3 class="about-stack__subcategory">Frameworks</h3>
+          <ul class="about-stack__list" role="list">
+            {
+              frameworksStack.map(({ label, icon }) => (
                 <li>
                   <span class="stack-icon" set:html={icon} />
                   {label}
@@ -465,6 +479,17 @@ const pageTitle = "About — Roger Rajaratnam";
     letter-spacing: 0.12em;
     color: var(--color-pink);
     margin-bottom: 1.25rem;
+  }
+
+  .about-stack__subcategory {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .about-stack__list {
