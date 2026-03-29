@@ -71,9 +71,9 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
             )
           }
         </div>
-        {
-          tocHeadings.length > 1 && (
-            <aside class="post__sidebar" aria-label="Table of contents">
+        <aside class="post__sidebar" aria-label="Post sidebar">
+          {
+            tocHeadings.length > 1 && (
               <nav class="toc">
                 <p class="toc__heading">On this page</p>
                 <ol class="toc__list">
@@ -86,22 +86,18 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
                   ))}
                 </ol>
               </nav>
-              <SharePost
-                title={frontmatter.title}
-                url={Astro.url.href}
-                vertical
-              />
-              <TagsSidebar />
-              <MailingListCTASidebar />
-            </aside>
-          )
-        }
+            )
+          }
+          <SharePost title={frontmatter.title} url={Astro.url.href} vertical />
+          <MailingListCTASidebar />
+          <TagsSidebar />
+        </aside>
       </div>
     </div>
 
+    <MailingListCTA />
     {postId && <Comments postId={postId} />}
   </article>
-  <MailingListCTA />
 </BaseLayout>
 
 <style>
