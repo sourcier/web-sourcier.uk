@@ -84,18 +84,19 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
     {postId && <Comments postId={postId} />}
     {
       (frontmatter.history?.length > 0 || frontmatter.credits?.length > 0) && (
-        <div class="post__body post__body--meta">
-          <div class="post__meta-inner">
-            <div class="post__meta">
-              {frontmatter.credits && frontmatter.credits.length > 0 && (
-                <PageCredits entries={frontmatter.credits} />
-              )}
-              {frontmatter.history && frontmatter.history.length > 0 && (
-                <PageHistory entries={frontmatter.history} />
-              )}
-            </div>
+        <section
+          class="post-meta-section"
+          aria-label="Page credits and history"
+        >
+          <div class="post-meta-section__inner">
+            {frontmatter.credits && frontmatter.credits.length > 0 && (
+              <PageCredits entries={frontmatter.credits} />
+            )}
+            {frontmatter.history && frontmatter.history.length > 0 && (
+              <PageHistory entries={frontmatter.history} />
+            )}
           </div>
-        </div>
+        </section>
       )
     }
   </article>

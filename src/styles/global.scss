@@ -645,23 +645,17 @@ h1, h2, h3, h4, h5, h6,
   padding: 2rem 1.5rem 2rem;
 }
 
-.post__body--meta {
-  padding-top: 0;
+.post-meta-section {
   border-top: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
 }
 
-.post__meta-inner {
+.post-meta-section__inner {
   max-width: 80ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.post__meta {
-  padding: 2rem 0;
+  margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 2rem;
-  align-items: start;
 }
 
 .post__layout {
