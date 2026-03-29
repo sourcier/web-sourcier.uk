@@ -42,6 +42,7 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
       tags={frontmatter.tags}
       author={frontmatter.author}
       date={formattedDate ?? undefined}
+      crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
     />
 
     <div class="post__body">

@@ -1,0 +1,131 @@
+---
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  crumbs: Crumb[];
+  inverted?: boolean;
+}
+
+const { crumbs, inverted = false } = Astro.props;
+const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
+---
+
+<nav
+  aria-label="Breadcrumb"
+  class:list={["breadcrumb-nav", { "breadcrumb-nav--inverted": inverted }]}
+>
+  <div class="container is-max-desktop">
+    <ol
+      class="breadcrumb__list"
+      itemscope
+      itemtype="https://schema.org/BreadcrumbList"
+    >
+      {
+        allCrumbs.map((crumb, index) => {
+          const isLast = index === allCrumbs.length - 1;
+          return (
+            <li
+              class="breadcrumb__item"
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
+            >
+              {!isLast && crumb.href ? (
+                <a href={crumb.href} class="breadcrumb__link" itemprop="item">
+                  <span itemprop="name">{crumb.label}</span>
+                </a>
+              ) : (
+                <span
+                  class="breadcrumb__current"
+                  aria-current="page"
+                  itemprop="name"
+                >
+                  {crumb.label}
+                </span>
+              )}
+              <meta itemprop="position" content={String(index + 1)} />
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</nav>
+
+<style lang="scss">
+  .breadcrumb-nav {
+    padding: 0.6rem 1.5rem;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+
+    &--inverted {
+      padding: 0;
+      background-color: transparent;
+      border-bottom: none;
+      margin-bottom: 1.25rem;
+
+      .breadcrumb__link {
+        color: rgba(255, 255, 255, 0.45);
+
+        &:hover,
+        &:focus-visible {
+          color: var(--color-pink);
+        }
+      }
+
+      .breadcrumb__current {
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .breadcrumb__item:not(:last-child)::after {
+        color: rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: "›";
+      margin: 0 0.4em;
+      color: var(--color-muted);
+      font-weight: 400;
+    }
+  }
+
+  .breadcrumb__link {
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-pink);
+    }
+  }
+
+  .breadcrumb__current {
+    color: var(--color-ink);
+  }
+</style>

@@ -62,6 +62,11 @@ const { tag } = Astro.params;
     kicker="Tag"
     title={label}
     subtitle={`All posts tagged with "${label}".`}
+    crumbs={[
+      { label: "Blog", href: "/blog" },
+      { label: "Tags", href: "/tags" },
+      { label },
+    ]}
   />
 
   <BlogGrid

@@ -1,5 +1,11 @@
 ---
 import { tagSlug } from "../utils/tags";
+import Breadcrumb from "./Breadcrumb.astro";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
 
 interface Props {
   kicker?: string;
@@ -9,9 +15,22 @@ interface Props {
   tags?: string[];
   author?: string;
   date?: string;
+  crumbs?: Crumb[];
 }
 
-const { kicker, title, subtitle, coverImage, tags, author, date } = Astro.props;
+const { kicker, title, subtitle, coverImage, tags, author, date, crumbs } =
+  Astro.props;
+
+function autoCrumbs(path: string): Crumb[] {
+  const segments = path.split("/").filter(Boolean);
+  const meaningful = segments.filter((s) => s !== "page" && !/^\d+$/.test(s));
+  return meaningful.map((seg, i) => ({
+    label: seg.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    href: "/" + meaningful.slice(0, i + 1).join("/"),
+  }));
+}
+
+const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
 ---
 
 <header
@@ -21,6 +40,11 @@ const { kicker, title, subtitle, coverImage, tags, author, date } = Astro.props;
 >
   <div class="container">
     <div class="post__header-inner">
+      {
+        resolvedCrumbs.length > 0 && (
+          <Breadcrumb crumbs={resolvedCrumbs} inverted />
+        )
+      }
       {
         tags && tags.length > 0 && (
           <div class="post__tags">
