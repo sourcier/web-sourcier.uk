@@ -258,6 +258,22 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 1.5rem;
 }
 
+// — Inline date chip (used in content to indicate a future publish date)
+.date-chip {
+  display: inline-block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-pink);
+  border: 1px solid currentColor;
+  padding: 0.1em 0.45em;
+  line-height: 1.5;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
 // — Blog cards
 .card.card__blog {
   display: flex;
