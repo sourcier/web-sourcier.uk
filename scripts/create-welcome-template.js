@@ -8,6 +8,16 @@
 // After the first run, copy the template ID printed to stdout and set it as:
 //   RESEND_WELCOME_TEMPLATE_ID=<id>   (Netlify → Site configuration → Env vars)
 
+import { existsSync } from "fs";
+import { join, resolve } from "path";
+
+const root = resolve(new URL(".", import.meta.url).pathname, "..");
+
+const envFile = join(root, ".env");
+if (existsSync(envFile) && typeof process.loadEnvFile === "function") {
+  process.loadEnvFile(envFile);
+}
+
 const apiKey = process.env.RESEND_API_KEY;
 
 if (!apiKey) {
@@ -22,10 +32,15 @@ const RESEND_API = "https://api.resend.com";
 // Triple-brace variables are rendered unescaped by Resend's template engine.
 const templateHtml = `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:560px;margin:0 auto;padding:2rem 1.5rem;color:#0f0f0f">
-  <p style="font-size:1.5rem;font-weight:800;text-transform:uppercase;letter-spacing:0.02em;margin:0 0 1rem">Welcome to Sourcier</p>
-  <p style="margin:0 0 1rem;line-height:1.6">Thanks for signing up. You'll get an email whenever I publish something new — engineering deep-dives, lessons from the field, and the occasional opinion.</p>
-  <p style="margin:0 0 1.5rem;line-height:1.6">In the meantime, browse the <a href="{{{BLOG_URL}}}" style="color:#e8006a">blog</a> to see what's already there.</p>
-  <p style="margin:0;color:#6b6b6b;font-size:0.875rem">You can unsubscribe at any time by replying to this email.</p>
+  <p style="margin:0 0 1.5rem;line-height:1.6">Hi — thanks for subscribing to Sourcier.</p>
+  <p style="font-size:1.5rem;font-weight:800;letter-spacing:-0.01em;margin:0 0 1rem;line-height:1.2">You're in.</p>
+  <p style="margin:0 0 1.5rem;line-height:1.6;color:#444">You'll get an email whenever I publish something new — engineering deep-dives, lessons from the field, and the occasional opinion. In the meantime, the <a href="{{{BLOG_URL}}}" style="color:#e8006a">blog</a> has plenty to read.</p>
+  <p style="margin:0 0 0;line-height:1.6">— Roger</p>
+  <hr style="margin:2rem 0;border:none;border-top:1px solid #e5e5e5">
+  <p style="margin:0;color:#999;font-size:0.8125rem;line-height:1.5">
+    You're receiving this because you subscribed at <a href="https://sourcier.uk" style="color:#999">sourcier.uk</a>.<br>
+    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#999">Unsubscribe</a>
+  </p>
 </div>`;
 
 async function resendRequest(path, method, body) {
