@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout pageTitle="Page not found — Sourcier" description="The page you're looking for doesn't exist.">
+  <div class="not-found">
+    <div class="not-found__number" aria-hidden="true">404</div>
+    <h1 class="not-found__heading">Nothing here.</h1>
+    <p class="not-found__sub">That URL doesn't exist — it may have moved, been deleted, or never existed at all. Here are some pages to try instead:</p>
+    <nav class="not-found__links" aria-label="Suggested pages">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 7rem;
+    min-height: 60vh;
+  }
+
+  .not-found__number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(8rem, 25vw, 18rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-pink);
+    user-select: none;
+    position: relative;
+
+    &::after {
+      content: "404";
+      position: absolute;
+      inset: 0;
+      color: rgba(232, 0, 106, 0.07);
+      -webkit-text-stroke: 0;
+      transform: translate(4px, 4px);
+      z-index: -1;
+    }
+  }
+
+  .not-found__heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .not-found__sub {
+    max-width: 42ch;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .not-found__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+
+    a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-pink);
+      border: 1px solid currentColor;
+      padding: 0.4em 1.1em;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+
+      &:hover {
+        background: var(--color-pink);
+        color: #fff;
+      }
+    }
+  }
+</style>
