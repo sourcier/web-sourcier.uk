@@ -1,6 +1,6 @@
 // Drafts are hidden by default. Run `pnpm dev:with-drafts` to show them.
-export const showDrafts: boolean =
-  import.meta.env.DEV && import.meta.env.SHOW_DRAFTS === "true";
+// Also enabled in production when SHOW_DRAFTS=true (used by the preview branch deploy).
+export const showDrafts: boolean = import.meta.env.SHOW_DRAFTS === "true";
 
 // Returns true for posts that should be visible at build/request time.
 // Hides drafts (unless showDrafts) and posts whose pubDate is in the future.

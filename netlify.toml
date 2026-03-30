@@ -4,6 +4,13 @@
   targetPort = 4321
   autoLaunch = false
 
+# Draft preview: push to the `preview` branch to get a Netlify deploy that
+# includes draft posts. Share the resulting URL (e.g. preview--sourcier.netlify.app)
+# before a post goes live. Never merged into main.
+[context."branch-deploy"]
+  [context."branch-deploy".environment]
+    SHOW_DRAFTS = "true"
+
 [build]
   command = "astro build"
   publish = "dist"
