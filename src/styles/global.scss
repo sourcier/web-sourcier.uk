@@ -295,6 +295,45 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 1.5rem;
 }
 
+// — Series callout banner (used at the top of series posts)
+.series-callout {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-pink);
+  padding: 0.875rem 1.25rem;
+  margin-bottom: 2rem;
+  background: rgba(232, 0, 106, 0.04);
+
+  &__label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-pink);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+
+    a {
+      color: var(--color-pink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
 // — Inline date chip (used in content to indicate a future publish date)
 .date-chip {
   display: inline-block;
