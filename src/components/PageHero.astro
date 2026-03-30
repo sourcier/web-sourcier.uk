@@ -207,6 +207,10 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       content: "·";
       color: var(--color-pink);
     }
+
+    @media (max-width: 639px) {
+      display: none;
+    }
   }
 
   .page-hero__tags {
@@ -218,13 +222,18 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
   .page-hero__tag {
     display: inline-block;
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: rgba(255, 255, 255, 0.55);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 0.15rem 0.55rem;
+    padding: 0.25rem 0.6rem;
+
+    @media (max-width: 639px) {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.75rem;
+    }
     transition:
       background-color 0.15s ease,
       color 0.15s ease,
