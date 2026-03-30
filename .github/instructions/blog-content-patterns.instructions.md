@@ -110,7 +110,11 @@ When updating an article that is part of a series, also update the series kicker
 
 ## Page History and Credits
 
-These are separate components rendered below the post body. When updating post content, also update the page history entry to describe what changed:
+These are separate components rendered below the post body.
+
+**Credits** should always be kept up to date — add or update entries whenever a new source, tool, image, or attribution is relevant to the post.
+
+**History** entries should only be added after the article has been published — do not add pre-publish revision notes. When updating already-published content, add a history entry to describe what changed:
 
 ```yaml
 - date: 2026-03-30T00:00:00
