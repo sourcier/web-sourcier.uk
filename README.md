@@ -83,4 +83,4 @@ All secrets should be configured in Netlify's environment variables dashboard fo
 
 ## License
 
-All rights reserved.
+[MIT](LICENSE)
