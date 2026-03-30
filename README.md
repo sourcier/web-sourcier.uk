@@ -1,43 +1,86 @@
-# Astro Starter Kit: Minimal
+# sourcier.uk
+
+Personal tech blog and engineering consultancy website built with [Astro](https://astro.build/) and hosted on [Netlify](https://www.netlify.com/).
+
+Live at **[sourcier.uk](https://sourcier.uk)**
+
+## Tech Stack
+
+- **Framework:** Astro 6
+- **Styling:** Sass + Bulma
+- **Content:** Markdown with frontmatter (Astro Content Collections)
+- **Hosting:** Netlify (static site + serverless functions)
+- **Email:** Resend (comment notifications & newsletter)
+- **Analytics:** PostHog
+- **Extras:** Mermaid diagrams, Expressive Code syntax highlighting, RSS feed
+
+## Project Structure
+
+```
+collections/posts/       # Blog posts (markdown + cover images)
+src/
+  components/            # Astro components
+  layouts/               # Page layouts
+  pages/                 # Routes (blog, tags, RSS, etc.)
+  plugins/               # Remark plugins (Mermaid)
+  styles/                # Global Sass styles
+  utils/                 # Utilities (drafts, tags, icons)
+netlify/functions/       # Serverless functions (comments, subscriptions, scheduled builds)
+scripts/                 # One-off utility scripts (email templates, notifications)
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (see [.nvmrc](.nvmrc) for version)
+- [pnpm](https://pnpm.io/)
+- [Netlify CLI](https://docs.netlify.com/cli/get-started/) (`npm i -g netlify-cli`)
+
+### Setup
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+cp .env.example .env     # Fill in your environment variables
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Development
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm dev                 # Start dev server with draft posts visible
+pnpm dev:no-drafts       # Start dev server without drafts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Build
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+pnpm build               # Build for production
+pnpm preview             # Preview the production build locally
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Features
 
-## 🧞 Commands
+- **Blog** with draft support, future-dated post scheduling, and tag filtering
+- **Comment system** using Netlify Forms with email-based moderation (approve/delete)
+- **Newsletter** subscriptions via Resend with welcome email templates
+- **Scheduled builds** (daily at 07:45 UTC) to auto-publish future-dated posts
+- **Draft previews** via the `preview` branch deploy on Netlify
+- **RSS feed** at `/rss.xml`
 
-All commands are run from the root of the project, from a terminal:
+## Environment Variables
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+See [.env.example](.env.example) for the full list. Key variables:
 
-## 👀 Want to learn more?
+| Variable | Purpose |
+| :--- | :--- |
+| `NETLIFY_ACCESS_TOKEN` | Netlify API access |
+| `APPROVAL_SECRET` | HMAC signing for comment moderation links |
+| `RESEND_API_KEY` | Email sending via Resend |
+| `NOTIFY_EMAIL` | Admin notification recipient |
+| `SITE_URL` | Public site URL |
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+All secrets should be configured in Netlify's environment variables dashboard for production.
+
+## License
+
+All rights reserved.
