@@ -13,6 +13,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 
+# blog content (cloned from private repo at build time)
+collections/posts/
+
 # environment variables
 .env
 .env.production

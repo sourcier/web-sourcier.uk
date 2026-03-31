@@ -12,7 +12,7 @@
     SHOW_DRAFTS = "true"
 
 [build]
-  command = "git config url.\"https://${GITHUB_PAT}@github.com/\".insteadOf \"https://github.com/\" && git submodule update --init --recursive && astro build"
+  command = "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && astro build"
   publish = "dist"
 
 [functions]
