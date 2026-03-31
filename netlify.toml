@@ -12,7 +12,7 @@
     SHOW_DRAFTS = "true"
 
 [build]
-  command = "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && astro build"
+  command = "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git && astro build"
   publish = "dist"
 
 [functions]
