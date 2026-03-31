@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "sourcier.uk (site)",
+      "path": "."
+    },
+    {
+      "name": "sourcier.uk (content)",
+      "path": "collections/posts"
+    }
+  ]
+}
