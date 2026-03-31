@@ -19,9 +19,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[edge_functions]
-  directory = "netlify/edge-functions"
-
 # Rebuild the site daily at 07:00 UTC so future-dated posts go live automatically.
 # Requires BUILD_HOOK_ID environment variable — see netlify/functions/scheduled-build.mjs.
 [functions."scheduled-build"]
