@@ -19,6 +19,9 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+[edge_functions]
+  directory = "netlify/edge-functions"
+
 # Rebuild the site daily at 07:00 UTC so future-dated posts go live automatically.
 # Requires BUILD_HOOK_ID environment variable — see netlify/functions/scheduled-build.mjs.
 [functions."scheduled-build"]
@@ -48,6 +51,12 @@
 #                             Generate with: openssl rand -hex 32
 #
 #   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
+#
+#   PREVIEW_PASSCODE          Passcode that gates access to the `preview` branch deploy.
+#                             Set this in the Netlify dashboard scoped to branch deploys only:
+#                             Site configuration → Environment variables → Add variable
+#                             → Scope: Branch deploys. Changing the value invalidates all
+#                             existing sessions. Generate with: openssl rand -base64 12
 #
 #   RESEND_API_KEY            API key from https://resend.com
 #                             (free tier: 3 000 emails/month)
