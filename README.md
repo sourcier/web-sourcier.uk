@@ -64,7 +64,8 @@ pnpm preview             # Preview the production build locally
 - **Comment system** using Netlify Forms with email-based moderation (approve/delete)
 - **Newsletter** subscriptions via Resend with welcome email templates
 - **Scheduled builds** (daily at 07:45 UTC) to auto-publish future-dated posts
-- **Draft previews** via the `preview` branch deploy on Netlify
+- **Draft previews** via the `preview` branch deploy on Netlify — access at
+  `https://preview--sourcier.netlify.app` (passcode-protected via edge function)
 - **RSS feed** at `/rss.xml`
 
 ## Environment Variables
@@ -73,11 +74,13 @@ See [.env.example](.env.example) for the full list. Key variables:
 
 | Variable | Purpose |
 | :--- | :--- |
+| `GITHUB_PAT` | Fine-grained token to clone the private content repo at build time |
 | `NETLIFY_ACCESS_TOKEN` | Netlify API access |
 | `APPROVAL_SECRET` | HMAC signing for comment moderation links |
 | `RESEND_API_KEY` | Email sending via Resend |
 | `NOTIFY_EMAIL` | Admin notification recipient |
 | `SITE_URL` | Public site URL |
+| `PREVIEW_PASSCODE` | Passcode for the `preview` branch deploy (scope: branch deploys only) |
 
 All secrets should be configured in Netlify's environment variables dashboard for production.
 
