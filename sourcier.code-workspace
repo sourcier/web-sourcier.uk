@@ -2,11 +2,14 @@
   "folders": [
     {
       "name": "sourcier.uk (site)",
-      "path": "."
+      "path": ".",
     },
     {
       "name": "sourcier.uk (content)",
-      "path": "collections/posts"
-    }
-  ]
+      "path": "collections/posts",
+    },
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder:sourcier.uk (site)}",
+  },
 }
