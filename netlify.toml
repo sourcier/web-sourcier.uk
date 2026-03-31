@@ -12,7 +12,7 @@
     SHOW_DRAFTS = "true"
 
 [build]
-  command = "astro build"
+  command = "git config url.\"https://${GITHUB_PAT}@github.com/\".insteadOf \"https://github.com/\" && git submodule update --init --recursive && astro build"
   publish = "dist"
 
 [functions]
@@ -27,6 +27,11 @@
 # ── Comment approval system ────────────────────────────────────────────────────
 #
 # Required environment variables (Netlify → Site configuration → Environment variables):
+#
+#   GITHUB_PAT                GitHub personal access token (fine-grained) with
+#                             read-only Contents access to sourcier/web-sourcier.uk-content.
+#                             Used to fetch the private blog content submodule at build time.
+#                             https://github.com/settings/tokens?type=beta
 #
 #   BUILD_HOOK_ID             Build hook ID for scheduled deploys.
 #                             Netlify → Site configuration → Build & deploy → Build hooks
