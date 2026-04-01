@@ -1,11 +1,11 @@
 /**
  * Generates 96×96 center-cropped WebP thumbnails for all posts that have
- * a cover image (*-cover.webp) but no thumb.webp yet.
+ * a cover image (*-cover.webp) but no <slug>-thumbnail.webp yet.
  *
  * Usage:
- *   node scripts/process-covers.mjs            # skip existing thumbs
- *   node scripts/process-covers.mjs --force    # regenerate all thumbs
- *   node scripts/process-covers.mjs --dry-run  # preview without changes
+ *   node scripts/process-thumbnails.mjs            # skip existing thumbnails
+ *   node scripts/process-thumbnails.mjs --force    # regenerate all thumbnails
+ *   node scripts/process-thumbnails.mjs --dry-run  # preview without changes
  */
 
 import { readdirSync, existsSync, statSync } from "node:fs";
@@ -30,16 +30,17 @@ for (const slug of readdirSync(POSTS_DIR).sort()) {
   const cover = readdirSync(dir).find((f) => /-cover\.webp$/i.test(f));
   if (!cover) continue;
 
-  const thumbPath = join(dir, "thumb.webp");
+  const thumbPath = join(dir, `${slug}-thumbnail.webp`);
   if (existsSync(thumbPath) && !force) {
     skipped++;
     continue;
   }
 
-  console.log(`${slug}: generating thumb.webp`);
+  console.log(`${slug}: generating ${slug}-thumbnail.webp`);
   if (!dryRun) {
     execSync(
       `magick "${join(dir, cover)}" -resize ${THUMB_SIZE}^ -gravity Center -extent ${THUMB_SIZE} "${thumbPath}"`,
+
       { stdio: "inherit" }
     );
   }

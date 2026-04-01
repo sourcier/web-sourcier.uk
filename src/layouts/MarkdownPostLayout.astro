@@ -24,8 +24,8 @@ const formattedDate = frontmatter.pubDate
 const ogImage = frontmatter.cover?.image?.src ?? undefined;
 const pageTitle = `${frontmatter.title} — Sourcier`;
 
-const thumbSrc = frontmatter.thumb
-  ? `/search-thumbs/${postId}/thumb.webp`
+const thumbSrc = frontmatter.cover?.thumbnail
+  ? `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
   : null;
 ---
 

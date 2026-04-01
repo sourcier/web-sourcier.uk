@@ -21,11 +21,11 @@ pnpm dev              # Dev server with drafts (localhost:8888 via Netlify CLI)
 pnpm dev:no-drafts    # Dev server without drafts
 pnpm build            # Production build to dist/
 pnpm search:index     # Full local Pagefind index rebuild
-pnpm thumbs:generate  # Generate thumb.webp for any post with a cover but no thumb
-pnpm thumbs:copy      # Copy thumb.webp files to public/search-thumbs/<slug>/
+pnpm thumbnails:generate  # Generate <slug>-thumbnail.webp for any post with a cover but no thumbnail
+pnpm thumbnails:copy      # Copy <slug>-thumbnail.webp files to public/search-thumbnails/<slug>/
 ```
 
-`pnpm dev` and `pnpm search:index` automatically run `thumbs:copy` first.
+`pnpm dev` and `pnpm search:index` automatically run `thumbnails:copy` first.
 
 ## Architecture
 
@@ -62,8 +62,7 @@ const posts = defineCollection({
     title: z.string(),
     subTitle: z.string(),
     pubDate: z.coerce.date(),
-    cover: z.object({ image: image(), alt: z.string() }).optional(),
-    thumb: z.string().optional(),
+    cover: z.object({ image: image(), alt: z.string(), thumbnail: z.string().optional() }).optional(),
     tags: z.array(z.string()),
     draft: z.boolean().default(false),
     // ... history, credits
@@ -72,7 +71,7 @@ const posts = defineCollection({
 ```
 
 - Post ID (slug) is derived from the folder name, e.g. `collections/posts/my-post/index.md` → `my-post`
-- `thumb` is a plain string (not an Astro image) — bypasses filename hashing so the path stays stable
+- `cover.thumbnail` is a plain string (not an Astro image) — bypasses filename hashing so the path stays stable
 
 ## Styling Conventions
 
@@ -87,15 +86,15 @@ const posts = defineCollection({
 Pagefind search results display a thumbnail per post. The pipeline:
 
 1. Cover images are stored as `<slug>-cover.webp` colocated with the article
-2. `thumb.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbs:generate`
-3. `scripts/copy-thumbs.mjs` copies thumbs to `public/search-thumbs/<slug>/thumb.webp`
-4. The layout references the stable path `/search-thumbs/${postId}/thumb.webp`
-5. `public/search-thumbs/` is gitignored — regenerated on every build
+2. `<slug>-thumbnail.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbnails:generate`
+- `scripts/copy-thumbnails.mjs` copies thumbnails to `public/search-thumbnails/<slug>/<slug>-thumbnail.webp`
+4. The layout references the stable path `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
+5. `public/search-thumbnails/` is gitignored — regenerated on every build
 
 When adding a new post with a cover:
 1. Save cover as `<slug>-cover.webp` in the post directory
-2. Run `pnpm thumbs:generate` to create `thumb.webp`
-3. Add `thumb: './thumb.webp'` to the post frontmatter
+2. Run `pnpm thumbnails:generate` to create `<slug>-thumbnail.webp`
+3. Add `cover.thumbnail: './<slug>-thumbnail.webp'` to the post frontmatter
 
 ## Pagefind Search
 
