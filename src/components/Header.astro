@@ -197,12 +197,30 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
       activeIndex = index;
     }
 
+    function renderLoading() {
+      resultsList.innerHTML = Array.from({ length: 3 })
+        .map(
+          () =>
+            `<li class="search-result search-result--loading" aria-hidden="true">
+          <div class="search-result__link">
+            <div class="search-result__thumb search-skeleton"></div>
+            <div class="search-result__body">
+              <span class="search-skeleton search-skeleton--title"></span>
+              <span class="search-skeleton search-skeleton--excerpt"></span>
+            </div>
+          </div>
+        </li>`,
+        )
+        .join("");
+    }
+
     async function handleInput() {
       const query = input.value.trim();
       if (!query) {
         resultsList.innerHTML = "";
         return;
       }
+      renderLoading();
       const pf = await initPagefind();
       if (!pf) {
         resultsList.innerHTML =

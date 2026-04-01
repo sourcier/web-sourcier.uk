@@ -1155,3 +1155,32 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
   }
 }
+
+.search-skeleton {
+  display: block;
+  border-radius: 0.25rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-surface) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 400px 100%;
+  animation: search-skeleton-shimmer 1.4s ease infinite;
+
+  &--title {
+    height: 1rem;
+    width: 55%;
+    margin-bottom: 0.4rem;
+  }
+
+  &--excerpt {
+    height: 0.75rem;
+    width: 85%;
+  }
+}
+
+@keyframes search-skeleton-shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position:  400px 0; }
+}
