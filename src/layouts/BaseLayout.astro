@@ -79,6 +79,8 @@ const siteName = "Sourcier";
       content={new URL(ogImage, Astro.site ?? Astro.url.origin).href}
     />
 
+    <slot name="head" />
+
     <!-- PostHog Analytics — only in production -->
     {import.meta.env.PROD && (
       <script

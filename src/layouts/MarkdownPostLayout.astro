@@ -38,6 +38,11 @@ const thumbSrc = frontmatter.cover?.thumbnail
   author={frontmatter.author}
   tags={frontmatter.tags}
 >
+  <script
+    is:inline
+    defer
+    src="https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.min.js"
+    slot="head"></script>
   <article class="post" data-pagefind-body>
     <span data-pagefind-meta="title" class="visually-hidden"
       >{frontmatter.title}</span
@@ -331,11 +336,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
   import type { MermaidConfig } from "mermaid";
   import { faCircleXmark, faExpand } from "@fortawesome/free-solid-svg-icons";
 
-  // Vite's bundling silently breaks mermaid's lazy-loaded diagram renderers.
-  // CDN import is left as-is by Vite/Rollup, so mermaid loads intact at runtime.
-  const mermaid = (
-    await import(/* @vite-ignore */ "https://esm.sh/mermaid@11.13.0" as string)
-  ).default;
+  // mermaid is loaded via CDN <script defer> in <head> (see BaseLayout head slot)
+  const mermaid = (window as any).mermaid;
 
   const toSvgIcon = (iconDef: typeof faExpand, size = 14): string => {
     const [width, height, , , pathData] = iconDef.icon;
