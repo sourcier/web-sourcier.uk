@@ -29,18 +29,28 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
         <span class="navbar-brand-name">Sourcier</span>
       </a>
 
-      <button
-        class="navbar-burger"
-        aria-label="menu"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-        data-target="mobileMenu"
-      >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </button>
+      <div class="navbar-brand-actions">
+        <button
+          class="social-icon navbar-search-mobile"
+          aria-label="Open search"
+          data-search-open
+        >
+          <Fragment set:html={searchIcon} />
+        </button>
+
+        <button
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+          data-target="mobileMenu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
 
     <div id="mobileMenu" class="navbar-menu">
@@ -54,7 +64,7 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
         <div class="navbar-item">
           <div class="buttons">
             <button
-              class="social-icon"
+              class="social-icon navbar-search-desktop"
               aria-label="Open search"
               data-search-open
             >
