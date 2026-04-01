@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "thumbs:generate": "node scripts/process-covers.mjs",
     "thumbs:copy": "node scripts/copy-thumbs.mjs",
     "search:index": "pnpm thumbs:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind"
   },
