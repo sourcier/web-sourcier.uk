@@ -20,6 +20,7 @@ const posts = defineCollection({
           alt: z.string(),
         })
         .optional(),
+      thumb: z.string().optional(),
       tags: z.array(z.string()),
       draft: z.boolean().default(false),
       history: z

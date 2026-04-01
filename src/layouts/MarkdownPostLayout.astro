@@ -23,6 +23,10 @@ const formattedDate = frontmatter.pubDate
 
 const ogImage = frontmatter.cover?.image?.src ?? undefined;
 const pageTitle = `${frontmatter.title} — Sourcier`;
+
+const thumbSrc = frontmatter.thumb
+  ? `/search-thumbs/${postId}/thumb.webp`
+  : null;
 ---
 
 <BaseLayout
@@ -34,7 +38,23 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
   author={frontmatter.author}
   tags={frontmatter.tags}
 >
-  <article class="post">
+  <article class="post" data-pagefind-body>
+    <span data-pagefind-meta="title" class="visually-hidden"
+      >{frontmatter.title}</span
+    >
+    {
+      thumbSrc && (
+        <img
+          data-pagefind-meta="image[src]"
+          src={thumbSrc}
+          width="96"
+          height="96"
+          alt=""
+          aria-hidden="true"
+          class="visually-hidden"
+        />
+      )
+    }
     <PageHero
       title={frontmatter.title}
       subtitle={frontmatter.subTitle}

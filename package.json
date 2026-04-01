@@ -3,11 +3,14 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "SHOW_DRAFTS=true netlify dev",
-    "dev:no-drafts": "netlify dev",
+    "clean": "rm -rf .astro dist public/pagefind",
+    "dev": "pnpm thumbs:copy && SHOW_DRAFTS=true netlify dev",
+    "dev:no-drafts": "pnpm thumbs:copy && netlify dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "thumbs:copy": "node scripts/copy-thumbs.mjs",
+    "search:index": "pnpm thumbs:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@netlify/edge-functions": "^3.0.6",
+    "pagefind": "^1.4.0",
     "remark-emoji": "^5.0.2"
   }
 }
