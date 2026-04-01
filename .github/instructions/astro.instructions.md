@@ -132,6 +132,8 @@ All markdown images automatically get an expand button, and all Mermaid diagrams
 
 ## Git Workflow
 
+This applies to the **site repo** (`web-sourcier.uk`) only — not the content repo.
+
 - All new changes must be made on the `preview` branch
 - Only merge into `main` once the user explicitly gives the go-ahead
 - Never push directly to `main`
