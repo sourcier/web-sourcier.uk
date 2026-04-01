@@ -8,6 +8,10 @@
       "name": "sourcier.uk (content)",
       "path": "collections/posts",
     },
+    {
+      "name": "dotfiles",
+      "path": "/Users/rrajaratnam/workspace/dotfiles",
+    },
   ],
   "settings": {
     "terminal.integrated.cwd": "${workspaceFolder:sourcier.uk (site)}",
