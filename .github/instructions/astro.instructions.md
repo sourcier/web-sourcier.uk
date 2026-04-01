@@ -1,103 +1,123 @@
 ---
-description: 'Astro development standards and best practices for content-driven websites'
+description: 'Astro development standards and best practices for sourcier.uk'
 applyTo: '**/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx'
 ---
 
 # Astro Development Instructions
 
-Instructions for building high-quality Astro applications following the content-driven, server-first architecture with modern best practices.
-
 ## Project Context
-- Astro 5.x with Islands Architecture and Content Layer API
-- TypeScript for type safety and better DX with auto-generated types
-- Content-driven websites (blogs, marketing, e-commerce, documentation)
-- Server-first rendering with selective client-side hydration
-- Support for multiple UI frameworks (React, Vue, Svelte, Solid, etc.)
-- Static site generation (SSG) by default with optional server-side rendering (SSR)
-- Enhanced performance with modern content loading and build optimizations
 
-## Development Standards
+- **Astro 6** with Islands Architecture and Content Layer API
+- **Styling:** Sass + Bulma CSS framework — `<style lang="scss">` in components, global styles in `src/styles/global.scss`
+- **Content:** Markdown in `collections/posts/` (separate git submodule), loaded via `glob()` in `src/content.config.ts`
+- **Hosting:** Netlify (serverless functions, edge functions, scheduled builds)
+- **Search:** Pagefind static site search, indexed after build
+- **Static site generation** (SSG) — no SSR
 
-### Architecture
-- Embrace the Islands Architecture: server-render by default, hydrate selectively
-- Organize content with Content Collections for type-safe Markdown/MDX management
-- Structure projects by feature or content type for scalability
-- Use component-based architecture with clear separation of concerns
-- Implement progressive enhancement patterns
-- Follow Multi-Page App (MPA) approach over Single-Page App (SPA) patterns
+## Development Commands
 
-### TypeScript Integration
-- Configure `tsconfig.json` with recommended v5.0 settings:
-```json
-{
-  "extends": "astro/tsconfigs/base",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
-}
+```sh
+pnpm dev              # Dev server with drafts (localhost:8888 via Netlify CLI)
+pnpm dev:no-drafts    # Dev server without drafts
+pnpm build            # Production build to dist/
+pnpm search:index     # Full local Pagefind index rebuild
+pnpm thumbs:generate  # Generate thumb.webp for any post with a cover but no thumb
+pnpm thumbs:copy      # Copy thumb.webp files to public/search-thumbs/<slug>/
 ```
-- Types auto-generated in `.astro/types.d.ts` (replaces `src/env.d.ts`)
-- Run `astro sync` to generate/update type definitions
+
+`pnpm dev` and `pnpm search:index` automatically run `thumbs:copy` first.
+
+## Architecture
+
+- Islands Architecture: server-render by default, hydrate selectively
+- Default to zero JavaScript — only add `client:load` / `client:idle` / `client:visible` where needed
+- Follow Multi-Page App (MPA) approach
+- Component script structure: frontmatter at top, template below
+
+## TypeScript
+
+- `tsconfig.json` extends `astro/tsconfigs/base`
+- Types auto-generated in `.astro/types.d.ts` — run `astro sync` to refresh
 - Define component props with TypeScript interfaces
-- Leverage auto-generated types for content collections and Content Layer API
 
-### Component Design
+## Component Design
+
 - Use `.astro` components for static, server-rendered content
-- Import framework components (React, Vue, Svelte) only when interactivity is needed
-- Follow Astro's component script structure: frontmatter at top, template below
-- Use meaningful component names following PascalCase convention
-- Keep components focused and composable
-- Implement proper prop validation and default values
+- Keep components focused and composable; use PascalCase names
+- Scoped `<style lang="scss">` in each component for component-specific styles
+- Global / utility styles go in `src/styles/global.scss` (e.g. `.visually-hidden`, search modal styles)
+- **Scoped Astro styles do not apply to elements injected via `innerHTML`** — put those styles in `global.scss`
 
-### Content Collections
+## Content Collections
 
-#### Modern Content Layer API (v5.0+)
-- Define collections in `src/content.config.ts` using the new Content Layer API
-- Use built-in loaders: `glob()` for file-based content, `file()` for single files
-- Leverage enhanced performance and scalability with the new loading system
-- Example with Content Layer API:
+Defined in `src/content.config.ts` using the Content Layer API:
+
 ```typescript
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
+const posts = defineCollection({
+  loader: glob({ pattern: ['**/*.md', '!README.md'], base: './collections/posts' }),
+  schema: ({ image }) => z.object({
     title: z.string(),
-    pubDate: z.date(),
-    tags: z.array(z.string()).optional()
+    subTitle: z.string(),
+    pubDate: z.coerce.date(),
+    cover: z.object({ image: image(), alt: z.string() }).optional(),
+    thumb: z.string().optional(),
+    tags: z.array(z.string()),
+    draft: z.boolean().default(false),
+    // ... history, credits
   })
 });
 ```
 
-#### Legacy Collections (backward compatible)
-- Legacy `type: 'content'` collections still supported via automatic glob() implementation
-- Migrate existing collections by adding explicit `loader` configuration
-- Use type-safe queries with `getCollection()` and `getEntry()`
-- Structure content with frontmatter validation and auto-generated types
+- Post ID (slug) is derived from the folder name, e.g. `collections/posts/my-post/index.md` → `my-post`
+- `thumb` is a plain string (not an Astro image) — bypasses filename hashing so the path stays stable
 
-### View Transitions & Client-Side Routing
-- Enable with `<ClientRouter />` component in layout head (renamed from `<ViewTransitions />` in v5.0)
-- Import from `astro:transitions`: `import { ClientRouter } from 'astro:transitions'`
-- Provides SPA-like navigation without full page reloads
-- Customize transition animations with CSS and view-transition-name
-- Maintain state across page navigations with persistent islands
-- Use `transition:persist` directive to preserve component state
+## Styling Conventions
 
-### Performance Optimization
-- Default to zero JavaScript - only add interactivity where needed
-- Use client directives strategically (`client:load`, `client:idle`, `client:visible`)
-- Implement lazy loading for images and components
-- Optimize static assets with Astro's built-in optimization
-- Leverage Content Layer API for faster content loading and builds
-- Minimize bundle size by avoiding unnecessary client-side JavaScript
+- BEM-style class naming: `.page-hero__title`, `.back-to-top--visible`
+- CSS variables for theming — never hardcode colours outside `:root` / `[data-theme]`
+- Dark mode via `data-theme="dark"` on `<html>`
+- Breakpoints: 640px (mobile/tablet), 768px (tablet/desktop)
+- Primary colour: `--color-pink: #e8006a`
 
-### Styling
-- Use scoped styles in `.astro` components by default
-- Implement CSS preprocessing (Sass, Less) when needed
-- Use CSS custom properties for theming and design systems
-- Follow mobile-first responsive design principles
-- Ensure accessibility with semantic HTML and proper ARIA attributes
-- Consider utility-first frameworks (Tailwind CSS) for rapid development
+## Thumbnail Pipeline
+
+Pagefind search results display a thumbnail per post. The pipeline:
+
+1. Cover images are stored as `<slug>-cover.webp` colocated with the article
+2. `thumb.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbs:generate`
+3. `scripts/copy-thumbs.mjs` copies thumbs to `public/search-thumbs/<slug>/thumb.webp`
+4. The layout references the stable path `/search-thumbs/${postId}/thumb.webp`
+5. `public/search-thumbs/` is gitignored — regenerated on every build
+
+When adding a new post with a cover:
+1. Save cover as `<slug>-cover.webp` in the post directory
+2. Run `pnpm thumbs:generate` to create `thumb.webp`
+3. Add `thumb: './thumb.webp'` to the post frontmatter
+
+## Pagefind Search
+
+- `data-pagefind-body` on the `<article>` element marks indexable content
+- `data-pagefind-meta="title"` on a `.visually-hidden` `<span>` sets the result title
+- `data-pagefind-meta="image[src]"` on a `.visually-hidden` `<img>` sets the result thumbnail
+- Use `.visually-hidden` (CSS clip pattern) — **not** `display:none`, which Pagefind skips
+- Pagefind JS loaded at runtime via `import('/pagefind/pagefind.js')` in an `is:inline` script
+- `public/pagefind/` is gitignored — rebuilt by `pnpm search:index`
+
+## Environment Variables
+
+- `import.meta.env` in Astro components
+- `process.env` in Netlify functions
+- All secrets in Netlify dashboard, never in code — see `.env.example`
+- Draft posts: controlled by `SHOW_DRAFTS` env var and `isPublished()` utility
+
+## Performance
+
+- Use `<Image />` component for automatic image optimisation (WebP, srcset)
+- Minimise client-side JavaScript
+- Posts with future `pubDate` auto-publish via daily scheduled build (07:45 UTC)
 
 ### Client-Side Interactivity
 - Use framework components (React, Vue, Svelte) for interactive elements
