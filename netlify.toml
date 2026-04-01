@@ -12,7 +12,7 @@
     SHOW_DRAFTS = "true"
 
 [build]
-  command = "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git && node scripts/copy-thumbnails.mjs && astro build && npx pagefind --site dist"
+  command = "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git && node scripts/copy-thumbnails.mjs && node scripts/copy-post-images.mjs && astro build && npx pagefind --site dist"
   publish = "dist"
 
 [functions]

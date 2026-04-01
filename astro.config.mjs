@@ -4,6 +4,7 @@ import emoji from "remark-emoji";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
+import { rehypeExpandableImages } from "./src/plugins/rehype-expandable-images.js";
 import { expressiveCodeCopyIcon } from "./src/utils/expressive-code-copy-icon.js";
 
 export default defineConfig({
@@ -43,6 +44,7 @@ export default defineConfig({
       remarkMermaid,
       [emoji, { emoticon: true, accessible: true }],
     ],
+    rehypePlugins: [rehypeExpandableImages],
     syntaxHighlight: false,
   },
 });

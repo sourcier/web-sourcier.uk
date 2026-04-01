@@ -23,9 +23,10 @@ pnpm build            # Production build to dist/
 pnpm search:index     # Full local Pagefind index rebuild
 pnpm thumbnails:generate  # Generate <slug>-thumbnail.webp for any post with a cover but no thumbnail
 pnpm thumbnails:copy      # Copy <slug>-thumbnail.webp files to public/search-thumbnails/<slug>/
+pnpm post-images:copy     # Copy SVG files from collections/posts/<slug>/ to public/post-images/<slug>/
 ```
 
-`pnpm dev` and `pnpm search:index` automatically run `thumbnails:copy` first.
+`pnpm dev` and `pnpm search:index` automatically run `thumbnails:copy` and `post-images:copy` first.
 
 ## Architecture
 
@@ -95,6 +96,30 @@ When adding a new post with a cover:
 1. Save cover as `<slug>-cover.webp` in the post directory
 2. Run `pnpm thumbnails:generate` to create `<slug>-thumbnail.webp`
 3. Add `cover.thumbnail: './<slug>-thumbnail.webp'` to the post frontmatter
+
+## Post Images (SVG)
+
+Astro's image optimisation pipeline (Sharp) cannot process SVG files, so SVGs referenced in markdown body content must be served from `public/` as static files.
+
+- `scripts/copy-post-images.mjs` copies `.svg` files from `collections/posts/<slug>/` → `public/post-images/<slug>/`
+- `public/post-images/` is gitignored — regenerated on every build and dev start
+- In markdown, reference SVGs with absolute paths: `/post-images/<slug>/<filename>.svg`
+- The rehype plugin `src/plugins/rehype-expandable-images.js` adds `class="expandable"` to every markdown `<img>` at build time, enabling the lightbox expand button
+
+## Expandable Images and Mermaid Lightbox
+
+All markdown images automatically get an expand button, and all Mermaid diagrams get one too. They share the same lightbox implementation in `MarkdownPostLayout.astro`.
+
+**How it works:**
+- `rehype-expandable-images.js` (registered in `astro.config.mjs`) adds `class="expandable"` to every `<img>` in markdown at build time
+- At runtime, `MarkdownPostLayout.astro` wraps each `.expandable` image in a `.mermaid-diagram` div and appends a `.mermaid-expand-btn` button
+- The same lightbox DOM structure is used for both images and Mermaid SVGs:
+  - `.mermaid-lightbox` — fixed overlay
+  - `.mermaid-lightbox__inner` — the card (non-scrolling, holds the fade `::after`)
+  - `.mermaid-lightbox__scroll` — the scrolling container
+  - `.mermaid-lightbox__svg` — the content (cloned SVG or `<img>`)
+- Scroll affordance: a `::after` fade + "scroll for more ↓" label on `inner`, hidden via `is-scrolled-end` class when fully scrolled
+- `mermaid.run()` receives only actual Mermaid containers as `nodes` (from the `definitions` Map), not SVG image wrappers, to prevent the renderer wiping non-Mermaid SVGs
 
 ## Pagefind Search
 

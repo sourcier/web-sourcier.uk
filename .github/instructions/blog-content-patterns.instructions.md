@@ -39,13 +39,30 @@ history:
 - `credits`: keep up to date — add entries when new sources, tools, or attributions apply.
 - `history`: only add entries **after** publication. Do not add pre-publish revision notes.
 
-## Adding a New Post with a Cover Image
+## Creating a New Post — Checklist
 
-1. Create `collections/posts/<slug>/index.md` with `draft: true`
-2. Save cover as `collections/posts/<slug>/<slug>-cover.webp`
-3. Run `pnpm thumbnails:generate` to create `<slug>-thumbnail.webp`
-4. Add `thumbnail: './<slug>-thumbnail.webp'` inside `cover:` in frontmatter
-5. `pnpm dev` will automatically copy thumbnails on startup
+When creating a new article:
+
+1. **Ask about the cover image** if the user hasn't specified one. Do not create the article without knowing what cover image to use.
+2. **Create the cover image** as `collections/posts/<slug>/<slug>-cover.webp`.
+3. **Generate the thumbnail** by running `pnpm thumbnails:generate` — this produces `<slug>-thumbnail.webp` (96×96, center-cropped).
+4. Add `thumbnail: './<slug>-thumbnail.webp'` inside `cover:` in frontmatter.
+5. Create `collections/posts/<slug>/index.md` with `draft: true`.
+6. `pnpm dev` will automatically copy thumbnails on startup.
+
+**Cover image naming:** always `<slug>-cover.webp` — for example, `search-pagefind-astro-cover.webp`.
+**Thumbnail naming:** always `<slug>-thumbnail.webp` — generated automatically by `pnpm thumbnails:generate`.
+
+## Diagrams and Mockups
+
+When creating or updating a technical article, include visual aids where they add clarity:
+
+- **Architecture diagram** — use a Mermaid `flowchart TD` for any post that describes a multi-component system, a build pipeline, or a data flow. Place it near the start of the article under an "Architecture overview" heading.
+- **UI mockup** — use an SVG wireframe for any post that describes a user-facing UI component or interaction pattern. Follow the conventions in `.github/instructions/wireframe-design.instructions.md`. Place it in the section that introduces the UI.
+
+Not every article needs both. Use judgement: a post about a CSS technique may need neither; a post about a search modal warrants both.
+
+All markdown images get an automatic fullscreen expand button — no extra markup needed.
 
 ## Tags
 
@@ -73,6 +90,22 @@ When a post lists a series of upcoming articles, format each item as:
 ```
 
 Use `<span class="date-chip">Live</span>` for already-published entries.
+
+## SVG Diagrams and Wireframes in Articles
+
+SVG files cannot go through Astro's image pipeline. To include an SVG in a post:
+
+1. Place the `.svg` file in `collections/posts/<slug>/` alongside the article
+2. Reference it with an **absolute path** in markdown: `/post-images/<slug>/<filename>.svg`
+3. The `post-images:copy` script (run automatically by `pnpm dev`) copies it to `public/post-images/<slug>/`
+
+```md
+![Alt text describing the diagram](/post-images/my-post/my-diagram.svg)
+```
+
+All markdown images automatically get a fullscreen expand button — no extra markup needed. The button is added at runtime by `MarkdownPostLayout.astro`.
+
+For the visual style of SVG wireframes, follow the conventions in `.github/instructions/wireframe-design.instructions.md`.
 
 ## Showing Markdown Source
 

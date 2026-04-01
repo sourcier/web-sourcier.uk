@@ -4,14 +4,15 @@
   "version": "0.0.1",
   "scripts": {
     "clean": "rm -rf .astro dist public/pagefind",
-    "dev": "pnpm thumbnails:copy && SHOW_DRAFTS=true netlify dev",
-    "dev:no-drafts": "pnpm thumbnails:copy && netlify dev",
+    "dev": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true netlify dev",
+    "dev:no-drafts": "pnpm thumbnails:copy && pnpm post-images:copy && netlify dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "thumbnails:generate": "node scripts/process-thumbnails.mjs",
     "thumbnails:copy": "node scripts/copy-thumbnails.mjs",
-    "search:index": "pnpm thumbnails:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind"
+    "post-images:copy": "node scripts/copy-post-images.mjs",
+    "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",

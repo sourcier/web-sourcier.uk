@@ -203,15 +203,48 @@ const thumbSrc = frontmatter.cover?.thumbnail
   :global(.mermaid-lightbox__inner) {
     position: relative;
     background: #fafafa;
-    padding: 2rem;
     width: 98vw;
     max-width: 98vw;
     height: 94vh;
     max-height: 94vh;
+
+    &::after {
+      content: "scroll for more ↓";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 5rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 0.75rem;
+      pointer-events: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: rgba(0, 0, 0, 0.45);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(250, 250, 250, 1)
+      );
+      transition: opacity 0.2s ease;
+    }
+
+    &.is-scrolled-end::after {
+      opacity: 0;
+    }
+  }
+
+  :global(.mermaid-lightbox__scroll) {
+    width: 100%;
+    height: 100%;
     overflow: auto;
+    padding: 2rem;
+    box-sizing: border-box;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
 
     svg {
       max-width: none;
@@ -219,8 +252,18 @@ const thumbSrc = frontmatter.cover?.thumbnail
     }
   }
 
+  :global(.mermaid-lightbox__svg) {
+    margin: auto;
+    flex-shrink: 0;
+  }
+
   :global([data-theme="dark"] .mermaid-lightbox__inner) {
     background: #282c34;
+  }
+
+  :global([data-theme="dark"] .mermaid-lightbox__inner::after) {
+    color: rgba(255, 255, 255, 0.35);
+    background: linear-gradient(to bottom, transparent, rgba(40, 44, 52, 1));
   }
 
   :global(.mermaid-lightbox__close) {
@@ -344,19 +387,33 @@ const thumbSrc = frontmatter.cover?.thumbnail
   lightbox.setAttribute("aria-label", "Diagram fullscreen view");
   const lightboxInner = document.createElement("div");
   lightboxInner.className = "mermaid-lightbox__inner";
+  const lightboxScroll = document.createElement("div");
+  lightboxScroll.className = "mermaid-lightbox__scroll";
   const closeBtn = document.createElement("button");
   closeBtn.className = "mermaid-lightbox__close";
   closeBtn.innerHTML = ICON_XMARK;
   closeBtn.setAttribute("aria-label", "Close fullscreen diagram");
+  lightboxInner.appendChild(lightboxScroll);
   lightboxInner.appendChild(closeBtn);
   lightbox.appendChild(lightboxInner);
   document.body.appendChild(lightbox);
 
   const closeLightbox = () => {
     lightbox.classList.remove("is-open");
-    lightboxInner.querySelector(".mermaid-lightbox__svg")?.remove();
+    lightboxScroll.querySelector(".mermaid-lightbox__svg")?.remove();
     document.body.style.overflow = "";
   };
+
+  const updateScrollHint = () => {
+    const atBottom =
+      lightboxScroll.scrollHeight - lightboxScroll.scrollTop <=
+      lightboxScroll.clientHeight + 4;
+    lightboxInner.classList.toggle("is-scrolled-end", atBottom);
+  };
+
+  lightboxScroll.addEventListener("scroll", updateScrollHint, {
+    passive: true,
+  });
 
   closeBtn.addEventListener("click", closeLightbox);
   lightbox.addEventListener("click", (e) => {
@@ -398,14 +455,52 @@ const thumbSrc = frontmatter.cover?.thumbnail
         svgClone.style.width = "100%";
         svgClone.style.height = "auto";
         svgClone.style.display = "block";
-        lightboxInner.appendChild(svgClone);
+        lightboxScroll.appendChild(svgClone);
+        lightboxScroll.scrollTop = 0;
         lightbox.classList.add("is-open");
         document.body.style.overflow = "hidden";
+        updateScrollHint();
         closeBtn.focus();
       });
 
       pre.replaceWith(container);
       definitions.set(container, { definition, btn: expandBtn });
+    });
+
+  // SVG image expand — reuses the same lightbox as Mermaid diagrams
+  document
+    .querySelectorAll<HTMLImageElement>(".post__content img.expandable")
+    .forEach((imgEl) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "mermaid-diagram";
+      imgEl.style.maxWidth = "100%";
+      imgEl.style.height = "auto";
+      imgEl.style.display = "block";
+      imgEl.parentNode!.insertBefore(wrapper, imgEl);
+      wrapper.appendChild(imgEl);
+
+      const expandBtn = document.createElement("button");
+      expandBtn.className = "mermaid-expand-btn";
+      expandBtn.innerHTML = ICON_EXPAND;
+      expandBtn.setAttribute("aria-label", "View image fullscreen");
+
+      expandBtn.addEventListener("click", () => {
+        const imgClone = document.createElement("img");
+        imgClone.src = imgEl.src;
+        imgClone.alt = imgEl.alt;
+        imgClone.className = "mermaid-lightbox__svg";
+        imgClone.style.width = "100%";
+        imgClone.style.height = "auto";
+        imgClone.style.display = "block";
+        lightboxScroll.appendChild(imgClone);
+        lightboxScroll.scrollTop = 0;
+        lightbox.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        updateScrollHint();
+        closeBtn.focus();
+      });
+
+      wrapper.appendChild(expandBtn);
     });
 
   async function renderDiagrams() {
@@ -418,7 +513,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
     });
 
     await mermaid.run({
-      nodes: document.querySelectorAll(".mermaid-diagram"),
+      nodes: [...definitions.keys()],
     });
 
     // Re-append expand buttons after mermaid.run() replaces container innerHTML
