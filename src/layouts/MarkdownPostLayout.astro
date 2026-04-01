@@ -328,8 +328,14 @@ const thumbSrc = frontmatter.cover?.thumbnail
 
 <script>
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
-  import mermaid, { type MermaidConfig } from "mermaid";
+  import type { MermaidConfig } from "mermaid";
   import { faCircleXmark, faExpand } from "@fortawesome/free-solid-svg-icons";
+
+  // Vite's bundling silently breaks mermaid's lazy-loaded diagram renderers.
+  // CDN import is left as-is by Vite/Rollup, so mermaid loads intact at runtime.
+  const mermaid = (
+    await import(/* @vite-ignore */ "https://esm.sh/mermaid@11.13.0" as string)
+  ).default;
 
   const toSvgIcon = (iconDef: typeof faExpand, size = 14): string => {
     const [width, height, , , pathData] = iconDef.icon;
