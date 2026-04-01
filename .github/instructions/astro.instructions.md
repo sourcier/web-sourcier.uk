@@ -130,6 +130,12 @@ All markdown images automatically get an expand button, and all Mermaid diagrams
 - Pagefind JS loaded at runtime via `import('/pagefind/pagefind.js')` in an `is:inline` script
 - `public/pagefind/` is gitignored — rebuilt by `pnpm search:index`
 
+## Git Workflow
+
+- All new changes must be made on the `preview` branch
+- Only merge into `main` once the user explicitly gives the go-ahead
+- Never push directly to `main`
+
 ## Environment Variables
 
 - `import.meta.env` in Astro components
