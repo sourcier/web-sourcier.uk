@@ -51,6 +51,24 @@ export const handler = async (event) => {
     return { statusCode: 400, body: "Missing submission id or data" };
   }
 
+  if (data.name && typeof data.name === "string" && data.name.length > 100) {
+    return { statusCode: 400, body: "Name too long" };
+  }
+  if (
+    data.comment &&
+    typeof data.comment === "string" &&
+    data.comment.length > 5000
+  ) {
+    return { statusCode: 400, body: "Comment too long" };
+  }
+  if (
+    data.postSlug &&
+    typeof data.postSlug === "string" &&
+    data.postSlug.length > 200
+  ) {
+    return { statusCode: 400, body: "Post slug too long" };
+  }
+
   const approveToken = hmac(id, "approve", secret);
   const deleteToken = hmac(id, "delete", secret);
   const base = `${siteUrl}/.netlify/functions/approve-comment`;

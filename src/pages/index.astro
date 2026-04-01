@@ -131,7 +131,7 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
   ];
 
   const el = document.getElementById("heroCycleTerm");
-  if (el) {
+  if (el && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     let current = 0;
 
     setInterval(() => {

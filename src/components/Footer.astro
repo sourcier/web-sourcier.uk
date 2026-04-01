@@ -54,56 +54,64 @@
     gap: 0.4em;
   }
 
-  // Total cycle: 4 words × 1s on + 3s off = 16s loop
-  @keyframes word-highlight {
-    0%,
-    100% {
-      color: rgba(255, 255, 255, 0.15);
-    }
-    5% {
-      color: rgba(255, 255, 255, 0.45);
-    }
-    20% {
-      color: rgba(255, 255, 255, 0.15);
-    }
-  }
-
   .footer__word {
     color: rgba(255, 255, 255, 0.15);
-    animation: word-highlight 16s ease-in-out infinite;
-
-    &:nth-child(1) {
-      animation-delay: 0s;
-    }
-    &:nth-child(3) {
-      animation-delay: 4s;
-    }
-    &:nth-child(5) {
-      animation-delay: 8s;
-    }
-    &:nth-child(7) {
-      animation-delay: 12s;
-    }
-  }
-
-  @keyframes arrow-opacity {
-    0%,
-    100% {
-      opacity: 0.25;
-    }
-    5% {
-      opacity: 1;
-    }
-    20% {
-      opacity: 0.25;
-    }
   }
 
   .footer__arrow {
     color: var(--color-pink);
     opacity: 0.25;
-    animation: arrow-opacity 16s ease-in-out infinite;
-    animation-delay: 12s;
+  }
+
+  // Total cycle: 4 words × 1s on + 3s off = 16s loop
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes word-highlight {
+      0%,
+      100% {
+        color: rgba(255, 255, 255, 0.15);
+      }
+      5% {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      20% {
+        color: rgba(255, 255, 255, 0.15);
+      }
+    }
+
+    .footer__word {
+      animation: word-highlight 16s ease-in-out infinite;
+
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+      &:nth-child(3) {
+        animation-delay: 4s;
+      }
+      &:nth-child(5) {
+        animation-delay: 8s;
+      }
+      &:nth-child(7) {
+        animation-delay: 12s;
+      }
+    }
+
+    @keyframes arrow-opacity {
+      0%,
+      100% {
+        opacity: 0.25;
+      }
+      5% {
+        opacity: 1;
+      }
+      20% {
+        opacity: 0.25;
+      }
+    }
+
+    .footer__arrow {
+      animation: arrow-opacity 16s ease-in-out infinite;
+      animation-delay: 12s;
+    }
   }
 
   .footer__divider {

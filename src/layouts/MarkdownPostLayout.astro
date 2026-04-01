@@ -407,7 +407,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
   const updateScrollHint = () => {
     const atBottom =
       lightboxScroll.scrollHeight - lightboxScroll.scrollTop <=
-      lightboxScroll.clientHeight + 4;
+      lightboxScroll.clientHeight + 4; // 4px tolerance for sub-pixel browser rounding
     lightboxInner.classList.toggle("is-scrolled-end", atBottom);
   };
 

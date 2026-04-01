@@ -58,7 +58,30 @@ export default async function previewAuth(request: Request, context: Context) {
     const body = await request.formData();
     const submitted = body.get("code")?.toString() ?? "";
 
-    if (submitted === passcode) {
+    const encoder = new TextEncoder();
+    const submittedBytes = encoder.encode(submitted);
+    const passcodeBytes = encoder.encode(passcode);
+    // Constant-time comparison to prevent timing attacks
+    const lengthsMatch = submittedBytes.byteLength === passcodeBytes.byteLength;
+    const paddedSubmitted = lengthsMatch
+      ? submittedBytes
+      : new Uint8Array(passcodeBytes.byteLength);
+    const key = await crypto.subtle.importKey(
+      "raw",
+      passcodeBytes,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign", "verify"],
+    );
+    const [sigA, sigB] = await Promise.all([
+      crypto.subtle.sign("HMAC", key, paddedSubmitted),
+      crypto.subtle.sign("HMAC", key, passcodeBytes),
+    ]);
+    const timingSafeMatch =
+      btoa(String.fromCharCode(...new Uint8Array(sigA))) ===
+        btoa(String.fromCharCode(...new Uint8Array(sigB))) && lengthsMatch;
+
+    if (timingSafeMatch) {
       const redirectTo = sanitizeRedirect(
         url.searchParams.get("redirect") ?? "/",
         url.origin,

@@ -16,9 +16,8 @@ function isValidEmail(email) {
 }
 
 export const handler = async (event) => {
-  const origin = event.headers["origin"] ?? "";
   const corsHeaders = {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN || origin,
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
