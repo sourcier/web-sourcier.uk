@@ -3,9 +3,12 @@ import newdayLogo from "../../assets/images/newday-favicon.png";
 import intofilmLogo from "../../assets/images/intofilm-favicon.png";
 import treatwellLogo from "../../assets/images/treatwell-favicon.png";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 const linkedinIcon = faIcon(faLinkedin, { size: 14 });
+const pauseIcon = faIcon(faPause, { size: 11 });
+const playIcon = faIcon(faPlay, { size: 11 });
 
 const testimonials = [
   {
@@ -17,18 +20,16 @@ const testimonials = [
     logo: newdayLogo,
     website: "https://www.newday.co.uk",
     linkedin: "https://www.linkedin.com/in/elisabethtencate/",
-    placeholder: false,
   },
   {
     quote:
-      "When we hired Roger a decade ago at Into Film, we couldn't decide between him and another candidate—so naturally, we took them both. Turns out Roger was worth it. As a principal software engineer, he solves problems I didn't even know existed, with a calm that makes the chaos of charity work look orderly. Ten years later, I still think hiring him was the smarter half of that indecision.",
-    name: "Chris Breen",
-    title: "Lead Engineer",
-    company: "Into Film",
-    logo: intofilmLogo,
-    website: "https://www.intofilm.org",
-    linkedin: "https://www.linkedin.com/in/chris-breen-b608aa42/",
-    placeholder: false,
+      "Roger has been an exceptional tech lead and manager during my time at NewDay. He has a real ability to quickly unblock problems and create an environment where engineers can do their best work. He has been a great mentor to me and played a significant role in helping me progress from a mid-level to a senior engineer. I've learned a huge amount from working with him and really value the experience of having worked together.",
+    name: "Gladwin Dosunmu",
+    title: "Senior Engineer",
+    company: "NewDay",
+    logo: newdayLogo,
+    website: "https://www.newday.co.uk",
+    linkedin: "https://www.linkedin.com/in/gladwin-dosunmu-80691b107/",
   },
   {
     quote:
@@ -39,38 +40,60 @@ const testimonials = [
     logo: treatwellLogo,
     website: "https://www.treatwell.co.uk",
     linkedin: "https://www.linkedin.com/in/syed-shah-6a881917/",
-    placeholder: false,
+  },
+  {
+    quote:
+      "When we hired Roger a decade ago at Into Film, we couldn't decide between him and another candidate—so naturally, we took them both. Turns out Roger was worth it. As a principal software engineer, he solves problems I didn't even know existed, with a calm that makes the chaos of charity work look orderly. Ten years later, I still think hiring him was the smarter half of that indecision.",
+    name: "Chris Breen",
+    title: "Lead Engineer",
+    company: "Into Film",
+    logo: intofilmLogo,
+    website: "https://www.intofilm.org",
+    linkedin: "https://www.linkedin.com/in/chris-breen-b608aa42/",
   },
 ];
 ---
 
 <section class="testimonials" aria-labelledby="testimonials-heading">
   <div class="container is-max-desktop">
-    <p class="section-label" id="testimonials-heading">What people say</p>
-    <ul class="testimonials__list" role="list">
-      {
-        testimonials.map((t) =>
-          t.placeholder ? (
-            <li
-              class="testimonials__item testimonials__item--placeholder"
-              aria-hidden="true"
-            >
-              <div class="testimonials__placeholder-inner">
-                <span class="testimonials__placeholder-label">
-                  More testimonials coming soon
-                </span>
-              </div>
-            </li>
-          ) : (
-            <li class="testimonials__item">
-              <blockquote class="testimonials__quote">
-                <p>&ldquo;{t.quote}&rdquo;</p>
-              </blockquote>
-              <footer class="testimonials__footer">
-                <div class="testimonials__attribution">
-                  <div>
-                    <p class="testimonials__name">
-                      {t.linkedin ? (
+    <div class="testimonials__header">
+      <p class="section-label" id="testimonials-heading">
+        From people I've worked with
+      </p>
+      <button
+        class="testimonials__pause-btn"
+        type="button"
+        aria-label="Pause slideshow"
+        aria-pressed="false"
+      >
+        <span class="testimonials__pause-icon" set:html={pauseIcon} />
+        <span class="testimonials__play-icon" set:html={playIcon} />
+      </button>
+    </div>
+
+    <div
+      class="testimonials__carousel"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Testimonials"
+    >
+      <div class="testimonials__track-wrapper">
+        <ul class="testimonials__track" role="list">
+          {
+            testimonials.map((t, i) => (
+              <li
+                class="testimonials__item"
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} of ${testimonials.length}`}
+              >
+                <blockquote class="testimonials__quote">
+                  <p>&ldquo;{t.quote}&rdquo;</p>
+                </blockquote>
+                <footer class="testimonials__footer">
+                  <div class="testimonials__attribution">
+                    <div>
+                      <p class="testimonials__name">
                         <span class="testimonials__name-group">
                           <a
                             href={t.linkedin}
@@ -89,41 +112,167 @@ const testimonials = [
                             set:html={linkedinIcon}
                           />
                         </span>
-                      ) : (
-                        t.name
-                      )}
-                    </p>
-                    <p class="testimonials__meta">
-                      {t.title ? `${t.title} · ${t.company}` : t.company}
-                    </p>
+                      </p>
+                      <p class="testimonials__meta">
+                        {t.title ? `${t.title} · ${t.company}` : t.company}
+                      </p>
+                    </div>
+                    {t.logo && (
+                      <a
+                        href={t.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="testimonials__logo-link"
+                        aria-label={`Visit ${t.company} website`}
+                      >
+                        <img
+                          src={t.logo.src}
+                          alt={t.company}
+                          class="testimonials__logo"
+                          width="64"
+                          height="64"
+                          loading="lazy"
+                        />
+                      </a>
+                    )}
                   </div>
-                  {t.logo && (
-                    <a
-                      href={t.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="testimonials__logo-link"
-                      aria-label={`Visit ${t.company} website`}
-                    >
-                      <img
-                        src={t.logo.src}
-                        alt={t.company}
-                        class="testimonials__logo"
-                        width="64"
-                        height="64"
-                        loading="lazy"
-                      />
-                    </a>
-                  )}
-                </div>
-              </footer>
-            </li>
-          ),
-        )
-      }
-    </ul>
+                </footer>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div
+        class="testimonials__dots"
+        role="group"
+        aria-label="Slide navigation"
+      >
+        {
+          testimonials.map((t, i) => (
+            <button
+              class:list={["testimonials__dot", { "is-active": i === 0 }]}
+              type="button"
+              aria-label={`Go to slide ${i + 1}: ${t.name}`}
+              aria-current={i === 0 ? "true" : "false"}
+              data-index={i}
+            />
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  const section = document.querySelector<HTMLElement>(".testimonials");
+  if (section) {
+    const track = section.querySelector<HTMLElement>(".testimonials__track")!;
+    const dots =
+      section.querySelectorAll<HTMLButtonElement>(".testimonials__dot");
+    const pauseBtn = section.querySelector<HTMLButtonElement>(
+      ".testimonials__pause-btn",
+    )!;
+    const carousel = section.querySelector<HTMLElement>(
+      ".testimonials__carousel",
+    )!;
+    const total = dots.length;
+    let current = 0;
+    let paused = false;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function getLayout() {
+      const wrapper = track.parentElement as HTMLElement;
+      const items = track.querySelectorAll<HTMLElement>(".testimonials__item");
+      const wrapperWidth = wrapper.getBoundingClientRect().width;
+      const itemWidth = items[0]?.getBoundingClientRect().width ?? wrapperWidth;
+      let stepPct = 100;
+      if (items.length > 1) {
+        const r0 = items[0].getBoundingClientRect();
+        const r1 = items[1].getBoundingClientRect();
+        stepPct = ((r1.left - r0.left) / wrapperWidth) * 100;
+      }
+      const visible = Math.round(wrapperWidth / itemWidth);
+      const maxIndex = Math.max(0, total - visible);
+      return { stepPct, maxIndex };
+    }
+
+    function goTo(index: number) {
+      const { stepPct, maxIndex } = getLayout();
+      current = ((index % (maxIndex + 1)) + (maxIndex + 1)) % (maxIndex + 1);
+      track.style.transform = `translateX(-${current * stepPct}%)`;
+      dots.forEach((d, i) => {
+        const hidden = i > maxIndex;
+        d.classList.toggle("is-active", i === current);
+        d.classList.toggle("is-hidden", hidden);
+        d.setAttribute("aria-current", i === current ? "true" : "false");
+      });
+    }
+
+    function startTimer() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    function stopTimer() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        goTo(parseInt(dot.dataset.index!, 10));
+        stopTimer();
+        if (!paused) startTimer();
+      });
+    });
+
+    pauseBtn.addEventListener("click", () => {
+      paused = !paused;
+      pauseBtn.setAttribute("aria-pressed", String(paused));
+      pauseBtn.setAttribute(
+        "aria-label",
+        paused ? "Play slideshow" : "Pause slideshow",
+      );
+      pauseBtn.classList.toggle("is-paused", paused);
+      if (paused) stopTimer();
+      else startTimer();
+    });
+
+    carousel.addEventListener("mouseenter", stopTimer);
+    carousel.addEventListener("mouseleave", () => {
+      if (!paused) startTimer();
+    });
+    carousel.addEventListener("focusin", stopTimer);
+    carousel.addEventListener("focusout", (e) => {
+      if (
+        !carousel.contains((e as FocusEvent).relatedTarget as Node) &&
+        !paused
+      ) {
+        startTimer();
+      }
+    });
+
+    carousel.addEventListener("keydown", (e) => {
+      const key = (e as KeyboardEvent).key;
+      if (key === "ArrowLeft" || key === "ArrowRight") {
+        goTo(key === "ArrowLeft" ? current - 1 : current + 1);
+        stopTimer();
+        if (!paused) startTimer();
+      }
+    });
+
+    new ResizeObserver(() => goTo(current)).observe(track.parentElement!);
+
+    goTo(0);
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      startTimer();
+    }
+  }
+</script>
 
 <style lang="scss">
   .testimonials {
@@ -133,33 +282,87 @@ const testimonials = [
     border-bottom: 1px solid var(--color-border);
   }
 
-  .testimonials__list {
+  .testimonials__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+
+    .section-label {
+      margin-bottom: 0;
+    }
+  }
+
+  .testimonials__pause-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    .testimonials__play-icon {
+      display: none;
+    }
+
+    &.is-paused {
+      .testimonials__pause-icon {
+        display: none;
+      }
+      .testimonials__play-icon {
+        display: flex;
+      }
+    }
+
+    &:hover {
+      color: var(--color-pink);
+      border-color: rgba(232, 0, 106, 0.5);
+    }
+  }
+
+  .testimonials__carousel {
+    position: relative;
+  }
+
+  .testimonials__track-wrapper {
+    overflow: hidden;
+  }
+
+  .testimonials__track {
+    display: flex;
+    gap: 1.25rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
 
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(3, 1fr);
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 
   .testimonials__item {
+    flex: 0 0 100%;
+    min-width: 0;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     padding: 1.75rem 1.5rem;
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
     background-color: var(--color-paper);
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease;
 
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+    @media (min-width: 640px) {
+      flex: 0 0 calc(50% - 0.625rem);
     }
   }
 
@@ -221,36 +424,6 @@ const testimonials = [
     }
   }
 
-  .testimonials__item--placeholder {
-    cursor: default;
-    border: 2px dashed var(--color-border);
-    border-top: 2px dashed var(--color-border);
-    background: transparent;
-    box-shadow: none;
-
-    &:hover {
-      transform: none;
-      box-shadow: none;
-    }
-  }
-
-  .testimonials__placeholder-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 2rem 1rem;
-  }
-
-  .testimonials__placeholder-label {
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-border);
-  }
-
   .testimonials__name {
     font-family: "Barlow Condensed", sans-serif;
     font-size: 1rem;
@@ -293,5 +466,39 @@ const testimonials = [
     font-size: 0.8125rem;
     color: var(--color-muted);
     margin: 0;
+  }
+
+  .testimonials__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding-top: 1.5rem;
+  }
+
+  .testimonials__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+
+    &.is-active {
+      background: var(--color-pink);
+      transform: scale(1.375);
+    }
+
+    &:hover:not(.is-active) {
+      background: var(--color-muted);
+    }
+
+    &.is-hidden {
+      display: none;
+    }
   }
 </style>
