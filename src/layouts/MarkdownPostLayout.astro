@@ -129,7 +129,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
 
 <style>
   :global(.mermaid-diagram),
-  :global(.expandable-image) {
+  :global(.zoomable-image) {
     position: relative;
     margin: 2rem 0;
     display: flex;
@@ -140,12 +140,17 @@ const thumbSrc = frontmatter.cover?.thumbnail
     padding: 2rem 1.5rem;
   }
 
+  :global(.zoomable-image img) {
+    outline: none;
+    margin: 0;
+  }
+
   :global([data-theme="dark"] .mermaid-diagram),
-  :global([data-theme="dark"] .expandable-image) {
+  :global([data-theme="dark"] .zoomable-image) {
     background: #282c34;
   }
 
-  :global(.mermaid-expand-btn) {
+  :global(.media-expand-btn) {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -167,33 +172,33 @@ const thumbSrc = frontmatter.cover?.thumbnail
       border-color 0.15s ease;
   }
 
-  :global([data-theme="dark"] .mermaid-expand-btn) {
+  :global([data-theme="dark"] .media-expand-btn) {
     border-color: rgba(255, 255, 255, 0.25);
     color: rgba(255, 255, 255, 0.5);
   }
 
   @media (hover: hover) {
-    :global(.mermaid-expand-btn) {
+    :global(.media-expand-btn) {
       opacity: 0;
     }
 
-    :global(.mermaid-diagram:hover .mermaid-expand-btn:not(:hover)),
-    :global(.expandable-image:hover .mermaid-expand-btn:not(:hover)) {
+    :global(.mermaid-diagram:hover .media-expand-btn:not(:hover)),
+    :global(.zoomable-image:hover .media-expand-btn:not(:hover)) {
       opacity: 0.75;
     }
 
-    :global(.mermaid-expand-btn:hover) {
+    :global(.media-expand-btn:hover) {
       opacity: 1;
     }
   }
 
-  :global(.mermaid-expand-btn:hover) {
+  :global(.media-expand-btn:hover) {
     background: rgba(232, 0, 106, 0.1);
     border-color: rgba(232, 0, 106, 0.5);
     color: #e8006a;
   }
 
-  :global(.mermaid-lightbox) {
+  :global(.media-lightbox) {
     display: none;
     position: fixed;
     inset: 0;
@@ -208,7 +213,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
     }
   }
 
-  :global(.mermaid-lightbox__inner) {
+  :global(.media-lightbox__inner) {
     position: relative;
     background: #fafafa;
     width: 98vw;
@@ -245,7 +250,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
     }
   }
 
-  :global(.mermaid-lightbox__scroll) {
+  :global(.media-lightbox__scroll) {
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -253,28 +258,24 @@ const thumbSrc = frontmatter.cover?.thumbnail
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-
-    svg {
-      max-width: none;
-      height: auto;
-    }
+    align-items: center;
   }
 
-  :global(.mermaid-lightbox__svg) {
+  :global(.media-lightbox__content) {
     margin: auto;
     flex-shrink: 0;
   }
 
-  :global([data-theme="dark"] .mermaid-lightbox__inner) {
+  :global([data-theme="dark"] .media-lightbox__inner) {
     background: #282c34;
   }
 
-  :global([data-theme="dark"] .mermaid-lightbox__inner::after) {
+  :global([data-theme="dark"] .media-lightbox__inner::after) {
     color: rgba(255, 255, 255, 0.35);
     background: linear-gradient(to bottom, transparent, rgba(40, 44, 52, 1));
   }
 
-  :global(.mermaid-lightbox__close) {
+  :global(.media-lightbox__close) {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -295,12 +296,12 @@ const thumbSrc = frontmatter.cover?.thumbnail
       border-color 0.15s ease;
   }
 
-  :global([data-theme="dark"] .mermaid-lightbox__close) {
+  :global([data-theme="dark"] .media-lightbox__close) {
     border-color: rgba(255, 255, 255, 0.25);
     color: rgba(255, 255, 255, 0.5);
   }
 
-  :global(.mermaid-lightbox__close:hover) {
+  :global(.media-lightbox__close:hover) {
     background: rgba(232, 0, 106, 0.1);
     border-color: rgba(232, 0, 106, 0.5);
     color: #e8006a;
@@ -315,14 +316,14 @@ const thumbSrc = frontmatter.cover?.thumbnail
     color: transparent; /* prevents definition text flashing between skeleton and SVG */
   }
 
-  :global(.expandable-image[data-loading]) {
+  :global(.zoomable-image[data-loading]) {
     min-height: 260px;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
 
-  :global(.expandable-image[data-loading])::before {
+  :global(.zoomable-image[data-loading])::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -337,11 +338,11 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   /* Skeleton fades out fast; image then fades in on its own via base transition */
-  :global(.expandable-image[data-loading].is-loaded)::before {
+  :global(.zoomable-image[data-loading].is-loaded)::before {
     animation: expandable-fade-out 0.25s ease forwards;
   }
 
-  :global(.expandable-image__icon) {
+  :global(.zoomable-image__icon) {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -352,15 +353,15 @@ const thumbSrc = frontmatter.cover?.thumbnail
     pointer-events: none;
   }
 
-  :global(.expandable-image[data-loading].is-loaded .expandable-image__icon) {
+  :global(.zoomable-image[data-loading].is-loaded .zoomable-image__icon) {
     animation: expandable-fade-out 0.2s ease forwards;
   }
 
-  :global(.expandable-image__icon svg) {
+  :global(.zoomable-image__icon svg) {
     display: block;
   }
 
-  :global([data-theme="dark"] .expandable-image[data-loading])::before {
+  :global([data-theme="dark"] .zoomable-image[data-loading])::before {
     background: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0.05) 25%,
@@ -371,16 +372,16 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   /* Transition on base selector so it fires reliably when data-loading is removed */
-  :global(.expandable-image img.expandable) {
+  :global(.zoomable-image img.zoomable) {
     transition: opacity 0.5s ease;
   }
 
-  :global(.expandable-image[data-loading] img) {
+  :global(.zoomable-image[data-loading] img) {
     opacity: 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(.expandable-image img.expandable) {
+    :global(.zoomable-image img.zoomable) {
       transition: none;
     }
   }
@@ -524,18 +525,18 @@ const thumbSrc = frontmatter.cover?.thumbnail
     };
   }
 
-  // Lightbox — created once, shared across all diagrams
+  // Lightbox — created once, shared across all diagrams and images
   const lightbox = document.createElement("div");
-  lightbox.className = "mermaid-lightbox";
+  lightbox.className = "media-lightbox";
   lightbox.setAttribute("role", "dialog");
   lightbox.setAttribute("aria-modal", "true");
   lightbox.setAttribute("aria-label", "Diagram fullscreen view");
   const lightboxInner = document.createElement("div");
-  lightboxInner.className = "mermaid-lightbox__inner";
+  lightboxInner.className = "media-lightbox__inner";
   const lightboxScroll = document.createElement("div");
-  lightboxScroll.className = "mermaid-lightbox__scroll";
+  lightboxScroll.className = "media-lightbox__scroll";
   const closeBtn = document.createElement("button");
-  closeBtn.className = "mermaid-lightbox__close";
+  closeBtn.className = "media-lightbox__close";
   closeBtn.innerHTML = ICON_XMARK;
   closeBtn.setAttribute("aria-label", "Close fullscreen diagram");
   lightboxInner.appendChild(lightboxScroll);
@@ -545,7 +546,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
 
   const closeLightbox = () => {
     lightbox.classList.remove("is-open");
-    lightboxScroll.querySelector(".mermaid-lightbox__svg")?.remove();
+    lightboxScroll.querySelector(".media-lightbox__content")?.remove();
+    document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
   };
 
@@ -582,7 +584,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
       const definition = container.dataset.mermaid!;
 
       const expandBtn = document.createElement("button");
-      expandBtn.className = "mermaid-expand-btn";
+      expandBtn.className = "media-expand-btn";
       expandBtn.innerHTML = ICON_EXPAND;
       expandBtn.setAttribute("aria-label", "View diagram fullscreen");
 
@@ -590,16 +592,38 @@ const thumbSrc = frontmatter.cover?.thumbnail
         const svgClone = container
           .querySelector("svg")!
           .cloneNode(true) as SVGElement;
-        svgClone.classList.add("mermaid-lightbox__svg");
+        svgClone.classList.add("media-lightbox__content");
         svgClone.removeAttribute("style");
         svgClone.removeAttribute("width");
         svgClone.removeAttribute("height");
-        svgClone.style.width = "100%";
-        svgClone.style.height = "auto";
         svgClone.style.display = "block";
+        const viewBoxAttr = svgClone.getAttribute("viewBox");
+        if (viewBoxAttr) {
+          const parts = viewBoxAttr
+            .trim()
+            .split(/[\s,]+/)
+            .map(Number);
+          if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+            const rem = parseFloat(
+              getComputedStyle(document.documentElement).fontSize,
+            );
+            const availW = window.innerWidth * 0.98 - 4 * rem;
+            const availH = window.innerHeight * 0.94 - 4 * rem;
+            const scale = Math.min(availW / parts[2], availH / parts[3]);
+            svgClone.style.width = `${Math.round(parts[2] * scale)}px`;
+            svgClone.style.height = `${Math.round(parts[3] * scale)}px`;
+          } else {
+            svgClone.style.width = "100%";
+            svgClone.style.height = "auto";
+          }
+        } else {
+          svgClone.style.width = "100%";
+          svgClone.style.height = "auto";
+        }
         lightboxScroll.appendChild(svgClone);
         lightboxScroll.scrollTop = 0;
         lightbox.classList.add("is-open");
+        document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
         updateScrollHint();
         closeBtn.focus();
@@ -608,14 +632,14 @@ const thumbSrc = frontmatter.cover?.thumbnail
       definitions.set(container, { definition, btn: expandBtn });
     });
 
-  // Image expand — wrapper div is injected at build time by rehype-expandable-images
+  // Image expand — wrapper div is injected at build time by rehype-zoomable-images
   document
-    .querySelectorAll<HTMLImageElement>(".post__content img.expandable")
+    .querySelectorAll<HTMLImageElement>(".post__content img.zoomable")
     .forEach((imgEl) => {
       const wrapper = imgEl.parentElement!;
 
-      // Icon is stamped into the HTML at build time by rehype-expandable-images
-      const placeholder = wrapper.querySelector(".expandable-image__icon");
+      // Icon is stamped into the HTML at build time by rehype-zoomable-images
+      const placeholder = wrapper.querySelector(".zoomable-image__icon");
 
       const revealImage = (animate = true) => {
         if (!animate) {
@@ -642,7 +666,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
       }
 
       const expandBtn = document.createElement("button");
-      expandBtn.className = "mermaid-expand-btn";
+      expandBtn.className = "media-expand-btn";
       expandBtn.innerHTML = ICON_EXPAND;
       expandBtn.setAttribute("aria-label", "View image fullscreen");
 
@@ -650,13 +674,27 @@ const thumbSrc = frontmatter.cover?.thumbnail
         const imgClone = document.createElement("img");
         imgClone.src = imgEl.src;
         imgClone.alt = imgEl.alt;
-        imgClone.className = "mermaid-lightbox__svg";
-        imgClone.style.width = "100%";
-        imgClone.style.height = "auto";
+        imgClone.className = "media-lightbox__content";
         imgClone.style.display = "block";
+        const rem = parseFloat(
+          getComputedStyle(document.documentElement).fontSize,
+        );
+        const availW = window.innerWidth * 0.98 - 4 * rem;
+        const availH = window.innerHeight * 0.94 - 4 * rem;
+        const nw = imgEl.naturalWidth;
+        const nh = imgEl.naturalHeight;
+        if (nw > 0 && nh > 0) {
+          const scale = Math.min(availW / nw, availH / nh);
+          imgClone.style.width = `${Math.round(nw * scale)}px`;
+          imgClone.style.height = `${Math.round(nh * scale)}px`;
+        } else {
+          imgClone.style.width = "100%";
+          imgClone.style.height = "auto";
+        }
         lightboxScroll.appendChild(imgClone);
         lightboxScroll.scrollTop = 0;
         lightbox.classList.add("is-open");
+        document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
         updateScrollHint();
         closeBtn.focus();

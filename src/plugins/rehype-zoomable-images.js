@@ -1,6 +1,6 @@
-// For every <p> that contains an <img>, adds class="expandable-image" + data-loading
-// to the <p>, and class="expandable" to the <img>, so the skeleton and expand button work.
-export function rehypeExpandableImages() {
+// For every <p> that contains an <img>, adds class="zoomable-image" + data-loading
+// to the <p>, and class="zoomable" to the <img>, so the skeleton and expand button work.
+export function rehypeZoomableImages() {
   return (tree) => {
     function walk(node) {
       if (
@@ -9,20 +9,20 @@ export function rehypeExpandableImages() {
         node.children?.some((c) => c.type === "element" && c.tagName === "img")
       ) {
         node.properties = node.properties || {};
-        node.properties.className = ["expandable-image"];
+        node.properties.className = ["zoomable-image"];
         node.properties["data-loading"] = true;
 
         for (const child of node.children) {
           if (child.type === "element" && child.tagName === "img") {
             child.properties = child.properties || {};
-            child.properties.className = ["expandable"];
+            child.properties.className = ["zoomable"];
           }
         }
 
         node.children.push({
           type: "element",
           tagName: "span",
-          properties: { className: ["expandable-image__icon"] },
+          properties: { className: ["zoomable-image__icon"] },
           children: [
             {
               type: "element",

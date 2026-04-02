@@ -104,20 +104,20 @@ Astro's image optimisation pipeline (Sharp) cannot process SVG files, so SVGs re
 - `scripts/copy-post-images.mjs` copies `.svg` files from `collections/posts/<slug>/` → `public/post-images/<slug>/`
 - `public/post-images/` is gitignored — regenerated on every build and dev start
 - In markdown, reference SVGs with absolute paths: `/post-images/<slug>/<filename>.svg`
-- The rehype plugin `src/plugins/rehype-expandable-images.js` adds `class="expandable"` to every markdown `<img>` at build time, enabling the lightbox expand button
+- The rehype plugin `src/plugins/rehype-zoomable-images.js` adds `class="zoomable"` to every markdown `<img>` at build time, enabling the lightbox expand button
 
 ## Expandable Images and Mermaid Lightbox
 
 All markdown images automatically get an expand button, and all Mermaid diagrams get one too. They share the same lightbox implementation in `MarkdownPostLayout.astro`.
 
 **How it works:**
-- `rehype-expandable-images.js` (registered in `astro.config.mjs`) adds `class="expandable"` to every `<img>` in markdown at build time
-- At runtime, `MarkdownPostLayout.astro` wraps each `.expandable` image in a `.mermaid-diagram` div and appends a `.mermaid-expand-btn` button
+- `rehype-zoomable-images.js` (registered in `astro.config.mjs`) adds `class="zoomable"` to every `<img>` in markdown at build time, wrapped in a `p.zoomable-image` container
+- At runtime, `MarkdownPostLayout.astro` queries each `.zoomable` image and appends a `.media-expand-btn` button
 - The same lightbox DOM structure is used for both images and Mermaid SVGs:
-  - `.mermaid-lightbox` — fixed overlay
-  - `.mermaid-lightbox__inner` — the card (non-scrolling, holds the fade `::after`)
-  - `.mermaid-lightbox__scroll` — the scrolling container
-  - `.mermaid-lightbox__svg` — the content (cloned SVG or `<img>`)
+  - `.media-lightbox` — fixed overlay
+  - `.media-lightbox__inner` — the card (non-scrolling, holds the fade `::after`)
+  - `.media-lightbox__scroll` — the scrolling container
+  - `.media-lightbox__content` — the content (cloned SVG or `<img>`)
 - Scroll affordance: a `::after` fade + "scroll for more ↓" label on `inner`, hidden via `is-scrolled-end` class when fully scrolled
 - `mermaid.run()` receives only actual Mermaid containers as `nodes` (from the `definitions` Map), not SVG image wrappers, to prevent the renderer wiping non-Mermaid SVGs
 
