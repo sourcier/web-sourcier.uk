@@ -25,6 +25,9 @@ collections/posts/
 .env.production
 !.env.example
 
+# Playwright MCP test artefacts
+.playwright-mcp/
+
 # macOS-specific files
 .DS_Store
 
