@@ -303,6 +303,73 @@ const thumbSrc = frontmatter.cover?.thumbnail
     color: #e8006a;
   }
 
+  :global(.mermaid-diagram[data-loading]) {
+    min-height: 180px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: transparent; /* prevents definition text flashing between skeleton and SVG */
+  }
+
+  :global(.mermaid-skeleton) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  :global(.mermaid-skeleton__row) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  :global(.mermaid-skeleton__node) {
+    height: 2.25rem;
+    flex: 1;
+    max-width: 140px;
+    border-radius: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      rgba(232, 0, 106, 0.12) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 400px 100%;
+    animation: mermaid-skeleton-shimmer 1.6s ease-in-out infinite;
+  }
+
+  :global(.mermaid-skeleton__node--wide) {
+    max-width: 220px;
+  }
+
+  :global(.mermaid-skeleton__node--narrow) {
+    max-width: 90px;
+  }
+
+  :global(.mermaid-skeleton__connector) {
+    width: 2px;
+    height: 1.5rem;
+    background: var(--color-border);
+    border-radius: 1px;
+    opacity: 0.6;
+  }
+
+  :global([data-theme="dark"] .mermaid-skeleton__node) {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.06) 25%,
+      rgba(232, 0, 106, 0.15) 50%,
+      rgba(255, 255, 255, 0.06) 75%
+    );
+    background-size: 400px 100%;
+  }
+
   :global(.mermaid-diagram svg) {
     max-width: 100%;
     height: auto;
@@ -335,9 +402,6 @@ const thumbSrc = frontmatter.cover?.thumbnail
   // Mermaid diagrams — rendered client-side from fenced ```mermaid blocks
   import type { MermaidConfig } from "mermaid";
   import { faCircleXmark, faExpand } from "@fortawesome/free-solid-svg-icons";
-
-  // mermaid is loaded via CDN <script defer> in <head> (see BaseLayout head slot)
-  const mermaid = (window as any).mermaid;
 
   const toSvgIcon = (iconDef: typeof faExpand, size = 14): string => {
     const [width, height, , , pathData] = iconDef.icon;
@@ -438,14 +502,11 @@ const thumbSrc = frontmatter.cover?.thumbnail
   >();
 
   document
-    .querySelectorAll<HTMLElement>(".post__content pre code.language-mermaid")
-    .forEach((codeEl) => {
-      const pre = codeEl.parentElement!;
-      const definition = codeEl.innerText;
-
-      const container = document.createElement("div");
-      container.className = "mermaid-diagram";
-      container.textContent = definition;
+    .querySelectorAll<HTMLElement>(
+      ".post__content .mermaid-diagram[data-mermaid]",
+    )
+    .forEach((container) => {
+      const definition = container.dataset.mermaid!;
 
       const expandBtn = document.createElement("button");
       expandBtn.className = "mermaid-expand-btn";
@@ -471,7 +532,6 @@ const thumbSrc = frontmatter.cover?.thumbnail
         closeBtn.focus();
       });
 
-      pre.replaceWith(container);
       definitions.set(container, { definition, btn: expandBtn });
     });
 
@@ -512,20 +572,33 @@ const thumbSrc = frontmatter.cover?.thumbnail
     });
 
   async function renderDiagrams() {
+    // Poll for mermaid — on slow connections the CDN defer script may not have executed yet
+    const mermaid = await new Promise<any>((resolve) => {
+      if ((window as any).mermaid) {
+        resolve((window as any).mermaid);
+        return;
+      }
+      const id = setInterval(() => {
+        if ((window as any).mermaid) {
+          clearInterval(id);
+          resolve((window as any).mermaid);
+        }
+      }, 10);
+    });
     const isDark = document.documentElement.dataset.theme === "dark";
     mermaid.initialize(getMermaidConfig(isDark));
 
+    // Replace skeleton with definition text — mermaid.run() will replace it with SVG
     definitions.forEach(({ definition }, container) => {
       container.removeAttribute("data-processed");
+      container.setAttribute("data-loading", "");
       container.textContent = definition;
     });
 
-    await mermaid.run({
-      nodes: [...definitions.keys()],
-    });
+    await mermaid.run({ nodes: [...definitions.keys()] });
 
-    // Re-append expand buttons after mermaid.run() replaces container innerHTML
     definitions.forEach(({ btn }, container) => {
+      container.removeAttribute("data-loading");
       container.appendChild(btn);
     });
   }
