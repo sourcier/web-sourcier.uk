@@ -1,0 +1,269 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import MailingListCTA from "../components/MailingListCTA.astro";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import {
+  faLaptop,
+  faMobileScreen,
+  faHeadphones,
+  faCode,
+  faTerminal,
+  faRobot,
+  faMagnifyingGlass,
+  faWindowRestore,
+  faToggleOn,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+const hardware = [
+  {
+    name: "MacBook Pro M1",
+    description:
+      "Primary machine for all development, writing, and everything in between. Fast, quiet, and the battery life is still ridiculous.",
+    icon: faIcon(faLaptop, { size: 24 }),
+  },
+  {
+    name: "iPhone 14 Pro Max",
+    description:
+      "Daily driver. The large screen is the main reason — reading, notes, and testing mobile layouts.",
+    icon: faIcon(faMobileScreen, { size: 24 }),
+  },
+  {
+    name: "Bose QC35 Headphones",
+    description:
+      "Wireless noise cancellation for deep focus. A non-negotiable when working in a busy office or open plan environment.",
+    icon: faIcon(faHeadphones, { size: 24 }),
+  },
+];
+
+const devTools = [
+  {
+    name: "VS Code",
+    description:
+      "Primary editor for everything. Extensions, settings sync, and GitHub Copilot integration make it hard to reach for anything else.",
+    url: "https://code.visualstudio.com",
+    icon: faIcon(faCode, { size: 24 }),
+  },
+  {
+    name: "iTerm2",
+    description:
+      "Terminal replacement with split panes, profiles, and better search. Paired with zsh and a minimal prompt.",
+    url: "https://iterm2.com",
+    icon: faIcon(faTerminal, { size: 24 }),
+  },
+  {
+    name: "GitHub Copilot",
+    description:
+      "AI pair programmer used daily at work. Strongest for boilerplate and tests — less useful for architectural decisions.",
+    url: "https://github.com/features/copilot",
+    icon: faIcon(faGithub, { size: 24 }),
+  },
+  {
+    name: "Claude",
+    description:
+      "Personal AI for writing, debugging, and thinking through problems. Tends to reason better than other models on complex tasks.",
+    url: "https://claude.ai",
+    icon: faIcon(faRobot, { size: 24 }),
+  },
+];
+
+const macosApps = [
+  {
+    name: "Alfred",
+    description:
+      "App launcher and workflow automation. Replaced Spotlight years ago and never looked back. The clipboard history alone is worth it.",
+    url: "https://www.alfredapp.com",
+    icon: faIcon(faMagnifyingGlass, { size: 24 }),
+  },
+  {
+    name: "Rectangle Pro",
+    description:
+      "Window management via keyboard shortcuts. Snap to halves, thirds, and corners without touching the mouse.",
+    url: "https://rectangleapp.com/pro",
+    icon: faIcon(faWindowRestore, { size: 24 }),
+  },
+  {
+    name: "Only Switch",
+    description:
+      "Menu bar utility for toggling system settings — Night Shift, hidden files, AirPods switching — without digging through System Preferences.",
+    url: "https://fireball.studio/onlyswitch",
+    icon: faIcon(faToggleOn, { size: 24 }),
+  },
+  {
+    name: "Calendar 366 II",
+    description:
+      "Full-featured calendar app that shows today's events in the menu bar. The week and year views make planning at a glance much easier.",
+    url: "https://nspektor.com/calendar366/mac",
+    icon: faIcon(faCalendarDays, { size: 24 }),
+  },
+];
+---
+
+<BaseLayout
+  pageTitle="Uses — Sourcier"
+  description="The hardware and software Roger Rajaratnam reaches for every day — MacBook Pro M1, VS Code, iTerm2, Alfred, and more."
+>
+  <PageHero
+    kicker="My setup"
+    title="Uses"
+    subtitle="The hardware and software I reach for every day"
+  />
+
+  <div class="uses-page">
+    <div class="container is-max-desktop">
+
+      <!-- Hardware -->
+      <section class="uses-section" aria-labelledby="hardware-heading">
+        <p class="section-label" id="hardware-heading">Hardware</p>
+        <ul class="uses-grid" role="list">
+          {
+            hardware.map(({ name, description, icon }) => (
+              <li class="uses-card">
+                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <div class="uses-card__body">
+                  <h2 class="uses-card__name">{name}</h2>
+                  <p class="uses-card__desc">{description}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Development -->
+      <section class="uses-section" aria-labelledby="dev-heading">
+        <p class="section-label" id="dev-heading">Development</p>
+        <ul class="uses-grid" role="list">
+          {
+            devTools.map(({ name, description, url, icon }) => (
+              <li class="uses-card">
+                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <div class="uses-card__body">
+                  <h2 class="uses-card__name">
+                    {url ? (
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        {name}
+                      </a>
+                    ) : (
+                      name
+                    )}
+                  </h2>
+                  <p class="uses-card__desc">{description}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- macOS Apps -->
+      <section class="uses-section" aria-labelledby="apps-heading">
+        <p class="section-label" id="apps-heading">macOS Apps</p>
+        <ul class="uses-grid" role="list">
+          {
+            macosApps.map(({ name, description, url, icon }) => (
+              <li class="uses-card">
+                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <div class="uses-card__body">
+                  <h2 class="uses-card__name">
+                    {url ? (
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        {name}
+                      </a>
+                    ) : (
+                      name
+                    )}
+                  </h2>
+                  <p class="uses-card__desc">{description}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+    </div>
+  </div>
+
+  <MailingListCTA />
+</BaseLayout>
+
+<style lang="scss">
+  .uses-page {
+    padding: 4rem 1.5rem;
+  }
+
+  .uses-section {
+    margin-bottom: 3.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .uses-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .uses-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    padding: 1.5rem 1.25rem 1.25rem;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+    }
+  }
+
+  .uses-card__icon {
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--color-pink);
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .uses-card__name {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+    margin-bottom: 0.5rem;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-pink);
+      }
+    }
+  }
+
+  .uses-card__desc {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
