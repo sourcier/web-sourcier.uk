@@ -6,7 +6,8 @@ import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
 import SharePost from "../components/SharePost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
-import MailingListCTASidebar from "../components/MailingListCTASidebar.astro";
+import SponsorCTA from "../components/SponsorCTA.astro";
+
 import TagsSidebar from "../components/TagsSidebar.astro";
 const { frontmatter, postId, headings = [] } = Astro.props;
 const tocHeadings = (
@@ -99,12 +100,15 @@ const thumbSrc = frontmatter.cover?.thumbnail
             )
           }
           <SharePost title={frontmatter.title} url={Astro.url.href} vertical />
-          <MailingListCTASidebar />
+          <SponsorCTA sidebar />
           <TagsSidebar />
         </aside>
       </div>
     </div>
 
+    <div class="sponsor-cta-below-post">
+      <SponsorCTA />
+    </div>
     <MailingListCTA />
     {postId && <Comments postId={postId} />}
     {

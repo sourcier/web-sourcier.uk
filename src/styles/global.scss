@@ -790,6 +790,12 @@ h1, h2, h3, h4, h5, h6,
   }
 }
 
+.sponsor-cta-below-post {
+  @media (min-width: 1280px) {
+    display: none;
+  }
+}
+
 .toc__heading {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 0.75rem;

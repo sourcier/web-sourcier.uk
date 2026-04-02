@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
+import SponsorCTA from "../components/SponsorCTA.astro";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faLaptop,
@@ -113,7 +114,6 @@ const macosApps = [
 
   <div class="uses-page">
     <div class="container is-max-desktop">
-
       <!-- Hardware -->
       <section class="uses-section" aria-labelledby="hardware-heading">
         <p class="section-label" id="hardware-heading">Hardware</p>
@@ -121,7 +121,11 @@ const macosApps = [
           {
             hardware.map(({ name, description, icon }) => (
               <li class="uses-card">
-                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <span
+                  class="uses-card__icon"
+                  set:html={icon}
+                  aria-hidden="true"
+                />
                 <div class="uses-card__body">
                   <h2 class="uses-card__name">{name}</h2>
                   <p class="uses-card__desc">{description}</p>
@@ -139,7 +143,11 @@ const macosApps = [
           {
             devTools.map(({ name, description, url, icon }) => (
               <li class="uses-card">
-                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <span
+                  class="uses-card__icon"
+                  set:html={icon}
+                  aria-hidden="true"
+                />
                 <div class="uses-card__body">
                   <h2 class="uses-card__name">
                     {url ? (
@@ -165,7 +173,11 @@ const macosApps = [
           {
             macosApps.map(({ name, description, url, icon }) => (
               <li class="uses-card">
-                <span class="uses-card__icon" set:html={icon} aria-hidden="true" />
+                <span
+                  class="uses-card__icon"
+                  set:html={icon}
+                  aria-hidden="true"
+                />
                 <div class="uses-card__body">
                   <h2 class="uses-card__name">
                     {url ? (
@@ -183,9 +195,10 @@ const macosApps = [
           }
         </ul>
       </section>
-
     </div>
   </div>
+
+  <SponsorCTA />
 
   <MailingListCTA />
 </BaseLayout>

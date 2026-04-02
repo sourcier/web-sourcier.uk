@@ -1,0 +1,184 @@
+---
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+interface Props {
+  sidebar?: boolean;
+}
+
+const { sidebar = false } = Astro.props;
+const heartIcon = faIcon(faHeart, { size: sidebar ? 12 : 20 });
+---
+
+{sidebar ? (
+  <div class="sponsor-cta-sidebar">
+    <p class="sponsor-cta-sidebar__heading" aria-hidden="true">
+      <span class="sponsor-cta-sidebar__heart" set:html={heartIcon} />
+      Support this blog
+    </p>
+    <p class="sponsor-cta-sidebar__text">
+      If you found this useful, a small tip keeps the writing going.
+    </p>
+    <a
+      href="https://github.com/sponsors/sourcier"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="sponsor-cta-sidebar__btn"
+      aria-label="Sponsor sourcier on GitHub"
+    >
+      Sponsor on GitHub
+    </a>
+  </div>
+) : (
+  <div class="sponsor-cta">
+    <div class="container is-max-desktop">
+      <div class="sponsor-cta__inner">
+        <span class="sponsor-cta__heart" set:html={heartIcon} aria-hidden="true" />
+        <div class="sponsor-cta__copy">
+          <p class="sponsor-cta__heading">Support this blog</p>
+          <p class="sponsor-cta__text">
+            If you found this useful, a small tip keeps the writing going.
+          </p>
+        </div>
+        <a
+          href="https://github.com/sponsors/sourcier"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="sponsor-cta__btn"
+        >
+          Sponsor on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+)}
+
+<style lang="scss">
+  /* Full-width variant (uses page, etc.) */
+  .sponsor-cta {
+    padding: 0 1.5rem 4rem;
+  }
+
+  .sponsor-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    background-color: var(--color-surface);
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+      text-align: left;
+      gap: 2rem;
+    }
+  }
+
+  .sponsor-cta__heart {
+    color: var(--color-pink);
+    flex-shrink: 0;
+    opacity: 0.9;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .sponsor-cta__copy {
+    flex: 1;
+  }
+
+  .sponsor-cta__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
+    margin: 0 0 0.25rem;
+  }
+
+  .sponsor-cta__text {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .sponsor-cta__btn {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 0.65rem 1.4rem;
+    background-color: var(--color-pink);
+    color: #fff;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  /* Sidebar variant — matches TagsSidebar / SharePost design language */
+  .sponsor-cta-sidebar {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .sponsor-cta-sidebar__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--color-pink);
+    margin-bottom: 0.6rem;
+  }
+
+  .sponsor-cta-sidebar__heart {
+    color: var(--color-pink);
+    line-height: 1;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .sponsor-cta-sidebar__text {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    margin: 0 0 0.85rem;
+    line-height: 1.5;
+  }
+
+  .sponsor-cta-sidebar__btn {
+    display: block;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color-pink);
+    color: #fff;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+</style>
