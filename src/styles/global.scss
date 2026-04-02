@@ -1201,6 +1201,10 @@ h1, h2, h3, h4, h5, h6,
   100% { background-position:  400px 0; }
 }
 
+@keyframes expandable-fade-out {
+  to { opacity: 0; }
+}
+
 @keyframes search-skeleton-shimmer {
   from { background-position: -400px 0; }
   to   { background-position:  400px 0; }

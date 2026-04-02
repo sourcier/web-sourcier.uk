@@ -128,7 +128,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
 </BaseLayout>
 
 <style>
-  :global(.mermaid-diagram) {
+  :global(.mermaid-diagram),
+  :global(.expandable-image) {
     position: relative;
     margin: 2rem 0;
     display: flex;
@@ -139,7 +140,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
     padding: 2rem 1.5rem;
   }
 
-  :global([data-theme="dark"] .mermaid-diagram) {
+  :global([data-theme="dark"] .mermaid-diagram),
+  :global([data-theme="dark"] .expandable-image) {
     background: #282c34;
   }
 
@@ -175,7 +177,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
       opacity: 0;
     }
 
-    :global(.mermaid-diagram:hover .mermaid-expand-btn:not(:hover)) {
+    :global(.mermaid-diagram:hover .mermaid-expand-btn:not(:hover)),
+    :global(.expandable-image:hover .mermaid-expand-btn:not(:hover)) {
       opacity: 0.75;
     }
 
@@ -310,6 +313,76 @@ const thumbSrc = frontmatter.cover?.thumbnail
     flex-direction: column;
     gap: 0.75rem;
     color: transparent; /* prevents definition text flashing between skeleton and SVG */
+  }
+
+  :global(.expandable-image[data-loading]) {
+    min-height: 260px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  :global(.expandable-image[data-loading])::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      rgba(232, 0, 106, 0.1) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 600px 100%;
+    animation: mermaid-skeleton-shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Skeleton fades out fast; image then fades in on its own via base transition */
+  :global(.expandable-image[data-loading].is-loaded)::before {
+    animation: expandable-fade-out 0.25s ease forwards;
+  }
+
+  :global(.expandable-image__icon) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 1;
+    opacity: 0.25;
+    color: currentColor;
+    pointer-events: none;
+  }
+
+  :global(.expandable-image[data-loading].is-loaded .expandable-image__icon) {
+    animation: expandable-fade-out 0.2s ease forwards;
+  }
+
+  :global(.expandable-image__icon svg) {
+    display: block;
+  }
+
+  :global([data-theme="dark"] .expandable-image[data-loading])::before {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(232, 0, 106, 0.12) 50%,
+      rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 600px 100%;
+  }
+
+  /* Transition on base selector so it fires reliably when data-loading is removed */
+  :global(.expandable-image img.expandable) {
+    transition: opacity 0.5s ease;
+  }
+
+  :global(.expandable-image[data-loading] img) {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.expandable-image img.expandable) {
+      transition: none;
+    }
   }
 
   :global(.mermaid-skeleton) {
@@ -535,17 +608,38 @@ const thumbSrc = frontmatter.cover?.thumbnail
       definitions.set(container, { definition, btn: expandBtn });
     });
 
-  // SVG image expand — reuses the same lightbox as Mermaid diagrams
+  // Image expand — wrapper div is injected at build time by rehype-expandable-images
   document
     .querySelectorAll<HTMLImageElement>(".post__content img.expandable")
     .forEach((imgEl) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "mermaid-diagram";
-      imgEl.style.maxWidth = "100%";
-      imgEl.style.height = "auto";
-      imgEl.style.display = "block";
-      imgEl.parentNode!.insertBefore(wrapper, imgEl);
-      wrapper.appendChild(imgEl);
+      const wrapper = imgEl.parentElement!;
+
+      // Icon is stamped into the HTML at build time by rehype-expandable-images
+      const placeholder = wrapper.querySelector(".expandable-image__icon");
+
+      const revealImage = (animate = true) => {
+        if (!animate) {
+          wrapper.removeAttribute("data-loading");
+          placeholder?.remove();
+          return;
+        }
+        wrapper.classList.add("is-loaded");
+        // After skeleton fades out (0.25s), remove data-loading → image's base
+        // transition (0.5s) fires naturally as opacity goes 0 → 1
+        setTimeout(() => {
+          wrapper.removeAttribute("data-loading");
+          wrapper.classList.remove("is-loaded");
+          placeholder?.remove();
+        }, 280);
+      };
+      if (imgEl.complete) {
+        revealImage(false);
+      } else {
+        imgEl.addEventListener("load", () => revealImage(true), { once: true });
+        imgEl.addEventListener("error", () => revealImage(false), {
+          once: true,
+        });
+      }
 
       const expandBtn = document.createElement("button");
       expandBtn.className = "mermaid-expand-btn";
