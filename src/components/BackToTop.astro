@@ -72,14 +72,17 @@ const backToTopIcon = faIcon(faCircleUp, {
       transform: translateY(0);
     }
 
-    &:hover,
-    &:focus-visible {
-      background-color: var(--color-pink);
-      color: var(--color-paper);
-      outline: none;
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--color-pink);
+        color: var(--color-paper);
+        outline: none;
+      }
     }
 
     &:focus-visible {
+      background-color: var(--color-pink);
+      color: var(--color-paper);
       outline: 3px solid var(--color-pink);
       outline-offset: 3px;
     }
