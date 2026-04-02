@@ -1,5 +1,5 @@
 ---
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin, faRedditAlien } from "@fortawesome/free-brands-svg-icons";
 import { faLink, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
@@ -12,10 +12,12 @@ interface Props {
 const { title, url, vertical = false } = Astro.props;
 
 const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+const redditUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
 const emailBody = `I thought you might find this interesting:\n\n"${title}"\n\n${url}`;
 const emailUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(emailBody)}`;
 
 const linkedinIcon = faIcon(faLinkedin, { size: 16 });
+const redditIcon = faIcon(faRedditAlien, { size: 16 });
 const linkIcon = faIcon(faLink, { size: 16 });
 const emailIcon = faIcon(faEnvelope, { size: 16 });
 ---
@@ -32,6 +34,16 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     >
       <Fragment set:html={linkedinIcon} />
       <span>LinkedIn</span>
+    </a>
+    <a
+      href={redditUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="share-post__btn"
+      aria-label="Share on Reddit"
+    >
+      <Fragment set:html={redditIcon} />
+      <span>Reddit</span>
     </a>
     <a href={emailUrl} class="share-post__btn" aria-label="Share by email">
       <Fragment set:html={emailIcon} />

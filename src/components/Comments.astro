@@ -1,4 +1,6 @@
 ---
+import Reactions from "./Reactions.astro";
+
 interface Props {
   postId: string;
 }
@@ -7,6 +9,7 @@ const { postId } = Astro.props;
 
 <section class="section comments" id="comments">
   <div class="container is-max-desktop">
+    <Reactions postId={postId} />
     <div class="comments__inner">
       <div class="comments__list-section">
         <h2 class="comments__heading">Comments</h2>
@@ -283,6 +286,12 @@ const { postId } = Astro.props;
       border-top: 1px solid var(--color-border);
       background-color: var(--color-surface);
 
+      :global(.reactions) {
+        border-top: none;
+        margin-top: 0;
+        margin-bottom: 2.5rem;
+        padding-top: 0;
+      }
       .comments__inner {
         margin-left: auto;
         margin-right: auto;

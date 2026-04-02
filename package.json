@@ -12,7 +12,8 @@
     "thumbnails:generate": "node scripts/process-thumbnails.mjs",
     "thumbnails:copy": "node scripts/copy-thumbnails.mjs",
     "post-images:copy": "node scripts/copy-post-images.mjs",
-    "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind"
+    "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
+    "crosspost:devto": "node scripts/crosspost-devto.js"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -20,6 +21,7 @@
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@netlify/blobs": "^10.7.4",
     "astro": "^6.1.1",
     "astro-expressive-code": "^0.41.7",
     "bulma": "^1.0.4",

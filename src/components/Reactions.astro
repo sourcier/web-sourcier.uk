@@ -1,0 +1,239 @@
+---
+interface Props {
+  postId: string;
+}
+const { postId } = Astro.props;
+
+const reactions = [
+  { key: "heart", emoji: "❤️", label: "Love it" },
+  { key: "fire", emoji: "🔥", label: "On fire" },
+  { key: "bulb", emoji: "💡", label: "Insightful" },
+  { key: "clap", emoji: "👏", label: "Helpful" },
+] satisfies { key: string; emoji: string; label: string }[];
+---
+
+<div class="reactions" data-post-id={postId} aria-label="Post reactions">
+  <p class="reactions__heading">Did you find this useful?</p>
+  <div class="reactions__buttons" role="group" aria-label="React to this post">
+    {
+      reactions.map((r) => (
+        <button
+          class="reactions__btn"
+          data-reaction={r.key}
+          aria-label={r.label}
+          aria-pressed="false"
+          type="button"
+        >
+          <span class="reactions__emoji" aria-hidden="true">
+            {r.emoji}
+          </span>
+          <span class="reactions__count" aria-live="polite">
+            —
+          </span>
+          <span class="reactions__label">{r.label}</span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const container = document.querySelector<HTMLElement>(".reactions");
+  if (container) {
+    const root = container; // stable non-null ref for async callbacks
+    const postId = root.dataset.postId!;
+    const storageKey = `reactions:${postId}`;
+
+    // Track which reactions this user has already clicked (persisted in localStorage)
+    const reacted = new Set<string>(
+      JSON.parse(localStorage.getItem(storageKey) ?? "[]"),
+    );
+
+    function saveReacted() {
+      localStorage.setItem(storageKey, JSON.stringify([...reacted]));
+    }
+
+    function updateButton(btn: HTMLButtonElement, count: number) {
+      const countEl = btn.querySelector<HTMLElement>(".reactions__count")!;
+      countEl.textContent = count > 0 ? String(count) : "—";
+      if (reacted.has(btn.dataset.reaction!)) {
+        btn.classList.add("reactions__btn--active");
+        btn.setAttribute("aria-pressed", "true");
+      }
+    }
+
+    // Load current counts from the API
+    async function fetchCounts() {
+      try {
+        const res = await fetch(`/.netlify/functions/reactions?post=${postId}`);
+        if (!res.ok) return;
+        const data: Record<string, number> = await res.json();
+        root
+          .querySelectorAll<HTMLButtonElement>(".reactions__btn")
+          .forEach((btn) => {
+            updateButton(btn, data[btn.dataset.reaction!] ?? 0);
+          });
+      } catch {}
+    }
+
+    // Post a reaction
+    async function postReaction(btn: HTMLButtonElement) {
+      const reaction = btn.dataset.reaction!;
+      if (reacted.has(reaction)) return;
+
+      reacted.add(reaction);
+      saveReacted();
+      btn.classList.add("reactions__btn--active");
+      btn.setAttribute("aria-pressed", "true");
+      btn.classList.remove("reactions__btn--pop");
+      void btn.offsetWidth; // force reflow to restart animation
+      btn.classList.add("reactions__btn--pop");
+
+      // Optimistic increment
+      const countEl = btn.querySelector<HTMLElement>(".reactions__count")!;
+      const current = parseInt(countEl.textContent ?? "0", 10) || 0;
+      countEl.textContent = String(current + 1);
+
+      try {
+        const res = await fetch(
+          `/.netlify/functions/reactions?post=${postId}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reaction }),
+          },
+        );
+        if (res.ok) {
+          const data: Record<string, number> = await res.json();
+          // Sync with server truth
+          root
+            .querySelectorAll<HTMLButtonElement>(".reactions__btn")
+            .forEach((b) => {
+              updateButton(b, data[b.dataset.reaction!] ?? 0);
+            });
+        }
+      } catch {}
+    }
+
+    fetchCounts();
+
+    root
+      .querySelectorAll<HTMLButtonElement>(".reactions__btn")
+      .forEach((btn) => {
+        btn.addEventListener("click", () => postReaction(btn));
+      });
+  }
+</script>
+
+<style lang="scss">
+  @keyframes btn-pop {
+    0% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.22);
+    }
+    70% {
+      transform: scale(0.94);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .reactions {
+    margin-bottom: 2.5rem;
+  }
+
+  .reactions__heading {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-ink);
+    margin: 0 0 1.25rem;
+  }
+
+  .reactions__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .reactions__btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 5rem;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--color-border);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      transform 0.15s ease;
+
+    @media (max-width: 639px) {
+      min-width: 4.25rem;
+      padding: 0.875rem 1rem;
+    }
+
+    &:hover {
+      border-color: var(--color-pink);
+      background-color: rgba(232, 0, 106, 0.04);
+      transform: translateY(-2px);
+
+      .reactions__emoji {
+        transform: scale(1.15);
+      }
+    }
+
+    &--active {
+      border-color: var(--color-pink);
+      background-color: rgba(232, 0, 106, 0.08);
+
+      .reactions__count {
+        color: var(--color-pink);
+      }
+      .reactions__label {
+        color: var(--color-pink);
+      }
+    }
+
+    &--pop {
+      animation: btn-pop 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  }
+
+  .reactions__emoji {
+    font-size: 1.75rem;
+    line-height: 1;
+    transition: transform 0.15s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .reactions__count {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-ink);
+    transition: color 0.15s ease;
+  }
+
+  .reactions__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    transition: color 0.15s ease;
+  }
+</style>
