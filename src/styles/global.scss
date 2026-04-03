@@ -394,6 +394,7 @@ h1, h2, h3, h4, h5, h6,
   gap: 0.75rem;
   border: 1px solid var(--color-border);
   border-left: 3px solid var(--color-pink);
+  border-radius: 6px;
   padding: 0.875rem 1.25rem;
   margin-bottom: 2rem;
   background: rgba(232, 0, 106, 0.04);
@@ -1120,7 +1121,7 @@ h1, h2, h3, h4, h5, h6,
   max-width: 640px;
   margin: 0 1rem;
   background-color: var(--color-surface);
-  border-radius: 0.75rem;
+  border-radius: 6px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -1162,7 +1163,7 @@ h1, h2, h3, h4, h5, h6,
   font-size: 1rem;
   line-height: 1;
   padding: 0.25rem;
-  border-radius: 0.25rem;
+  border-radius: 4px;
   flex-shrink: 0;
 
   &:hover { color: var(--color-ink); }
@@ -1184,7 +1185,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .search-result {
-  border-radius: 0.5rem;
+  border-radius: 6px;
 
   &.is-active,
   &:hover {
@@ -1206,7 +1207,7 @@ h1, h2, h3, h4, h5, h6,
 .search-result__thumb {
   width: 52px;
   height: 52px;
-  border-radius: 0.375rem;
+  border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
   background-color: var(--color-border);
@@ -1248,7 +1249,7 @@ h1, h2, h3, h4, h5, h6,
 
 .search-skeleton {
   display: block;
-  border-radius: 0.25rem;
+  border-radius: 4px;
   background: linear-gradient(
     90deg,
     var(--color-border) 25%,

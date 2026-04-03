@@ -10,48 +10,54 @@ const { sidebar = false } = Astro.props;
 const heartIcon = faIcon(faHeart, { size: sidebar ? 12 : 20 });
 ---
 
-{sidebar ? (
-  <div class="sponsor-cta-sidebar">
-    <p class="sponsor-cta-sidebar__heading" aria-hidden="true">
-      <span class="sponsor-cta-sidebar__heart" set:html={heartIcon} />
-      Support this blog
-    </p>
-    <p class="sponsor-cta-sidebar__text">
-      If you found this useful, a small tip keeps the writing going.
-    </p>
-    <a
-      href="https://github.com/sponsors/sourcier"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="sponsor-cta-sidebar__btn"
-      aria-label="Sponsor sourcier on GitHub"
-    >
-      Sponsor on GitHub
-    </a>
-  </div>
-) : (
-  <div class="sponsor-cta">
-    <div class="container is-max-desktop">
-      <div class="sponsor-cta__inner">
-        <span class="sponsor-cta__heart" set:html={heartIcon} aria-hidden="true" />
-        <div class="sponsor-cta__copy">
-          <p class="sponsor-cta__heading">Support this blog</p>
-          <p class="sponsor-cta__text">
-            If you found this useful, a small tip keeps the writing going.
-          </p>
+{
+  sidebar ? (
+    <div class="sponsor-cta-sidebar">
+      <p class="sponsor-cta-sidebar__heading" aria-hidden="true">
+        <span class="sponsor-cta-sidebar__heart" set:html={heartIcon} />
+        Support this blog
+      </p>
+      <p class="sponsor-cta-sidebar__text">
+        If you found this useful, a small tip keeps the writing going.
+      </p>
+      <a
+        href="https://github.com/sponsors/sourcier"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sponsor-cta-sidebar__btn"
+        aria-label="Sponsor sourcier on GitHub"
+      >
+        Sponsor on GitHub
+      </a>
+    </div>
+  ) : (
+    <div class="sponsor-cta">
+      <div class="container is-max-desktop">
+        <div class="sponsor-cta__inner">
+          <span
+            class="sponsor-cta__heart"
+            set:html={heartIcon}
+            aria-hidden="true"
+          />
+          <div class="sponsor-cta__copy">
+            <p class="sponsor-cta__heading">Support this blog</p>
+            <p class="sponsor-cta__text">
+              If you found this useful, a small tip keeps the writing going.
+            </p>
+          </div>
+          <a
+            href="https://github.com/sponsors/sourcier"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="sponsor-cta__btn"
+          >
+            Sponsor on GitHub
+          </a>
         </div>
-        <a
-          href="https://github.com/sponsors/sourcier"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="sponsor-cta__btn"
-        >
-          Sponsor on GitHub
-        </a>
       </div>
     </div>
-  </div>
-)}
+  )
+}
 
 <style lang="scss">
   /* Full-width variant (uses page, etc.) */
@@ -68,6 +74,7 @@ const heartIcon = faIcon(faHeart, { size: sidebar ? 12 : 20 });
     padding: 2.5rem 2rem;
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
+    border-radius: 6px;
     background-color: var(--color-surface);
 
     @media (min-width: 640px) {

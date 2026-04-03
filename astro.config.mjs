@@ -21,7 +21,7 @@ export default defineConfig({
         },
       },
       styleOverrides: {
-        borderRadius: "0",
+        borderRadius: "6px",
         borderColor: "var(--color-border)",
         borderWidth: "1px",
         codePaddingInline: "1.5rem",
