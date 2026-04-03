@@ -5,6 +5,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
+import BlogTagCloud from "../../../components/BlogTagCloud.astro";
 
 export async function getStaticPaths() {
   const PAGE_SIZE = 9;
@@ -51,6 +52,8 @@ const nextUrl =
     prevUrl={prevUrl}
     nextUrl={nextUrl}
   />
+
+  <BlogTagCloud />
 
   <MailingListCTA />
 </BaseLayout>
