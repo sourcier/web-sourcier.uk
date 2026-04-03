@@ -39,8 +39,17 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
         </nav>
       )
     }
-    <div class:list={["page-menu__actions", { "page-menu__actions--with-toc": hasToc }]}>
-      <button class="page-menu__top-btn" id="page-menu-top-btn" aria-label="Back to top">
+    <div
+      class:list={[
+        "page-menu__actions",
+        { "page-menu__actions--with-toc": hasToc },
+      ]}
+    >
+      <button
+        class="page-menu__top-btn"
+        id="page-menu-top-btn"
+        aria-label="Back to top"
+      >
         <span class="page-menu__top-icon" set:html={arrowUpIcon} />
         Back to top
       </button>
@@ -50,8 +59,12 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
 
 <script>
   const menuEl = document.getElementById("page-menu");
-  const btn = document.getElementById("page-menu-btn") as HTMLButtonElement | null;
-  const panel = document.getElementById("page-menu-panel") as HTMLElement | null;
+  const btn = document.getElementById(
+    "page-menu-btn",
+  ) as HTMLButtonElement | null;
+  const panel = document.getElementById(
+    "page-menu-panel",
+  ) as HTMLElement | null;
 
   if (menuEl && btn && panel) {
     const close = () => {
@@ -64,7 +77,10 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
       // Post pages: show once hero scrolls out of view
       const observer = new IntersectionObserver(
         ([entry]) => {
-          menuEl.setAttribute("aria-hidden", entry.isIntersecting ? "true" : "false");
+          menuEl.setAttribute(
+            "aria-hidden",
+            entry.isIntersecting ? "true" : "false",
+          );
         },
         { rootMargin: "0px 0px -80% 0px" },
       );
@@ -72,7 +88,10 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     } else {
       // All other pages: show after scrolling 400px
       const toggleVisibility = () => {
-        menuEl.setAttribute("aria-hidden", window.scrollY > 400 ? "false" : "true");
+        menuEl.setAttribute(
+          "aria-hidden",
+          window.scrollY > 400 ? "false" : "true",
+        );
       };
       window.addEventListener("scroll", toggleVisibility, { passive: true });
       toggleVisibility();
@@ -104,6 +123,19 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
         btn.focus();
       }
     });
+
+    // Push button above the footer when footer is visible
+    const footer = document.querySelector("footer");
+    if (footer) {
+      const footerObserver = new IntersectionObserver(
+        ([entry]) => {
+          const overlap = entry.intersectionRect.height;
+          menuEl.style.bottom = overlap > 0 ? `${overlap + 20}px` : "";
+        },
+        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) },
+      );
+      footerObserver.observe(footer);
+    }
   }
 </script>
 
@@ -123,14 +155,18 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
       pointer-events: none;
       opacity: 0;
       transform: translateY(4px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
     }
 
     &[aria-hidden="false"] {
       pointer-events: auto;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
     }
   }
 

@@ -1,17 +1,11 @@
 ---
 import avatarImage from "../../assets/images/avatar.jpeg";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import {
-  faMagnifyingGlass,
-  faMoon,
-  faSun,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 const githubIcon = faIcon(faGithub, { size: 18 });
 const linkedinIcon = faIcon(faLinkedin, { size: 18 });
-const moonIcon = faIcon(faMoon, { size: 18 });
-const sunIcon = faIcon(faSun, { size: 18 });
 const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
 ---
 
@@ -89,14 +83,6 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
             >
               <Fragment set:html={linkedinIcon} />
             </a>
-            <button
-              class="social-icon"
-              data-theme-toggle
-              aria-label="Change to dark theme"
-            >
-              <span class="moonIcon" set:html={moonIcon} />
-              <span class="sunIcon" set:html={sunIcon} />
-            </button>
           </div>
         </div>
       </div>
@@ -270,59 +256,3 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
     });
   })();
 </script>
-
-<script>
-  const button = document.querySelector("[data-theme-toggle]");
-  const htmlElement = document.documentElement;
-
-  const handleThemeToggle = () => {
-    const isDark = htmlElement.getAttribute("data-theme") === "dark";
-    const newTheme = isDark ? "light" : "dark";
-    const newCta =
-      newTheme === "dark" ? "Change to light theme" : "Change to dark theme";
-
-    button?.setAttribute("aria-label", newCta);
-    htmlElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  const theme = (() => {
-    const localStorageTheme = localStorage?.getItem("theme") ?? "";
-    if (["dark", "light"].includes(localStorageTheme)) {
-      return localStorageTheme;
-    }
-
-    return "light";
-  })();
-
-  if (theme === "light") {
-    htmlElement.setAttribute("data-theme", "light");
-    button?.setAttribute("aria-label", "Change to dark theme");
-  } else {
-    htmlElement.setAttribute("data-theme", "dark");
-    button?.setAttribute("aria-label", "Change to light theme");
-  }
-
-  button?.addEventListener("click", handleThemeToggle);
-</script>
-
-<style lang="scss">
-  html[data-theme="light"] {
-    .moonIcon {
-      display: flex;
-      align-items: center;
-    }
-    .sunIcon {
-      display: none;
-    }
-  }
-  html[data-theme="dark"] {
-    .moonIcon {
-      display: none;
-    }
-    .sunIcon {
-      display: flex;
-      align-items: center;
-    }
-  }
-</style>

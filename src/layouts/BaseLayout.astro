@@ -35,10 +35,16 @@ const siteName = "Sourcier";
 <html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <!-- Runs synchronously before first paint to prevent flash of light theme -->
+    <!-- Runs synchronously before first paint to prevent flash of unstyled theme -->
     <script is:inline>
       const stored = localStorage.getItem("theme");
-      if (stored === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      if (stored === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      } else if (stored === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
     </script>
     <link rel="icon" type="image/jpeg" href="/favicon.jpeg?v=a3f8c1d2" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
