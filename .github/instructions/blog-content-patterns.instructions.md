@@ -176,7 +176,7 @@ These are separate components rendered below the post body.
 
 ## Markdown Test Post
 
-`collections/posts/markdown-test/index.md` is the site's living Markdown reference page (always `draft: true`). When updating it:
+`collections/posts/markdown-test/index.md` is the site's living Markdown reference page. When updating it:
 
 - For supported features: show source and rendered output; do not explain *how* they are enabled.
 - For unsupported features: keep them in `## Not currently supported` with the plugin name.

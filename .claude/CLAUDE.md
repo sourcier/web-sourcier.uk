@@ -120,4 +120,4 @@ When updating an article in a series, also update the series kicker article (e.g
 
 ### Markdown Test Post
 
-`collections/posts/markdown-test/index.md` is the living Markdown reference (always `draft: true`). Supported features show source and rendered output. Unsupported features go in `## Not currently supported` with the plugin name
+`collections/posts/markdown-test/index.md` is the living Markdown reference page. Supported features show source and rendered output. Unsupported features go in `## Not currently supported` with the plugin name
