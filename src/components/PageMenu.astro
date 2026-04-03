@@ -123,19 +123,6 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
         btn.focus();
       }
     });
-
-    // Push button above the footer when footer is visible
-    const footer = document.querySelector("footer");
-    if (footer) {
-      const footerObserver = new IntersectionObserver(
-        ([entry]) => {
-          const overlap = entry.intersectionRect.height;
-          menuEl.style.bottom = overlap > 0 ? `${overlap + 20}px` : "";
-        },
-        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) },
-      );
-      footerObserver.observe(footer);
-    }
   }
 </script>
 
