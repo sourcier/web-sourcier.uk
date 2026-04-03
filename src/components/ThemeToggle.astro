@@ -1,0 +1,81 @@
+---
+import { faDesktop, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+const systemIcon = faIcon(faDesktop, { size: 14 });
+const sunIcon = faIcon(faSun, { size: 14 });
+const moonIcon = faIcon(faMoon, { size: 14 });
+---
+
+<div class="theme-toggle" role="group" aria-label="Theme preference">
+  <button
+    class="theme-toggle__btn"
+    data-theme-select="system"
+    aria-label="System theme"
+    aria-pressed="true"
+  >
+    <Fragment set:html={systemIcon} />
+    <span class="theme-toggle__label">System</span>
+  </button>
+  <button
+    class="theme-toggle__btn"
+    data-theme-select="light"
+    aria-label="Light theme"
+    aria-pressed="false"
+  >
+    <Fragment set:html={sunIcon} />
+    <span class="theme-toggle__label">Light</span>
+  </button>
+  <button
+    class="theme-toggle__btn"
+    data-theme-select="dark"
+    aria-label="Dark theme"
+    aria-pressed="false"
+  >
+    <Fragment set:html={moonIcon} />
+    <span class="theme-toggle__label">Dark</span>
+  </button>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-theme-select]",
+  );
+  const html = document.documentElement;
+
+  function setTheme(mode: string) {
+    buttons.forEach((btn) =>
+      btn.setAttribute(
+        "aria-pressed",
+        btn.dataset.themeSelect === mode ? "true" : "false",
+      ),
+    );
+    if (mode === "system") {
+      localStorage.removeItem("theme");
+      html.setAttribute(
+        "data-theme",
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light",
+      );
+    } else {
+      localStorage.setItem("theme", mode);
+      html.setAttribute("data-theme", mode);
+    }
+  }
+
+  const stored = localStorage.getItem("theme");
+  setTheme(stored === "dark" || stored === "light" ? stored : "system");
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        html.setAttribute("data-theme", e.matches ? "dark" : "light");
+      }
+    });
+
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => setTheme(btn.dataset.themeSelect!)),
+  );
+</script>

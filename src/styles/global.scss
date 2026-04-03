@@ -138,6 +138,70 @@ h1, h2, h3, h4, h5, h6,
         justify-content: center;
       }
     }
+
+    .navbar-theme-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+      &__label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+        margin: 0;
+      }
+
+    }
+  }
+}
+
+.navbar-theme-item {
+  display: none;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.theme-toggle__btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: "Barlow", sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &[aria-pressed="true"] {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  &:hover:not([aria-pressed="true"]) {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  svg {
+    width: 0.75rem;
+    height: 0.75rem;
   }
 }
 

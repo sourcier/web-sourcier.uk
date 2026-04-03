@@ -1,10 +1,5 @@
 ---
-import { faDesktop, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import { faIcon } from "../utils/icons";
-
-const systemIcon = faIcon(faDesktop, { size: 14 });
-const sunIcon = faIcon(faSun, { size: 14 });
-const moonIcon = faIcon(faMoon, { size: 14 });
+import ThemeToggle from "./ThemeToggle.astro";
 ---
 
 <footer class="footer mt-auto">
@@ -23,34 +18,9 @@ const moonIcon = faIcon(faMoon, { size: 14 });
     </div>
 
     <div class="footer__bottom">
-      <div class="theme-toggle" role="group" aria-label="Theme preference">
-        <button
-          class="theme-toggle__btn"
-          data-theme-select="system"
-          aria-label="System theme"
-          aria-pressed="true"
-        >
-          <Fragment set:html={systemIcon} />
-          <span class="theme-toggle__label">System</span>
-        </button>
-        <button
-          class="theme-toggle__btn"
-          data-theme-select="light"
-          aria-label="Light theme"
-          aria-pressed="false"
-        >
-          <Fragment set:html={sunIcon} />
-          <span class="theme-toggle__label">Light</span>
-        </button>
-        <button
-          class="theme-toggle__btn"
-          data-theme-select="dark"
-          aria-label="Dark theme"
-          aria-pressed="false"
-        >
-          <Fragment set:html={moonIcon} />
-          <span class="theme-toggle__label">Dark</span>
-        </button>
+      <div class="footer__theme">
+        <p class="footer__theme-label">Theme</p>
+        <ThemeToggle />
       </div>
       <p class="footer__copy">&copy; 2026 Roger Rajaratnam</p>
     </div>
@@ -157,98 +127,34 @@ const moonIcon = faIcon(faMoon, { size: 14 });
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
-    padding-top: 1.5rem;
+    gap: 1rem;
+    padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .theme-toggle {
+  .footer__theme {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    padding: 2px;
-    gap: 2px;
+    gap: 0.5rem;
   }
 
-  .theme-toggle__btn {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.65rem;
-    border: none;
-    border-radius: 4px;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.4);
-    font-family: "Barlow", sans-serif;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
-
-    &[aria-pressed="true"] {
-      background: rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    &:hover:not([aria-pressed="true"]) {
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    :global(svg) {
-      width: 0.75rem;
-      height: 0.75rem;
-    }
+  .footer__theme-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    margin: 0;
   }
 
   .footer__copy {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.3);
     margin: 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    text-align: center;
   }
 </style>
-
-<script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>(
-    "[data-theme-select]",
-  );
-  const html = document.documentElement;
-
-  function setTheme(mode: string) {
-    buttons.forEach((btn) =>
-      btn.setAttribute(
-        "aria-pressed",
-        btn.dataset.themeSelect === mode ? "true" : "false",
-      ),
-    );
-    if (mode === "system") {
-      localStorage.removeItem("theme");
-      html.setAttribute(
-        "data-theme",
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light",
-      );
-    } else {
-      localStorage.setItem("theme", mode);
-      html.setAttribute("data-theme", mode);
-    }
-  }
-
-  const stored = localStorage.getItem("theme");
-  setTheme(stored === "dark" || stored === "light" ? stored : "system");
-
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", (e) => {
-      if (!localStorage.getItem("theme")) {
-        html.setAttribute("data-theme", e.matches ? "dark" : "light");
-      }
-    });
-
-  buttons.forEach((btn) =>
-    btn.addEventListener("click", () => setTheme(btn.dataset.themeSelect!)),
-  );
-</script>

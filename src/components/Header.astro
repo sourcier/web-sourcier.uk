@@ -3,6 +3,7 @@ import avatarImage from "../../assets/images/avatar.jpeg";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
+import ThemeToggle from "./ThemeToggle.astro";
 
 const githubIcon = faIcon(faGithub, { size: 18 });
 const linkedinIcon = faIcon(faLinkedin, { size: 18 });
@@ -84,6 +85,10 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
               <Fragment set:html={linkedinIcon} />
             </a>
           </div>
+        </div>
+        <div class="navbar-item navbar-theme-item">
+          <p class="navbar-theme-item__label">Theme</p>
+          <ThemeToggle />
         </div>
       </div>
     </div>
