@@ -8,6 +8,11 @@ import ThemeToggle from "./ThemeToggle.astro";
 const githubIcon = faIcon(faGithub, { size: 18 });
 const linkedinIcon = faIcon(faLinkedin, { size: 18 });
 const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
+
+const currentPath = new URL(Astro.request.url).pathname;
+function isActive(href: string) {
+  return href === "/" ? currentPath === href : currentPath.startsWith(href);
+}
 ---
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -50,10 +55,26 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
 
     <div id="mobileMenu" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="/about">About</a>
-        <a class="navbar-item" href="/blog">Blog</a>
-        <a class="navbar-item" href="/uses">Uses</a>
-        <a class="navbar-item" href="/contact">Contact</a>
+        <a
+          class="navbar-item"
+          href="/about"
+          aria-current={isActive("/about") ? "page" : undefined}>About</a
+        >
+        <a
+          class="navbar-item"
+          href="/blog"
+          aria-current={isActive("/blog") ? "page" : undefined}>Blog</a
+        >
+        <a
+          class="navbar-item"
+          href="/uses"
+          aria-current={isActive("/uses") ? "page" : undefined}>Uses</a
+        >
+        <a
+          class="navbar-item"
+          href="/contact"
+          aria-current={isActive("/contact") ? "page" : undefined}>Contact</a
+        >
       </div>
 
       <div class="navbar-end">
@@ -84,6 +105,7 @@ const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
             >
               <Fragment set:html={linkedinIcon} />
             </a>
+            <a href="/contact" class="navbar-cta">Work with me</a>
           </div>
         </div>
         <div class="navbar-item navbar-theme-item">

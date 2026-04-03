@@ -90,14 +90,17 @@ h1, h2, h3, h4, h5, h6,
   text-transform: uppercase;
 }
 
-// — Navbar: black bar with pink accent on hover
+// — Navbar: frosted glass with pink accent on hover
 .navbar {
-  --bulma-navbar-background-color: var(--color-ink);
+  --bulma-navbar-background-color: transparent;
   --bulma-navbar-item-color: rgba(255, 255, 255, 0.85);
   --bulma-navbar-item-hover-color: var(--color-pink);
   --bulma-navbar-item-hover-background-color: transparent;
   --bulma-navbar-item-active-color: var(--color-pink);
-  border-bottom: none;
+  background-color: rgba(10, 10, 10, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -206,7 +209,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 [data-theme='dark'] .navbar {
-  --bulma-navbar-background-color: #000;
+  --bulma-navbar-background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .navbar-brand-actions {
@@ -254,8 +258,43 @@ h1, h2, h3, h4, h5, h6,
     transition: transform 0.2s ease;
   }
 
-  &:hover::after {
+  &:hover::after,
+  &[aria-current='page']::after {
     transform: scaleX(1);
+  }
+
+  &[aria-current='page'] {
+    color: #ffffff;
+  }
+}
+
+// — Navbar CTA button
+.navbar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  background-color: var(--color-pink);
+  color: #ffffff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+    color: #ffffff;
+  }
+
+  @media (max-width: 1023px) {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 1rem;
   }
 }
 
