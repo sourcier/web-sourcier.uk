@@ -312,6 +312,15 @@ h1, h2, h3, h4, h5, h6,
     mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 90%);
     -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 90%);
     pointer-events: none;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: dot-grid-breathe 4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes dot-grid-breathe {
+    0%, 100% { opacity: 0.5; }
+    50%       { opacity: 1; }
   }
 
   .hero-kicker {
