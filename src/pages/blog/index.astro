@@ -41,6 +41,8 @@ const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
     </div>
   </div>
 
+  <BlogTagCloud />
+
   <BlogGrid
     posts={posts}
     currentPage={1}
@@ -48,8 +50,6 @@ const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
     prevUrl={null}
     nextUrl={nextUrl}
   />
-
-  <BlogTagCloud />
 
   <MailingListCTA />
 </BaseLayout>

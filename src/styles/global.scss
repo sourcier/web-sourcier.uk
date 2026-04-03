@@ -341,17 +341,22 @@ h1, h2, h3, h4, h5, h6,
 
   .buttons .button.is-light {
     background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
+    border-color: transparent;
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.7);
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    border-radius: 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding-left: 0;
 
     &:hover {
-      border-color: var(--color-pink);
-      color: var(--color-pink);
+      background-color: transparent;
+      border-color: transparent;
+      color: #ffffff;
+      text-decoration: none;
     }
   }
 
@@ -820,7 +825,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .post-meta-section__inner {
-  max-width: 80ch;
+  max-width: 68ch;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -832,7 +837,7 @@ h1, h2, h3, h4, h5, h6,
 
   @media (min-width: 1280px) {
     display: grid;
-    grid-template-columns: minmax(0, 80ch) 260px;
+    grid-template-columns: minmax(0, 68ch) 260px;
     gap: 4rem;
     align-items: start;
     justify-content: center;
@@ -915,7 +920,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .post__content {
-  max-width: 80ch;
+  max-width: 68ch;
   margin-left: auto;
   margin-right: auto;
 
