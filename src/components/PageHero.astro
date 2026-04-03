@@ -109,14 +109,45 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
 
 <style lang="scss">
   .page-hero {
-    min-height: 280px;
+    min-height: 320px;
     display: flex;
     align-items: flex-end;
-    padding: 4rem 1.5rem 3rem;
-    background-color: #0f0f0f;
+    padding: 5rem 1.5rem 4rem;
+    background:
+      radial-gradient(
+        ellipse 80% 60% at 70% 0%,
+        rgba(232, 0, 106, 0.18) 0%,
+        transparent 65%
+      ),
+      #0a0a0a;
     color: #ffffff;
     position: relative;
+    isolation: isolate;
     overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.18) 1px,
+        transparent 1px
+      );
+      background-size: 28px 28px;
+      mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      -webkit-mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      pointer-events: none;
+    }
 
     &[data-has-cover="true"] {
       min-height: 420px;
@@ -125,16 +156,18 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       background-size: cover;
       background-position: center;
 
-      &::before {
+      &::after {
         content: "";
         position: absolute;
         inset: 0;
+        z-index: -2;
         background: linear-gradient(
           to bottom,
           rgba(0, 0, 0, 0.35) 0%,
           rgba(0, 0, 0, 0.7) 55%,
           rgba(0, 0, 0, 0.92) 100%
         );
+        pointer-events: none;
       }
 
       .page-hero__tag {

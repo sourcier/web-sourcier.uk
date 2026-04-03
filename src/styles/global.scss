@@ -295,6 +295,7 @@ h1, h2, h3, h4, h5, h6,
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  min-height: 520px;
   padding: 5rem 1.5rem 4rem;
   background:
     radial-gradient(ellipse 80% 60% at 30% 0%, rgba(232, 0, 106, 0.18) 0%, transparent 65%),
