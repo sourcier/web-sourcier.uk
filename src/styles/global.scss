@@ -796,6 +796,128 @@ h1, h2, h3, h4, h5, h6,
   }
 }
 
+/* Hide standalone back-to-top on mobile/tablet when the floating TOC is present */
+@media (max-width: 1279px) {
+  body:has(.toc-float) .back-to-top {
+    display: none !important;
+  }
+}
+
+/* Floating TOC — mobile/tablet only */
+.toc-float {
+  display: none;
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.5rem;
+  z-index: 100;
+
+  @media (min-width: 769px) {
+    bottom: 2rem;
+    right: clamp(1rem, 3vw, 2rem);
+  }
+
+  @media (max-width: 1279px) {
+    display: block;
+  }
+
+  &[aria-hidden="true"] {
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  &[aria-hidden="false"] {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+}
+
+.toc-float__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-pink);
+  color: #fff;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.15s ease;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    opacity: 0.88;
+  }
+}
+
+.toc-float__drawer {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  right: 0;
+  width: min(320px, calc(100vw - 3rem));
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-pink);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  padding: 1rem 0.5rem 0.75rem;
+
+  &--open {
+    display: block;
+  }
+}
+
+.toc-float__heading {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-pink);
+  margin: 0 0.75rem 0.75rem;
+}
+
+.toc-float__footer {
+  border-top: 1px solid var(--color-border);
+  margin: 0.5rem 0 0;
+  padding: 0.25rem 0 0;
+}
+
+.toc-float__top-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--color-pink);
+  }
+}
+
 .toc__heading {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 0.75rem;
