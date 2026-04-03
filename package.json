@@ -12,7 +12,7 @@
     "thumbnails:generate": "node scripts/process-thumbnails.mjs",
     "thumbnails:copy": "node scripts/copy-thumbnails.mjs",
     "post-images:copy": "node scripts/copy-post-images.mjs",
-    "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
+    "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
     "crosspost:devto": "node scripts/crosspost-devto.js"
   },
   "dependencies": {
