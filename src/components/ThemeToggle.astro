@@ -1,50 +1,86 @@
 ---
-import { faDesktop, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleHalfStroke,
+  faSun,
+  faMoon,
+} from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
-const systemIcon = faIcon(faDesktop, { size: 14 });
+const systemIcon = faIcon(faCircleHalfStroke, { size: 14 });
 const sunIcon = faIcon(faSun, { size: 14 });
 const moonIcon = faIcon(faMoon, { size: 14 });
 ---
 
-<div class="theme-toggle" role="group" aria-label="Theme preference">
+<div class="theme-toggle">
   <button
-    class="theme-toggle__btn"
-    data-theme-select="system"
-    aria-label="System theme"
-    aria-pressed="true"
+    class="theme-toggle__trigger social-icon"
+    aria-label="Theme preference"
+    aria-expanded="false"
+    aria-haspopup="true"
   >
-    <Fragment set:html={systemIcon} />
-    <span class="theme-toggle__label">System</span>
+    <span class="theme-toggle__trigger-icon theme-toggle__trigger-icon--system"
+      ><Fragment set:html={systemIcon} /></span
+    >
+    <span class="theme-toggle__trigger-icon theme-toggle__trigger-icon--light"
+      ><Fragment set:html={sunIcon} /></span
+    >
+    <span class="theme-toggle__trigger-icon theme-toggle__trigger-icon--dark"
+      ><Fragment set:html={moonIcon} /></span
+    >
   </button>
-  <button
-    class="theme-toggle__btn"
-    data-theme-select="light"
-    aria-label="Light theme"
-    aria-pressed="false"
+
+  <div
+    class="theme-toggle__dropdown"
+    role="menu"
+    aria-label="Theme preference"
+    hidden
   >
-    <Fragment set:html={sunIcon} />
-    <span class="theme-toggle__label">Light</span>
-  </button>
-  <button
-    class="theme-toggle__btn"
-    data-theme-select="dark"
-    aria-label="Dark theme"
-    aria-pressed="false"
-  >
-    <Fragment set:html={moonIcon} />
-    <span class="theme-toggle__label">Dark</span>
-  </button>
+    <button
+      class="theme-toggle__option"
+      data-theme-select="system"
+      role="menuitem"
+      aria-pressed="true"
+    >
+      <Fragment set:html={systemIcon} />
+      <span>System</span>
+    </button>
+    <button
+      class="theme-toggle__option"
+      data-theme-select="light"
+      role="menuitem"
+      aria-pressed="false"
+    >
+      <Fragment set:html={sunIcon} />
+      <span>Light</span>
+    </button>
+    <button
+      class="theme-toggle__option"
+      data-theme-select="dark"
+      role="menuitem"
+      aria-pressed="false"
+    >
+      <Fragment set:html={moonIcon} />
+      <span>Dark</span>
+    </button>
+  </div>
 </div>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>(
+  const wrapper = document.querySelector<HTMLElement>(".theme-toggle")!;
+  const trigger = wrapper.querySelector<HTMLButtonElement>(
+    ".theme-toggle__trigger",
+  )!;
+  const dropdown = wrapper.querySelector<HTMLElement>(
+    ".theme-toggle__dropdown",
+  )!;
+  const options = wrapper.querySelectorAll<HTMLButtonElement>(
     "[data-theme-select]",
   );
   const html = document.documentElement;
 
   function setTheme(mode: string) {
-    buttons.forEach((btn) =>
+    wrapper.dataset.themeCurrent = mode;
+    options.forEach((btn) =>
       btn.setAttribute(
         "aria-pressed",
         btn.dataset.themeSelect === mode ? "true" : "false",
@@ -64,6 +100,36 @@ const moonIcon = faIcon(faMoon, { size: 14 });
     }
   }
 
+  function openMenu() {
+    dropdown.removeAttribute("hidden");
+    trigger.setAttribute("aria-expanded", "true");
+  }
+
+  function closeMenu() {
+    dropdown.setAttribute("hidden", "");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  trigger.addEventListener("click", () => {
+    if (dropdown.hasAttribute("hidden")) openMenu();
+    else closeMenu();
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target as Node)) closeMenu();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+
+  options.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      setTheme(btn.dataset.themeSelect!);
+      closeMenu();
+    }),
+  );
+
   const stored = localStorage.getItem("theme");
   setTheme(stored === "dark" || stored === "light" ? stored : "system");
 
@@ -74,8 +140,4 @@ const moonIcon = faIcon(faMoon, { size: 14 });
         html.setAttribute("data-theme", e.matches ? "dark" : "light");
       }
     });
-
-  buttons.forEach((btn) =>
-    btn.addEventListener("click", () => setTheme(btn.dataset.themeSelect!)),
-  );
 </script>

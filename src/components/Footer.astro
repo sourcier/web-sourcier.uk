@@ -1,5 +1,5 @@
 ---
-import ThemeToggle from "./ThemeToggle.astro";
+
 ---
 
 <footer class="footer mt-auto">
@@ -18,10 +18,6 @@ import ThemeToggle from "./ThemeToggle.astro";
     </div>
 
     <div class="footer__bottom">
-      <div class="footer__theme">
-        <p class="footer__theme-label">Theme</p>
-        <ThemeToggle />
-      </div>
       <p class="footer__copy">&copy; 2026 Roger Rajaratnam</p>
     </div>
   </div>
@@ -132,28 +128,10 @@ import ThemeToggle from "./ThemeToggle.astro";
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .footer__theme {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .footer__theme-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
-    margin: 0;
-  }
-
   .footer__copy {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.3);
     margin: 0;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
     width: 100%;
     text-align: center;
   }
