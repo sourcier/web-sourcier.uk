@@ -1,7 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import BackToTop from "../components/BackToTop.astro";
+import PageMenu from "../components/PageMenu.astro";
 import "../styles/global.scss";
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
   pubDate?: Date;
   author?: string;
   tags?: string[];
+  tocHeadings?: { depth: number; slug: string; text: string }[];
 }
 
 const {
@@ -24,6 +25,7 @@ const {
   pubDate,
   author,
   tags,
+  tocHeadings,
 } = Astro.props;
 
 const siteName = "Sourcier";
@@ -104,7 +106,7 @@ const siteName = "Sourcier";
       <slot />
     </main>
     <Footer />
-    <BackToTop />
+    <PageMenu tocHeadings={tocHeadings} />
     <script>
       import "../scripts/menu.js";
     </script>

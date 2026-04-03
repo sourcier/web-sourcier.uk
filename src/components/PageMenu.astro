@@ -1,0 +1,237 @@
+---
+import { faPlus, faCircleUp } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+interface Props {
+  tocHeadings?: { depth: number; slug: string; text: string }[];
+}
+
+const { tocHeadings = [] } = Astro.props;
+const hasToc = tocHeadings.length > 1;
+const plusIcon = faIcon(faPlus, { size: 18 });
+const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
+---
+
+<div class="page-menu" id="page-menu" aria-hidden="true">
+  <button
+    class="page-menu__btn"
+    id="page-menu-btn"
+    aria-expanded="false"
+    aria-controls="page-menu-panel"
+    aria-label="Page menu"
+  >
+    <span class="page-menu__btn-icon" set:html={plusIcon} />
+  </button>
+  <div class="page-menu__panel" id="page-menu-panel" hidden>
+    {
+      hasToc && (
+        <nav aria-label="Table of contents">
+          <p class="page-menu__section-label">On this page</p>
+          <ol class="toc__list">
+            {tocHeadings.map((h) => (
+              <li class={`toc__item toc__item--h${h.depth}`}>
+                <a class="toc__link page-menu__toc-link" href={`#${h.slug}`}>
+                  {h.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <div class:list={["page-menu__actions", { "page-menu__actions--with-toc": hasToc }]}>
+      <button class="page-menu__top-btn" id="page-menu-top-btn" aria-label="Back to top">
+        <span class="page-menu__top-icon" set:html={arrowUpIcon} />
+        Back to top
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const menuEl = document.getElementById("page-menu");
+  const btn = document.getElementById("page-menu-btn") as HTMLButtonElement | null;
+  const panel = document.getElementById("page-menu-panel") as HTMLElement | null;
+
+  if (menuEl && btn && panel) {
+    const close = () => {
+      btn.setAttribute("aria-expanded", "false");
+      panel.hidden = true;
+    };
+
+    const hero = document.querySelector(".page-hero");
+    if (hero) {
+      // Post pages: show once hero scrolls out of view
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          menuEl.setAttribute("aria-hidden", entry.isIntersecting ? "true" : "false");
+        },
+        { rootMargin: "0px 0px -80% 0px" },
+      );
+      observer.observe(hero);
+    } else {
+      // All other pages: show after scrolling 400px
+      const toggleVisibility = () => {
+        menuEl.setAttribute("aria-hidden", window.scrollY > 400 ? "false" : "true");
+      };
+      window.addEventListener("scroll", toggleVisibility, { passive: true });
+      toggleVisibility();
+    }
+
+    btn.addEventListener("click", () => {
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!isOpen));
+      panel.hidden = isOpen;
+    });
+
+    panel.querySelectorAll(".page-menu__toc-link").forEach((link) => {
+      link.addEventListener("click", close);
+    });
+
+    const topBtn = document.getElementById("page-menu-top-btn");
+    topBtn?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      close();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menuEl.contains(e.target as Node)) close();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+        close();
+        btn.focus();
+      }
+    });
+  }
+</script>
+
+<style lang="scss">
+  .page-menu {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.5rem;
+    z-index: 100;
+
+    @media (min-width: 769px) {
+      bottom: 2rem;
+      right: clamp(1rem, 3vw, 2rem);
+    }
+
+    &[aria-hidden="true"] {
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    &[aria-hidden="false"] {
+      pointer-events: auto;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+  }
+
+  .page-menu__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-pink);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: opacity 0.15s ease;
+
+    &[aria-expanded="true"] .page-menu__btn-icon :global(svg) {
+      transform: rotate(45deg);
+    }
+
+    &:hover {
+      opacity: 0.88;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--color-pink);
+      outline-offset: 3px;
+    }
+  }
+
+  .page-menu__btn-icon {
+    display: flex;
+    align-items: center;
+
+    :global(svg) {
+      transition: transform 0.2s ease;
+    }
+  }
+
+  .page-menu__panel {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+    width: min(320px, calc(100vw - 3rem));
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+    padding: 0.75rem 0.5rem;
+  }
+
+  .page-menu__section-label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+    margin: 0 0.75rem 0.75rem;
+  }
+
+  .page-menu__actions {
+    &--with-toc {
+      border-top: 1px solid var(--color-border);
+      margin-top: 0.5rem;
+      padding-top: 0.25rem;
+    }
+  }
+
+  .page-menu__top-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--color-pink);
+      outline-offset: 2px;
+      color: var(--color-pink);
+    }
+  }
+
+  .page-menu__top-icon {
+    display: flex;
+    align-items: center;
+  }
+</style>

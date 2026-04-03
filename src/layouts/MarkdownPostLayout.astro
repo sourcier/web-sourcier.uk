@@ -38,6 +38,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
   pubDate={frontmatter.pubDate}
   author={frontmatter.author}
   tags={frontmatter.tags}
+  tocHeadings={tocHeadings}
 >
   <script
     is:inline
@@ -106,73 +107,6 @@ const thumbSrc = frontmatter.cover?.thumbnail
       </div>
     </div>
 
-    {
-      tocHeadings.length > 1 && (
-        <div class="toc-float" id="toc-float" aria-hidden="true">
-          <button
-            class="toc-float__btn"
-            id="toc-float-btn"
-            aria-expanded="false"
-            aria-controls="toc-float-drawer"
-            aria-label="Page navigation"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <rect x="3" y="4" width="18" height="2" rx="1" />
-              <rect x="3" y="9" width="14" height="2" rx="1" />
-              <rect x="3" y="14" width="16" height="2" rx="1" />
-              <rect x="3" y="19" width="11" height="2" rx="1" />
-            </svg>
-          </button>
-          <nav
-            class="toc-float__drawer"
-            id="toc-float-drawer"
-            aria-label="Table of contents"
-          >
-            <p class="toc-float__heading">On this page</p>
-            <ol class="toc__list">
-              {tocHeadings.map((h) => (
-                <li class={`toc__item toc__item--h${h.depth}`}>
-                  <a class="toc__link toc-float__link" href={`#${h.slug}`}>
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-            </ol>
-            <div class="toc-float__footer">
-              <button
-                class="toc-float__top-btn"
-                id="toc-float-top-btn"
-                aria-label="Back to top"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 384 512"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
-                  />
-                </svg>
-                Back to top
-              </button>
-            </div>
-          </nav>
-        </div>
-      )
-    }
-
     <div class="sponsor-cta-below-post">
       <SponsorCTA />
     </div>
@@ -198,56 +132,6 @@ const thumbSrc = frontmatter.cover?.thumbnail
     }
   </article>
 </BaseLayout>
-
-<script>
-  const floatEl = document.getElementById("toc-float");
-  const btn = document.getElementById("toc-float-btn");
-  const drawer = document.getElementById("toc-float-drawer");
-
-  if (floatEl && btn && drawer) {
-    // Show the float once we've scrolled past the hero
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        floatEl.setAttribute(
-          "aria-hidden",
-          entry.isIntersecting ? "true" : "false",
-        );
-      },
-      { rootMargin: "0px 0px -80% 0px" },
-    );
-    const hero = document.querySelector(".page-hero");
-    if (hero) observer.observe(hero);
-
-    btn.addEventListener("click", () => {
-      const isOpen = btn.getAttribute("aria-expanded") === "true";
-      btn.setAttribute("aria-expanded", String(!isOpen));
-      drawer.classList.toggle("toc-float__drawer--open", !isOpen);
-    });
-
-    // Close on link click
-    drawer.querySelectorAll(".toc-float__link").forEach((link) => {
-      link.addEventListener("click", () => {
-        btn.setAttribute("aria-expanded", "false");
-        drawer.classList.remove("toc-float__drawer--open");
-      });
-    });
-
-    const topBtn = document.getElementById("toc-float-top-btn");
-    topBtn?.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      btn.setAttribute("aria-expanded", "false");
-      drawer.classList.remove("toc-float__drawer--open");
-    });
-
-    // Close on outside click
-    document.addEventListener("click", (e) => {
-      if (!floatEl.contains(e.target as Node)) {
-        btn.setAttribute("aria-expanded", "false");
-        drawer.classList.remove("toc-float__drawer--open");
-      }
-    });
-  }
-</script>
 
 <style>
   :global(.mermaid-diagram),
