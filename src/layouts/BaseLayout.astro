@@ -58,6 +58,12 @@ const siteName = "Sourcier";
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Sourcier — Blog"
+      href={new URL("/rss.xml", Astro.site ?? Astro.url.origin).href}
+    />
 
     <!-- OpenGraph -->
     <meta property="og:type" content={ogType} />
