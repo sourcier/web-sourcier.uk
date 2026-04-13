@@ -4,6 +4,8 @@
 //
 // Usage:
 //   node scripts/crosspost-devto.js
+//   node scripts/crosspost-devto.js --update
+//   node scripts/crosspost-devto.js --update <devto-article-id>
 //
 // Required environment variables (set in .env or shell):
 //   DEVTO_API_KEY  — API key from https://dev.to/settings/extensions → DEV Community API Keys
@@ -22,10 +24,53 @@ if (existsSync(envFile) && typeof process.loadEnvFile === "function") {
 
 const apiKey = process.env.DEVTO_API_KEY;
 const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(/\/$/, "");
+const mermaidMode = (process.env.DEVTO_MERMAID_MODE ?? "image").toLowerCase();
+
+function parseCliArgs(argv) {
+  let explicitArticleId = null;
+  let updateOnly = false;
+
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+
+    if (arg === "--help" || arg === "-h") {
+      console.log("Usage:");
+      console.log("  node scripts/crosspost-devto.js");
+      console.log("  node scripts/crosspost-devto.js --update");
+      console.log(
+        "  node scripts/crosspost-devto.js --update <devto-article-id>",
+      );
+      process.exit(0);
+    }
+
+    if (arg === "--update") {
+      updateOnly = true;
+      const maybeId = argv[i + 1];
+      if (maybeId && !maybeId.startsWith("--")) {
+        explicitArticleId = Number(maybeId);
+        i += 1;
+      }
+      continue;
+    }
+
+    console.error(`Error: Unknown argument '${arg}'.`);
+    console.error("Use --help to see supported options.");
+    process.exit(1);
+  }
+
+  return { explicitArticleId, updateOnly };
+}
+
+const { explicitArticleId, updateOnly } = parseCliArgs(process.argv.slice(2));
 
 if (!apiKey) {
   console.error("Error: DEVTO_API_KEY environment variable is required.");
   console.error("Get one at: https://dev.to/settings/extensions");
+  process.exit(1);
+}
+
+if (explicitArticleId !== null && !Number.isInteger(explicitArticleId)) {
+  console.error("Error: --update <devto-article-id> must be a valid integer.");
   process.exit(1);
 }
 
@@ -81,6 +126,112 @@ function makeImagesAbsolute(markdown, slug) {
     .replace(/\(\.\/([^)]+\.(png|jpg|jpeg|gif|webp|svg))\)/g, `(${siteBase}/post-images/${slug}/$1)`);
 }
 
+function toBase64Url(value) {
+  return Buffer.from(value, "utf8")
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+function normaliseFenceLanguage(info) {
+  const token = info.trim().split(/\s+/)[0] ?? "";
+  return /^[a-z0-9#+.-]+$/i.test(token) ? token.toLowerCase() : "";
+}
+
+function mermaidFallback(markdown, canonicalUrl) {
+  const diagram = markdown.trim();
+  if (!diagram) return "";
+
+  if (mermaidMode === "code") {
+    return [
+      `> Mermaid diagram is available in the canonical article: ${canonicalUrl}`,
+      "",
+      "```mermaid",
+      diagram,
+      "```",
+    ].join("\n");
+  }
+
+  const encoded = toBase64Url(diagram);
+  const imageUrl = `https://mermaid.ink/img/${encoded}`;
+
+  return [
+    `![Mermaid diagram](${imageUrl})`,
+    "",
+    `> Diagram fallback for Dev.to. View the canonical article for the full version: ${canonicalUrl}`,
+  ].join("\n");
+}
+
+function normaliseMarkdownForDevto(markdown, canonicalUrl) {
+  const lines = markdown.split(/\r?\n/);
+  const output = [];
+  const stats = {
+    mermaidBlocks: 0,
+    codeFencesNormalised: 0,
+  };
+
+  let inFence = false;
+  let fenceMarker = "";
+  let fenceInfo = "";
+  let fenceLines = [];
+
+  for (const line of lines) {
+    if (!inFence) {
+      const open = line.match(/^(`{3,})(.*)$/);
+      if (!open) {
+        output.push(line);
+        continue;
+      }
+
+      inFence = true;
+      fenceMarker = open[1];
+      fenceInfo = open[2] ?? "";
+      fenceLines = [];
+      continue;
+    }
+
+    const trimmed = line.trim();
+    const isFenceClose =
+      trimmed.startsWith(fenceMarker) &&
+      /^`+$/.test(trimmed) &&
+      trimmed.length >= fenceMarker.length;
+
+    if (!isFenceClose) {
+      fenceLines.push(line);
+      continue;
+    }
+
+    const rawCode = fenceLines.join("\n");
+    const language = normaliseFenceLanguage(fenceInfo);
+
+    if (language === "mermaid") {
+      stats.mermaidBlocks += 1;
+      output.push(mermaidFallback(rawCode, canonicalUrl));
+    } else {
+      if (fenceInfo.trim()) stats.codeFencesNormalised += 1;
+      output.push(language ? `\`\`\`${language}` : "\`\`\`");
+      output.push(rawCode);
+      output.push("\`\`\`");
+    }
+
+    inFence = false;
+    fenceMarker = "";
+    fenceInfo = "";
+    fenceLines = [];
+  }
+
+  if (inFence) {
+    output.push(`${fenceMarker}${fenceInfo}`);
+    output.push(...fenceLines);
+  }
+
+  return {
+    markdown: output.join("\n"),
+    stats,
+  };
+}
+
 function loadPost(slug) {
   const filePath = join(root, "collections", "posts", slug, "index.md");
   let raw;
@@ -91,14 +242,20 @@ function loadPost(slug) {
   }
   const fm = parseFrontmatter(raw);
   if (!fm.title) throw new Error(`No title found in frontmatter for: ${slug}`);
+
+  const canonicalUrl = `${siteBase}/blog/${slug}`;
+  const markdownBody = makeImagesAbsolute(stripFrontmatter(raw), slug);
+  const normalised = normaliseMarkdownForDevto(markdownBody, canonicalUrl);
+
   return {
     title: fm.title.replace(/^["']|["']$/g, ""),
     description: fm.description || "",
     tags: normaliseTags(fm.tags),
     draft: fm.draft === "true",
     pubDate: fm.pubDate ? new Date(fm.pubDate) : null,
-    body: makeImagesAbsolute(stripFrontmatter(raw), slug),
-    canonicalUrl: `${siteBase}/blog/${slug}`,
+    body: normalised.markdown,
+    canonicalUrl,
+    transformStats: normalised.stats,
   };
 }
 
@@ -108,18 +265,22 @@ function listPostIds() {
     .filter((d) => d.isDirectory())
     .map((d) => {
       try {
-        const content = readFileSync(join(postsDir, d.name, "index.md"), "utf8");
+        const content = readFileSync(
+          join(postsDir, d.name, "index.md"),
+          "utf8",
+        );
         const fm = parseFrontmatter(content);
         return {
           id: d.name,
           pubDate: fm.pubDate ? new Date(fm.pubDate) : new Date(0),
           isDraft: fm.draft === "true",
+          isFuture: fm.pubDate ? new Date(fm.pubDate) > new Date() : false,
         };
       } catch {
         return null;
       }
     })
-    .filter((p) => p && !p.isDraft)
+    .filter((p) => p && !p.isDraft && !p.isFuture)
     .sort((a, b) => b.pubDate - a.pubDate)
     .map((p) => p.id);
 }
@@ -132,6 +293,60 @@ function prompt(question) {
       resolve(answer.trim());
     });
   });
+}
+
+function normaliseUrl(value) {
+  return String(value || "").replace(/\/$/, "");
+}
+
+function buildArticlePayload(post) {
+  return {
+    article: {
+      title: post.title,
+      body_markdown: post.body,
+      published: true,
+      canonical_url: post.canonicalUrl,
+      description: post.description,
+      tags: post.tags,
+    },
+  };
+}
+
+async function findExistingArticleByCanonical(canonicalUrl) {
+  const target = normaliseUrl(canonicalUrl);
+  let page = 1;
+  const perPage = 100;
+
+  while (true) {
+    const res = await fetch(
+      `https://dev.to/api/articles/me/all?page=${page}&per_page=${perPage}`,
+      {
+        headers: {
+          "api-key": apiKey,
+        },
+      },
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        `Unable to list Dev.to articles (${res.status}): ${JSON.stringify(data)}`,
+      );
+    }
+
+    if (!Array.isArray(data) || data.length === 0) return null;
+
+    const existing = data.find((article) => {
+      const canonical = normaliseUrl(article.canonical_url);
+      return canonical && canonical === target;
+    });
+
+    if (existing) return existing;
+    if (data.length < perPage) return null;
+
+    page += 1;
+  }
 }
 
 // ── Select post ───────────────────────────────────────────────────────────────
@@ -176,6 +391,12 @@ console.log(`  Title        : ${post.title}`);
 console.log(`  Canonical URL: ${post.canonicalUrl}`);
 console.log(`  Tags         : ${post.tags.join(", ") || "(none)"}`);
 console.log(`  Description  : ${post.description.slice(0, 80)}${post.description.length > 80 ? "…" : ""}`);
+console.log(
+  `  Mermaid      : ${post.transformStats.mermaidBlocks} converted (${mermaidMode} mode)`,
+);
+console.log(
+  `  Code fences  : ${post.transformStats.codeFencesNormalised} normalised`,
+);
 console.log(`  Body length  : ${post.body.length} chars`);
 console.log("─────────────────────────────────────────\n");
 
@@ -185,26 +406,47 @@ if (confirm.toLowerCase() !== "y" && confirm.toLowerCase() !== "yes") {
   process.exit(0);
 }
 
-// ── POST to Dev.to API ────────────────────────────────────────────────────────
+// ── CREATE or UPDATE via Dev.to API ──────────────────────────────────────────
 
-console.log("\nPosting to Dev.to…");
+let existingArticle = null;
 
-const res = await fetch("https://dev.to/api/articles", {
-  method: "POST",
+if (explicitArticleId !== null) {
+  existingArticle = { id: explicitArticleId };
+  console.log(`\n--update ${explicitArticleId} provided — forcing update mode.`);
+} else {
+  console.log("\nChecking for existing Dev.to article by canonical URL…");
+  try {
+    existingArticle = await findExistingArticleByCanonical(post.canonicalUrl);
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+    process.exit(1);
+  }
+}
+
+const isUpdate = Boolean(existingArticle?.id);
+
+if (updateOnly && !isUpdate) {
+  console.error(
+    "\nError: --update was set, but no existing Dev.to article was found for this canonical URL.",
+  );
+  console.error("Re-run without --update to create a new article instead.");
+  process.exit(1);
+}
+
+const endpoint = isUpdate
+  ? `https://dev.to/api/articles/${existingArticle.id}`
+  : "https://dev.to/api/articles";
+const method = isUpdate ? "PUT" : "POST";
+
+console.log(`\n${isUpdate ? "Updating" : "Posting"} on Dev.to…`);
+
+const res = await fetch(endpoint, {
+  method,
   headers: {
     "Content-Type": "application/json",
     "api-key": apiKey,
   },
-  body: JSON.stringify({
-    article: {
-      title: post.title,
-      body_markdown: post.body,
-      published: true,
-      canonical_url: post.canonicalUrl,
-      description: post.description,
-      tags: post.tags,
-    },
-  }),
+  body: JSON.stringify(buildArticlePayload(post)),
 });
 
 const data = await res.json();
@@ -214,7 +456,11 @@ if (!res.ok) {
   process.exit(1);
 }
 
-console.log(`\n✓ Published! View at: ${data.url}`);
+console.log(`\n✓ ${isUpdate ? "Updated" : "Published"}! View at: ${data.url}`);
 console.log("  Dev.to article ID:", data.id);
-console.log("\nNote: review the article on Dev.to and adjust any images or Mermaid");
-console.log("diagrams that may not render. The canonical URL is set correctly.");
+console.log(
+  "\nNote: Mermaid and expressive code fences were normalised for Dev.to compatibility.",
+);
+console.log(
+  "Review the Dev.to article to confirm formatting. Canonical URL is set correctly.",
+);
