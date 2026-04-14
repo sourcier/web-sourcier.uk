@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "clean": "rm -rf .astro dist public/pagefind .playwright-mcp",
-    "dev": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true netlify dev",
-    "dev:no-drafts": "pnpm thumbnails:copy && pnpm post-images:copy && netlify dev",
+    "dev": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true astro dev",
+    "dev:no-drafts": "pnpm thumbnails:copy && pnpm post-images:copy && astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -13,7 +13,8 @@
     "thumbnails:copy": "node scripts/copy-thumbnails.mjs",
     "post-images:copy": "node scripts/copy-post-images.mjs",
     "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
-    "crosspost:devto": "node scripts/crosspost-devto.js"
+    "crosspost:devto": "node scripts/crosspost-devto.js",
+    "template:pptx": "node scripts/create-powerpoint-template.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@netlify/edge-functions": "^3.0.6",
     "pagefind": "^1.4.0",
+    "pptxgenjs": "^4.0.1",
     "remark-emoji": "^5.0.2"
   }
 }
