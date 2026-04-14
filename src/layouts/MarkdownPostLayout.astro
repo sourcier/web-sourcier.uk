@@ -9,7 +9,7 @@ import MailingListCTA from "../components/MailingListCTA.astro";
 import SponsorCTA from "../components/SponsorCTA.astro";
 
 import TagsSidebar from "../components/TagsSidebar.astro";
-const { frontmatter, postId, headings = [] } = Astro.props;
+const { frontmatter, postId, headings = [], readingTime } = Astro.props;
 const tocHeadings = (
   headings as { depth: number; slug: string; text: string }[]
 ).filter((h) => h.depth === 2 || h.depth === 3);
@@ -71,6 +71,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
       tags={frontmatter.tags}
       author={frontmatter.author}
       date={formattedDate ?? undefined}
+      readingTime={readingTime}
       crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
       shareUrl={Astro.url.href}
       shareTitle={frontmatter.title}

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import { isPublished } from "../../utils/drafts";
+import readingTime from "reading-time";
 import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -11,12 +12,14 @@ export async function getStaticPaths() {
 }
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
+const postReadingTime = readingTime(post.body ?? "").text;
 ---
 
 <MarkdownPostLayout
   frontmatter={post.data}
   postId={post.id}
   headings={headings}
+  readingTime={postReadingTime}
 >
   <Content />
 </MarkdownPostLayout>

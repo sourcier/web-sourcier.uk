@@ -1,5 +1,6 @@
 ---
 import BlogPost from "./BlogPost.astro";
+import readingTime from "reading-time";
 
 interface Props {
   posts: any[];
@@ -42,6 +43,7 @@ function pageUrl(n: number) {
                 cover={post.data.cover}
                 pubDate={post.data.pubDate}
                 draft={post.data.draft}
+                readingTime={readingTime(post.body ?? "").text}
               />
             </div>
           ))

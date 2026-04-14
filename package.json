@@ -17,6 +17,7 @@
     "template:pptx": "node scripts/create-powerpoint-template.mjs"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.8",
     "@astrojs/rss": "^4.0.18",
     "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
@@ -27,8 +28,10 @@
     "astro-expressive-code": "^0.41.7",
     "bulma": "^1.0.4",
     "mermaid": "^11.13.0",
+    "reading-time": "^1.5.0",
     "sass": "^1.98.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "typescript": "^6.0.2"
   },
   "devDependencies": {
     "@netlify/edge-functions": "^3.0.6",

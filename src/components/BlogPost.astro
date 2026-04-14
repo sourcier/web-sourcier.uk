@@ -1,6 +1,14 @@
 ---
-const { description, title, subTitle, url, cover, pubDate, draft } =
-  Astro.props;
+const {
+  description,
+  title,
+  subTitle,
+  url,
+  cover,
+  pubDate,
+  draft,
+  readingTime,
+} = Astro.props;
 const formattedDate = pubDate
   ? new Date(pubDate).toLocaleDateString("en-GB", {
       year: "numeric",
@@ -29,7 +37,14 @@ const formattedDate = pubDate
     )
   }
   <div class="card__body">
-    {formattedDate && <p class="card-meta">{formattedDate}</p>}
+    {
+      formattedDate && (
+        <p class="card-meta">
+          {formattedDate}
+          {readingTime && ` · ${readingTime}`}
+        </p>
+      )
+    }
     <p class="card__title">{title}</p>
     {subTitle && <p class="card__subtitle">{subTitle}</p>}
     <p class="card__description">{description}</p>

@@ -16,6 +16,7 @@ interface Props {
   tags?: string[];
   author?: string;
   date?: string;
+  readingTime?: string;
   crumbs?: Crumb[];
   shareUrl?: string;
   shareTitle?: string;
@@ -29,6 +30,7 @@ const {
   tags,
   author,
   date,
+  readingTime,
   crumbs,
   shareUrl,
   shareTitle,
@@ -62,16 +64,19 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       <h1 class="page-hero__title">{title}</h1>
       {subtitle && <p class="page-hero__subtitle">{subtitle}</p>}
       {
-        (author || date || (tags && tags.length > 0)) && (
+        (author || date || readingTime || (tags && tags.length > 0)) && (
           <div class="page-hero__meta">
             {author && <span class="page-hero__author">By {author}</span>}
             {date && <span class="page-hero__date">{date}</span>}
-            {date && tags && tags.length > 0 && (
+            {readingTime && (
+              <span class="page-hero__reading-time">{readingTime}</span>
+            )}
+            {(date || readingTime) && tags && tags.length > 0 && (
               <span class="page-hero__divider" aria-hidden="true" />
             )}
             {tags && tags.length > 0 && (
               <div class="page-hero__tags">
-                {tags.map((tag) => (
+                {tags.map((tag: string) => (
                   <a href={`/tags/${tagSlug(tag)}`} class="page-hero__tag">
                     {tag}
                   </a>
