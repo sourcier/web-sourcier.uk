@@ -1,0 +1,356 @@
+---
+
+---
+
+<section class="course-launch" aria-labelledby="course-launch-heading">
+  <div class="container is-max-desktop">
+    <div class="course-launch__card">
+      <div class="course-launch__intro">
+        <p class="course-launch__kicker">Launching soon</p>
+        <h2 class="course-launch__heading" id="course-launch-heading">
+          Full Stack Developer Course
+        </h2>
+        <p class="course-launch__body">
+          A practical learning path designed for developers who want to build
+          complete applications end-to-end. First cohort details are coming
+          soon.
+        </p>
+      </div>
+
+      <ul class="course-launch__modules" role="list" aria-label="Course modules">
+        <li class="course-launch__module">
+          <p class="course-launch__module-title">HTML &amp; CSS</p>
+          <p class="course-launch__module-copy">
+            Semantic structure, modern layouts, and production-ready styling
+            patterns.
+          </p>
+        </li>
+        <li class="course-launch__module">
+          <p class="course-launch__module-title">JavaScript (Frontend + Backend)</p>
+          <p class="course-launch__module-copy">
+            Build interactive user interfaces, design APIs, and ship
+            maintainable full-stack JavaScript applications.
+          </p>
+        </li>
+        <li class="course-launch__module">
+          <p class="course-launch__module-title">DevOps</p>
+          <p class="course-launch__module-copy">
+            Deployments, CI/CD, and observability practices to keep systems
+            reliable in production.
+          </p>
+        </li>
+      </ul>
+
+      <form
+        class="course-launch__form"
+        id="course-launch-form"
+        novalidate
+        aria-label="Register interest for full stack course"
+      >
+        <p class="course-launch__fineprint">No spam. Course updates only.</p>
+        <p class="course-launch__honeypot" aria-hidden="true">
+          <label for="course-launch-website">Leave this blank</label>
+          <input
+            id="course-launch-website"
+            name="website"
+            type="text"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </p>
+        <div class="course-launch__field">
+          <label for="course-launch-email" class="is-sr-only"
+            >Email address</label
+          >
+          <input
+            id="course-launch-email"
+            name="email"
+            type="email"
+            class="input course-launch__input"
+            placeholder="your@email.com"
+            autocomplete="email"
+            required
+          />
+          <button type="submit" class="button course-launch__btn">
+            Register interest
+          </button>
+        </div>
+        <p
+          class="course-launch__feedback"
+          id="course-launch-feedback"
+          aria-live="polite"
+          hidden
+        >
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById(
+    "course-launch-form",
+  ) as HTMLFormElement | null;
+  const feedback = document.getElementById(
+    "course-launch-feedback",
+  ) as HTMLElement | null;
+  const input = document.getElementById(
+    "course-launch-email",
+  ) as HTMLInputElement | null;
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!input || !feedback) return;
+
+    const email = input.value.trim();
+    if (!email) return;
+
+    const button = form.querySelector("button[type=submit]") as
+      | HTMLButtonElement
+      | null;
+    if (!button) return;
+
+    button.disabled = true;
+    button.textContent = "Registering…";
+    feedback.hidden = true;
+    feedback.className = "course-launch__feedback";
+
+    try {
+      const response = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          website:
+            (form.elements.namedItem("website") as HTMLInputElement)?.value ??
+            "",
+          source: "full-stack-course",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        feedback.textContent =
+          "You're on the list. I'll email you when enrolment opens.";
+        feedback.classList.add("course-launch__feedback--success");
+        form.reset();
+        button.textContent = "Registered";
+      } else {
+        feedback.textContent =
+          data.error ?? "Something went wrong. Please try again.";
+        feedback.classList.add("course-launch__feedback--error");
+        button.disabled = false;
+        button.textContent = "Register interest";
+      }
+    } catch {
+      feedback.textContent = "Something went wrong. Please try again.";
+      feedback.classList.add("course-launch__feedback--error");
+      button.disabled = false;
+      button.textContent = "Register interest";
+    } finally {
+      feedback.hidden = false;
+    }
+  });
+</script>
+
+<style lang="scss">
+  .course-launch {
+    padding: 2rem 1.5rem 0;
+  }
+
+  .course-launch__card {
+    border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-pink);
+    border-radius: 8px;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--color-pink) 10%, var(--color-surface)) 0%,
+        var(--color-surface) 38%
+      ),
+      var(--color-surface);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--color-pink) 8%, transparent);
+  }
+
+  .course-launch__intro {
+    margin-bottom: 1rem;
+  }
+
+  .course-launch__kicker {
+    margin: 0 0 0.35rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-pink);
+  }
+
+  .course-launch__heading {
+    margin: 0;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1;
+    color: var(--color-ink);
+  }
+
+  .course-launch__body {
+    margin: 0.65rem 0 0;
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+
+  .course-launch__modules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr;
+  }
+
+  .course-launch__module {
+    border: 1px solid color-mix(in srgb, var(--color-border) 75%, transparent);
+    border-radius: 6px;
+    padding: 0.85rem 0.9rem;
+    background: color-mix(in srgb, var(--color-paper) 88%, var(--color-pink) 12%);
+    animation: course-module-in 320ms ease both;
+
+    &:nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 160ms;
+    }
+  }
+
+  .course-launch__module-title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  .course-launch__module-copy {
+    margin: 0.35rem 0 0;
+    font-size: 0.92rem;
+    color: var(--color-muted);
+    line-height: 1.45;
+  }
+
+  .course-launch__form {
+    margin-top: 1rem;
+  }
+
+  .course-launch__fineprint {
+    margin: 0 0 0.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .course-launch__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .course-launch__input {
+    min-height: 2.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    background: var(--color-paper);
+    color: var(--color-ink);
+
+    &:focus {
+      border-color: var(--color-pink);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pink) 20%, transparent);
+      outline: none;
+    }
+  }
+
+  .course-launch__btn {
+    min-height: 2.75rem;
+    background: var(--color-pink);
+    border-color: var(--color-pink);
+    color: #fff;
+    font-family: "Barlow Condensed", sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 700;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--color-pink) 85%, #000);
+      border-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+  }
+
+  .course-launch__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .course-launch__feedback {
+    margin-top: 0.6rem;
+    font-size: 0.875rem;
+
+    &--success {
+      color: #15803d;
+    }
+
+    &--error {
+      color: #b91c1c;
+    }
+  }
+
+  @keyframes course-module-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .course-launch__modules {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .course-launch__field {
+      align-items: stretch;
+      flex-direction: row;
+    }
+
+    .course-launch__btn {
+      min-width: 13.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course-launch__module {
+      animation: none;
+    }
+  }
+</style>
