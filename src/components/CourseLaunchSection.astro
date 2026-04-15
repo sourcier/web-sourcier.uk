@@ -17,7 +17,11 @@
         </p>
       </div>
 
-      <ul class="course-launch__modules" role="list" aria-label="Course modules">
+      <ul
+        class="course-launch__modules"
+        role="list"
+        aria-label="Course modules"
+      >
         <li class="course-launch__module">
           <p class="course-launch__module-title">HTML &amp; CSS</p>
           <p class="course-launch__module-copy">
@@ -26,7 +30,9 @@
           </p>
         </li>
         <li class="course-launch__module">
-          <p class="course-launch__module-title">JavaScript (Frontend + Backend)</p>
+          <p class="course-launch__module-title">
+            JavaScript (Frontend + Backend)
+          </p>
           <p class="course-launch__module-copy">
             Build interactive user interfaces, design APIs, and ship
             maintainable full-stack JavaScript applications.
@@ -105,9 +111,9 @@
     const email = input.value.trim();
     if (!email) return;
 
-    const button = form.querySelector("button[type=submit]") as
-      | HTMLButtonElement
-      | null;
+    const button = form.querySelector(
+      "button[type=submit]",
+    ) as HTMLButtonElement | null;
     if (!button) return;
 
     button.disabled = true;
@@ -156,7 +162,7 @@
 
 <style lang="scss">
   .course-launch {
-    padding: 2rem 1.5rem 0;
+    padding: 2rem 1.5rem 2rem;
   }
 
   .course-launch__card {
@@ -171,7 +177,8 @@
         var(--color-surface) 38%
       ),
       var(--color-surface);
-    box-shadow: 0 10px 26px color-mix(in srgb, var(--color-pink) 8%, transparent);
+    box-shadow: 0 10px 26px
+      color-mix(in srgb, var(--color-pink) 8%, transparent);
   }
 
   .course-launch__intro {
@@ -214,7 +221,11 @@
     border: 1px solid color-mix(in srgb, var(--color-border) 75%, transparent);
     border-radius: 6px;
     padding: 0.85rem 0.9rem;
-    background: color-mix(in srgb, var(--color-paper) 88%, var(--color-pink) 12%);
+    background: color-mix(
+      in srgb,
+      var(--color-paper) 88%,
+      var(--color-pink) 12%
+    );
     animation: course-module-in 320ms ease both;
 
     &:nth-child(2) {
@@ -272,7 +283,8 @@
 
     &:focus {
       border-color: var(--color-pink);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pink) 20%, transparent);
+      box-shadow: 0 0 0 2px
+        color-mix(in srgb, var(--color-pink) 20%, transparent);
       outline: none;
     }
   }
