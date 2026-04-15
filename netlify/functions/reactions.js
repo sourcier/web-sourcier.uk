@@ -3,10 +3,11 @@
 // GET  /.netlify/functions/reactions?post=<slug>  → { heart: N, fire: N, bulb: N, clap: N }
 // POST /.netlify/functions/reactions?post=<slug>  body: { reaction: "heart" }  → updated counts
 //
-// Local dev: requires NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID in .env
+// Local dev: requires NETLIFY_SITE_ID plus either NETLIFY_AUTH_TOKEN or
+// NETLIFY_ACCESS_TOKEN in .env
 // Production: works automatically with no extra config
 
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 
 const REACTIONS = ["heart", "fire", "bulb", "clap"];
 // Matches slugs like "deploying-astro-netlify" — prevents path traversal
@@ -18,6 +19,23 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
+function getReactionsStore(event) {
+  if (event.blobs && event.headers?.["x-nf-site-id"]) {
+    connectLambda(event);
+    return getStore("reactions");
+  }
+
+  const siteID = process.env.NETLIFY_SITE_ID;
+  const token =
+    process.env.NETLIFY_AUTH_TOKEN ?? process.env.NETLIFY_ACCESS_TOKEN;
+
+  if (siteID && token) {
+    return getStore("reactions", { siteID, token });
+  }
+
+  return getStore("reactions");
+}
+
 export const handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: CORS, body: "" };
@@ -28,7 +46,7 @@ export const handler = async (event) => {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: "Invalid post ID" }) };
   }
 
-  const store = getStore("reactions");
+  const store = getReactionsStore(event);
 
   if (event.httpMethod === "GET") {
     const data = (await store.get(postId, { type: "json" })) ?? {};
