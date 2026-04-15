@@ -24,6 +24,13 @@ pnpm build            # Production build to dist/
 
 Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 
+## Git Workflow
+
+- Treat `web-sourcier.uk` and `collections/posts/` as separate repositories with separate status, staging, and commits
+- The site repo uses the `preview` branch for code changes; do not commit site changes on `main`
+- The content repo in `collections/posts/` stays on `main` unless the user asks for a different branch
+- If a task spans both repos, inspect and commit them separately
+
 ## Project Structure
 
 - `collections/posts/` — Blog posts (markdown + cover images)
@@ -71,6 +78,8 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 - Tags are normalised to slugs via `tagSlug()` in `src/utils/tags.ts`
 - RSS feed at `/rss.xml` via `src/pages/rss.xml.js`
 - Comment system uses Netlify Forms with email-based moderation (approve/delete via HMAC-signed links)
+- Post slug is the folder name; when renaming a post, rename the folder and all slug-derived assets together (`<slug>-cover-source.*`, `<slug>-cover.webp`, `<slug>-thumbnail.webp`) and update any scripts or public paths that reference the old slug
+- Companion posts for talks or meetups should mention the talk or event in the title or subtitle when that context is central to the article
 
 ### Post Frontmatter
 

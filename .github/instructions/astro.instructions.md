@@ -21,6 +21,7 @@ pnpm dev              # Dev server with drafts (localhost:8888 via Netlify CLI)
 pnpm dev:no-drafts    # Dev server without drafts
 pnpm build            # Production build to dist/
 pnpm search:index     # Full local Pagefind index rebuild
+pnpm talk:playwright  # Regenerate the Playwright JavaScript London talk deck and companion cover/thumbnail assets
 pnpm thumbnails:generate  # Generate <slug>-thumbnail.webp for any post with a cover but no thumbnail
 pnpm thumbnails:copy      # Copy <slug>-thumbnail.webp files to public/search-thumbnails/<slug>/
 pnpm post-images:copy     # Copy SVG files from collections/posts/<slug>/ to public/post-images/<slug>/
@@ -97,6 +98,12 @@ When adding a new post with a cover:
 2. Run `pnpm thumbnails:generate` to create `<slug>-thumbnail.webp`
 3. Add `cover.thumbnail: './<slug>-thumbnail.webp'` to the post frontmatter
 
+When renaming a post slug:
+1. Rename `collections/posts/<old-slug>/` to the new slug
+2. Rename every slug-derived asset in that folder (`<slug>-cover-source.*`, `<slug>-cover.webp`, `<slug>-thumbnail.webp`)
+3. Update frontmatter, any generator scripts, and any public download paths that derive from the old slug
+4. Rerun `pnpm thumbnails:copy` or `pnpm build` so public search thumbnails catch up with the rename
+
 ## Post Images (SVG)
 
 Astro's image optimisation pipeline (Sharp) cannot process SVG files, so SVGs referenced in markdown body content must be served from `public/` as static files.
@@ -134,9 +141,11 @@ All markdown images automatically get an expand button, and all Mermaid diagrams
 
 This applies to the **site repo** (`web-sourcier.uk`) only — not the content repo.
 
-- All new changes must be made on the `preview` branch
-- Only merge into `main` once the user explicitly gives the go-ahead
-- Never push directly to `main`
+- The site repo (`web-sourcier.uk`) uses the `preview` branch for code changes
+- The nested content repo (`collections/posts/`) stays on `main` unless the user explicitly asks for a different branch
+- When work spans both repos, inspect status in both repositories and commit them separately
+- Only merge site repo changes into `main` once the user explicitly gives the go-ahead
+- Never push directly to site `main`
 
 ## Environment Variables
 
