@@ -14,7 +14,8 @@
     "post-images:copy": "node scripts/copy-post-images.mjs",
     "search:index": "pnpm thumbnails:copy && pnpm post-images:copy && SHOW_DRAFTS=true astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
     "crosspost:devto": "node scripts/crosspost-devto.js",
-    "template:pptx": "node scripts/create-powerpoint-template.mjs"
+    "template:pptx": "node scripts/create-powerpoint-template.mjs",
+    "talk:playwright": "node scripts/create-playwright-e2e-talk.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
