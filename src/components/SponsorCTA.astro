@@ -1,191 +1,552 @@
 ---
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faCreditCard,
+  faMugHot,
+} from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 interface Props {
-  sidebar?: boolean;
+  mode?: "article" | "support";
+  placement?: "full" | "sidebar";
 }
 
-const { sidebar = false } = Astro.props;
-const heartIcon = faIcon(faHeart, { size: sidebar ? 12 : 20 });
+interface DonationLink {
+  href: string;
+  label: string;
+  shortLabel: string;
+  description: string;
+  icon: string;
+}
+
+const { mode = "article", placement = "full" } = Astro.props;
+
+const stripeDonateUrl = import.meta.env.PUBLIC_STRIPE_DONATE_URL?.trim();
+const koFiDonateUrl = import.meta.env.PUBLIC_KOFI_DONATE_URL?.trim();
+const donationArrowIcon = faIcon(faArrowUpRightFromSquare, { size: 14 });
+
+const donationLinks: DonationLink[] = [];
+
+if (stripeDonateUrl) {
+  donationLinks.push({
+    href: stripeDonateUrl,
+    label: "Leave a tip via Stripe",
+    shortLabel: "Stripe",
+    description: "Card, Apple Pay, or Link",
+    icon: faIcon(faCreditCard, { size: 18 }),
+  });
+}
+
+if (koFiDonateUrl) {
+  donationLinks.push({
+    href: koFiDonateUrl,
+    label: "Leave a tip on Ko-fi",
+    shortLabel: "Ko-fi",
+    description: "Quick one-off tip",
+    icon: faIcon(faMugHot, { size: 18 }),
+  });
+}
+
+const isArticle = mode === "article";
+const isSidebar = placement === "sidebar";
+const eyebrow = isSidebar
+  ? "Enjoying the post?"
+  : isArticle
+    ? "Working on something similar?"
+    : "Enjoying the site?";
+const title = isSidebar
+  ? "Support the writing"
+  : isArticle
+    ? "Need help shipping it?"
+    : "Support the writing";
+const body = isSidebar
+  ? "Found this useful? You can back the writing with a quick tip."
+  : isArticle
+    ? "I help teams turn ideas like this into production work: architecture reviews, hands-on delivery, and mentoring. If you want a second pair of eyes or hands-on help, let's talk."
+    : "If the blog has been useful, you can back the writing with a tip. If you have a project in mind instead, I'm available for consulting, speaking, and mentoring.";
+const headingId = isSidebar
+  ? "sidebar-support-cta"
+  : isArticle
+    ? "article-support-cta"
+    : "site-support-cta";
+const showHighlights = isArticle && !isSidebar;
+const showWorkButton = !isSidebar || donationLinks.length === 0;
+const showDonationIntro = donationLinks.length > 0 && !isSidebar;
 ---
 
-{
-  sidebar ? (
-    <div class="sponsor-cta-sidebar">
-      <p class="sponsor-cta-sidebar__heading" aria-hidden="true">
-        <span class="sponsor-cta-sidebar__heart" set:html={heartIcon} />
-        Support this blog
-      </p>
-      <p class="sponsor-cta-sidebar__text">
-        If you found this useful, a small tip keeps the writing going.
-      </p>
-      <a
-        href="https://github.com/sponsors/sourcier"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="sponsor-cta-sidebar__btn"
-        aria-label="Sponsor sourcier on GitHub"
-      >
-        Sponsor on GitHub
-      </a>
-    </div>
-  ) : (
-    <div class="sponsor-cta">
-      <div class="container is-max-desktop">
-        <div class="sponsor-cta__inner">
-          <span
-            class="sponsor-cta__heart"
-            set:html={heartIcon}
-            aria-hidden="true"
-          />
-          <div class="sponsor-cta__copy">
-            <p class="sponsor-cta__heading">Support this blog</p>
-            <p class="sponsor-cta__text">
-              If you found this useful, a small tip keeps the writing going.
-            </p>
-          </div>
-          <a
-            href="https://github.com/sponsors/sourcier"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="sponsor-cta__btn"
-          >
-            Sponsor on GitHub
-          </a>
-        </div>
+<section
+  class={`support-cta support-cta--${mode} support-cta--${placement}`}
+  aria-labelledby={headingId}
+>
+  <div class="container is-max-desktop">
+    <div class="support-cta__panel">
+      <div class="support-cta__content">
+        <p class="support-cta__eyebrow">{eyebrow}</p>
+        <h2 class="support-cta__title" id={headingId}>{title}</h2>
+        <p class="support-cta__text">{body}</p>
+
+        {
+          showHighlights && (
+            <ul class="support-cta__highlights" role="list">
+              <li>Architecture review</li>
+              <li>Hands-on delivery</li>
+              <li>Team mentoring</li>
+            </ul>
+          )
+        }
+      </div>
+
+      <div class="support-cta__actions">
+        {
+          showWorkButton && (
+            <a href="/contact" class="support-cta__btn support-cta__btn--work">
+              Work with me
+            </a>
+          )
+        }
+
+        {
+          donationLinks.length > 0 && (
+            <>
+              {showDonationIntro && (
+                <p class="support-cta__aside">
+                  If this has been useful, you can also back the writing with a
+                  tip.
+                </p>
+              )}
+              <div
+                class="support-cta__donations"
+                role="list"
+                aria-label={isSidebar ? "Tip options" : "Tip options"}
+              >
+                {donationLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="support-cta__donation"
+                    role="listitem"
+                  >
+                    <span
+                      class="support-cta__donation-icon"
+                      set:html={link.icon}
+                    />
+                    <span class="support-cta__donation-copy">
+                      <span class="support-cta__donation-label">
+                        {isSidebar ? link.shortLabel : link.label}
+                      </span>
+                      {!isSidebar && (
+                        <span class="support-cta__donation-meta">
+                          {link.description}
+                        </span>
+                      )}
+                    </span>
+                    {!isSidebar && (
+                      <span
+                        class="support-cta__donation-arrow"
+                        set:html={donationArrowIcon}
+                      />
+                    )}
+                  </a>
+                ))}
+              </div>
+            </>
+          )
+        }
       </div>
     </div>
-  )
-}
+  </div>
+</section>
 
 <style lang="scss">
-  /* Full-width variant (uses page, etc.) */
-  .sponsor-cta {
+  .support-cta {
     padding: 0 1.5rem 4rem;
   }
 
-  .sponsor-cta__inner {
-    display: flex;
-    flex-direction: column;
+  .support-cta--sidebar {
+    margin: 1rem 0;
+    padding: 0;
+  }
+
+  .support-cta__panel {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(232, 0, 106, 0.16);
+    border-radius: 18px;
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(232, 0, 106, 0.16),
+        transparent 32%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(255, 250, 252, 0.98)
+      );
+    box-shadow: 0 20px 60px rgba(15, 15, 15, 0.08);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 1fr);
+      gap: 2.5rem;
+      padding: 2.5rem;
+    }
+  }
+
+  .support-cta__panel::before,
+  .support-cta__panel::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .support-cta__panel::before {
+    width: 16rem;
+    height: 16rem;
+    right: -6rem;
+    bottom: -9rem;
+    background: rgba(232, 0, 106, 0.08);
+  }
+
+  .support-cta__panel::after {
+    width: 10rem;
+    height: 10rem;
+    right: 12%;
+    top: -6rem;
+    border: 1px solid rgba(232, 0, 106, 0.12);
+  }
+
+  :global([data-theme="dark"]) .support-cta__panel {
+    border-color: rgba(232, 0, 106, 0.24);
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(232, 0, 106, 0.18),
+        transparent 32%
+      ),
+      linear-gradient(145deg, rgba(18, 18, 18, 0.98), rgba(26, 20, 24, 0.98));
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  }
+
+  .support-cta__content,
+  .support-cta__actions {
+    position: relative;
+    z-index: 1;
+  }
+
+  .support-cta__eyebrow {
+    display: inline-flex;
     align-items: center;
-    gap: 1.25rem;
-    text-align: center;
-    padding: 2.5rem 2rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
-    background-color: var(--color-surface);
-
-    @media (min-width: 640px) {
-      flex-direction: row;
-      text-align: left;
-      gap: 2rem;
-    }
-  }
-
-  .sponsor-cta__heart {
-    color: var(--color-pink);
-    flex-shrink: 0;
-    opacity: 0.9;
-
-    :global(svg) {
-      display: block;
-    }
-  }
-
-  .sponsor-cta__copy {
-    flex: 1;
-  }
-
-  .sponsor-cta__heading {
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-ink);
-    margin: 0 0 0.25rem;
-  }
-
-  .sponsor-cta__text {
-    font-size: 0.9rem;
-    color: var(--color-muted);
-    margin: 0;
-  }
-
-  .sponsor-cta__btn {
-    display: inline-block;
-    flex-shrink: 0;
-    padding: 0.65rem 1.4rem;
-    background-color: var(--color-pink);
-    color: #fff;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    text-decoration: none;
-    transition: opacity 0.15s ease;
-
-    &:hover {
-      opacity: 0.85;
-    }
-  }
-
-  /* Sidebar variant — matches TagsSidebar / SharePost design language */
-  .sponsor-cta-sidebar {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .sponsor-cta-sidebar__heading {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-pink);
-    padding-top: 0.75rem;
-    border-top: 2px solid var(--color-pink);
-    margin-bottom: 0.6rem;
-  }
-
-  .sponsor-cta-sidebar__heart {
-    color: var(--color-pink);
-    line-height: 1;
-
-    :global(svg) {
-      display: block;
-    }
-  }
-
-  .sponsor-cta-sidebar__text {
-    font-size: 0.82rem;
-    color: var(--color-muted);
-    margin: 0 0 0.85rem;
-    line-height: 1.5;
-  }
-
-  .sponsor-cta-sidebar__btn {
-    display: block;
-    text-align: center;
-    padding: 0.5rem 0.75rem;
-    background-color: var(--color-pink);
-    color: #fff;
+    gap: 0.45rem;
+    margin: 0 0 0.75rem;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-pink);
+  }
+
+  .support-cta__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+    color: var(--color-ink);
+    max-width: 14ch;
+  }
+
+  .support-cta--support .support-cta__title {
+    max-width: 16ch;
+  }
+
+  .support-cta__text {
+    margin: 0.9rem 0 0;
+    max-width: 58ch;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .support-cta__highlights {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+
+  .support-cta__highlights li {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(232, 0, 106, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.65);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+  }
+
+  :global([data-theme="dark"]) .support-cta__highlights li {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(232, 0, 106, 0.22);
+  }
+
+  .support-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    justify-content: center;
+  }
+
+  .support-cta--sidebar .support-cta__panel {
+    gap: 0.8rem;
+    padding: 1rem 0.9rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 22px rgba(15, 15, 15, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    .support-cta--sidebar .support-cta__panel {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+      padding: 1rem 0.9rem;
+    }
+  }
+
+  .support-cta--sidebar .support-cta__panel::before {
+    width: 8rem;
+    height: 8rem;
+    right: -3rem;
+    bottom: -4rem;
+  }
+
+  .support-cta--sidebar .support-cta__panel::after {
+    width: 5.5rem;
+    height: 5.5rem;
+    right: -0.5rem;
+    top: -2rem;
+  }
+
+  .support-cta--sidebar .support-cta__title {
+    max-width: none;
+    font-size: clamp(1.35rem, 2.5vw, 1.7rem);
+  }
+
+  .support-cta--sidebar .support-cta__text {
+    max-width: none;
+    margin-top: 0.45rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .support-cta--sidebar .support-cta__actions {
+    gap: 0.55rem;
+  }
+
+  .support-cta--sidebar .support-cta__btn {
+    width: 100%;
+    min-height: 2.65rem;
+    padding: 0.7rem 0.95rem;
+    font-size: 0.82rem;
+  }
+
+  .support-cta--sidebar .support-cta__eyebrow {
+    margin-bottom: 0.45rem;
+    font-size: 0.72rem;
+  }
+
+  .support-cta__btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.85rem 1.2rem;
+    border-radius: 999px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
     letter-spacing: 0.08em;
     text-decoration: none;
-    transition: opacity 0.15s ease;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease;
+  }
 
-    &:hover {
-      opacity: 0.85;
+  .support-cta__btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .support-cta__btn:focus-visible {
+    outline: 2px solid var(--color-pink);
+    outline-offset: 3px;
+  }
+
+  .support-cta__btn--work {
+    background: linear-gradient(135deg, #e8006a, #ff4b92);
+    color: #ffffff;
+    box-shadow: 0 12px 30px rgba(232, 0, 106, 0.22);
+  }
+
+  .support-cta__btn--work:hover {
+    box-shadow: 0 16px 36px rgba(232, 0, 106, 0.28);
+  }
+
+  .support-cta__aside {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .support-cta__donations {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .support-cta__donation {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(232, 0, 106, 0.16);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--color-ink);
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(15, 15, 15, 0.05);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      background-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .support-cta__donation:hover {
+    transform: translateY(-2px);
+    border-color: rgba(232, 0, 106, 0.32);
+    background: rgba(255, 247, 251, 0.96);
+    box-shadow: 0 16px 32px rgba(15, 15, 15, 0.08);
+  }
+
+  .support-cta__donation:focus-visible {
+    outline: 2px solid var(--color-pink);
+    outline-offset: 3px;
+  }
+
+  .support-cta__donation-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 14px;
+    flex-shrink: 0;
+    background: rgba(232, 0, 106, 0.08);
+    color: var(--color-pink);
+
+    :global(svg) {
+      display: block;
     }
+  }
+
+  .support-cta__donation-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .support-cta__donation-label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+  }
+
+  .support-cta__donation-meta {
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+  }
+
+  .support-cta__donation-arrow {
+    color: var(--color-muted);
+    transition:
+      transform 0.18s ease,
+      color 0.18s ease;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .support-cta__donation:hover .support-cta__donation-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .support-cta--sidebar .support-cta__donation {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 999px;
+    box-shadow: none;
+  }
+
+  .support-cta--sidebar .support-cta__donation-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+  }
+
+  .support-cta--sidebar .support-cta__donation-label {
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+  }
+
+  :global([data-theme="dark"]) .support-cta__donation {
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+  }
+
+  :global([data-theme="dark"]) .support-cta__donation:hover {
+    border-color: rgba(232, 0, 106, 0.34);
+    background: rgba(232, 0, 106, 0.08);
+  }
+
+  :global([data-theme="dark"]) .support-cta__donation-icon {
+    background: rgba(232, 0, 106, 0.14);
+    color: var(--color-pink);
+  }
+
+  :global([data-theme="dark"]) .support-cta__donation-label {
+    color: #ffffff;
+  }
+
+  .support-cta--support {
+    padding-bottom: 3rem;
+  }
+
+  .support-cta--sidebar.support-cta--support {
+    padding-bottom: 0;
   }
 </style>

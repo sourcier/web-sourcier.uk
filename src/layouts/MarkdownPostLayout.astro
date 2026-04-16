@@ -6,7 +6,7 @@ import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
 import SharePost from "../components/SharePost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
-import SponsorCTA from "../components/SponsorCTA.astro";
+import SupportCTA from "../components/SponsorCTA.astro";
 
 import TagsSidebar from "../components/TagsSidebar.astro";
 const { frontmatter, postId, headings = [], readingTime } = Astro.props;
@@ -101,16 +101,14 @@ const thumbSrc = frontmatter.cover?.thumbnail
               </nav>
             )
           }
+          <SupportCTA mode="support" placement="sidebar" />
           <SharePost title={frontmatter.title} url={Astro.url.href} vertical />
-          <SponsorCTA sidebar />
           <TagsSidebar />
         </aside>
       </div>
     </div>
 
-    <div class="sponsor-cta-below-post">
-      <SponsorCTA />
-    </div>
+    <SupportCTA />
     <MailingListCTA />
 
     {postId && <Comments postId={postId} />}
