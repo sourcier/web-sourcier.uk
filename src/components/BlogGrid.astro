@@ -9,6 +9,8 @@ interface Props {
   prevUrl: string | null;
   nextUrl: string | null;
   paginationBase?: string;
+  sectionLabel?: string;
+  sectionTitle?: string;
 }
 
 const { posts, currentPage, totalPages, prevUrl, nextUrl, paginationBase } =
@@ -26,8 +28,20 @@ function pageUrl(n: number) {
 }
 ---
 
-<section class="section">
+<section class="section blog-grid-section">
   <div class="container is-max-desktop">
+    {
+      (Astro.props.sectionLabel || Astro.props.sectionTitle) && (
+        <div class="blog-grid__header">
+          {Astro.props.sectionLabel && (
+            <p class="section-label">{Astro.props.sectionLabel}</p>
+          )}
+          {Astro.props.sectionTitle && (
+            <h2 class="blog-grid__title">{Astro.props.sectionTitle}</h2>
+          )}
+        </div>
+      )
+    }
     <div
       class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
     >
@@ -110,6 +124,24 @@ function pageUrl(n: number) {
 </section>
 
 <style lang="scss">
+  .blog-grid-section {
+    padding-top: 2.75rem;
+    padding-bottom: 0;
+  }
+
+  .blog-grid__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .blog-grid__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
   /* ── Pagination ───────────────────────────────────────────── */
   .pagination-nav {
     display: flex;

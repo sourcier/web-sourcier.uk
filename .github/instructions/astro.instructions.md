@@ -83,6 +83,14 @@ const posts = defineCollection({
 - Breakpoints: 640px (mobile/tablet), 768px (tablet/desktop)
 - Primary colour: `--color-pink: #e8006a`
 
+## UI Refinement Conventions
+
+- Audience-navigation surfaces on Sourcier should call these curated routes **guides**; prefer “guide” over “path” in headings, buttons, and supporting copy unless the user explicitly asks otherwise
+- In compact stat cards, place the small uppercase label above the value and keep the value short enough to avoid awkward wrapping; longer role or employer details belong in sidebar-style fact cards instead
+- When something is launching soon, promote that status into a distinct badge or label instead of relying on paragraph copy alone
+- If a footer divider or similar separator is meant to read as page-wide, implement it as a full-bleed line instead of a container-width border
+- For start-here and similar navigation sections, prefer positive orientation headings over “problem” wording
+
 ## Thumbnail Pipeline
 
 Pagefind search results display a thumbnail per post. The pipeline:

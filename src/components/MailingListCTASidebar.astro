@@ -3,13 +3,13 @@
 ---
 
 <div class="sidebar-subscribe" aria-labelledby="sidebar-subscribe-heading">
-  <p class="sidebar-subscribe__kicker">Free · No spam · Unsubscribe any time</p>
+  <p class="sidebar-subscribe__kicker">Free · Practical · One email per post</p>
   <p class="sidebar-subscribe__heading" id="sidebar-subscribe-heading">
-    Get new posts in your inbox
+    Get practical software engineering notes
   </p>
   <p class="sidebar-subscribe__body">
-    When the next article in this series drops, I'll send a short note with a
-    link and a summary. Nothing else.
+    Useful if you are transitioning into tech, trying to grow as an engineer, or
+    working on stronger engineering practice across your team.
   </p>
 
   <form id="sidebar-subscribe-form" novalidate aria-label="Newsletter sign up">
@@ -35,7 +35,7 @@
       required
     />
     <button type="submit" class="sidebar-subscribe__btn">
-      Yes, keep me posted
+      Join the list
     </button>
     <p
       class="sidebar-subscribe__feedback"
@@ -96,13 +96,13 @@
         feedback.textContent = data.error ?? "Something went wrong.";
         feedback.classList.add("sidebar-subscribe__feedback--error");
         btn.disabled = false;
-        btn.textContent = "Subscribe";
+        btn.textContent = "Join the list";
       }
     } catch {
       feedback.textContent = "Something went wrong.";
       feedback.classList.add("sidebar-subscribe__feedback--error");
       btn.disabled = false;
-      btn.textContent = "Yes, keep me posted";
+      btn.textContent = "Join the list";
     } finally {
       feedback.hidden = false;
     }

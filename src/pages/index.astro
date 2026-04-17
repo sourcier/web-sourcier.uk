@@ -7,6 +7,7 @@ import BlogPost from "../components/BlogPost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import Testimonials from "../components/Testimonials.astro";
 import CourseLaunchSection from "../components/CourseLaunchSection.astro";
+import { audienceGuides } from "../data/audienceGuides";
 
 const allPosts = (await getCollection("posts"))
   .filter(isPublished)
@@ -18,40 +19,68 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 ---
 
 <BaseLayout
-  pageTitle="Sourcier — Software Engineering by Roger Rajaratnam"
-  description="London-based Software engineer. Writing about engineering, architecture, and technical leadership."
+  pageTitle="Sourcier — Practical software engineering guidance"
+  description="Practical software engineering guidance for people transitioning into tech, engineers growing in confidence, and teams improving how they build software."
 >
   <section class="hero-intro">
     <div class="container">
       <div class="columns is-vcentered">
         <div class="column">
           <span class="hero-kicker"
-            >Sourcier &middot; Software Engineering Consultancy</span
+            >Sourcier &middot; Mentoring, career growth, and better software
+            delivery</span
           >
-          <h1 class="hero-title">Hi, I'm Roger<br />Rajaratnam</h1>
+          <h1 class="hero-title">Practical software engineering guidance</h1>
           <p class="hero-bio">
-            Sourcier is my software engineering consultancy — I build, mentor,
-            and advise. This is where I share what that work actually looks
-            like. Writing about
+            I help people transition into tech, engineers grow with confidence,
+            and teams improve how they build software. Writing about
             <span class="hero-cycle" aria-live="polite" aria-atomic="true"
               ><span class="hero-cycle__term" id="heroCycleTerm"
-                >System Design</span
+                >Breaking into Tech</span
               ></span
             >
           </p>
           <div class="buttons">
-            <a href="/blog" class="button is-primary is-medium">Read the blog</a
+            <a href="/start-here" class="button is-primary is-medium"
+              >Choose a guide</a
             >
-            <a href="/about" class="button is-light is-medium">About me</a>
+            <a href="/contact" class="button is-light is-medium">Get guidance</a
+            >
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <section
+    class="section audience-paths"
+    id="audience-paths"
+    aria-labelledby="audience-paths-heading"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label">Who this site is for</p>
+      <h2 class="audience-paths__heading" id="audience-paths-heading">
+        Choose the guide that matches where you are now
+      </h2>
+      <div class="audience-paths__grid">
+        {
+          audienceGuides.map((guide) => (
+            <article class="audience-card">
+              <h3 class="audience-card__title">{guide.title}</h3>
+              <p class="audience-card__body">{guide.summary}</p>
+              <a class="audience-card__primary" href={guide.href}>
+                Open the guide
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
   <section class="section" aria-label="Recent Posts">
     <div class="container is-max-desktop">
-      <p class="section-label">Recent Posts</p>
+      <p class="section-label">Latest writing</p>
       <div
         class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
       >
@@ -100,6 +129,89 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 </BaseLayout>
 
 <style lang="scss">
+  .audience-paths {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: 1rem;
+  }
+
+  .audience-paths__heading {
+    margin: 0 0 1.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    line-height: 1.05;
+    color: var(--color-ink);
+    text-transform: uppercase;
+  }
+
+  .audience-paths__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .audience-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
+    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 44px rgba(232, 0, 106, 0.12);
+      border-color: rgba(232, 0, 106, 0.26);
+    }
+  }
+
+  .audience-card__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .audience-card__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .audience-card__primary {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .audience-card__primary {
+    color: var(--color-pink);
+  }
+
   .card__blog--placeholder {
     pointer-events: none;
     border: 2px dashed var(--color-border);
@@ -128,11 +240,11 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 
 <script>
   const terms = [
-    "System Design",
-    "Web Development",
-    "Technical Leadership",
-    "Growing Engineers",
-    "Engineering Craft",
+    "Breaking into Tech",
+    "Career Growth",
+    "Engineering Practice",
+    "Mentoring Engineers",
+    "Shipping Better Software",
   ];
 
   const el = document.getElementById("heroCycleTerm");

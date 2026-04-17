@@ -6,6 +6,7 @@ import PageHero from "../../components/PageHero.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
 import BlogTagCloud from "../../components/BlogTagCloud.astro";
+import { audienceGuides } from "../../data/audienceGuides";
 
 const PAGE_SIZE = 9;
 
@@ -20,26 +21,52 @@ const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
 
 <BaseLayout
   pageTitle="Blog — Sourcier"
-  description="Writing on software engineering, architecture, technical leadership, and lessons learned from 20+ years in the craft."
+  description="Practical writing for people transitioning into tech, engineers growing in confidence, and teams improving engineering practice."
 >
   <PageHero
     kicker="Writing"
     title="Blog"
-    subtitle="Software engineering, architecture, and lessons learned along the way."
+    subtitle="Practical writing for career switchers, engineers building confidence, and teams improving how they build software."
   />
 
   <div class="blog-intro">
     <div class="container is-max-desktop">
-      <blockquote class="blog-intro__quote">
+      <blockquote class="blog-intro__quote page-panel">
         <p>
-          This blog is where I share ideas, lessons learned, and practical
-          insights from my experience in software engineering — system design,
-          web development, technical leadership, and whatever else is on my
-          mind.
+          This blog is where I turn day-to-day software engineering work into
+          something useful for three groups: people moving into tech, engineers
+          trying to level up, and teams that want stronger engineering practice
+          without adding pointless process.
         </p>
       </blockquote>
     </div>
   </div>
+
+  <section class="blog-paths" aria-labelledby="blog-paths-heading">
+    <div class="container is-max-desktop">
+      <p class="section-label">Start here</p>
+      <h2 class="blog-paths__heading" id="blog-paths-heading">
+        Pick the guide that fits where you are now
+      </h2>
+      <div class="blog-paths__grid">
+        {
+          audienceGuides.map((guide) => (
+            <article class="blog-path-card">
+              <h3 class="blog-path-card__title">{guide.title}</h3>
+              <p class="blog-path-card__body">{guide.summary}</p>
+              <div class="blog-path-card__meta" aria-label="Guide coverage">
+                <span>{guide.currentPostIds.length} published now</span>
+                <span>{guide.plannedArticles.length} planned next</span>
+              </div>
+              <a class="blog-path-card__cta" href={guide.href}>
+                Open the guide
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
   <BlogTagCloud />
 
@@ -49,6 +76,8 @@ const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
     totalPages={totalPages}
     prevUrl={null}
     nextUrl={nextUrl}
+    sectionLabel="Latest posts"
+    sectionTitle="Recent articles from the blog"
   />
 
   <MailingListCTA />
@@ -56,12 +85,102 @@ const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
 
 <style lang="scss">
   .blog-intro {
-    padding: 3.5rem 1.5rem 0;
+    padding: clamp(2.5rem, 5vw, 3.5rem) 1.5rem 0;
+    margin-bottom: 0;
+  }
+
+  .blog-paths {
+    padding: 2.75rem 1.5rem 0;
+  }
+
+  .blog-paths__heading {
+    margin: 0 0 1.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .blog-paths__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .blog-path-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
+    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 44px rgba(232, 0, 106, 0.12);
+      border-color: rgba(232, 0, 106, 0.26);
+    }
+  }
+
+  .blog-path-card__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .blog-path-card__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .blog-path-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .blog-path-card__cta {
+    margin-top: auto;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-pink);
+    text-decoration: none;
   }
 
   .blog-intro__quote {
     margin: 0;
-    padding: 0 0 0 2rem;
+    padding-left: clamp(1.25rem, 3vw, 2rem);
     border-left: 3px solid var(--color-pink);
     position: relative;
 

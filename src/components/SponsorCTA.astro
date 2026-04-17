@@ -57,13 +57,13 @@ const eyebrow = isSidebar
 const title = isSidebar
   ? "Support the writing"
   : isArticle
-    ? "Need help shipping it?"
+    ? "Need help raising the bar?"
     : "Support the writing";
 const body = isSidebar
   ? "Found this useful? You can back the writing with a quick tip."
   : isArticle
-    ? "I help teams turn ideas like this into production work: architecture reviews, hands-on delivery, and mentoring. If you want a second pair of eyes or hands-on help, let's talk."
-    : "If the blog has been useful, you can back the writing with a tip. If you have a project in mind instead, I'm available for consulting, speaking, and mentoring.";
+    ? "I help teams improve engineering practice through hands-on delivery, pragmatic reviews, and mentoring. If you want a second pair of eyes or practical support, let's talk."
+    : "If the blog has been useful, you can back the writing with a tip. If you need support with career growth or engineering practice instead, I'm available to help.";
 const headingId = isSidebar
   ? "sidebar-support-cta"
   : isArticle
@@ -88,7 +88,7 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
         {
           showHighlights && (
             <ul class="support-cta__highlights" role="list">
-              <li>Architecture review</li>
+              <li>Engineering practice review</li>
               <li>Hands-on delivery</li>
               <li>Team mentoring</li>
             </ul>
@@ -100,7 +100,7 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
         {
           showWorkButton && (
             <a href="/contact" class="support-cta__btn support-cta__btn--work">
-              Work with me
+              Get guidance
             </a>
           )
         }

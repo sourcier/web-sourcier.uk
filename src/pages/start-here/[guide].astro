@@ -1,0 +1,325 @@
+---
+import { getCollection } from "astro:content";
+import readingTime from "reading-time";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import BlogPost from "../../components/BlogPost.astro";
+import MailingListCTA from "../../components/MailingListCTA.astro";
+import { audienceGuides, getAudienceGuide } from "../../data/audienceGuides";
+import { isPublished } from "../../utils/drafts";
+
+export async function getStaticPaths() {
+  return audienceGuides.map((guide) => ({
+    params: { guide: guide.slug },
+    props: { guide },
+  }));
+}
+
+const { guide: guideFromProps } = Astro.props;
+const guide = guideFromProps ?? getAudienceGuide(Astro.params.guide ?? "");
+
+if (!guide) {
+  throw new Error(`Unknown audience guide: ${Astro.params.guide}`);
+}
+
+const allPosts = (await getCollection("posts"))
+  .filter(isPublished)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsById = new Map(allPosts.map((post) => [post.id, post]));
+const guidePosts = guide.currentPostIds
+  .map((postId) => postsById.get(postId))
+  .filter(Boolean);
+---
+
+<BaseLayout
+  pageTitle={`${guide.pageTitle} — Start Here — Sourcier`}
+  description={guide.pageDescription}
+>
+  <PageHero
+    kicker="Start here"
+    title={guide.pageTitle}
+    subtitle={guide.pageSubtitle}
+  />
+
+  <section class="section guide-intro" aria-labelledby="guide-intro-heading">
+    <div class="container is-max-desktop">
+      <div class="guide-intro__panel page-panel">
+        <p class="section-label">Overview</p>
+        <h2 class="guide-intro__heading" id="guide-intro-heading">
+          A practical guide, not just a list of links
+        </h2>
+        <p class="guide-intro__body">{guide.intro}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section guide-panels" aria-labelledby="guide-panels-heading">
+    <div class="container is-max-desktop">
+      <div class="guide-panels__grid">
+        <article class="guide-panel">
+          <p class="guide-panel__kicker">Who this is for</p>
+          <h2 class="guide-panel__title" id="guide-panels-heading">
+            Start here if this sounds like you
+          </h2>
+          <ul class="guide-panel__list" role="list">
+            {guide.whoItsFor.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <article class="guide-panel">
+          <p class="guide-panel__kicker">What you will get</p>
+          <h2 class="guide-panel__title">What this guide will cover</h2>
+          <ul class="guide-panel__list" role="list">
+            {guide.whatYouWillGet.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section guide-current" aria-labelledby="guide-current-heading">
+    <div class="container is-max-desktop">
+      <p class="section-label">Published now</p>
+      <h2 class="guide-current__heading" id="guide-current-heading">
+        Read these first
+      </h2>
+      <div class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop">
+        <div class="grid">
+          {
+            guidePosts.map((post: any) => (
+              <div class="cell">
+                <BlogPost
+                  title={post.data.title}
+                  subTitle={post.data.subTitle}
+                  description={post.data.description}
+                  url={`/blog/${post.id}`}
+                  cover={post.data.cover}
+                  pubDate={post.data.pubDate}
+                  draft={post.data.draft}
+                  readingTime={readingTime(post.body ?? "").text}
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section guide-planned" aria-labelledby="guide-planned-heading">
+    <div class="container is-max-desktop">
+      <p class="section-label">Coming next</p>
+      <h2 class="guide-planned__heading" id="guide-planned-heading">
+        Planned articles for this path
+      </h2>
+      <p class="guide-planned__intro">
+        These are the topics I plan to add next so this path becomes more useful over time.
+      </p>
+      <div class="guide-planned__grid">
+        {
+          guide.plannedArticles.map((article) => (
+            <article class="planned-article-card">
+              <p class="planned-article-card__status">Planned</p>
+              <h3 class="planned-article-card__title">{article.title}</h3>
+              <p class="planned-article-card__body">{article.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section guide-cta" aria-labelledby="guide-cta-heading">
+    <div class="container is-max-desktop">
+      <div class="guide-cta__panel">
+        <div>
+          <p class="guide-cta__kicker">Next step</p>
+          <h2 class="guide-cta__title" id="guide-cta-heading">
+            Want help beyond the articles?
+          </h2>
+          <p class="guide-cta__body">
+            If this path matches where you are now, you can either get in touch directly or subscribe so you hear about new articles as this guide grows.
+          </p>
+        </div>
+        <div class="guide-cta__actions">
+          <a href={guide.supportHref} class="guide-cta__primary">
+            {guide.supportLabel}
+          </a>
+          <a href="/blog" class="guide-cta__secondary">Browse the blog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <MailingListCTA />
+</BaseLayout>
+
+<style lang="scss">
+  .guide-intro {
+    padding-top: clamp(2.75rem, 5vw, 4rem);
+  }
+
+  .guide-panels,
+  .guide-panels,
+  .guide-current,
+  .guide-planned,
+  .guide-cta {
+    padding-top: 0;
+  }
+
+  .guide-intro__panel {
+    padding-top: 1.5rem;
+  }
+
+  .guide-intro__heading,
+  .guide-current__heading,
+  .guide-planned__heading {
+    margin: 0 0 1rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .guide-intro__body,
+  .guide-planned__intro,
+  .guide-cta__body {
+    max-width: 64ch;
+    margin: 0;
+    line-height: 1.75;
+    color: var(--color-muted);
+  }
+
+  .guide-panels__grid,
+  .guide-planned__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .guide-panel,
+  .planned-article-card,
+  .guide-cta__panel {
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
+    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+  }
+
+  .guide-panel,
+  .planned-article-card {
+    padding: 1.5rem;
+  }
+
+  .guide-panel__kicker,
+  .planned-article-card__status,
+  .guide-cta__kicker {
+    margin: 0 0 0.6rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-pink);
+  }
+
+  .guide-panel__title,
+  .planned-article-card__title,
+  .guide-cta__title {
+    margin: 0 0 0.75rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .guide-panel__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+
+    li {
+      position: relative;
+      padding-left: 1rem;
+      line-height: 1.65;
+      color: var(--color-muted);
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.72em;
+        width: 0.35rem;
+        height: 0.35rem;
+        border-radius: 999px;
+        background: var(--color-pink);
+      }
+    }
+  }
+
+  .planned-article-card__body {
+    margin: 0;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .guide-cta__panel {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.5rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.6fr) auto;
+      align-items: center;
+    }
+  }
+
+  .guide-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .guide-cta__primary,
+  .guide-cta__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .guide-cta__primary {
+    background: var(--color-pink);
+    color: #fff;
+  }
+
+  .guide-cta__secondary {
+    border: 1px solid var(--color-border);
+    color: var(--color-ink);
+    background: transparent;
+  }
+</style>

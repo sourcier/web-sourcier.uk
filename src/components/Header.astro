@@ -67,6 +67,11 @@ function isActive(href: string) {
         >
         <a
           class="navbar-item"
+          href="/start-here"
+          aria-current={isActive("/start-here") ? "page" : undefined}>Guides</a
+        >
+        <a
+          class="navbar-item"
           href="/uses"
           aria-current={isActive("/uses") ? "page" : undefined}>Uses</a
         >
@@ -106,7 +111,7 @@ function isActive(href: string) {
               <Fragment set:html={linkedinIcon} />
             </a>
             <ThemeToggle />
-            <a href="/contact" class="navbar-cta">Work with me</a>
+            <a href="/contact" class="navbar-cta">Get guidance</a>
           </div>
         </div>
       </div>

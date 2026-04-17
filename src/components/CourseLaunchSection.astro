@@ -2,19 +2,26 @@
 
 ---
 
-<section class="course-launch" aria-labelledby="course-launch-heading">
+<section
+  class="course-launch"
+  id="course-launch"
+  aria-labelledby="course-launch-heading"
+>
   <div class="container is-max-desktop">
     <p class="section-label course-launch__section-label">Courses</p>
     <div class="course-launch__card">
       <div class="course-launch__intro">
-        <p class="course-launch__kicker">Launching soon</p>
+        <p class="course-launch__status">Launching soon</p>
+        <p class="course-launch__kicker">
+          For career switchers and engineers building confidence
+        </p>
         <h2 class="course-launch__heading" id="course-launch-heading">
           Full Stack Developer Course
         </h2>
         <p class="course-launch__body">
-          A practical learning path designed for developers who want to build
-          complete applications end-to-end. First cohort details are coming
-          soon.
+          A practical learning path for people moving into tech and engineers
+          who want stronger full-stack foundations. First cohort details are
+          coming soon.
         </p>
       </div>
 
@@ -24,26 +31,24 @@
         aria-label="Course modules"
       >
         <li class="course-launch__module">
-          <p class="course-launch__module-title">HTML &amp; CSS</p>
+          <p class="course-launch__module-title">Web foundations</p>
           <p class="course-launch__module-copy">
-            Semantic structure, modern layouts, and production-ready styling
-            patterns.
+            Semantic HTML, modern CSS, accessibility, and the layout patterns
+            you actually use on real projects.
           </p>
         </li>
         <li class="course-launch__module">
-          <p class="course-launch__module-title">
-            JavaScript (Frontend + Backend)
-          </p>
+          <p class="course-launch__module-title">JavaScript across the stack</p>
           <p class="course-launch__module-copy">
-            Build interactive user interfaces, design APIs, and ship
-            maintainable full-stack JavaScript applications.
+            Build front-end features, design APIs, and understand how full-stack
+            applications fit together.
           </p>
         </li>
         <li class="course-launch__module">
-          <p class="course-launch__module-title">DevOps</p>
+          <p class="course-launch__module-title">Shipping and team habits</p>
           <p class="course-launch__module-copy">
-            Deployments, CI/CD, and observability practices to keep systems
-            reliable in production.
+            Testing, deployments, debugging, and the engineering habits that
+            help you work confidently in a team.
           </p>
         </li>
       </ul>
@@ -54,7 +59,9 @@
         novalidate
         aria-label="Register interest for full stack course"
       >
-        <p class="course-launch__fineprint">No spam. Course updates only.</p>
+        <p class="course-launch__fineprint">
+          No spam. Course updates and early access only.
+        </p>
         <p class="course-launch__honeypot" aria-hidden="true">
           <label for="course-launch-website">Leave this blank</label>
           <input
@@ -79,7 +86,7 @@
             required
           />
           <button type="submit" class="button course-launch__btn">
-            Register interest
+            Get course updates
           </button>
         </div>
         <p
@@ -148,13 +155,13 @@
           data.error ?? "Something went wrong. Please try again.";
         feedback.classList.add("course-launch__feedback--error");
         button.disabled = false;
-        button.textContent = "Register interest";
+        button.textContent = "Get course updates";
       }
     } catch {
       feedback.textContent = "Something went wrong. Please try again.";
       feedback.classList.add("course-launch__feedback--error");
       button.disabled = false;
-      button.textContent = "Register interest";
+      button.textContent = "Get course updates";
     } finally {
       feedback.hidden = false;
     }
@@ -188,6 +195,22 @@
 
   .course-launch__intro {
     margin-bottom: 1rem;
+  }
+
+  .course-launch__status {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 0 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: var(--color-pink);
+    box-shadow: 0 10px 24px rgba(232, 0, 106, 0.24);
   }
 
   .course-launch__kicker {

@@ -4,7 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import {
   faBriefcase,
-  faMicrophone,
+  faArrowTrendUp,
   faUserGraduate,
   faSquareCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,7 @@ import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faIcon } from "../utils/icons";
 
 const projectsIcon = faIcon(faBriefcase, { size: 24 });
-const speakingIcon = faIcon(faMicrophone, { size: 24 });
+const growthIcon = faIcon(faArrowTrendUp, { size: 24 });
 const mentoringIcon = faIcon(faUserGraduate, { size: 24 });
 const linkedinIcon = faIcon(faLinkedin, { size: 20 });
 const githubIcon = faIcon(faGithub, { size: 20 });
@@ -31,38 +31,39 @@ const pageTitle = "Contact — Sourcier";
 
 <BaseLayout
   pageTitle={pageTitle}
-  description="Get in touch with Roger Rajaratnam about projects, speaking opportunities, or mentoring."
+  description="Get in touch about career-transition support, engineering growth, or help improving how your team builds software."
 >
   <PageHero
     kicker="Get in touch"
-    title="Let's work together"
-    subtitle="Open to projects, speaking opportunities, and mentoring conversations."
+    title="Get support"
+    subtitle="Career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
   />
 
   <!-- Contact reasons -->
   <div class="contact-reasons">
     <div class="container is-max-desktop">
       <ul class="contact-reasons__list" role="list">
-        <li class="contact-reasons__item">
+        <li class="contact-reasons__item" id="team-guidance">
           <span class="contact-reasons__icon-wrap">
             <span class="contact-reasons__icon" set:html={projectsIcon} />
           </span>
           <div>
-            <p class="contact-reasons__title">Projects</p>
+            <p class="contact-reasons__title">Engineering practice</p>
             <p class="contact-reasons__desc">
-              Engineering leadership or full-stack development work.
+              Help for teams that want better delivery, maintainability, and
+              engineering habits.
             </p>
           </div>
         </li>
         <li class="contact-reasons__item">
           <span class="contact-reasons__icon-wrap">
-            <span class="contact-reasons__icon" set:html={speakingIcon} />
+            <span class="contact-reasons__icon" set:html={growthIcon} />
           </span>
           <div>
-            <p class="contact-reasons__title">Speaking</p>
+            <p class="contact-reasons__title">Career growth</p>
             <p class="contact-reasons__desc">
-              Talks on software engineering, technical leadership, or career
-              growth.
+              Support for engineers who want to grow their confidence, judgment,
+              and impact.
             </p>
           </div>
         </li>
@@ -71,10 +72,10 @@ const pageTitle = "Contact — Sourcier";
             <span class="contact-reasons__icon" set:html={mentoringIcon} />
           </span>
           <div>
-            <p class="contact-reasons__title">Mentoring</p>
+            <p class="contact-reasons__title">Transition into tech</p>
             <p class="contact-reasons__desc">
-              Supporting engineers looking to grow their skills or break into
-              the field.
+              Guidance for people changing careers and trying to build the
+              skills, context, and confidence to get started.
             </p>
           </div>
         </li>
@@ -87,7 +88,9 @@ const pageTitle = "Contact — Sourcier";
       <div class="contact-layout">
         <div class="contact-form-col">
           <p class="contact-form__intro">
-            Use the form below and I'll get back to you as soon as I can.
+            If you are changing careers, trying to level up as an engineer, or
+            need help improving how your team builds software, send a note and I
+            will get back to you as soon as I can.
           </p>
 
           <form
@@ -138,9 +141,13 @@ const pageTitle = "Contact — Sourcier";
                 required
               >
                 <option value="" disabled selected>Select a reason…</option>
+                <option value="career-transition">Transition into tech</option>
+                <option value="career-growth">Career growth</option>
+                <option value="engineering-practice"
+                  >Engineering practice</option
+                >
                 <option value="project">Project</option>
                 <option value="speaking">Speaking</option>
-                <option value="mentoring">Mentoring</option>
                 <option value="other">Other</option>
               </select>
             </div>
@@ -165,7 +172,7 @@ const pageTitle = "Contact — Sourcier";
               <textarea
                 class="contact-form__textarea"
                 id="contact-message"
-                placeholder="Tell me a bit about what you have in mind…"
+                placeholder="Tell me about your situation, your goals, or the team challenge you want to solve…"
                 name="message"
                 rows="6"
                 required></textarea>
@@ -206,9 +213,10 @@ const pageTitle = "Contact — Sourcier";
                 LinkedIn
               </span>
               <span class="contact-sidebar__link-desc"
-                >Software engineering &amp; leadership</span
+                >Mentoring, growth, and engineering leadership</span
               >
             </a>
+
             <a
               class="contact-sidebar__link"
               href="https://github.com/sourcier"
@@ -223,7 +231,7 @@ const pageTitle = "Contact — Sourcier";
                 GitHub
               </span>
               <span class="contact-sidebar__link-desc"
-                >Open source &amp; blog code</span
+                >Blog code, tooling, and experiments</span
               >
             </a>
           </div>
@@ -238,8 +246,8 @@ const pageTitle = "Contact — Sourcier";
 <style lang="scss">
   /* ── Contact reasons bar ───────────────────────────────────── */
   .contact-reasons {
-    margin-top: 3rem;
-    padding: 0 1.5rem;
+    margin-top: 0;
+    padding: clamp(2.75rem, 5vw, 4rem) 1.5rem 0;
   }
 
   .contact-reasons__list {
@@ -263,7 +271,14 @@ const pageTitle = "Contact — Sourcier";
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;

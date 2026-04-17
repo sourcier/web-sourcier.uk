@@ -10,7 +10,14 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
 
 <section class="section" aria-labelledby="career-section-title">
   <div class="container is-max-desktop">
-    <h2 class="career-section-title" id="career-section-title">Career</h2>
+    <h2 class="career-section-title" id="career-section-title">
+      Experience across mentoring, delivery, and team leadership
+    </h2>
+    <p class="career-section-intro">
+      My background spans hands-on software engineering, teaching career
+      changers, mentoring growing engineers, and helping product teams deliver
+      with more confidence.
+    </p>
   </div>
   <div class="career-timeline">
     <div class="career-timeline__track">
@@ -257,7 +264,18 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       font-weight: 800;
       letter-spacing: -0.01em;
       color: var(--color-ink);
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
+
+      @media (min-width: 640px) {
+        text-align: center;
+      }
+    }
+
+    .career-section-intro {
+      max-width: 60ch;
+      margin: 0 auto 3rem;
+      color: var(--color-muted);
+      line-height: 1.7;
 
       @media (min-width: 640px) {
         text-align: center;
@@ -268,7 +286,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       position: relative;
       max-width: 780px;
       margin: 0 auto;
-      padding: 0 1.5rem 4rem;
+      padding: 0 1.5rem 1.5rem;
     }
 
     .career-timeline__track {
@@ -424,7 +442,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
     .career-timeline__more {
       display: flex;
       justify-content: center;
-      padding: 0.5rem 0 2rem;
+      padding: 0.5rem 0 0.5rem;
     }
 
     .career-timeline__more-btn {

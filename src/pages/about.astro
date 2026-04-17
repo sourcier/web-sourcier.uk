@@ -56,12 +56,12 @@ const pageTitle = "About — Roger Rajaratnam";
 
 <BaseLayout
   pageTitle={pageTitle}
-  description="Software engineer based in London with 20+ years across fintech, media, and consumer technology."
+  description="Helping career switchers, growing engineers, and teams build better software engineering practice."
 >
   <PageHero
     kicker="About"
     title="Roger Rajaratnam"
-    subtitle="Software engineer based in London"
+    subtitle="Helping people move into tech, engineers grow, and teams improve how they build software"
   />
 
   <!-- Stats bar -->
@@ -69,20 +69,20 @@ const pageTitle = "About — Roger Rajaratnam";
     <div class="container is-max-desktop">
       <ul class="about-stats__list" role="list">
         <li class="about-stats__item">
+          <span class="about-stats__label">Years in software</span>
           <span class="about-stats__value">20+</span>
-          <span class="about-stats__label">Years experience</span>
         </li>
         <li class="about-stats__item">
-          <span class="about-stats__value">Fintech</span>
           <span class="about-stats__label">Current domain</span>
+          <span class="about-stats__value">Fintech</span>
         </li>
         <li class="about-stats__item">
-          <span class="about-stats__value">Full&#8209;stack</span>
-          <span class="about-stats__label">Discipline</span>
+          <span class="about-stats__label">Teaching experience</span>
+          <span class="about-stats__value">Bootcamps</span>
         </li>
         <li class="about-stats__item">
-          <span class="about-stats__value">London</span>
-          <span class="about-stats__label">Based in</span>
+          <span class="about-stats__label">Career focus</span>
+          <span class="about-stats__value">Mentoring</span>
         </li>
       </ul>
     </div>
@@ -95,37 +95,53 @@ const pageTitle = "About — Roger Rajaratnam";
         <!-- Left: labelled narrative blocks -->
         <div class="about-bio__main">
           <div class="about-bio__block">
-            <h2 class="about-bio__kicker">Background</h2>
+            <h2 class="about-bio__kicker">How I work</h2>
             <p class="about-bio__text">
-              I'm a software engineer based in London, passionate about building
-              things on the web and solving problems through technology. My
-              journey started with a curiosity about how digital products work
-              behind the scenes — that curiosity eventually turned into a career
-              focused on designing and building scalable applications.
+              I am a software engineer based in London with more than 20 years
+              of experience across product engineering, delivery, mentoring, and
+              team leadership. The thread that runs through all of it is
+              practical improvement: helping people and teams get better at
+              building software without adding unnecessary ceremony.
             </p>
           </div>
 
-          <div class="about-bio__block">
-            <h2 class="about-bio__kicker">What I do</h2>
+          <div class="about-bio__block" id="career-support">
+            <h2 class="about-bio__kicker">
+              For people transitioning into tech
+            </h2>
             <p class="about-bio__text">
-              I've worked across a range of projects in fintech and consumer
-              technology as a full-stack engineer. I enjoy working across the
-              entire stack — from crafting intuitive front-end experiences to
-              designing backend systems that are reliable, scalable, and
-              maintainable. Much of my work today sits at the intersection of
-              engineering, architecture, and leadership.
+              I teach the parts that often stay fuzzy when you are new: how the
+              web stack fits together, how to think about trade-offs, how to go
+              from tutorials to real projects, and how to build enough context
+              to make better decisions. My bootcamp teaching experience made me
+              care deeply about turning complex engineering work into something
+              clear and usable.
             </p>
           </div>
 
-          <div class="about-bio__block">
-            <h2 class="about-bio__kicker">Teaching &amp; mentoring</h2>
+          <div class="about-bio__block" id="career-growth-support">
+            <h2 class="about-bio__kicker">
+              For engineers growing in confidence
+            </h2>
             <p class="about-bio__text">
-              One of the most rewarding aspects of my career has been helping
-              other developers grow. I've spent time mentoring engineers and
-              teaching at coding bootcamps, supporting people as they transition
-              into software engineering. Watching someone go from writing their
-              first lines of code to confidently building full applications is
-              incredibly fulfilling.
+              A lot of career progression comes down to better habits rather
+              than flashy knowledge: debugging clearly, writing maintainable
+              code, communicating trade-offs, and learning how to own outcomes.
+              I enjoy helping engineers make that shift from delivering tasks to
+              growing into trusted contributors.
+            </p>
+          </div>
+
+          <div class="about-bio__block" id="team-standards-support">
+            <h2 class="about-bio__kicker">
+              For teams improving engineering practice
+            </h2>
+            <p class="about-bio__text">
+              Most teams do not need more process. They need clearer
+              expectations, healthier delivery habits, better testing, more
+              thoughtful mentoring, and pragmatic technical direction. I work
+              best where teams want to raise the bar without slowing everything
+              down.
             </p>
           </div>
         </div>
@@ -139,33 +155,33 @@ const pageTitle = "About — Roger Rajaratnam";
           </div>
 
           <div class="about-sidebar-card">
-            <p class="about-sidebar-card__label">Education</p>
+            <p class="about-sidebar-card__label">Teaching background</p>
             <p class="about-sidebar-card__title">
-              BSc Computer Software Engineering
+              Full-Stack Bootcamp Instructor
             </p>
-            <p class="about-sidebar-card__sub">University of Westminster</p>
+            <p class="about-sidebar-card__sub">The Jump Digital School</p>
+          </div>
+
+          <div class="about-sidebar-card">
+            <p class="about-sidebar-card__label">Who I help</p>
+            <ul class="about-tag-list" role="list">
+              <li>Career changers</li>
+              <li>Engineers building confidence</li>
+              <li>Engineers taking on more ownership</li>
+              <li>Product teams</li>
+              <li>Growing engineering teams</li>
+            </ul>
           </div>
 
           <div class="about-sidebar-card">
             <p class="about-sidebar-card__label">Focus areas</p>
             <ul class="about-tag-list" role="list">
-              <li>Full-stack development</li>
-              <li>System design</li>
-              <li>Technical leadership</li>
-              <li>Engineering mentorship</li>
-              <li>Web performance</li>
-            </ul>
-          </div>
-
-          <div class="about-sidebar-card">
-            <p class="about-sidebar-card__label">Tech stack</p>
-            <ul class="about-tag-list" role="list">
-              <li>CSS</li>
-              <li>HTML</li>
-              <li>JavaScript</li>
-              <li>Node.js</li>
-              <li>React</li>
-              <li>TypeScript</li>
+              <li>Mentoring and coaching</li>
+              <li>Engineering practice</li>
+              <li>Full-stack delivery</li>
+              <li>Testing and automation</li>
+              <li>Developer experience</li>
+              <li>Pragmatic team leadership</li>
             </ul>
           </div>
         </aside>
@@ -178,10 +194,9 @@ const pageTitle = "About — Roger Rajaratnam";
     <div class="container is-max-desktop">
       <blockquote class="about-pullquote__inner">
         <p>
-          This blog is where I share ideas, lessons learned, and practical
-          insights from my experience in software engineering — system design,
-          web development, technical leadership, and whatever else is on my
-          mind.
+          I write for people getting into tech, engineers figuring out their
+          next level, and teams that want practical engineering practice rather
+          than process theatre.
         </p>
       </blockquote>
     </div>
@@ -253,8 +268,8 @@ const pageTitle = "About — Roger Rajaratnam";
 <style lang="scss">
   /* ── Stats bar ─────────────────────────────────────────────── */
   .about-stats {
-    padding: 0 1.5rem;
-    margin-top: 3rem;
+    padding: clamp(2.75rem, 5vw, 4rem) 1.5rem 0;
+    margin-top: 0;
   }
 
   .about-stats__list {
@@ -274,11 +289,19 @@ const pageTitle = "About — Roger Rajaratnam";
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    min-height: clamp(7.25rem, 14vw, 8.25rem);
     padding: 1.5rem 1.25rem 1.25rem;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
     position: relative;
     transition:
       transform 0.18s ease,
@@ -310,7 +333,7 @@ const pageTitle = "About — Roger Rajaratnam";
 
   /* ── Bio grid ──────────────────────────────────────────────── */
   .about-bio {
-    padding-top: 4rem;
+    padding-top: 3rem;
     padding-bottom: 4rem;
   }
 

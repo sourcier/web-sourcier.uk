@@ -37,9 +37,10 @@ const tags = [...tagCounts.entries()]
 <section class="tag-cloud" aria-labelledby="tag-cloud-heading">
   <div class="container is-max-desktop">
     <div class="tag-cloud__header">
-      <span class="tag-cloud__label" id="tag-cloud-heading"
-        >Browse by topic</span
-      >
+      <div class="tag-cloud__intro">
+        <p class="section-label">Topics</p>
+        <h2 class="tag-cloud__title" id="tag-cloud-heading">Browse by topic</h2>
+      </div>
       <a href="/tags" class="tag-cloud__all-link" aria-label="View all topics">
         All topics &rarr;
       </a>
@@ -67,25 +68,33 @@ const tags = [...tagCounts.entries()]
 
 <style lang="scss">
   .tag-cloud {
-    padding: 2.5rem 1.5rem;
+    padding: 2.75rem 1.5rem 0;
   }
 
   .tag-cloud__header {
     display: flex;
-    align-items: baseline;
+    align-items: end;
     justify-content: space-between;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-pink);
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+
+    @media (max-width: 639px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
-  .tag-cloud__label {
+  .tag-cloud__intro {
+    min-width: 0;
+  }
+
+  .tag-cloud__title {
+    margin: 0;
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.05;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-pink);
+    color: var(--color-ink);
   }
 
   .tag-cloud__all-link {
@@ -100,6 +109,10 @@ const tags = [...tagCounts.entries()]
 
     &:hover {
       color: var(--color-pink);
+    }
+
+    @media (min-width: 640px) {
+      padding-bottom: 0.25rem;
     }
   }
 

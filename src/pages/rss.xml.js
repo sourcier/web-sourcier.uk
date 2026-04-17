@@ -10,7 +10,7 @@ export async function GET(context) {
   return rss({
     title: "Sourcier — Blog",
     description:
-      "Writing on software engineering, architecture, technical leadership, and lessons learned from 20+ years in the craft.",
+      "Practical software engineering writing for people transitioning into tech, engineers growing in confidence, and teams improving engineering practice.",
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,

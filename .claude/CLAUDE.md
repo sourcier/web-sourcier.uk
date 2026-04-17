@@ -52,6 +52,14 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 - **Breakpoints:** 640px (mobile/tablet), 768px (tablet/desktop)
 - **Pill-style elements** (tags, share buttons, credits): 0.75rem / 0.25rem 0.6rem on desktop, 0.8rem / 0.4rem 0.75rem on mobile
 
+## UI Conventions
+
+- Audience-navigation surfaces should call these routes **guides**; prefer “guide” over “path” in headings, CTAs, and supporting copy unless the user explicitly asks otherwise
+- In compact stat cards, put the small uppercase label above the main value and keep the value short enough to avoid awkward wrapping; longer role or employer detail belongs in sidebar/fact cards instead
+- If a course, feature, or CTA is launching soon, surface that as a distinct status badge or label rather than burying it in paragraph copy
+- Footer dividers that are meant to read as full-width separators should use full-bleed lines, not container-width borders
+- Prefer positive, orientation-based section headings for navigation blocks; avoid “problem” framing when the section is helping readers choose where to start
+
 ## Coding Conventions
 
 - Astro components use scoped `<style lang="scss">`

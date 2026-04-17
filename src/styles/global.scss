@@ -434,6 +434,21 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 1.5rem;
 }
 
+.page-panel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-pink);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+      var(--color-surface) 58%
+    ),
+    var(--color-surface);
+  box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+}
+
 // — Series callout banner (used at the top of series posts)
 .series-callout {
   display: flex;

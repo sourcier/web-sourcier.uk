@@ -8,14 +8,15 @@
       <div class="mailing-cta__inner">
         <div class="mailing-cta__copy">
           <p class="mailing-cta__kicker">
-            Free · No spam · Unsubscribe any time
+            Free · Practical · One email per post
           </p>
           <h2 class="mailing-cta__heading" id="mailing-cta-heading">
-            Get new posts in your inbox
+            Get practical engineering notes
           </h2>
           <p class="mailing-cta__body">
-            When the next article drops, I'll send a short note — a link and a
-            summary, nothing else. One email per post.
+            One short email when a new article goes live. Useful if you are
+            breaking into tech, growing as an engineer, or improving engineering
+            practice on your team.
           </p>
         </div>
 
@@ -49,7 +50,7 @@
               required
             />
             <button type="submit" class="button mailing-cta__btn">
-              Yes, keep me posted
+              Join the list
             </button>
           </div>
           <p
@@ -116,13 +117,13 @@
           data.error ?? "Something went wrong. Please try again.";
         feedback.classList.add("mailing-cta__feedback--error");
         btn.disabled = false;
-        btn.textContent = "Subscribe";
+        btn.textContent = "Join the list";
       }
     } catch {
       feedback.textContent = "Something went wrong. Please try again.";
       feedback.classList.add("mailing-cta__feedback--error");
       btn.disabled = false;
-      btn.textContent = "Yes, keep me posted";
+      btn.textContent = "Join the list";
     } finally {
       feedback.hidden = false;
     }
@@ -131,21 +132,55 @@
 
 <style lang="scss">
   .mailing-cta {
-    padding: 2.5rem 1.5rem;
-    border-top: 1px solid var(--color-border);
+    padding: 3rem 1.5rem;
   }
 
   .mailing-cta__card {
-    background-color: #0f0f0f;
-    border-radius: 6px;
-    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
     border-top: 3px solid var(--color-pink);
     border-left: 1px solid rgba(255, 255, 255, 0.06);
     border-right: 1px solid rgba(255, 255, 255, 0.06);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+      radial-gradient(
+        ellipse 80% 70% at 18% 0%,
+        rgba(232, 0, 106, 0.2) 0%,
+        transparent 60%
+      ),
+      linear-gradient(180deg, #141414 0%, #0a0a0a 100%);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.12) 1px,
+        transparent 1px
+      );
+      background-size: 28px 28px;
+      mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      -webkit-mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      opacity: 0.3;
+      pointer-events: none;
+    }
   }
 
   .mailing-cta__inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -160,6 +195,7 @@
 
   .mailing-cta__copy {
     flex: 1;
+    max-width: 40rem;
   }
 
   .mailing-cta__kicker {
@@ -192,6 +228,10 @@
   .mailing-cta__form {
     flex-shrink: 0;
     width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     @media (min-width: 768px) {
       width: 22rem;
@@ -200,12 +240,19 @@
 
   .mailing-cta__field {
     display: flex;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+    }
   }
 
   .mailing-cta__input {
     flex: 1;
     min-width: 0;
+    min-height: 3rem;
+    height: 3rem;
     background-color: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.15);
     color: #ffffff;
@@ -223,11 +270,16 @@
   }
 
   .mailing-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--color-pink);
     border-color: var(--color-pink);
     color: #ffffff;
     font-weight: 600;
     white-space: nowrap;
+    min-height: 3rem;
+    height: 3rem;
 
     &:hover:not(:disabled) {
       background-color: color-mix(in srgb, var(--color-pink) 85%, #000);

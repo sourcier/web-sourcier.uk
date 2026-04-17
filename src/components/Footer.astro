@@ -4,22 +4,37 @@
 
 <footer class="footer mt-auto">
   <div class="footer__inner">
-    <div class="footer__tagline">
-      <span class="footer__word">Make things</span>
-      <span class="footer__divider">/</span>
-      <span class="footer__word">Break things</span>
-      <span class="footer__divider">/</span>
-      <span class="footer__word">Fix things</span>
-      <span class="footer__divider">/</span>
-      <span class="footer__word"
-        >Repeat <span class="footer__arrow" aria-hidden="true">&#x21BA;</span
-        ></span
-      >
+    <div class="footer__top">
+      <div class="footer__intro">
+        <p class="footer__eyebrow">Sourcier</p>
+        <p class="footer__summary">
+          Practical software engineering guidance for people breaking into tech,
+          engineers growing in confidence, and teams improving engineering
+          practice.
+        </p>
+      </div>
+
+      <div class="footer__tagline">
+        <span class="footer__word">Make things</span>
+        <span class="footer__divider">/</span>
+        <span class="footer__word">Break things</span>
+        <span class="footer__divider">/</span>
+        <span class="footer__word">Fix things</span>
+        <span class="footer__divider">/</span>
+        <span class="footer__word"
+          >Repeat <span class="footer__arrow" aria-hidden="true">&#x21BA;</span
+          ></span
+        >
+      </div>
     </div>
 
     <div class="footer__bottom">
       <p class="footer__copy">&copy; 2026 Roger Rajaratnam</p>
       <nav class="footer__links" aria-label="Footer links">
+        <a class="footer__link" href="/start-here">Guides</a>
+        <a class="footer__link" href="/blog">Blog</a>
+        <a class="footer__link" href="/about">About</a>
+        <a class="footer__link" href="/contact">Contact</a>
         <a class="footer__link" href="/rss.xml">RSS feed</a>
       </nav>
     </div>
@@ -28,23 +43,87 @@
 
 <style lang="scss">
   .footer {
-    background-color: #0f0f0f;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 3rem 1.5rem 2rem;
-    border-top: 3px solid var(--color-pink);
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse 80% 70% at 20% 0%,
+        rgba(232, 0, 106, 0.18) 0%,
+        transparent 60%
+      ),
+      linear-gradient(180deg, #141414 0%, #090909 100%);
+    color: rgba(255, 255, 255, 0.64);
+    padding: 3.5rem 1.5rem 2rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.12) 1px,
+        transparent 1px
+      );
+      background-size: 28px 28px;
+      mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      -webkit-mask-image: radial-gradient(
+        ellipse 90% 90% at 50% 50%,
+        black 30%,
+        transparent 90%
+      );
+      opacity: 0.3;
+      pointer-events: none;
+    }
   }
 
   .footer__inner {
+    position: relative;
+    z-index: 1;
     max-width: 75rem;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .footer__top {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
 
-  .footer__tagline {
+  .footer__intro {
+    max-width: 40rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .footer__eyebrow {
+    margin: 0 0 0.5rem;
     font-family: "Barlow Condensed", sans-serif;
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-pink);
+  }
+
+  .footer__summary {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .footer__tagline {
+    position: relative;
+    padding: 1.25rem 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.35rem, 3vw, 2.1rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -53,11 +132,26 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     gap: 0.4em;
+    text-align: center;
+  }
+
+  .footer__tagline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
   .footer__word {
+    display: inline-flex;
+    align-items: center;
     color: rgba(255, 255, 255, 0.15);
   }
 
@@ -118,45 +212,81 @@
   }
 
   .footer__divider {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
     color: var(--color-pink);
     opacity: 0.4;
   }
 
   .footer__bottom {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.25rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .footer__bottom::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
   .footer__copy {
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.38);
     margin: 0;
-    width: 100%;
-    text-align: center;
   }
 
   .footer__links {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .footer__link {
-    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: color 0.2s ease;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover,
     &:focus-visible {
       color: var(--color-pink);
+      border-color: rgba(232, 0, 106, 0.28);
+      background: rgba(232, 0, 106, 0.08);
+      transform: translateY(-1px);
     }
   }
 </style>

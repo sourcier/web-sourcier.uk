@@ -13,16 +13,6 @@ const playIcon = faIcon(faPlay, { size: 11 });
 const testimonials = [
   {
     quote:
-      "As a product designer I've enjoyed working with Roger on New Day's SaaS product Fusion. He's a collaborative engineering lead who is deeply engaged in problem solving and thinks outside the box to find the best solutions for both business and users. Easy to approach, calm and always happy to talk through ideas, Roger is a great colleague to work with.",
-    name: "Elise Ten Cate",
-    title: "Product Designer",
-    company: "NewDay",
-    logo: newdayLogo,
-    website: "https://www.newday.co.uk",
-    linkedin: "https://www.linkedin.com/in/elisabethtencate/",
-  },
-  {
-    quote:
       "Roger has been an exceptional tech lead and manager during my time at NewDay. He has a real ability to quickly unblock problems and create an environment where engineers can do their best work. He has been a great mentor to me and played a significant role in helping me progress from a mid-level to a senior engineer. I've learned a huge amount from working with him and really value the experience of having worked together.",
     name: "Gladwin Dosunmu",
     title: "Senior Engineer",
@@ -43,6 +33,16 @@ const testimonials = [
   },
   {
     quote:
+      "As a product designer I've enjoyed working with Roger on New Day's SaaS product Fusion. He's a collaborative engineering lead who is deeply engaged in problem solving and thinks outside the box to find the best solutions for both business and users. Easy to approach, calm and always happy to talk through ideas, Roger is a great colleague to work with.",
+    name: "Elise Ten Cate",
+    title: "Product Designer",
+    company: "NewDay",
+    logo: newdayLogo,
+    website: "https://www.newday.co.uk",
+    linkedin: "https://www.linkedin.com/in/elisabethtencate/",
+  },
+  {
+    quote:
       "When we hired Roger a decade ago at Into Film, we couldn't decide between him and another candidate—so naturally, we took them both. Turns out Roger was worth it. As a principal software engineer, he solves problems I didn't even know existed, with a calm that makes the chaos of charity work look orderly. Ten years later, I still think hiring him was the smarter half of that indecision.",
     name: "Chris Breen",
     title: "Lead Engineer",
@@ -58,7 +58,7 @@ const testimonials = [
   <div class="container is-max-desktop">
     <div class="testimonials__header">
       <p class="section-label" id="testimonials-heading">
-        From people I've worked with
+        Growth, mentoring, and team impact
       </p>
       <button
         class="testimonials__pause-btn"
@@ -70,6 +70,11 @@ const testimonials = [
         <span class="testimonials__play-icon" set:html={playIcon} />
       </button>
     </div>
+
+    <p class="testimonials__intro">
+      The feedback I hear most often is about calm leadership, helping engineers
+      grow, and making teams work better together.
+    </p>
 
     <div
       class="testimonials__carousel"
@@ -291,6 +296,13 @@ const testimonials = [
     .section-label {
       margin-bottom: 0;
     }
+  }
+
+  .testimonials__intro {
+    max-width: 62ch;
+    margin: 0 0 1.5rem;
+    color: var(--color-muted);
+    line-height: 1.7;
   }
 
   .testimonials__pause-btn {
