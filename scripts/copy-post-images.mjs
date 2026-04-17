@@ -1,5 +1,6 @@
 import { readdirSync, existsSync, mkdirSync, copyFileSync } from "node:fs";
-import { join, extname } from "node:path";
+import { join, extname, basename } from "node:path";
+import sharp from "sharp";
 
 const postsDir = "./collections/posts";
 const destDir = "./public/post-images";
@@ -22,5 +23,11 @@ for (const slug of readdirSync(postsDir)) {
     const dest = join(destDir, slug);
     mkdirSync(dest, { recursive: true });
     copyFileSync(src, join(dest, file));
+
+    if (extname(file).toLowerCase() === ".svg") {
+      await sharp(src)
+        .png()
+        .toFile(join(dest, `${basename(file, ".svg")}.png`));
+    }
   }
 }

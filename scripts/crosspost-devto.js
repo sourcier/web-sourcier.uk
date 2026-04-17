@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Cross-posts a blog post to Dev.to with a canonical URL pointing back to sourcier.uk.
+// Prepends an original-post link and converts unsupported SVG embeds into PNG fallbacks.
 // Reads post content from collections/posts/<slug>/index.md.
 //
 // Usage:
@@ -119,11 +120,52 @@ function normaliseTags(tags = []) {
     .slice(0, 4);
 }
 
+function escapeMarkdownLinkText(value) {
+  return String(value ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\[/g, "\\[")
+    .replace(/\]/g, "\\]");
+}
+
+function makeUrlAbsolute(url) {
+  if (!url) return url;
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith("/")) return `${siteBase}${url}`;
+  return url;
+}
+
+function buildOriginalPostLine(title, canonicalUrl) {
+  return `> Original post: [${escapeMarkdownLinkText(title)}](${canonicalUrl})`;
+}
+
+function swapSvgExtension(url) {
+  return url.replace(/\.svg(?=(?:\?[^)]*)?$)/i, ".png");
+}
+
 // Replace relative /post-images/ paths and ./image references with absolute URLs
 function makeImagesAbsolute(markdown, slug) {
   return markdown
     .replace(/\(\/post-images\//g, `(${siteBase}/post-images/`)
     .replace(/\(\.\/([^)]+\.(png|jpg|jpeg|gif|webp|svg))\)/g, `(${siteBase}/post-images/${slug}/$1)`);
+}
+
+function normaliseSeriesCallout(line) {
+  const match = line.match(
+    /^<div class="series-callout"><span class="series-callout__label">([^<]+)<\/span><span class="series-callout__text">([\s\S]*?)<\/span><\/div>$/,
+  );
+
+  if (!match) return null;
+
+  const label = match[1].trim();
+  const text = match[2]
+    .replace(/<a href="([^"]+)">([\s\S]*?)<\/a>/g, (_, href, linkText) => {
+      return `[${escapeMarkdownLinkText(linkText)}](${makeUrlAbsolute(href)})`;
+    })
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return `> ${label}: ${text}`;
 }
 
 function toBase64Url(value) {
@@ -163,12 +205,34 @@ function mermaidFallback(markdown, canonicalUrl) {
   ].join("\n");
 }
 
-function normaliseMarkdownForDevto(markdown, canonicalUrl) {
+function svgFallback(alt, svgUrl, canonicalUrl) {
+  const pngUrl = swapSvgExtension(svgUrl);
+
+  return [
+    `![${escapeMarkdownLinkText(alt)}](${pngUrl})`,
+    "",
+    `> Diagram fallback for Dev.to. View the canonical article for the original SVG: ${canonicalUrl}`,
+  ].join("\n");
+}
+
+function normaliseSvgImage(line, canonicalUrl) {
+  const match = line.match(/^!\[([^\]]*)\]\(([^)\s]+\.svg(?:\?[^)]*)?)\)$/i);
+  if (!match) return null;
+
+  const alt = match[1].trim() || "Diagram";
+  const url = match[2];
+
+  return svgFallback(alt, url, canonicalUrl);
+}
+
+function normaliseMarkdownForDevto(markdown, canonicalUrl, title) {
   const lines = markdown.split(/\r?\n/);
   const output = [];
   const stats = {
     mermaidBlocks: 0,
     codeFencesNormalised: 0,
+    seriesCalloutsNormalised: 0,
+    svgImagesConverted: 0,
   };
 
   let inFence = false;
@@ -180,6 +244,20 @@ function normaliseMarkdownForDevto(markdown, canonicalUrl) {
     if (!inFence) {
       const open = line.match(/^(`{3,})(.*)$/);
       if (!open) {
+        const seriesCallout = normaliseSeriesCallout(line);
+        if (seriesCallout) {
+          stats.seriesCalloutsNormalised += 1;
+          output.push(seriesCallout);
+          continue;
+        }
+
+        const svgImage = normaliseSvgImage(line, canonicalUrl);
+        if (svgImage) {
+          stats.svgImagesConverted += 1;
+          output.push(svgImage);
+          continue;
+        }
+
         output.push(line);
         continue;
       }
@@ -227,7 +305,7 @@ function normaliseMarkdownForDevto(markdown, canonicalUrl) {
   }
 
   return {
-    markdown: output.join("\n"),
+    markdown: `${buildOriginalPostLine(title, canonicalUrl)}\n\n${output.join("\n").trimStart()}`,
     stats,
   };
 }
@@ -243,12 +321,17 @@ function loadPost(slug) {
   const fm = parseFrontmatter(raw);
   if (!fm.title) throw new Error(`No title found in frontmatter for: ${slug}`);
 
+  const title = fm.title.replace(/^["']|["']$/g, "");
   const canonicalUrl = `${siteBase}/blog/${slug}`;
   const markdownBody = makeImagesAbsolute(stripFrontmatter(raw), slug);
-  const normalised = normaliseMarkdownForDevto(markdownBody, canonicalUrl);
+  const normalised = normaliseMarkdownForDevto(
+    markdownBody,
+    canonicalUrl,
+    title,
+  );
 
   return {
-    title: fm.title.replace(/^["']|["']$/g, ""),
+    title,
     description: fm.description || "",
     tags: normaliseTags(fm.tags),
     draft: fm.draft === "true",
@@ -397,6 +480,13 @@ console.log(
 console.log(
   `  Code fences  : ${post.transformStats.codeFencesNormalised} normalised`,
 );
+console.log(
+  `  Series notes : ${post.transformStats.seriesCalloutsNormalised} normalised`,
+);
+console.log(
+  `  SVG images   : ${post.transformStats.svgImagesConverted} converted to links`,
+);
+console.log("  Original link: prepended");
 console.log(`  Body length  : ${post.body.length} chars`);
 console.log("─────────────────────────────────────────\n");
 
@@ -462,5 +552,5 @@ console.log(
   "\nNote: Mermaid and expressive code fences were normalised for Dev.to compatibility.",
 );
 console.log(
-  "Review the Dev.to article to confirm formatting. Canonical URL is set correctly.",
+  "Review the Dev.to article to confirm formatting. Original-post link and canonical URL are set correctly.",
 );
