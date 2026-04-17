@@ -1,4 +1,5 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import readingTime from "reading-time";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -27,9 +28,14 @@ const allPosts = (await getCollection("posts"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const postsById = new Map(allPosts.map((post) => [post.id, post]));
+function isPostEntry(
+  post: CollectionEntry<"posts"> | undefined,
+): post is CollectionEntry<"posts"> {
+  return Boolean(post);
+}
 const guidePosts = guide.currentPostIds
   .map((postId) => postsById.get(postId))
-  .filter(Boolean);
+  .filter(isPostEntry);
 ---
 
 <BaseLayout
@@ -78,16 +84,21 @@ const guidePosts = guide.currentPostIds
     </div>
   </section>
 
-  <section class="section guide-current" aria-labelledby="guide-current-heading">
+  <section
+    class="section guide-current"
+    aria-labelledby="guide-current-heading"
+  >
     <div class="container is-max-desktop">
       <p class="section-label">Published now</p>
       <h2 class="guide-current__heading" id="guide-current-heading">
         Read these first
       </h2>
-      <div class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop">
+      <div
+        class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
+      >
         <div class="grid">
           {
-            guidePosts.map((post: any) => (
+            guidePosts.map((post) => (
               <div class="cell">
                 <BlogPost
                   title={post.data.title}
@@ -107,14 +118,18 @@ const guidePosts = guide.currentPostIds
     </div>
   </section>
 
-  <section class="section guide-planned" aria-labelledby="guide-planned-heading">
+  <section
+    class="section guide-planned"
+    aria-labelledby="guide-planned-heading"
+  >
     <div class="container is-max-desktop">
       <p class="section-label">Coming next</p>
       <h2 class="guide-planned__heading" id="guide-planned-heading">
         Planned articles for this path
       </h2>
       <p class="guide-planned__intro">
-        These are the topics I plan to add next so this path becomes more useful over time.
+        These are the topics I plan to add next so this path becomes more useful
+        over time.
       </p>
       <div class="guide-planned__grid">
         {
@@ -139,7 +154,9 @@ const guidePosts = guide.currentPostIds
             Want help beyond the articles?
           </h2>
           <p class="guide-cta__body">
-            If this path matches where you are now, you can either get in touch directly or subscribe so you hear about new articles as this guide grows.
+            If this path matches where you are now, you can either get in touch
+            directly or subscribe so you hear about new articles as this guide
+            grows.
           </p>
         </div>
         <div class="guide-cta__actions">

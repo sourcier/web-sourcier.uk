@@ -1,0 +1,12 @@
+.astro
+.netlify
+.tmp
+collections/posts
+deno.lock
+dist
+node_modules
+public/pagefind
+public/post-images
+public/search-thumbnails
+public/talks/*.pptx
+src/layouts/BaseLayout.astro

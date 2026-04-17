@@ -58,6 +58,19 @@ pnpm build               # Build for production
 pnpm preview             # Preview the production build locally
 ```
 
+### Code Quality
+
+```sh
+pnpm lint                # Run ESLint across Astro, JS, and TS files
+pnpm lint:fix            # Auto-fix lint issues where possible
+pnpm format              # Format the project with Prettier
+pnpm format:check        # Verify formatting without writing changes
+```
+
+`pnpm install` runs the `prepare` script to install Husky hooks. Pre-commit
+then runs `lint-staged`, so staged code is linted and formatted before each
+commit.
+
 ## Features
 
 - **Blog** with draft support, future-dated post scheduling, and tag filtering
@@ -72,15 +85,15 @@ pnpm preview             # Preview the production build locally
 
 See [.env.example](.env.example) for the full list. Key variables:
 
-| Variable | Purpose |
-| :--- | :--- |
-| `GITHUB_PAT` | Fine-grained token to clone the private content repo at build time |
-| `NETLIFY_ACCESS_TOKEN` | Netlify API access |
-| `APPROVAL_SECRET` | HMAC signing for comment moderation links |
-| `RESEND_API_KEY` | Email sending via Resend |
-| `NOTIFY_EMAIL` | Admin notification recipient |
-| `SITE_URL` | Public site URL |
-| `PREVIEW_PASSCODE` | Passcode for the `preview` branch deploy (scope: branch deploys only) |
+| Variable               | Purpose                                                               |
+| :--------------------- | :-------------------------------------------------------------------- |
+| `GITHUB_PAT`           | Fine-grained token to clone the private content repo at build time    |
+| `NETLIFY_ACCESS_TOKEN` | Netlify API access                                                    |
+| `APPROVAL_SECRET`      | HMAC signing for comment moderation links                             |
+| `RESEND_API_KEY`       | Email sending via Resend                                              |
+| `NOTIFY_EMAIL`         | Admin notification recipient                                          |
+| `SITE_URL`             | Public site URL                                                       |
+| `PREVIEW_PASSCODE`     | Passcode for the `preview` branch deploy (scope: branch deploys only) |
 
 All secrets should be configured in Netlify's environment variables dashboard for production.
 

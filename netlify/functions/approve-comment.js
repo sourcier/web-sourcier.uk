@@ -29,7 +29,10 @@ function verifyToken(submissionId, action, token, secret) {
   const expected = hmac(submissionId, action, secret);
   if (token.length !== expected.length) return false;
   // Constant-time comparison to prevent timing attacks
-  return crypto.timingSafeEqual(Buffer.from(token, "hex"), Buffer.from(expected, "hex"));
+  return crypto.timingSafeEqual(
+    Buffer.from(token, "hex"),
+    Buffer.from(expected, "hex"),
+  );
 }
 
 export const handler = async (event) => {
@@ -49,31 +52,43 @@ export const handler = async (event) => {
 
   if (!secret || !accessToken || !siteUrl) {
     console.error("approve-comment: missing environment variables");
-    return htmlPage(500, "Configuration Error", "Server is not configured correctly.");
+    return htmlPage(
+      500,
+      "Configuration Error",
+      "Server is not configured correctly.",
+    );
   }
 
-  let tokenValid = false;
   try {
-    tokenValid = verifyToken(id, action, token, secret);
+    if (!verifyToken(id, action, token, secret)) {
+      return htmlPage(403, "Forbidden", "Invalid or expired token.");
+    }
   } catch {
     // token may be wrong length or otherwise malformed
-    tokenValid = false;
-  }
-
-  if (!tokenValid) {
     return htmlPage(403, "Forbidden", "Invalid or expired token.");
   }
 
   if (action === "delete") {
-    const res = await fetch(`https://api.netlify.com/api/v1/submissions/${encodeURIComponent(id)}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    const res = await fetch(
+      `https://api.netlify.com/api/v1/submissions/${encodeURIComponent(id)}`,
+      {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
     if (!res.ok && res.status !== 404) {
       console.error(`approve-comment: delete failed ${res.status}`);
-      return htmlPage(502, "Error", "Could not delete the submission. Try again or remove it from the Netlify dashboard.");
+      return htmlPage(
+        502,
+        "Error",
+        "Could not delete the submission. Try again or remove it from the Netlify dashboard.",
+      );
     }
-    return htmlPage(200, "Comment Deleted", "The comment has been removed from the queue.");
+    return htmlPage(
+      200,
+      "Comment Deleted",
+      "The comment has been removed from the queue.",
+    );
   }
 
   // Approve: fetch pending submission, re-post to approved form, then delete
@@ -83,12 +98,22 @@ export const handler = async (event) => {
   );
 
   if (submissionRes.status === 404) {
-    return htmlPage(404, "Not Found", "This comment has already been actioned or doesn't exist.");
+    return htmlPage(
+      404,
+      "Not Found",
+      "This comment has already been actioned or doesn't exist.",
+    );
   }
 
   if (!submissionRes.ok) {
-    console.error(`approve-comment: fetch submission failed ${submissionRes.status}`);
-    return htmlPage(502, "Error", "Could not retrieve the submission from Netlify.");
+    console.error(
+      `approve-comment: fetch submission failed ${submissionRes.status}`,
+    );
+    return htmlPage(
+      502,
+      "Error",
+      "Could not retrieve the submission from Netlify.",
+    );
   }
 
   const submission = await submissionRes.json();
@@ -110,16 +135,29 @@ export const handler = async (event) => {
   });
 
   if (!postRes.ok) {
-    console.error(`approve-comment: post to approved form failed ${postRes.status}`);
-    return htmlPage(502, "Error", "Failed to post the comment to the approved form.");
+    console.error(
+      `approve-comment: post to approved form failed ${postRes.status}`,
+    );
+    return htmlPage(
+      502,
+      "Error",
+      "Failed to post the comment to the approved form.",
+    );
   }
 
-  await fetch(`https://api.netlify.com/api/v1/submissions/${encodeURIComponent(id)}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  await fetch(
+    `https://api.netlify.com/api/v1/submissions/${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
+  );
 
-  return htmlPage(200, "Comment Approved", `The comment from <strong>${escapeHtml(data.name ?? "anonymous")}</strong> is now live.`);
+  return htmlPage(
+    200,
+    "Comment Approved",
+    `The comment from <strong>${escapeHtml(data.name ?? "anonymous")}</strong> is now live.`,
+  );
 };
 
 function htmlPage(statusCode, heading, message) {

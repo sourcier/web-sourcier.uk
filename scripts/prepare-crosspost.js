@@ -32,7 +32,10 @@ if (existsSync(envFile) && typeof process.loadEnvFile === "function") {
   process.loadEnvFile(envFile);
 }
 
-const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(/\/$/, "");
+const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(
+  /\/$/,
+  "",
+);
 const defaultMermaidMode = (
   process.env.CROSSPOST_MERMAID_MODE ??
   process.env.DEVTO_MERMAID_MODE ??
@@ -48,7 +51,9 @@ const PLATFORM_PRESETS = {
   },
   devto: {
     label: "Dev.to",
-    mermaidMode: (process.env.DEVTO_MERMAID_MODE ?? defaultMermaidMode).toLowerCase(),
+    mermaidMode: (
+      process.env.DEVTO_MERMAID_MODE ?? defaultMermaidMode
+    ).toLowerCase(),
     tagNormaliser: normaliseTagsForDevto,
     copyVariantBuilder: buildDefaultTextVariants,
   },
@@ -84,9 +89,15 @@ function parseCliArgs(argv) {
       console.log("Usage:");
       console.log("  node scripts/prepare-crosspost.js");
       console.log("  node scripts/prepare-crosspost.js <post-slug>");
-      console.log("  node scripts/prepare-crosspost.js --slug <post-slug> --platform generic");
-      console.log("  node scripts/prepare-crosspost.js --slug <post-slug> --platform devto --yes");
-      console.log("  node scripts/prepare-crosspost.js --slug <post-slug> --platform linkedin --yes");
+      console.log(
+        "  node scripts/prepare-crosspost.js --slug <post-slug> --platform generic",
+      );
+      console.log(
+        "  node scripts/prepare-crosspost.js --slug <post-slug> --platform devto --yes",
+      );
+      console.log(
+        "  node scripts/prepare-crosspost.js --slug <post-slug> --platform linkedin --yes",
+      );
       console.log("");
       console.log("Options:");
       console.log("  --slug <post-slug>      Published post slug to prepare");
@@ -151,7 +162,9 @@ function parseFrontmatter(content) {
     }
   }
 
-  const descBlock = yaml.match(/^description:\s*>-?\r?\n((?:[ \t]+.+\r?\n?)*)/m);
+  const descBlock = yaml.match(
+    /^description:\s*>-?\r?\n((?:[ \t]+.+\r?\n?)*)/m,
+  );
   if (descBlock) {
     result.description = descBlock[1]
       .split(/\r?\n/)
@@ -303,7 +316,12 @@ function normaliseSvgImage(line, canonicalUrl) {
   return svgFallback(alt, url, canonicalUrl);
 }
 
-function normaliseMarkdownForCrosspost(markdown, canonicalUrl, title, mermaidMode) {
+function normaliseMarkdownForCrosspost(
+  markdown,
+  canonicalUrl,
+  title,
+  mermaidMode,
+) {
   const lines = markdown.split(/\r?\n/);
   const output = [];
   const stats = {
@@ -366,9 +384,9 @@ function normaliseMarkdownForCrosspost(markdown, canonicalUrl, title, mermaidMod
       output.push(mermaidFallback(rawCode, canonicalUrl, mermaidMode));
     } else {
       if (fenceInfo.trim()) stats.codeFencesNormalised += 1;
-      output.push(language ? `\`\`\`${language}` : "\`\`\`");
+      output.push(language ? `\`\`\`${language}` : "```");
       output.push(rawCode);
-      output.push("\`\`\`");
+      output.push("```");
     }
 
     inFence = false;
@@ -393,12 +411,16 @@ function buildThumbnailUrl(slug, cover) {
   if (!thumbnail) return null;
   if (/^https?:\/\//i.test(thumbnail)) return thumbnail;
   if (thumbnail.startsWith("/")) return `${siteBase}${thumbnail}`;
-  const fileName = thumbnail.startsWith("./") ? thumbnail.slice(2) : basename(thumbnail);
+  const fileName = thumbnail.startsWith("./")
+    ? thumbnail.slice(2)
+    : basename(thumbnail);
   return `${siteBase}/search-thumbnails/${slug}/${fileName}`;
 }
 
 function normaliseWhitespace(value) {
-  return String(value ?? "").replace(/\s+/g, " ").trim();
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function truncateText(value, maxLength) {
@@ -407,9 +429,10 @@ function truncateText(value, maxLength) {
 
   const shortened = text.slice(0, maxLength - 1);
   const lastSpace = shortened.lastIndexOf(" ");
-  const trimmed = lastSpace > Math.floor(maxLength * 0.6)
-    ? shortened.slice(0, lastSpace)
-    : shortened;
+  const trimmed =
+    lastSpace > Math.floor(maxLength * 0.6)
+      ? shortened.slice(0, lastSpace)
+      : shortened;
 
   return `${trimmed.trimEnd()}…`;
 }
@@ -427,11 +450,7 @@ function toHashtag(tag) {
 }
 
 function buildHashtagLine(tags = [], limit = tags.length) {
-  return tags
-    .map(toHashtag)
-    .filter(Boolean)
-    .slice(0, limit)
-    .join(" ");
+  return tags.map(toHashtag).filter(Boolean).slice(0, limit).join(" ");
 }
 
 function joinCopyBlocks(parts) {
@@ -443,7 +462,8 @@ function joinCopyBlocks(parts) {
 
 function buildDefaultTextVariants(post) {
   const summary = post.description || post.subTitle || "";
-  const subtitle = post.subTitle && post.subTitle !== summary ? post.subTitle : "";
+  const subtitle =
+    post.subTitle && post.subTitle !== summary ? post.subTitle : "";
 
   return {
     short: joinCopyBlocks([
@@ -467,7 +487,8 @@ function buildDefaultTextVariants(post) {
 
 function buildKoFiTextVariants(post) {
   const summary = post.description || post.subTitle || "";
-  const subtitle = post.subTitle && post.subTitle !== summary ? post.subTitle : "";
+  const subtitle =
+    post.subTitle && post.subTitle !== summary ? post.subTitle : "";
 
   return {
     short: joinCopyBlocks([
@@ -492,7 +513,8 @@ function buildKoFiTextVariants(post) {
 
 function buildLinkedInTextVariants(post, preset) {
   const summary = post.description || post.subTitle || "";
-  const subtitle = post.subTitle && post.subTitle !== summary ? post.subTitle : "";
+  const subtitle =
+    post.subTitle && post.subTitle !== summary ? post.subTitle : "";
   const hashtags = buildHashtagLine(post.tags, preset.hashtagLimit ?? 3);
 
   return {
@@ -583,13 +605,20 @@ function listPostIds() {
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
       try {
-        const content = readFileSync(join(postsDir, entry.name, "index.md"), "utf8");
+        const content = readFileSync(
+          join(postsDir, entry.name, "index.md"),
+          "utf8",
+        );
         const frontmatter = parseFrontmatter(content);
         return {
           id: entry.name,
-          pubDate: frontmatter.pubDate ? new Date(frontmatter.pubDate) : new Date(0),
+          pubDate: frontmatter.pubDate
+            ? new Date(frontmatter.pubDate)
+            : new Date(0),
           isDraft: frontmatter.draft === "true",
-          isFuture: frontmatter.pubDate ? new Date(frontmatter.pubDate) > new Date() : false,
+          isFuture: frontmatter.pubDate
+            ? new Date(frontmatter.pubDate) > new Date()
+            : false,
         };
       } catch {
         return null;
@@ -610,14 +639,19 @@ function prompt(question) {
   });
 }
 
-const { slug: cliSlug, platform, outputDir, assumeYes } = parseCliArgs(
-  process.argv.slice(2),
-);
+const {
+  slug: cliSlug,
+  platform,
+  outputDir,
+  assumeYes,
+} = parseCliArgs(process.argv.slice(2));
 
 const preset = PLATFORM_PRESETS[platform];
 if (!preset) {
   console.error(`Error: Unsupported platform '${platform}'.`);
-  console.error(`Supported platforms: ${Object.keys(PLATFORM_PRESETS).join(", ")}`);
+  console.error(
+    `Supported platforms: ${Object.keys(PLATFORM_PRESETS).join(", ")}`,
+  );
   process.exit(1);
 }
 
@@ -671,10 +705,18 @@ console.log(`  Tags         : ${post.tags.join(", ") || "(none)"}`);
 console.log(
   `  Description  : ${post.description.slice(0, 80)}${post.description.length > 80 ? "…" : ""}`,
 );
-console.log(`  Mermaid      : ${post.transformStats.mermaidBlocks} converted (${preset.mermaidMode} mode)`);
-console.log(`  Code fences  : ${post.transformStats.codeFencesNormalised} normalised`);
-console.log(`  Series notes : ${post.transformStats.seriesCalloutsNormalised} normalised`);
-console.log(`  SVG images   : ${post.transformStats.svgImagesConverted} converted to PNG fallbacks`);
+console.log(
+  `  Mermaid      : ${post.transformStats.mermaidBlocks} converted (${preset.mermaidMode} mode)`,
+);
+console.log(
+  `  Code fences  : ${post.transformStats.codeFencesNormalised} normalised`,
+);
+console.log(
+  `  Series notes : ${post.transformStats.seriesCalloutsNormalised} normalised`,
+);
+console.log(
+  `  SVG images   : ${post.transformStats.svgImagesConverted} converted to PNG fallbacks`,
+);
 console.log(`  Thumbnail    : ${post.thumbnailUrl ?? "(none)"}`);
 console.log(`  Output dir   : ${targetDir}`);
 console.log("─────────────────────────────────────────\n");
@@ -710,11 +752,20 @@ const payload = {
 };
 
 writeFileSync(join(targetDir, "body.md"), `${post.body}\n`);
-writeFileSync(join(targetDir, "text-short.txt"), `${post.textVariants.short}\n`);
-writeFileSync(join(targetDir, "text-medium.txt"), `${post.textVariants.medium}\n`);
+writeFileSync(
+  join(targetDir, "text-short.txt"),
+  `${post.textVariants.short}\n`,
+);
+writeFileSync(
+  join(targetDir, "text-medium.txt"),
+  `${post.textVariants.medium}\n`,
+);
 writeFileSync(join(targetDir, "text-long.txt"), `${post.textVariants.long}\n`);
 writeFileSync(join(targetDir, "share.txt"), `${post.shareText}\n`);
-writeFileSync(join(targetDir, "crosspost.json"), `${JSON.stringify(payload, null, 2)}\n`);
+writeFileSync(
+  join(targetDir, "crosspost.json"),
+  `${JSON.stringify(payload, null, 2)}\n`,
+);
 
 console.log(`Wrote ${join(targetDir, "body.md")}`);
 console.log(`Wrote ${join(targetDir, "text-short.txt")}`);

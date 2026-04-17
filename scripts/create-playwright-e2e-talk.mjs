@@ -260,7 +260,7 @@ function highlightCodeLine(line) {
   }
 
   const tokenPattern =
-    /\/\/.*$|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|\/(?:[^\/\\]|\\.)+\/[dgimsuvy]*|\.[A-Za-z_][A-Za-z0-9_]*|\b(?:import|from|export|class|constructor|async|await|return|const|let|new|this|test|expect)\b|\b(?:true|false|null)\b|\b\d+\b/g;
+    /\/\/.*$|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|\/(?:[^/\\]|\\.)+\/[dgimsuvy]*|\.[A-Za-z_][A-Za-z0-9_]*|\b(?:import|from|export|class|constructor|async|await|return|const|let|new|this|test|expect)\b|\b(?:true|false|null)\b|\b\d+\b/g;
   const runs = [];
   let lastIndex = 0;
 

@@ -711,17 +711,23 @@ const thumbSrc = frontmatter.cover?.thumbnail
       wrapper.appendChild(expandBtn);
     });
 
+  type MermaidApi = {
+    initialize: (config: unknown) => void;
+    run: (options: { nodes: Element[] }) => Promise<void>;
+  };
+
   async function renderDiagrams() {
     // Poll for mermaid — on slow connections the CDN defer script may not have executed yet
-    const mermaid = await new Promise<any>((resolve) => {
-      if ((window as any).mermaid) {
-        resolve((window as any).mermaid);
+    const windowWithMermaid = window as Window & { mermaid?: MermaidApi };
+    const mermaid = await new Promise<MermaidApi>((resolve) => {
+      if (windowWithMermaid.mermaid) {
+        resolve(windowWithMermaid.mermaid);
         return;
       }
       const id = setInterval(() => {
-        if ((window as any).mermaid) {
+        if (windowWithMermaid.mermaid) {
           clearInterval(id);
-          resolve((window as any).mermaid);
+          resolve(windowWithMermaid.mermaid);
         }
       }, 10);
     });

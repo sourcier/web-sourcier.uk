@@ -24,7 +24,10 @@ if (existsSync(envFile) && typeof process.loadEnvFile === "function") {
 }
 
 const apiKey = process.env.DEVTO_API_KEY;
-const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(/\/$/, "");
+const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(
+  /\/$/,
+  "",
+);
 const mermaidMode = (process.env.DEVTO_MERMAID_MODE ?? "image").toLowerCase();
 
 function parseCliArgs(argv) {
@@ -88,7 +91,9 @@ function parseFrontmatter(content) {
     if (m) result[m[1]] = m[2].trim();
   }
 
-  const descBlock = yaml.match(/^description:\s*>-?\r?\n((?:[ \t]+.+\r?\n?)*)/m);
+  const descBlock = yaml.match(
+    /^description:\s*>-?\r?\n((?:[ \t]+.+\r?\n?)*)/m,
+  );
   if (descBlock) {
     result.description = descBlock[1]
       .split(/\r?\n/)
@@ -146,7 +151,10 @@ function swapSvgExtension(url) {
 function makeImagesAbsolute(markdown, slug) {
   return markdown
     .replace(/\(\/post-images\//g, `(${siteBase}/post-images/`)
-    .replace(/\(\.\/([^)]+\.(png|jpg|jpeg|gif|webp|svg))\)/g, `(${siteBase}/post-images/${slug}/$1)`);
+    .replace(
+      /\(\.\/([^)]+\.(png|jpg|jpeg|gif|webp|svg))\)/g,
+      `(${siteBase}/post-images/${slug}/$1)`,
+    );
 }
 
 function normaliseSeriesCallout(line) {
@@ -288,9 +296,9 @@ function normaliseMarkdownForDevto(markdown, canonicalUrl, title) {
       output.push(mermaidFallback(rawCode, canonicalUrl));
     } else {
       if (fenceInfo.trim()) stats.codeFencesNormalised += 1;
-      output.push(language ? `\`\`\`${language}` : "\`\`\`");
+      output.push(language ? `\`\`\`${language}` : "```");
       output.push(rawCode);
-      output.push("\`\`\`");
+      output.push("```");
     }
 
     inFence = false;
@@ -441,7 +449,9 @@ if (postIds.length === 0) {
 }
 
 console.log("\nPublished posts (newest first):");
-postIds.forEach((id, i) => console.log(`  ${String(i + 1).padStart(2)}. ${id}`));
+postIds.forEach((id, i) =>
+  console.log(`  ${String(i + 1).padStart(2)}. ${id}`),
+);
 console.log();
 
 const input = await prompt("Enter post slug or number: ");
@@ -450,9 +460,7 @@ if (!input) {
   process.exit(1);
 }
 
-const slug = /^\d+$/.test(input)
-  ? postIds[parseInt(input, 10) - 1]
-  : input;
+const slug = /^\d+$/.test(input) ? postIds[parseInt(input, 10) - 1] : input;
 
 if (!slug || !postIds.includes(slug)) {
   console.error(`Post not found: ${input}`);
@@ -473,7 +481,9 @@ console.log("\n─────────────────────�
 console.log(`  Title        : ${post.title}`);
 console.log(`  Canonical URL: ${post.canonicalUrl}`);
 console.log(`  Tags         : ${post.tags.join(", ") || "(none)"}`);
-console.log(`  Description  : ${post.description.slice(0, 80)}${post.description.length > 80 ? "…" : ""}`);
+console.log(
+  `  Description  : ${post.description.slice(0, 80)}${post.description.length > 80 ? "…" : ""}`,
+);
 console.log(
   `  Mermaid      : ${post.transformStats.mermaidBlocks} converted (${mermaidMode} mode)`,
 );
@@ -502,7 +512,9 @@ let existingArticle = null;
 
 if (explicitArticleId !== null) {
   existingArticle = { id: explicitArticleId };
-  console.log(`\n--update ${explicitArticleId} provided — forcing update mode.`);
+  console.log(
+    `\n--update ${explicitArticleId} provided — forcing update mode.`,
+  );
 } else {
   console.log("\nChecking for existing Dev.to article by canonical URL…");
   try {
@@ -542,7 +554,10 @@ const res = await fetch(endpoint, {
 const data = await res.json();
 
 if (!res.ok) {
-  console.error(`\nDev.to API error (${res.status}):`, JSON.stringify(data, null, 2));
+  console.error(
+    `\nDev.to API error (${res.status}):`,
+    JSON.stringify(data, null, 2),
+  );
   process.exit(1);
 }
 

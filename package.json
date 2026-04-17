@@ -8,6 +8,10 @@
     "dev:no-drafts": "pnpm thumbnails:copy && pnpm post-images:copy && netlify dev",
     "build": "astro build",
     "preview": "astro preview",
+    "lint": "eslint \"**/*.{js,mjs,cjs,ts,mts,cts,astro}\"",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "astro": "astro",
     "thumbnails:generate": "node scripts/process-thumbnails.mjs",
     "thumbnails:copy": "node scripts/copy-thumbnails.mjs",
@@ -16,7 +20,8 @@
     "crosspost:prepare": "node scripts/prepare-crosspost.js",
     "crosspost:devto": "node scripts/crosspost-devto.js",
     "template:pptx": "node scripts/create-powerpoint-template.mjs",
-    "talk:playwright": "node scripts/create-playwright-e2e-talk.mjs"
+    "talk:playwright": "node scripts/create-playwright-e2e-talk.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -36,9 +41,20 @@
     "typescript": "^6.0.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@netlify/edge-functions": "^3.0.6",
+    "@typescript-eslint/parser": "^8.58.2",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.7.0",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "pagefind": "^1.4.0",
     "pptxgenjs": "^4.0.1",
-    "remark-emoji": "^5.0.2"
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "remark-emoji": "^5.0.2",
+    "typescript-eslint": "^8.58.2"
   }
 }
