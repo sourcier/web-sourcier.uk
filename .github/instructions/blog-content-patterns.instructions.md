@@ -1,6 +1,6 @@
 ---
-description: 'Patterns and conventions for blog content, post structure, and common authoring tasks on sourcier.uk'
-applyTo: '**/*.md, **/*.astro'
+description: "Patterns and conventions for blog content, post structure, and common authoring tasks on sourcier.uk"
+applyTo: "**/*.md, **/*.astro"
 ---
 
 # Blog Content Patterns
@@ -11,15 +11,15 @@ Full frontmatter for a post with cover image:
 
 ```yaml
 ---
-title: 'Post Title'
-subTitle: 'Subtitle displayed below the title'
+title: "Post Title"
+subTitle: "Subtitle displayed below the title"
 pubDate: 2026-03-30T00:00:00
-description: 'One-sentence description used in meta tags and listings.'
-author: 'Roger Rajaratnam'
+description: "One-sentence description used in meta tags and listings."
+author: "Roger Rajaratnam"
 cover:
-  image: './my-post-cover.webp'
-  alt: 'Description of image — Photo by Name on Unsplash'
-  thumbnail: './<slug>-thumbnail.webp'
+  image: "./my-post-cover.webp"
+  alt: "Description of image — Photo by Name on Unsplash"
+  thumbnail: "./<slug>-thumbnail.webp"
 tags: ["tag1", "tag2"]
 draft: true
 credits:
@@ -129,8 +129,8 @@ For the visual style of SVG wireframes, follow the conventions in `.github/instr
 For features where source and rendered output can sit side by side:
 
 ```md
-| Source | Rendered |
-| ------ | -------- |
+| Source     | Rendered |
+| ---------- | -------- |
 | `:rocket:` | :rocket: |
 | `~~text~~` | ~~text~~ |
 ```
@@ -186,14 +186,14 @@ These are separate components rendered below the post body.
 
 ```yaml
 - date: 2026-03-30T00:00:00
-  description: 'Short description of what was added or changed'
+  description: "Short description of what was added or changed"
 ```
 
 ## Markdown Test Post
 
 `collections/posts/markdown-test/index.md` is the site's living Markdown reference page. When updating it:
 
-- For supported features: show source and rendered output; do not explain *how* they are enabled.
+- For supported features: show source and rendered output; do not explain _how_ they are enabled.
 - For unsupported features: keep them in `## Not currently supported` with the plugin name.
 - Use double-fenced code blocks to show raw Markdown source of block-level features.
 - Use source/rendered tables for inline features (emoji, emphasis, etc.).

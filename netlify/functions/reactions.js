@@ -14,7 +14,8 @@ const REACTIONS = ["heart", "fire", "bulb", "clap"];
 const SLUG_RE = /^[a-z0-9-]+$/;
 
 const CORS = {
-  "Access-Control-Allow-Origin": process.env.SITE_URL?.replace(/\/$/, "") ?? "*",
+  "Access-Control-Allow-Origin":
+    process.env.SITE_URL?.replace(/\/$/, "") ?? "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
@@ -43,7 +44,11 @@ export const handler = async (event) => {
 
   const postId = event.queryStringParameters?.post ?? "";
   if (!postId || !SLUG_RE.test(postId)) {
-    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: "Invalid post ID" }) };
+    return {
+      statusCode: 400,
+      headers: CORS,
+      body: JSON.stringify({ error: "Invalid post ID" }),
+    };
   }
 
   const store = getReactionsStore(event);
@@ -62,12 +67,20 @@ export const handler = async (event) => {
     try {
       body = JSON.parse(event.body ?? "{}");
     } catch {
-      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: "Invalid JSON" }) };
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: JSON.stringify({ error: "Invalid JSON" }),
+      };
     }
 
     const reaction = body.reaction;
     if (!REACTIONS.includes(reaction)) {
-      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: "Invalid reaction" }) };
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: JSON.stringify({ error: "Invalid reaction" }),
+      };
     }
 
     const data = (await store.get(postId, { type: "json" })) ?? {};

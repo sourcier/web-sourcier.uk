@@ -1,6 +1,6 @@
 ---
-description: 'Markdown guidelines and content creation standards for blog posts'
-applyTo: '**/*.md'
+description: "Markdown guidelines and content creation standards for blog posts"
+applyTo: "**/*.md"
 ---
 
 # Markdown Content Rules
@@ -60,8 +60,8 @@ Use `<span class="date-chip">Live</span>` for already-published entries.
 ### Inline features — two-column table
 
 ```md
-| Source | Rendered |
-| ------ | -------- |
+| Source     | Rendered |
+| ---------- | -------- |
 | `:rocket:` | :rocket: |
 | `~~text~~` | ~~text~~ |
 ```

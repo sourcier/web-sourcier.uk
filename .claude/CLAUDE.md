@@ -93,14 +93,14 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 
 ```yaml
 ---
-title: 'Post Title'
-subTitle: 'Optional subtitle'
+title: "Post Title"
+subTitle: "Optional subtitle"
 pubDate: 2026-03-30T00:00:00
-description: 'One-sentence description for meta tags and listings.'
-author: 'Roger Rajaratnam'
+description: "One-sentence description for meta tags and listings."
+author: "Roger Rajaratnam"
 cover:
-  image: './cover-image.jpg'
-  alt: 'Description — Photo credit if applicable'
+  image: "./cover-image.jpg"
+  alt: "Description — Photo credit if applicable"
 tags: ["tag1", "tag2"]
 draft: true
 ---
@@ -128,7 +128,7 @@ draft: true
 
 ```yaml
 - date: 2026-03-30T00:00:00
-  description: 'Short description of what was added or changed'
+  description: "Short description of what was added or changed"
 ```
 
 ### Series Articles

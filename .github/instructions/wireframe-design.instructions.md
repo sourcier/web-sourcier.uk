@@ -1,6 +1,6 @@
 ---
-description: 'Visual design system for SVG wireframes and UI mockups used in blog posts on sourcier.uk'
-applyTo: '**/*.svg'
+description: "Visual design system for SVG wireframes and UI mockups used in blog posts on sourcier.uk"
+applyTo: "**/*.svg"
 ---
 
 # Wireframe Design System
@@ -31,18 +31,18 @@ Do **not** apply the sketch filter to text elements — it makes them unreadable
 
 ## Colours
 
-| Role | Value |
-|---|---|
-| Paper background | `#fafaf7` |
-| Navbar background | `#1e1b2e` (dark purple) |
-| Brand accent (annotations, focus states) | `#e8006a` |
-| Card / modal background | `white` |
-| Dark card background | `#282c34` |
-| Border / stroke | `#aaa`, `#d4d0cc`, `#ece9e4` |
-| Ghost elements (inactive icons) | `rgba(255,255,255,0.35)` stroke |
-| Placeholder text bars (title) | `#2d2a3e` |
-| Placeholder text bars (body) | `#c0bdb7` |
-| Skeleton image placeholder | `#edeae4` fill, `#c8c4bc` stroke |
+| Role                                     | Value                            |
+| ---------------------------------------- | -------------------------------- |
+| Paper background                         | `#fafaf7`                        |
+| Navbar background                        | `#1e1b2e` (dark purple)          |
+| Brand accent (annotations, focus states) | `#e8006a`                        |
+| Card / modal background                  | `white`                          |
+| Dark card background                     | `#282c34`                        |
+| Border / stroke                          | `#aaa`, `#d4d0cc`, `#ece9e4`     |
+| Ghost elements (inactive icons)          | `rgba(255,255,255,0.35)` stroke  |
+| Placeholder text bars (title)            | `#2d2a3e`                        |
+| Placeholder text bars (body)             | `#c0bdb7`                        |
+| Skeleton image placeholder               | `#edeae4` fill, `#c8c4bc` stroke |
 
 ## Typography
 
@@ -55,13 +55,13 @@ Do **not** apply the sketch filter to text elements — it makes them unreadable
 
 The navbar sits at `y=8`, `height=50`, background `#1e1b2e`:
 
-| Element | Position | Notes |
-|---|---|---|
-| Logo circle | `cx=34 cy=33 r=11` | `stroke="rgba(255,255,255,0.6)"` |
-| Logo text "Sourcier" | `x=52 y=39` | bold, white |
-| Nav links (About, Blog, Contact) | `x=272,324,370 y=38` | muted white |
-| Search icon | **First** icon at right, `cx=558 cy=31 r=8` | white, full opacity — active/highlighted |
-| Ghost social circles | `cx=584,610,636 cy=33 r=9` | `rgba(255,255,255,0.35)` — inactive |
+| Element                          | Position                                    | Notes                                    |
+| -------------------------------- | ------------------------------------------- | ---------------------------------------- |
+| Logo circle                      | `cx=34 cy=33 r=11`                          | `stroke="rgba(255,255,255,0.6)"`         |
+| Logo text "Sourcier"             | `x=52 y=39`                                 | bold, white                              |
+| Nav links (About, Blog, Contact) | `x=272,324,370 y=38`                        | muted white                              |
+| Search icon                      | **First** icon at right, `cx=558 cy=31 r=8` | white, full opacity — active/highlighted |
+| Ghost social circles             | `cx=584,610,636 cy=33 r=9`                  | `rgba(255,255,255,0.35)` — inactive      |
 
 The search icon is always the **first** icon in the right-hand navbar group, before social icons.
 
@@ -114,12 +114,14 @@ Annotation labels sit to the **left or bottom** of the diagram. Lines go from la
 ## Result Rows
 
 **Normal row:**
+
 - `fill="white"`, `stroke="#ece9e4"`, `rx="5"`
 - Thumbnail placeholder: `fill="#edeae4"`, `stroke="#c8c4bc"`, crossed by two diagonal lines
 - Title bar: `fill="#2d2a3e"`, `height=11`, `rx=3`
 - Body bars: `fill="#c0bdb7"`, `height=9`, `rx=3`
 
 **Focused row:**
+
 - `fill="#fdf2f8"`, `stroke="#f0bed8"` (pink tint)
 - Left accent: `fill="#e8006a"`, `width=4`, `rx=2` — flush to left edge of row
 

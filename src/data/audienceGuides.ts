@@ -61,7 +61,8 @@ export const audienceGuides: AudienceGuide[] = [
           "A step-by-step way to explore an unfamiliar project without getting lost in every file and folder.",
       },
       {
-        title: "What employers are really looking for in engineers starting out",
+        title:
+          "What employers are really looking for in engineers starting out",
         description:
           "The habits, signals, and evidence that matter more than memorising another list of interview questions.",
       },

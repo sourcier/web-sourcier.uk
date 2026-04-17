@@ -55,11 +55,15 @@ export const handler = async (event) => {
   });
 
   if (!response.ok) {
-    console.error(`Netlify API error: ${response.status} ${response.statusText}`);
+    console.error(
+      `Netlify API error: ${response.status} ${response.statusText}`,
+    );
     return {
       statusCode: 502,
       headers: corsHeaders,
-      body: JSON.stringify({ error: "Failed to fetch comments from Netlify API" }),
+      body: JSON.stringify({
+        error: "Failed to fetch comments from Netlify API",
+      }),
     };
   }
 

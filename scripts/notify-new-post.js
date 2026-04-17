@@ -28,7 +28,10 @@ if (existsSync(envFile)) {
 const apiKey = process.env.RESEND_API_KEY;
 const segmentId = process.env.RESEND_SEGMENT_ID;
 const topicId = process.env.RESEND_TOPIC_ID;
-const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(/\/$/, "");
+const siteBase = (process.env.SITE_URL ?? "https://sourcier.uk").replace(
+  /\/$/,
+  "",
+);
 
 if (!apiKey) {
   console.error("Error: RESEND_API_KEY environment variable is required.");
@@ -78,12 +81,13 @@ function loadPost(postId) {
     throw new Error(`Post not found: collections/posts/${postId}/index.md`);
   }
   const fm = parseFrontmatter(content);
-  if (!fm.title) throw new Error(`No title found in frontmatter for post: ${postId}`);
+  if (!fm.title)
+    throw new Error(`No title found in frontmatter for post: ${postId}`);
   return {
-    title:   fm.title.replace(/^["']|["']$/g, ""),
+    title: fm.title.replace(/^["']|["']$/g, ""),
     excerpt: fm.description || fm.subTitle || "",
-    url:     `${siteBase}/blog/${postId}`,
-    draft:   fm.draft === "true",
+    url: `${siteBase}/blog/${postId}`,
+    draft: fm.draft === "true",
   };
 }
 
@@ -95,7 +99,10 @@ function listPostIds() {
     .filter((d) => d.isDirectory())
     .map((d) => {
       try {
-        const content = readFileSync(join(postsDir, d.name, "index.md"), "utf8");
+        const content = readFileSync(
+          join(postsDir, d.name, "index.md"),
+          "utf8",
+        );
         const fm = parseFrontmatter(content);
         const pubDate = fm.pubDate ? new Date(fm.pubDate).getTime() : 0;
         const isDraft = fm.draft === "true";
@@ -147,7 +154,9 @@ try {
 }
 
 if (post.draft) {
-  console.warn("\n⚠  Warning: this post is marked draft: true in its frontmatter.");
+  console.warn(
+    "\n⚠  Warning: this post is marked draft: true in its frontmatter.",
+  );
   const confirm = await prompt("Send anyway? [y/N] ");
   if (confirm.toLowerCase() !== "y" && confirm.toLowerCase() !== "yes") {
     console.log("Aborted.");
@@ -158,7 +167,8 @@ if (post.draft) {
 const { title, url, excerpt } = post;
 
 const SUBJECT = `New post: ${title}`;
-const FROM    = process.env.NOTIFY_FROM_EMAIL ?? "Roger @ Sourcier <hello@sourcier.uk>";
+const FROM =
+  process.env.NOTIFY_FROM_EMAIL ?? "Roger @ Sourcier <hello@sourcier.uk>";
 const RESEND_API = "https://api.resend.com";
 
 function buildHtml() {

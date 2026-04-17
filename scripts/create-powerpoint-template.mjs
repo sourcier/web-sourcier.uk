@@ -253,7 +253,11 @@ function addSectionSlide(pptx) {
 function addContentSlide(pptx) {
   const slide = pptx.addSlide();
 
-  addHeader(slide, "Content Layout", "Two-column slide with clear visual hierarchy.");
+  addHeader(
+    slide,
+    "Content Layout",
+    "Two-column slide with clear visual hierarchy.",
+  );
 
   slide.addShape("rect", {
     x: 0.5,
@@ -334,7 +338,11 @@ function addContentSlide(pptx) {
 function addQuoteSlide(pptx) {
   const slide = pptx.addSlide();
 
-  addHeader(slide, "Quote Layout", "Ideal for key takeaways and narrative pivots.");
+  addHeader(
+    slide,
+    "Quote Layout",
+    "Ideal for key takeaways and narrative pivots.",
+  );
 
   slide.addShape("roundRect", {
     x: 1.25,
@@ -346,7 +354,7 @@ function addQuoteSlide(pptx) {
     line: { color: COLORS.pink, pt: 1.5 },
   });
 
-  slide.addText("\"", {
+  slide.addText('"', {
     x: 1.7,
     y: 2.7,
     w: 0.9,
@@ -356,19 +364,22 @@ function addQuoteSlide(pptx) {
     fontSize: 72,
   });
 
-  slide.addText("Replace with a strong insight, user quote, or key lesson from the project.", {
-    x: 2.4,
-    y: 3.3,
-    w: 8.9,
-    h: 1.4,
-    fontFace: FONT.body,
-    color: COLORS.ink,
-    fontSize: 27,
-    italic: true,
-    fit: "shrink",
-    align: "center",
-    valign: "mid",
-  });
+  slide.addText(
+    "Replace with a strong insight, user quote, or key lesson from the project.",
+    {
+      x: 2.4,
+      y: 3.3,
+      w: 8.9,
+      h: 1.4,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 27,
+      italic: true,
+      fit: "shrink",
+      align: "center",
+      valign: "mid",
+    },
+  );
 
   slide.addText("Attribution / Source", {
     x: 2.4,
@@ -387,7 +398,11 @@ function addQuoteSlide(pptx) {
 function addImageSlide(pptx) {
   const slide = pptx.addSlide();
 
-  addHeader(slide, "Image + Caption", "Use for screenshots, architecture diagrams, or mockups.");
+  addHeader(
+    slide,
+    "Image + Caption",
+    "Use for screenshots, architecture diagrams, or mockups.",
+  );
 
   slide.addShape("rect", {
     x: 0.8,

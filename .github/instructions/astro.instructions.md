@@ -1,6 +1,6 @@
 ---
-description: 'Astro development standards and best practices for sourcier.uk'
-applyTo: '**/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx'
+description: "Astro development standards and best practices for sourcier.uk"
+applyTo: "**/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx"
 ---
 
 # Astro Development Instructions
@@ -55,20 +55,30 @@ pnpm post-images:copy     # Copy SVG files from collections/posts/<slug>/ to pub
 Defined in `src/content.config.ts` using the Content Layer API:
 
 ```typescript
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const posts = defineCollection({
-  loader: glob({ pattern: ['**/*.md', '!README.md'], base: './collections/posts' }),
-  schema: ({ image }) => z.object({
-    title: z.string(),
-    subTitle: z.string(),
-    pubDate: z.coerce.date(),
-    cover: z.object({ image: image(), alt: z.string(), thumbnail: z.string().optional() }).optional(),
-    tags: z.array(z.string()),
-    draft: z.boolean().default(false),
-    // ... history, credits
-  })
+  loader: glob({
+    pattern: ["**/*.md", "!README.md"],
+    base: "./collections/posts",
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      subTitle: z.string(),
+      pubDate: z.coerce.date(),
+      cover: z
+        .object({
+          image: image(),
+          alt: z.string(),
+          thumbnail: z.string().optional(),
+        })
+        .optional(),
+      tags: z.array(z.string()),
+      draft: z.boolean().default(false),
+      // ... history, credits
+    }),
 });
 ```
 
@@ -97,16 +107,20 @@ Pagefind search results display a thumbnail per post. The pipeline:
 
 1. Cover images are stored as `<slug>-cover.webp` colocated with the article
 2. `<slug>-thumbnail.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbnails:generate`
+
 - `scripts/copy-thumbnails.mjs` copies thumbnails to `public/search-thumbnails/<slug>/<slug>-thumbnail.webp`
+
 4. The layout references the stable path `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
 5. `public/search-thumbnails/` is gitignored — regenerated on every build
 
 When adding a new post with a cover:
+
 1. Save cover as `<slug>-cover.webp` in the post directory
 2. Run `pnpm thumbnails:generate` to create `<slug>-thumbnail.webp`
 3. Add `cover.thumbnail: './<slug>-thumbnail.webp'` to the post frontmatter
 
 When renaming a post slug:
+
 1. Rename `collections/posts/<old-slug>/` to the new slug
 2. Rename every slug-derived asset in that folder (`<slug>-cover-source.*`, `<slug>-cover.webp`, `<slug>-thumbnail.webp`)
 3. Update frontmatter, any generator scripts, and any public download paths that derive from the old slug
@@ -126,6 +140,7 @@ Astro's image optimisation pipeline (Sharp) cannot process SVG files, so SVGs re
 All markdown images automatically get an expand button, and all Mermaid diagrams get one too. They share the same lightbox implementation in `MarkdownPostLayout.astro`.
 
 **How it works:**
+
 - `rehype-zoomable-images.js` (registered in `astro.config.mjs`) adds `class="zoomable"` to every `<img>` in markdown at build time, wrapped in a `p.zoomable-image` container
 - At runtime, `MarkdownPostLayout.astro` queries each `.zoomable` image and appends a `.media-expand-btn` button
 - The same lightbox DOM structure is used for both images and Mermaid SVGs:
@@ -169,6 +184,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Posts with future `pubDate` auto-publish via daily scheduled build (07:45 UTC)
 
 ### Client-Side Interactivity
+
 - Use framework components (React, Vue, Svelte) for interactive elements
 - Choose the right hydration strategy based on user interaction patterns
 - Implement state management within framework boundaries
@@ -177,6 +193,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Share state between islands using stores or custom events
 
 ### API Routes and SSR
+
 - Create API routes in `src/pages/api/` for dynamic functionality
 - Use proper HTTP methods and status codes
 - Implement request validation and error handling
@@ -185,6 +202,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Handle environment variables securely
 
 ### SEO and Meta Management
+
 - Use Astro's built-in SEO components and meta tag management
 - Implement proper Open Graph and Twitter Card metadata
 - Generate sitemaps automatically for better search indexing
@@ -193,6 +211,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Optimize page titles and descriptions for search engines
 
 ### Image Optimization
+
 - Use Astro's `<Image />` component for automatic optimization
 - Implement responsive images with proper srcset generation
 - Use WebP and AVIF formats for modern browsers
@@ -201,6 +220,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Optimize images at build time for better performance
 
 ### Data Fetching
+
 - Fetch data at build time in component frontmatter
 - Use dynamic imports for conditional data loading
 - Implement proper error handling for external API calls
@@ -209,6 +229,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - Handle loading states and fallbacks appropriately
 
 ### Build & Deployment
+
 - Optimize static assets with Astro's built-in optimizations
 - Configure deployment for static (SSG) or hybrid (SSR) rendering
 - Use environment variables for configuration management
@@ -217,25 +238,28 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 ## Key Astro v5.0 Updates
 
 ### Breaking Changes
+
 - **ClientRouter**: Use `<ClientRouter />` instead of `<ViewTransitions />`
 - **TypeScript**: Auto-generated types in `.astro/types.d.ts` (run `astro sync`)
 - **Content Layer API**: New `glob()` and `file()` loaders for enhanced performance
 
 ### Migration Example
+
 ```typescript
 // Modern Content Layer API
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({ title: z.string(), pubDate: z.date() })
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: z.object({ title: z.string(), pubDate: z.date() }),
 });
 ```
 
 ## Implementation Guidelines
 
 ### Development Workflow
+
 1. Use `npm create astro@latest` with TypeScript template
 2. Configure Content Layer API with appropriate loaders
 3. Set up TypeScript with `astro sync` for type generation
@@ -243,6 +267,7 @@ const blog = defineCollection({
 5. Implement content pages with SEO and performance optimization
 
 ### Astro-Specific Best Practices
+
 - **Islands Architecture**: Server-first with selective hydration using client directives
 - **Content Layer API**: Use `glob()` and `file()` loaders for scalable content management
 - **Zero JavaScript**: Default to static rendering, add interactivity only when needed

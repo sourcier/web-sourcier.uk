@@ -2,11 +2,17 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout pageTitle="Page not found — Sourcier" description="The page you're looking for doesn't exist.">
+<BaseLayout
+  pageTitle="Page not found — Sourcier"
+  description="The page you're looking for doesn't exist."
+>
   <div class="not-found">
     <div class="not-found__number" aria-hidden="true">404</div>
     <h1 class="not-found__heading">Nothing here.</h1>
-    <p class="not-found__sub">That URL doesn't exist — it may have moved, been deleted, or never existed at all. Here are some pages to try instead:</p>
+    <p class="not-found__sub">
+      That URL doesn't exist — it may have moved, been deleted, or never existed
+      at all. Here are some pages to try instead:
+    </p>
     <nav class="not-found__links" aria-label="Suggested pages">
       <a href="/">Home</a>
       <a href="/blog">Blog</a>
@@ -28,7 +34,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   .not-found__number {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: "Barlow Condensed", sans-serif;
     font-size: clamp(8rem, 25vw, 18rem);
     font-weight: 900;
     line-height: 1;
@@ -50,7 +56,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   .not-found__heading {
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: "Barlow Condensed", sans-serif;
     font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 800;
     text-transform: uppercase;
@@ -72,7 +78,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     justify-content: center;
 
     a {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: "Barlow Condensed", sans-serif;
       font-size: 0.85rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -81,7 +87,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       border: 1px solid currentColor;
       padding: 0.4em 1.1em;
       text-decoration: none;
-      transition: background 0.15s ease, color 0.15s ease;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease;
 
       &:hover {
         background: var(--color-pink);

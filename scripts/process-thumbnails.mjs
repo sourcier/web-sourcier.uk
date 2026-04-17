@@ -41,7 +41,7 @@ for (const slug of readdirSync(POSTS_DIR).sort()) {
     execSync(
       `magick "${join(dir, cover)}" -resize ${THUMB_SIZE}^ -gravity Center -extent ${THUMB_SIZE} "${thumbPath}"`,
 
-      { stdio: "inherit" }
+      { stdio: "inherit" },
     );
   }
   generated++;

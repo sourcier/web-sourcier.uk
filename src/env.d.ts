@@ -3,7 +3,8 @@
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends astroHTML.JSX.DefinedIntrinsicElements {}
+    interface IntrinsicElements
+      extends astroHTML.JSX.DefinedIntrinsicElements {}
   }
 }
 

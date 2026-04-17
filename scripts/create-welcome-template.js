@@ -57,7 +57,7 @@ async function resendRequest(path, method, body) {
 
   if (!res.ok) {
     throw new Error(
-      `Resend API ${method} ${path} failed (${res.status}): ${JSON.stringify(json)}`
+      `Resend API ${method} ${path} failed (${res.status}): ${JSON.stringify(json)}`,
     );
   }
 
@@ -99,7 +99,9 @@ async function main() {
     console.log(`Template created (id: ${templateId}).`);
   } else {
     const body = await existing.text();
-    throw new Error(`Resend API GET /templates/${TEMPLATE_ALIAS} failed (${existing.status}): ${body}`);
+    throw new Error(
+      `Resend API GET /templates/${TEMPLATE_ALIAS} failed (${existing.status}): ${body}`,
+    );
   }
 
   console.log("Publishing template…");

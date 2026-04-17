@@ -35,7 +35,9 @@ export const handler = async (event) => {
   const toEmail = process.env.NOTIFY_EMAIL;
 
   if (!secret || !siteUrl || !resendApiKey || !fromEmail || !toEmail) {
-    console.warn("comment-handler: missing environment variables — skipping notification");
+    console.warn(
+      "comment-handler: missing environment variables — skipping notification",
+    );
     return { statusCode: 200, body: "OK" };
   }
 
