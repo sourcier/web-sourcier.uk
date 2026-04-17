@@ -9,4 +9,3 @@ public/pagefind
 public/post-images
 public/search-thumbnails
 public/talks/*.pptx
-src/layouts/BaseLayout.astro
