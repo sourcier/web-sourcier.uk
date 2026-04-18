@@ -286,7 +286,7 @@ const testimonials = [
   .testimonials {
     position: relative;
     overflow: hidden;
-    padding: 4rem 1.5rem;
+    padding: clamp(2rem, 3.5vw, 2.4rem) 1.5rem clamp(2rem, 3.5vw, 2.6rem);
     background:
       radial-gradient(
         ellipse 90% 70% at 100% 0%,
@@ -298,8 +298,8 @@ const testimonials = [
         color-mix(in srgb, var(--color-secondary) 4%, var(--color-paper)) 0%,
         var(--color-surface) 100%
       );
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-border) 72%, transparent);
   }
 
   .testimonials__header {
