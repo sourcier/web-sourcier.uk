@@ -57,7 +57,10 @@ const testimonials = [
 <section class="testimonials" aria-labelledby="testimonials-heading">
   <div class="container is-max-desktop">
     <div class="testimonials__header">
-      <p class="section-label" id="testimonials-heading">
+      <p
+        class="section-label section-label--secondary"
+        id="testimonials-heading"
+      >
         Growth, mentoring, and team impact
       </p>
       <button
@@ -281,8 +284,20 @@ const testimonials = [
 
 <style lang="scss">
   .testimonials {
+    position: relative;
+    overflow: hidden;
     padding: 4rem 1.5rem;
-    background-color: var(--color-surface);
+    background:
+      radial-gradient(
+        ellipse 90% 70% at 100% 0%,
+        color-mix(in srgb, var(--color-secondary) 12%, transparent) 0%,
+        transparent 62%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-secondary) 4%, var(--color-paper)) 0%,
+        var(--color-surface) 100%
+      );
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
   }
@@ -312,8 +327,9 @@ const testimonials = [
     width: 2rem;
     height: 2rem;
     flex-shrink: 0;
-    background: transparent;
-    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-secondary) 4%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--color-secondary) 18%, transparent);
     border-radius: 4px;
     color: var(--color-muted);
     cursor: pointer;
@@ -335,8 +351,8 @@ const testimonials = [
     }
 
     &:hover {
-      color: var(--color-pink);
-      border-color: rgba(232, 0, 106, 0.5);
+      color: var(--color-secondary);
+      border-color: color-mix(in srgb, var(--color-secondary) 42%, transparent);
     }
   }
 
@@ -370,9 +386,15 @@ const testimonials = [
     flex-direction: column;
     padding: 1.75rem 1.5rem;
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
-    background-color: var(--color-paper);
+    border-top: 3px solid var(--color-secondary);
+    border-radius: var(--radius-panel);
+    background: linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--color-secondary) 8%, var(--color-paper)) 0%,
+      var(--color-paper) 48%,
+      var(--color-paper) 100%
+    );
+    box-shadow: var(--shadow-panel);
 
     @media (min-width: 640px) {
       flex: 0 0 calc(50% - 0.625rem);
@@ -453,11 +475,11 @@ const testimonials = [
     gap: 0.35rem;
 
     &:hover .testimonials__name-link {
-      color: var(--color-pink);
+      color: var(--color-secondary);
     }
 
     &:hover .testimonials__linkedin {
-      color: var(--color-pink);
+      color: var(--color-secondary);
     }
   }
 
@@ -502,7 +524,7 @@ const testimonials = [
       transform 0.2s ease;
 
     &.is-active {
-      background: var(--color-pink);
+      background: var(--color-secondary);
       transform: scale(1.375);
     }
 

@@ -91,6 +91,8 @@ function seededShuffle<T>(arr: T[]): T[] {
 }
 
 const shuffled = seededShuffle(sorted);
+const totalTags = sorted.length;
+const totalPosts = allPosts.length;
 
 // Per-ring visual treatment
 const ringStyle = (ringIdx: number) => {
@@ -108,63 +110,92 @@ const ringStyle = (ringIdx: number) => {
   <PageHero
     kicker="Browse"
     title="Tags"
-    subtitle="All topics covered on this blog."
+    subtitle="Browse every topic covered on the blog."
   />
+
+  <section class="tag-summary" aria-labelledby="tag-summary-heading">
+    <div class="container is-max-desktop">
+      <div class="page-panel tag-summary__panel">
+        <div class="tag-summary__copy">
+          <p class="tag-summary__eyebrow">Topic map</p>
+          <h2 class="tag-summary__title" id="tag-summary-heading">
+            Explore the writing by theme
+          </h2>
+          <p class="tag-summary__text">
+            Jump straight into the ideas that show up most often across the
+            blog, or skim the full map below if you want to browse more broadly.
+          </p>
+        </div>
+        <ul class="tag-summary__stats" role="list">
+          <li class="tag-summary__stat">
+            <span class="tag-summary__label">Published</span>
+            <span class="tag-summary__value">{totalPosts}</span>
+          </li>
+          <li class="tag-summary__stat">
+            <span class="tag-summary__label">Topics</span>
+            <span class="tag-summary__value">{totalTags}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section class="section cloud-section">
     <div class="container is-max-desktop">
-      <div class="cloud-intro">
-        <p class="cloud-intro__text">
-          Each tag links to a collection of related posts. The bigger the tag,
-          the more posts cover that topic — the most-written-about subjects sit
-          at the centre.
-        </p>
-        <div class="cloud-legend" aria-label="Size guide">
-          <span class="cloud-legend__example cloud-legend__example--sm"
-            >fewer posts</span
-          >
-          <span class="cloud-legend__arrow" aria-hidden="true">→</span>
-          <span class="cloud-legend__example cloud-legend__example--lg"
-            >more posts</span
-          >
+      <div class="cloud-surface page-panel">
+        <div class="cloud-intro">
+          <p class="cloud-intro__text">
+            Each topic links to a collection of related posts. Larger tags mean
+            I write about that area more often, so the subjects I return to most
+            sit closer to the centre.
+          </p>
+          <div class="cloud-legend" aria-label="Size guide">
+            <span class="cloud-legend__example cloud-legend__example--sm"
+              >fewer posts</span
+            >
+            <span class="cloud-legend__arrow" aria-hidden="true">→</span>
+            <span class="cloud-legend__example cloud-legend__example--lg"
+              >more posts</span
+            >
+          </div>
         </div>
-      </div>
 
-      <!-- Circular cloud — decorative, replaced by list for SR/mobile -->
-      <div class="cloud-circle-wrap" aria-hidden="true">
-        <div class="cloud-circle">
+        <!-- Circular cloud — decorative, replaced by list for SR/mobile -->
+        <div class="cloud-circle-wrap" aria-hidden="true">
+          <div class="cloud-circle">
+            {
+              positioned.map(({ tag, slug, fontSize, x, y, ringIdx }) => (
+                <a
+                  href={`/tags/${slug}`}
+                  class="cloud-circle__tag"
+                  style={`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;font-size:${fontSize.toFixed(3)}rem;${ringStyle(ringIdx)}`}
+                  tabindex="-1"
+                >
+                  {tag}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Accessible list — always available to screen readers, visible on mobile -->
+        <ul class="cloud-list" role="list" aria-label="Tag cloud">
           {
-            positioned.map(({ tag, slug, fontSize, x, y, ringIdx }) => (
-              <a
-                href={`/tags/${slug}`}
-                class="cloud-circle__tag"
-                style={`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;font-size:${fontSize.toFixed(3)}rem;${ringStyle(ringIdx)}`}
-                tabindex="-1"
-              >
-                {tag}
-              </a>
+            shuffled.map(({ tag, count, slug, fontSize }) => (
+              <li>
+                <a
+                  href={`/tags/${slug}`}
+                  class="cloud-list__tag"
+                  style={`font-size:${fontSize.toFixed(3)}rem`}
+                  aria-label={`${tag} — ${count} post${count === 1 ? "" : "s"}`}
+                >
+                  {tag}
+                </a>
+              </li>
             ))
           }
-        </div>
+        </ul>
       </div>
-
-      <!-- Accessible list — always available to screen readers, visible on mobile -->
-      <ul class="cloud-list" role="list" aria-label="Tag cloud">
-        {
-          shuffled.map(({ tag, count, slug, fontSize }) => (
-            <li>
-              <a
-                href={`/tags/${slug}`}
-                class="cloud-list__tag"
-                style={`font-size:${fontSize.toFixed(3)}rem`}
-                aria-label={`${tag} — ${count} post${count === 1 ? "" : "s"}`}
-              >
-                {tag}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -172,8 +203,118 @@ const ringStyle = (ringIdx: number) => {
 </BaseLayout>
 
 <style lang="scss">
+  .tag-summary {
+    padding: clamp(2.5rem, 5vw, 3.25rem) 1.5rem 0;
+  }
+
+  .tag-summary__panel {
+    display: grid;
+    gap: 1.25rem;
+    border-top-color: var(--color-secondary);
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.5fr) auto;
+      gap: 2rem;
+      align-items: center;
+    }
+  }
+
+  .tag-summary__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .tag-summary__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .tag-summary__text {
+    margin: 0.85rem 0 0;
+    max-width: 58ch;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .tag-summary__stats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .tag-summary__stat {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 9rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(41, 92, 69, 0.16);
+    border-radius: 14px;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary) 8%,
+      var(--color-surface)
+    );
+  }
+
+  .tag-summary__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .tag-summary__value {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.55rem, 4vw, 2.1rem);
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
   .cloud-section {
     padding-bottom: 5rem;
+  }
+
+  .cloud-surface {
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-pink) 3%, var(--color-surface)) 0%,
+        var(--color-surface) 66%
+      ),
+      var(--color-surface);
   }
 
   // — Intro + legend
@@ -181,7 +322,7 @@ const ringStyle = (ringIdx: number) => {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid var(--color-border);
 
@@ -209,7 +350,7 @@ const ringStyle = (ringIdx: number) => {
   }
 
   .cloud-legend__arrow {
-    color: var(--color-pink);
+    color: var(--color-secondary);
     font-size: 1.25rem;
   }
 
@@ -228,7 +369,7 @@ const ringStyle = (ringIdx: number) => {
 
   .cloud-legend__example--lg {
     font-size: 2rem;
-    color: var(--color-pink);
+    color: var(--color-secondary);
   }
 
   // — Circular cloud (≥ 640px)
@@ -263,7 +404,7 @@ const ringStyle = (ringIdx: number) => {
       position: absolute;
       inset: 22%;
       border-radius: 50%;
-      border: 1px dashed rgba(232, 0, 106, 0.18);
+      border: 1px dashed rgba(41, 92, 69, 0.18);
       pointer-events: none;
     }
   }
@@ -284,7 +425,7 @@ const ringStyle = (ringIdx: number) => {
       transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     &:hover {
-      color: var(--color-pink) !important;
+      color: var(--color-secondary) !important;
       opacity: 1 !important;
       transform: translate(-50%, -50%) scale(1.18);
       z-index: 1;
@@ -333,7 +474,7 @@ const ringStyle = (ringIdx: number) => {
       opacity 0.15s ease;
 
     &:hover {
-      color: var(--color-pink);
+      color: var(--color-secondary);
       opacity: 1;
     }
   }

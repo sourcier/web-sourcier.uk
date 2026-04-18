@@ -1,5 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { audienceGuides } from "../data/audienceGuides";
+
+const corePages = [
+  {
+    href: "/blog",
+    label: "Blog",
+    description: "Start with the latest writing and browse by topic.",
+  },
+  {
+    href: "/about",
+    label: "About",
+    description: "Find out who I help and the kind of work I do.",
+  },
+  {
+    href: "/contact",
+    label: "Contact",
+    description: "Get in touch about mentoring, consulting, or a question.",
+  },
+];
 ---
 
 <BaseLayout
@@ -7,38 +26,104 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   description="The page you're looking for doesn't exist."
 >
   <div class="not-found">
-    <div class="not-found__number" aria-hidden="true">404</div>
-    <h1 class="not-found__heading">Nothing here.</h1>
-    <p class="not-found__sub">
-      That URL doesn't exist — it may have moved, been deleted, or never existed
-      at all. Here are some pages to try instead:
-    </p>
-    <nav class="not-found__links" aria-label="Suggested pages">
-      <a href="/">Home</a>
-      <a href="/blog">Blog</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-    </nav>
+    <div class="container is-max-desktop">
+      <section class="not-found__hero" aria-labelledby="not-found-heading">
+        <div class="page-panel not-found__panel">
+          <div class="not-found__number" aria-hidden="true">404</div>
+          <div class="not-found__copy">
+            <p class="not-found__eyebrow">Page not found</p>
+            <h1 class="not-found__heading" id="not-found-heading">
+              Nothing here.
+            </h1>
+            <p class="not-found__sub">
+              That URL may have moved, been deleted, or never existed. Start
+              from the homepage, jump into the latest writing, or pick the guide
+              that matches where you are now.
+            </p>
+            <div class="not-found__actions">
+              <a href="/" class="button is-primary is-medium">Home</a>
+              <a href="/blog" class="button is-light is-medium">
+                Browse the blog
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="not-found__routes"
+        aria-labelledby="not-found-routes-heading"
+      >
+        <p class="section-label">Try these instead</p>
+        <h2 class="not-found__routes-heading" id="not-found-routes-heading">
+          Start from a guide or a core page
+        </h2>
+        <div class="not-found__grid">
+          {
+            audienceGuides.map((guide) => (
+              <article class="not-found-card not-found-card--guide">
+                <p class="not-found-card__eyebrow">Guide</p>
+                <h3 class="not-found-card__title">{guide.title}</h3>
+                <p class="not-found-card__body">{guide.summary}</p>
+                <a href={guide.href} class="not-found-card__cta">
+                  Open the guide
+                </a>
+              </article>
+            ))
+          }
+          {
+            corePages.map((page) => (
+              <article class="not-found-card">
+                <p class="not-found-card__eyebrow">Page</p>
+                <h3 class="not-found-card__title">{page.label}</h3>
+                <p class="not-found-card__body">{page.description}</p>
+                <a href={page.href} class="not-found-card__cta">
+                  Open {page.label}
+                </a>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+    </div>
   </div>
 </BaseLayout>
 
-<style>
+<style lang="scss">
   .not-found {
-    display: flex;
-    flex-direction: column;
+    padding: clamp(3rem, 6vw, 5rem) 1.5rem 5.5rem;
+  }
+
+  .not-found__panel {
+    display: grid;
+    gap: 1.5rem;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 5rem 1.5rem 7rem;
-    min-height: 60vh;
+    margin-bottom: 3rem;
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(9rem, 0.6fr) minmax(0, 1.4fr);
+      gap: 2rem;
+    }
   }
 
   .not-found__number {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: clamp(8rem, 25vw, 18rem);
+    font-size: clamp(6rem, 18vw, 12rem);
     font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.02em;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
     color: transparent;
     -webkit-text-stroke: 2px var(--color-pink);
     user-select: none;
@@ -50,51 +135,149 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       inset: 0;
       color: rgba(232, 0, 106, 0.07);
       -webkit-text-stroke: 0;
-      transform: translate(4px, 4px);
+      transform: translate(6px, 6px);
       z-index: -1;
     }
   }
 
-  .not-found__heading {
+  .not-found__eyebrow {
+    margin: 0 0 0.65rem;
     font-family: "Barlow Condensed", sans-serif;
-    font-size: clamp(1.8rem, 5vw, 3rem);
-    font-weight: 800;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin: 0.5rem 0 1rem;
+    letter-spacing: 0.1em;
+    color: var(--color-secondary);
+  }
+
+  .not-found__heading {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--color-ink);
   }
 
   .not-found__sub {
-    max-width: 42ch;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
+    margin: 0.95rem 0 0;
+    max-width: 58ch;
+    line-height: 1.75;
+    color: var(--color-muted);
   }
 
-  .not-found__links {
+  .not-found__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    justify-content: center;
+    margin-top: 1.4rem;
+  }
 
-    a {
-      font-family: "Barlow Condensed", sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-pink);
-      border: 1px solid currentColor;
-      padding: 0.4em 1.1em;
-      text-decoration: none;
-      transition:
-        background 0.15s ease,
-        color 0.15s ease;
+  .not-found__routes-heading {
+    margin: 0 0 1.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    line-height: 1.02;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
 
-      &:hover {
-        background: var(--color-pink);
-        color: #fff;
-      }
+  .not-found__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+  }
+
+  .not-found-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: 100%;
+    padding: 1.4rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-pink);
+    border-radius: var(--radius-panel);
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+    box-shadow: var(--shadow-panel);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lift);
+    }
+  }
+
+  .not-found-card--guide {
+    border-top-color: var(--color-secondary);
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 12%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-pink) 3%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+  }
+
+  .not-found-card__eyebrow {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .not-found-card--guide .not-found-card__eyebrow {
+    color: var(--color-secondary);
+  }
+
+  .not-found-card__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .not-found-card__body {
+    margin: 0;
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+
+  .not-found-card__cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-pink);
+    text-decoration: none;
+  }
+
+  .not-found-card--guide .not-found-card__cta {
+    color: var(--color-secondary);
   }
 </style>

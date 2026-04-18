@@ -12,11 +12,16 @@
   --bulma-link-invert-l: 100%;
 
   --color-pink: #e8006a;
+  --color-secondary: #295c45;
+  --color-secondary-deep: #173326;
   --color-ink: #0f0f0f;
   --color-paper: #ffffff;
   --color-muted: #6b6b6b;
   --color-surface: #ffffff;
   --color-border: rgba(0, 0, 0, 0.1);
+  --radius-panel: 16px;
+  --shadow-panel: 0 18px 40px rgba(15, 15, 15, 0.08);
+  --shadow-lift: 0 28px 60px rgba(15, 15, 15, 0.12);
 }
 
 [data-theme="dark"] {
@@ -110,7 +115,25 @@ h6,
   --bulma-navbar-item-hover-color: var(--color-pink);
   --bulma-navbar-item-hover-background-color: transparent;
   --bulma-navbar-item-active-color: var(--color-pink);
-  background-color: #0a0a0a;
+  background:
+    radial-gradient(
+      ellipse 85% 150% at 0% 0%,
+      rgba(232, 0, 106, 0.12) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 85% 150% at 100% 0%,
+      color-mix(in srgb, var(--color-secondary) 24%, transparent) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0.96) 0%,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -265,7 +288,11 @@ h6,
     left: 1rem;
     right: 1rem;
     height: 2px;
-    background-color: var(--color-pink);
+    background: linear-gradient(
+      90deg,
+      var(--color-pink) 0%,
+      var(--color-secondary) 100%
+    );
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.2s ease;
@@ -288,6 +315,7 @@ h6,
   gap: 0.35rem;
   padding: 0.45rem 1rem;
   background-color: var(--color-pink);
+  border: 1px solid color-mix(in srgb, var(--color-pink) 36%, transparent);
   color: #ffffff;
   font-family: "Barlow Condensed", sans-serif;
   font-size: 0.8125rem;
@@ -296,14 +324,19 @@ h6,
   letter-spacing: 0.08em;
   text-decoration: none;
   border-radius: 4px;
+  box-shadow: 0 12px 28px rgba(232, 0, 106, 0.24);
   transition:
     background-color 0.15s ease,
-    opacity 0.15s ease;
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
   white-space: nowrap;
 
   &:hover {
     background-color: color-mix(in srgb, var(--color-pink) 85%, #000);
     color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 16px 32px rgba(232, 0, 106, 0.28);
   }
 
   @media (max-width: 1023px) {
@@ -322,11 +355,16 @@ h6,
   padding: 5rem 1.5rem 4rem;
   background:
     radial-gradient(
-      ellipse 80% 60% at 30% 0%,
+      ellipse 80% 60% at 24% 0%,
       rgba(232, 0, 106, 0.18) 0%,
-      transparent 65%
+      transparent 63%
     ),
-    #0a0a0a;
+    radial-gradient(
+      ellipse 72% 66% at 82% 6%,
+      color-mix(in srgb, var(--color-secondary) 24%, transparent) 0%,
+      transparent 64%
+    ),
+    linear-gradient(180deg, #0a0a0a 0%, #101410 100%);
   color: #ffffff;
 
   &::before {
@@ -360,6 +398,8 @@ h6,
     background: rgba(232, 0, 106, 0.08);
     border: 1px solid rgba(232, 0, 106, 0.22);
     border-radius: 999px;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -462,11 +502,86 @@ h6,
   margin-bottom: 1.5rem;
 }
 
+.section-label--secondary {
+  color: var(--color-secondary);
+}
+
+.button.is-primary,
+.button.is-light,
+.button.is-ink {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 4px;
+  text-decoration: none;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.button.is-primary {
+  background-color: var(--color-pink);
+  border-color: var(--color-pink);
+  color: var(--color-paper);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-pink) 20%, transparent);
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+    border-color: color-mix(in srgb, var(--color-pink) 85%, #000);
+    color: var(--color-paper);
+    transform: translateY(-1px);
+    box-shadow: 0 18px 36px
+      color-mix(in srgb, var(--color-pink) 28%, transparent);
+  }
+}
+
+.button.is-light {
+  background-color: transparent;
+  border-color: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  box-shadow: none;
+  color: var(--color-ink);
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--color-ink) 4%, transparent);
+    border-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+    color: var(--color-ink);
+    transform: translateY(-1px);
+  }
+}
+
+.button.is-ink {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow: 0 14px 28px rgba(15, 15, 15, 0.16);
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--color-ink) 90%, #ffffff);
+    border-color: color-mix(in srgb, var(--color-ink) 90%, #ffffff);
+    color: var(--color-paper);
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(15, 15, 15, 0.24);
+  }
+}
+
+.button.is-medium {
+  min-height: 2.85rem;
+  padding-inline: 1.15rem;
+  font-size: 0.9375rem;
+}
+
 .page-panel {
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--color-border);
   border-top: 3px solid var(--color-pink);
-  border-radius: 10px;
+  border-radius: var(--radius-panel);
   background:
     linear-gradient(
       155deg,
@@ -474,7 +589,19 @@ h6,
       var(--color-surface) 58%
     ),
     var(--color-surface);
-  box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+  box-shadow: var(--shadow-panel);
+}
+
+.page-panel--secondary {
+  border-top-color: var(--color-secondary);
+  background:
+    linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--color-secondary) 10%, var(--color-paper)) 0%,
+      color-mix(in srgb, var(--color-secondary) 3%, var(--color-surface)) 42%,
+      var(--color-surface) 100%
+    ),
+    var(--color-surface);
 }
 
 // — Series callout banner (used at the top of series posts)
@@ -538,9 +665,16 @@ h6,
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-panel);
   border: 1px solid var(--color-border);
-  background-color: var(--color-surface);
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--color-pink) 3%, var(--color-surface)) 0%,
+      var(--color-surface) 64%
+    ),
+    var(--color-surface);
+  box-shadow: var(--shadow-panel);
   text-decoration: none;
   color: inherit;
   overflow: hidden;
@@ -551,8 +685,9 @@ h6,
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 32px rgba(232, 0, 106, 0.18);
-    border-color: var(--color-pink);
+    box-shadow: 0 20px 44px
+      color-mix(in srgb, var(--color-secondary) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-secondary) 26%, transparent);
 
     .card__cover img {
       transform: scale(1.04);
@@ -563,7 +698,7 @@ h6,
     }
 
     .card__cta {
-      background-color: var(--color-pink);
+      background-color: var(--color-secondary);
       color: var(--color-paper);
     }
   }
@@ -571,7 +706,7 @@ h6,
 
 .card__cover {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
 
   img {
@@ -586,52 +721,61 @@ h6,
 .card__cover-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(232, 0, 106, 0.15);
+  background-color: color-mix(in srgb, var(--color-secondary) 18%, transparent);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .card__body {
   flex: 1;
-  padding: 1.25rem 1.25rem 0.75rem;
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+  padding: 1.35rem 1.25rem 1rem;
   border-left: 3px solid transparent;
   transition: border-color 0.18s ease;
 
   .card.card__blog:hover & {
-    border-left-color: var(--color-pink);
+    border-left-color: var(--color-secondary);
   }
 }
 
 .card__title {
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.22rem;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  line-height: 1.15;
-  margin-bottom: 0.3rem;
+  line-height: 1.12;
+  margin: 0;
   color: var(--color-ink);
 }
 
 .card__subtitle {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--color-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--color-ink) 58%, white);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 0.75rem;
+  opacity: 0.88;
+  margin: 0;
 }
 
 .card__cta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.625rem 1.25rem;
-  background-color: #0f0f0f;
-  color: rgba(255, 255, 255, 0.8);
+  padding: 0.78rem 1.25rem;
+  background-color: color-mix(
+    in srgb,
+    var(--color-secondary) 5%,
+    var(--color-surface)
+  );
+  border-top: 1px solid var(--color-border);
+  color: var(--color-ink);
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 700;
-  font-size: 0.8125rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   transition:
@@ -641,12 +785,26 @@ h6,
 }
 
 .card-meta {
-  font-size: 0.75rem;
-  color: var(--color-pink);
-  font-weight: 700;
+  font-size: 0.74rem;
+  color: var(--color-secondary);
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.09em;
+  margin: 0;
+}
+
+@media (max-width: 639px) {
+  .card__body {
+    padding: 1.15rem 1rem 0.95rem;
+  }
+
+  .card__title {
+    font-size: 1.16rem;
+  }
+
+  .card__cta {
+    padding: 0.72rem 1rem;
+  }
 }
 
 // — Social icon buttons

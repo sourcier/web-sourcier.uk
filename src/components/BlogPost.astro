@@ -57,11 +57,32 @@ const formattedDate = pubDate
 
 <style lang="scss">
   .card__description {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-ink) 70%, white);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: initial;
     display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .card__title {
+    display: -webkit-box;
+    overflow: hidden;
     -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .card__subtitle {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
@@ -92,6 +113,12 @@ const formattedDate = pubDate
       opacity: 0.55;
       pointer-events: none;
       z-index: 1;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .card__description {
+      -webkit-line-clamp: 3;
     }
   }
 </style>

@@ -273,7 +273,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
 
     .career-section-intro {
       max-width: 60ch;
-      margin: 0 auto 3rem;
+      margin: 0 auto 2.5rem;
       color: var(--color-muted);
       line-height: 1.7;
 
@@ -346,7 +346,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
     .career-timeline__item {
       position: relative;
       padding-left: calc(1.5rem + 36px);
-      margin-bottom: 2.5rem;
+      margin-bottom: clamp(1.75rem, 3vw, 2.15rem);
 
       @media (min-width: 640px) {
         width: 50%;
@@ -399,18 +399,37 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
     }
 
     .career-timeline__content {
-      background: var(--color-surface);
+      background:
+        linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+          var(--color-surface) 62%
+        ),
+        var(--color-surface);
       border: 1px solid var(--color-border);
-      border-radius: 6px;
+      border-top: 3px solid rgba(232, 0, 106, 0.24);
+      border-radius: var(--radius-panel);
       padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-panel);
       transition:
         transform 0.18s ease,
         box-shadow 0.18s ease;
 
       &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+        box-shadow: var(--shadow-lift);
       }
+    }
+
+    .career-timeline__item:nth-child(even) .career-timeline__content {
+      background:
+        linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--color-secondary) 6%, var(--color-surface)) 0%,
+          var(--color-surface) 62%
+        ),
+        var(--color-surface);
+      border-top-color: rgba(41, 92, 69, 0.24);
     }
 
     .career-timeline__period {

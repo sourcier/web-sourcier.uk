@@ -1,0 +1,586 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+
+const pageTitle = "Charity support — Sourcier";
+
+const supportAreas = [
+  {
+    title: "Websites, forms, and journeys",
+    body: "Small improvements to the parts of your site people actually rely on: clearer calls to action, easier forms, better accessibility, or fixing the friction that is getting in the way.",
+    examples: [
+      "Accessibility and usability fixes",
+      "Form and content improvements",
+      "Performance and digital tidy-ups",
+    ],
+  },
+  {
+    title: "Scoping, advice, and next steps",
+    body: "Sometimes the most helpful thing is not writing code straight away. I can help you understand the problem, assess your options, and turn a fuzzy need into a clearer next step.",
+    examples: [
+      "Project scoping and prioritisation",
+      "Sanity-checking an approach",
+      "Reviewing developer or supplier proposals",
+    ],
+  },
+  {
+    title: "Small workflow improvements",
+    body: "A single day works well for the annoying little things that keep costing time: repetitive admin, manual content updates, or a useful fix that never quite gets picked up.",
+    examples: [
+      "Lightweight automation ideas",
+      "Content and publishing workflow fixes",
+      "Debugging and delivery unblockers",
+    ],
+  },
+];
+
+const fitSignals = [
+  "A charity or community organisation with a clear digital problem to solve.",
+  "A small, practical piece of work with a defined outcome.",
+  "Something that will save staff or volunteers time, reduce friction, or improve access.",
+  "A team that can explain the current problem, the desired outcome, and any timing constraints.",
+];
+
+const biggerWorkSignals = [
+  "A full website rebuild or broad redesign programme.",
+  "An open-ended stream of delivery work with no clear boundary.",
+  "Anything that needs urgent operational support or constant availability.",
+  "Projects where the best next step is formal procurement or a larger implementation partner.",
+];
+
+const processSteps = [
+  {
+    label: "Step 1",
+    title: "Tell me what needs attention",
+    body: "Use the contact form and outline the organisation, the problem you want solved, and what a good outcome would look like.",
+  },
+  {
+    label: "Step 2",
+    title: "I choose one request each month",
+    body: "I review requests and pick one piece of work that is both useful and realistically scoped for a focused day.",
+  },
+  {
+    label: "Step 3",
+    title: "We focus on something concrete",
+    body: "The aim is a practical result: a fix, a recommendation, a scoped plan, or a meaningful unblocker that helps your team move forward.",
+  },
+];
+
+const charityExperience = [
+  {
+    organisation: "Into Film",
+    detail: "My first charity role.",
+  },
+  {
+    organisation: "JustGiving",
+    detail:
+      "Campaigns and digital work for charities including Alzheimer's Research UK, Comic Relief, Diabetes UK, Macmillan Cancer Support, Shelter, and WaterAid UK, among many others.",
+  },
+];
+---
+
+<BaseLayout
+  pageTitle={pageTitle}
+  description="Once a month I set aside one free day for a charity or community organisation that could use practical digital help, advice, or a hand moving a piece of work forward."
+>
+  <PageHero
+    kicker="Community"
+    title="One free day each month for a charity"
+    subtitle="The charity sector is close to my heart, so I set aside one day each month to help a charity or community organisation move an important piece of work forward."
+  />
+
+  <section class="section charity-stats" aria-label="Offer details">
+    <div class="container is-max-desktop">
+      <ul class="charity-stats__list" role="list">
+        <li class="charity-stats__item">
+          <span class="charity-stats__label">Frequency</span>
+          <span class="charity-stats__value">1 day/month</span>
+        </li>
+        <li class="charity-stats__item">
+          <span class="charity-stats__label">Cost</span>
+          <span class="charity-stats__value">Free</span>
+        </li>
+        <li class="charity-stats__item">
+          <span class="charity-stats__label">Best fit</span>
+          <span class="charity-stats__value">Small scope</span>
+        </li>
+        <li class="charity-stats__item">
+          <span class="charity-stats__label">Format</span>
+          <span class="charity-stats__value">Remote first</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section
+    class="section charity-intro"
+    aria-labelledby="charity-intro-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="charity-intro__grid">
+        <div class="charity-intro__main page-panel page-panel--secondary">
+          <p class="section-label section-label--secondary">
+            Why I am doing this
+          </p>
+          <h2 class="charity-intro__heading" id="charity-intro-heading">
+            A practical way to give something back
+          </h2>
+          <p class="charity-intro__body">
+            I have worked in the charity sector before, and it is something I
+            still care about deeply. I know how often worthwhile organisations
+            are balancing meaningful work against tight budgets, limited time,
+            and more digital friction than they should have to carry.
+          </p>
+          <p class="charity-intro__body">
+            Into Film was the first charity I worked for. After that, I worked
+            at JustGiving on projects for Alzheimer's Research UK, Comic Relief,
+            Diabetes UK, Macmillan Cancer Support, Shelter, and WaterAid UK,
+            among many others. That work stays with me.
+          </p>
+          <p class="charity-intro__body">
+            This page is my way of making space for that. Each month I set aside
+            one free day for a charity or community organisation that could
+            benefit from practical help. The goal is simple: solve one real
+            problem well and leave the team in a better place than before.
+          </p>
+        </div>
+
+        <aside
+          class="charity-callout page-panel page-panel--secondary"
+          aria-label="Charity experience"
+        >
+          <p class="charity-callout__label">Charity sector experience</p>
+          <h2 class="charity-callout__title">
+            Experience that shapes how I approach this
+          </h2>
+          <p class="charity-callout__body">
+            I understand the pace, constraints, and care that often sit behind
+            this kind of work. That is part of why I want that day to be
+            genuinely useful rather than symbolic.
+          </p>
+          <ul class="charity-callout__list" role="list">
+            {
+              charityExperience.map((item) => (
+                <li>
+                  <span class="charity-callout__org">{item.organisation}</span>
+                  <span class="charity-callout__context">{item.detail}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section charity-areas"
+    aria-labelledby="charity-areas-heading"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label section-label--secondary">What I can help with</p>
+      <h2 class="charity-areas__heading" id="charity-areas-heading">
+        Good, practical problems for one focused day
+      </h2>
+      <div class="charity-areas__grid">
+        {
+          supportAreas.map((area) => (
+            <article class="charity-area-card">
+              <h3 class="charity-area-card__title">{area.title}</h3>
+              <p class="charity-area-card__body">{area.body}</p>
+              <ul class="charity-area-card__examples" role="list">
+                {area.examples.map((example) => (
+                  <li>{example}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section charity-fit" aria-labelledby="charity-fit-heading">
+    <div class="container is-max-desktop">
+      <p class="section-label section-label--secondary">How this works best</p>
+      <h2 class="charity-fit__heading" id="charity-fit-heading">
+        Where one day can make the biggest difference
+      </h2>
+      <div class="charity-fit__grid">
+        <article class="charity-fit__panel page-panel page-panel--secondary">
+          <h3 class="charity-fit__title">Strong fit</h3>
+          <ul class="charity-fit__list" role="list">
+            {fitSignals.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <article class="charity-fit__panel page-panel page-panel--secondary">
+          <h3 class="charity-fit__title">
+            Better suited to a bigger engagement
+          </h3>
+          <ul class="charity-fit__list" role="list">
+            {biggerWorkSignals.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="charity-fit__note">
+            If your need falls into this second group, it can still be worth
+            getting in touch. I may be able to help you scope it or clarify what
+            to ask for next.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section charity-process"
+    aria-labelledby="charity-process-heading"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label section-label--secondary">Process</p>
+      <h2 class="charity-process__heading" id="charity-process-heading">
+        Simple, focused, and practical
+      </h2>
+      <div class="charity-process__grid">
+        {
+          processSteps.map((step) => (
+            <article class="charity-step">
+              <p class="charity-step__label">{step.label}</p>
+              <h3 class="charity-step__title">{step.title}</h3>
+              <p class="charity-step__body">{step.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section charity-cta" aria-labelledby="charity-cta-heading">
+    <div class="container is-max-desktop">
+      <div class="charity-cta__panel page-panel page-panel--secondary">
+        <p class="section-label section-label--secondary">Apply</p>
+        <h2 class="charity-cta__heading" id="charity-cta-heading">
+          Tell me about your charity or community organisation
+        </h2>
+        <p class="charity-cta__body">
+          Tell me about your organisation, the problem you want solved, why it
+          matters, and what a good outcome would look like. If it feels like a
+          good fit for that day, I will get back to you and take it from there.
+        </p>
+        <div class="charity-cta__actions">
+          <a
+            href="/contact?reason=charity-support#contact-form"
+            class="button is-ink is-medium"
+          >
+            Get in touch about this
+          </a>
+          <a href="/contact#contact-form" class="charity-cta__link">
+            Ask if it is a fit
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  .charity-stats {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: 0;
+  }
+
+  .charity-stats__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 960px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .charity-stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-height: 100%;
+    padding: 1.25rem 1.3rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-secondary);
+    border-radius: 10px;
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-secondary) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
+    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+  }
+
+  .charity-stats__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .charity-stats__value {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .charity-intro,
+  .charity-areas,
+  .charity-fit,
+  .charity-process,
+  .charity-cta {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .charity-intro__grid,
+  .charity-fit__grid,
+  .charity-cta__panel {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .charity-intro__grid {
+    @media (min-width: 960px) {
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.8fr);
+    }
+  }
+
+  .charity-intro__heading,
+  .charity-areas__heading,
+  .charity-fit__heading,
+  .charity-process__heading,
+  .charity-cta__heading {
+    margin: 0 0 1rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.85rem, 4vw, 3rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .charity-intro__body,
+  .charity-cta__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.75;
+    font-size: 1rem;
+  }
+
+  .charity-intro__main,
+  .charity-callout,
+  .charity-fit__panel,
+  .charity-cta__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .charity-fit__title,
+  .charity-step__label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .charity-callout__label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .charity-callout__title,
+  .charity-step__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .charity-callout__body,
+  .charity-fit__note,
+  .charity-step__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .charity-callout__list,
+  .charity-fit__list,
+  .charity-area-card__examples {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .charity-callout__list li,
+  .charity-fit__list li,
+  .charity-area-card__examples li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.68rem;
+      left: 0;
+      width: 0.38rem;
+      height: 0.38rem;
+      border-radius: 999px;
+      background: var(--color-secondary);
+      transform: translateY(-50%);
+    }
+  }
+
+  .charity-callout__list li::before {
+    background: var(--color-secondary);
+  }
+
+  .charity-callout__org,
+  .charity-callout__context {
+    display: block;
+  }
+
+  .charity-callout__org {
+    margin-bottom: 0.15rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .charity-callout__context {
+    line-height: 1.65;
+  }
+
+  .charity-areas__grid,
+  .charity-process__grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .charity-areas__grid {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .charity-area-card,
+  .charity-step {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-secondary);
+    border-radius: var(--radius-panel);
+    background:
+      linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
+        var(--color-surface) 58%
+      ),
+      var(--color-surface);
+    box-shadow: var(--shadow-panel);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+      border-color: color-mix(in srgb, var(--color-secondary) 22%, transparent);
+    }
+  }
+
+  .charity-area-card__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.28rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .charity-area-card__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .charity-fit__grid {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .charity-process__grid {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .charity-cta__panel {
+    align-items: flex-start;
+    background:
+      radial-gradient(
+        ellipse 120% 120% at 100% 0%,
+        color-mix(in srgb, var(--color-secondary) 16%, transparent) 0%,
+        transparent 55%
+      ),
+      var(--color-surface);
+  }
+
+  .charity-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .charity-cta__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-secondary);
+  }
+</style>

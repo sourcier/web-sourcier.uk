@@ -64,6 +64,29 @@ const pageTitle = "About — Roger Rajaratnam";
     subtitle="Helping people move into tech, engineers grow, and teams improve how they build software"
   />
 
+  <section class="about-intro" aria-labelledby="about-intro-heading">
+    <div class="container is-max-desktop">
+      <div class="page-panel about-intro__panel">
+        <div class="about-intro__copy">
+          <p class="about-intro__eyebrow">What I focus on</p>
+          <h2 class="about-intro__title" id="about-intro-heading">
+            Practical engineering improvement for people, teams, and products
+          </h2>
+          <p class="about-intro__text">
+            The work I keep coming back to is the work that makes engineering
+            clearer: better habits, better delivery, and more confidence for the
+            people doing the work.
+          </p>
+        </div>
+        <ul class="about-intro__list" role="list">
+          <li>Career switchers who need clarity</li>
+          <li>Engineers growing into more ownership</li>
+          <li>Teams raising the bar without process theatre</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Stats bar -->
   <div class="about-stats">
     <div class="container is-max-desktop">
@@ -192,7 +215,9 @@ const pageTitle = "About — Roger Rajaratnam";
   <!-- Pullquote -->
   <div class="about-pullquote" aria-hidden="false">
     <div class="container is-max-desktop">
-      <blockquote class="about-pullquote__inner">
+      <blockquote
+        class="about-pullquote__inner page-panel page-panel--secondary"
+      >
         <p>
           I write for people getting into tech, engineers figuring out their
           next level, and teams that want practical engineering practice rather
@@ -266,9 +291,87 @@ const pageTitle = "About — Roger Rajaratnam";
 </BaseLayout>
 
 <style lang="scss">
+  .about-intro {
+    padding: clamp(2.5rem, 5vw, 3.5rem) 1.5rem 0;
+  }
+
+  .about-intro__panel {
+    display: grid;
+    gap: 1.5rem;
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.9fr);
+      gap: 2rem;
+      align-items: center;
+    }
+  }
+
+  .about-intro__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-secondary);
+  }
+
+  .about-intro__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .about-intro__text {
+    margin: 0.9rem 0 0;
+    max-width: 58ch;
+    line-height: 1.75;
+    color: var(--color-muted);
+  }
+
+  .about-intro__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .about-intro__list li {
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(41, 92, 69, 0.16);
+    border-radius: 14px;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary) 8%,
+      var(--color-surface)
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
   /* ── Stats bar ─────────────────────────────────────────────── */
   .about-stats {
-    padding: clamp(2.75rem, 5vw, 4rem) 1.5rem 0;
+    padding: clamp(2.25rem, 4vw, 3.25rem) 1.5rem 0;
     margin-top: 0;
   }
 
@@ -294,7 +397,7 @@ const pageTitle = "About — Roger Rajaratnam";
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
-    border-radius: 10px;
+    border-radius: var(--radius-panel);
     background:
       linear-gradient(
         155deg,
@@ -303,13 +406,25 @@ const pageTitle = "About — Roger Rajaratnam";
       ),
       var(--color-surface);
     position: relative;
+    box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+      box-shadow: var(--shadow-lift);
+    }
+
+    &:nth-child(even) {
+      border-top-color: var(--color-secondary);
+      background:
+        linear-gradient(
+          155deg,
+          color-mix(in srgb, var(--color-secondary) 6%, var(--color-surface)) 0%,
+          var(--color-surface) 58%
+        ),
+        var(--color-surface);
     }
   }
 
@@ -381,19 +496,35 @@ const pageTitle = "About — Roger Rajaratnam";
   .about-bio__sidebar {
     display: flex;
     flex-direction: column;
-    gap: 1px;
-    background-color: var(--color-border);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    overflow: hidden;
+    gap: 1rem;
   }
 
   .about-sidebar-card {
-    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-panel);
+    background:
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+    box-shadow: var(--shadow-panel);
     padding: 1.25rem 1.5rem;
 
     &--highlight {
-      background-color: var(--color-ink);
+      border-color: rgba(41, 92, 69, 0.22);
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(255, 255, 255, 0.12),
+          transparent 34%
+        ),
+        linear-gradient(
+          145deg,
+          var(--color-secondary-deep),
+          var(--color-secondary)
+        );
 
       .about-sidebar-card__label {
         color: rgba(255, 255, 255, 0.65);
@@ -410,7 +541,17 @@ const pageTitle = "About — Roger Rajaratnam";
   }
 
   :global([data-theme="dark"]) .about-sidebar-card--highlight {
-    background-color: var(--color-pink);
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(255, 255, 255, 0.08),
+        transparent 34%
+      ),
+      linear-gradient(
+        145deg,
+        var(--color-secondary-deep),
+        var(--color-secondary)
+      );
   }
 
   .about-sidebar-card__label {
@@ -486,14 +627,33 @@ const pageTitle = "About — Roger Rajaratnam";
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
+    border-radius: var(--radius-panel);
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+    box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+      box-shadow: var(--shadow-lift);
+    }
+
+    &:nth-child(2) {
+      border-top-color: var(--color-secondary);
+      background:
+        linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--color-secondary) 7%, var(--color-surface)) 0%,
+          var(--color-surface) 62%
+        ),
+        var(--color-surface);
     }
   }
 
@@ -540,7 +700,7 @@ const pageTitle = "About — Roger Rajaratnam";
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    color: var(--color-pink);
+    color: var(--color-secondary);
 
     svg {
       display: block;
@@ -550,22 +710,18 @@ const pageTitle = "About — Roger Rajaratnam";
   /* ── Pullquote ─────────────────────────────────────────────── */
   .about-pullquote {
     padding: 4rem 1.5rem;
-    background-color: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
   }
 
   .about-pullquote__inner {
     margin: 0;
-    padding: 0;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
     position: relative;
-    padding-left: 2rem;
 
     &::before {
       content: "\201C";
       position: absolute;
-      left: 0;
-      top: -0.1em;
+      left: 1.25rem;
+      top: 0.45rem;
       font-family: "Barlow Condensed", sans-serif;
       font-size: 4rem;
       font-weight: 800;
@@ -582,6 +738,7 @@ const pageTitle = "About — Roger Rajaratnam";
       text-transform: uppercase;
       letter-spacing: 0.01em;
       margin: 0;
+      padding-left: 1.75rem;
     }
   }
 </style>

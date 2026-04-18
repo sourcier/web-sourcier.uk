@@ -24,10 +24,10 @@ export const audienceGuides: AudienceGuide[] = [
   {
     slug: "transition-into-tech",
     href: "/start-here/transition-into-tech",
-    title: "Transition into tech",
+    title: "Transitioning into tech",
     summary:
       "Clear explanations, practical examples, and guidance for moving from learning to shipping real software.",
-    pageTitle: "Transition into tech",
+    pageTitle: "Transitioning into tech",
     pageDescription:
       "A practical guide for people transitioning into tech and building the confidence to work on real software.",
     pageSubtitle:
@@ -73,10 +73,10 @@ export const audienceGuides: AudienceGuide[] = [
   {
     slug: "engineering-career-growth",
     href: "/start-here/engineering-career-growth",
-    title: "Grow as an engineer",
+    title: "Growing as an engineer",
     summary:
       "Advice for engineers who want stronger habits, better judgment, and more confidence at work.",
-    pageTitle: "Grow as an engineer",
+    pageTitle: "Growing as an engineer",
     pageDescription:
       "A practical guide for engineers who want to grow their judgment, communication, and technical confidence.",
     pageSubtitle:
@@ -121,10 +121,10 @@ export const audienceGuides: AudienceGuide[] = [
   {
     slug: "engineering-practice",
     href: "/start-here/engineering-practice",
-    title: "Improve engineering practice",
+    title: "Improving engineering practice",
     summary:
       "Practical guidance for teams that want healthier delivery habits, clearer expectations, and better software outcomes.",
-    pageTitle: "Improve engineering practice",
+    pageTitle: "Improving engineering practice",
     pageDescription:
       "A practical guide for teams and companies that want stronger engineering practice, healthier delivery habits, and better software quality.",
     pageSubtitle:

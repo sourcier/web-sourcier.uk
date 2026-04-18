@@ -100,6 +100,12 @@ const macosApps = [
     icon: faIcon(faCalendarDays, { size: 24 }),
   },
 ];
+
+const setupPrinciples = [
+  "Fast enough to stay out of the way",
+  "Portable between home and office",
+  "Low-friction tools I genuinely enjoy using",
+];
 ---
 
 <BaseLayout
@@ -112,11 +118,41 @@ const macosApps = [
     subtitle="The hardware and software I reach for every day"
   />
 
+  <section class="uses-intro" aria-labelledby="uses-intro-heading">
+    <div class="container is-max-desktop">
+      <div class="page-panel uses-intro__panel">
+        <div class="uses-intro__copy">
+          <p class="uses-intro__eyebrow">Setup philosophy</p>
+          <h2 class="uses-intro__title" id="uses-intro-heading">
+            A setup built for focus, portability, and low friction
+          </h2>
+          <p class="uses-intro__text">
+            I optimise for tools that help me ship, teach, write, and debug
+            without getting in the way. Nothing here is chosen for novelty. It
+            all earns its place by being useful day after day.
+          </p>
+        </div>
+        <ul class="uses-intro__list" role="list">
+          {setupPrinciples.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <div class="uses-page">
     <div class="container is-max-desktop">
       <!-- Hardware -->
-      <section class="uses-section" aria-labelledby="hardware-heading">
-        <p class="section-label" id="hardware-heading">Hardware</p>
+      <section
+        class="uses-section uses-section--hardware"
+        aria-labelledby="hardware-heading"
+      >
+        <div class="uses-section__header">
+          <p class="section-label" id="hardware-heading">Hardware</p>
+          <p class="uses-section__intro">
+            The devices I rely on for development, writing, and day-to-day
+            testing.
+          </p>
+        </div>
         <ul class="uses-grid" role="list">
           {
             hardware.map(({ name, description, icon }) => (
@@ -137,8 +173,17 @@ const macosApps = [
       </section>
 
       <!-- Development -->
-      <section class="uses-section" aria-labelledby="dev-heading">
-        <p class="section-label" id="dev-heading">Development</p>
+      <section
+        class="uses-section uses-section--development"
+        aria-labelledby="dev-heading"
+      >
+        <div class="uses-section__header">
+          <p class="section-label" id="dev-heading">Development</p>
+          <p class="uses-section__intro">
+            The editor, terminal, and AI tools I use to write, test, and think
+            through software work.
+          </p>
+        </div>
         <ul class="uses-grid" role="list">
           {
             devTools.map(({ name, description, url, icon }) => (
@@ -167,8 +212,17 @@ const macosApps = [
       </section>
 
       <!-- macOS Apps -->
-      <section class="uses-section" aria-labelledby="apps-heading">
-        <p class="section-label" id="apps-heading">macOS Apps</p>
+      <section
+        class="uses-section uses-section--apps"
+        aria-labelledby="apps-heading"
+      >
+        <div class="uses-section__header">
+          <p class="section-label" id="apps-heading">macOS Apps</p>
+          <p class="uses-section__intro">
+            Utility apps that remove friction from planning, window management,
+            and daily navigation.
+          </p>
+        </div>
         <ul class="uses-grid" role="list">
           {
             macosApps.map(({ name, description, url, icon }) => (
@@ -204,16 +258,116 @@ const macosApps = [
 </BaseLayout>
 
 <style lang="scss">
+  .uses-intro {
+    padding: clamp(2.5rem, 5vw, 3.25rem) 1.5rem 0;
+  }
+
+  .uses-intro__panel {
+    display: grid;
+    gap: 1.5rem;
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.9fr);
+      gap: 2rem;
+      align-items: center;
+    }
+  }
+
+  .uses-intro__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-secondary);
+  }
+
+  .uses-intro__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2rem, 4vw, 2.85rem);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .uses-intro__text {
+    margin: 0.9rem 0 0;
+    max-width: 58ch;
+    line-height: 1.75;
+    color: var(--color-muted);
+  }
+
+  .uses-intro__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .uses-intro__list li {
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(41, 92, 69, 0.16);
+    border-radius: 14px;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary) 8%,
+      var(--color-surface)
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
   .uses-page {
-    padding: 4rem 1.5rem;
+    padding: clamp(2.75rem, 5vw, 4rem) 1.5rem 4rem;
   }
 
   .uses-section {
+    --uses-accent: var(--color-pink);
     margin-bottom: 3.5rem;
 
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  .uses-section--development {
+    --uses-accent: var(--color-secondary);
+  }
+
+  .uses-section--apps {
+    --uses-accent: var(--color-ink);
+  }
+
+  .uses-section__header {
+    display: grid;
+    gap: 0.55rem;
+    max-width: 56ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .uses-section__intro {
+    margin: 0;
+    line-height: 1.7;
+    color: var(--color-muted);
   }
 
   .uses-grid {
@@ -230,29 +384,52 @@ const macosApps = [
   }
 
   .uses-card {
+    display: flex;
+    gap: 1rem;
+    min-height: 100%;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
+    border-top: 3px solid var(--uses-accent);
+    border-radius: var(--radius-panel);
     padding: 1.5rem 1.25rem 1.25rem;
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--uses-accent) 6%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+    box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+      box-shadow: var(--shadow-lift);
     }
   }
 
   .uses-card__icon {
-    display: block;
-    margin-bottom: 1rem;
-    color: var(--color-pink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    margin-top: 0.1rem;
+    border-radius: 12px;
+    color: var(--uses-accent);
+    background: color-mix(in srgb, var(--uses-accent) 10%, transparent);
 
     :global(svg) {
       display: block;
     }
+  }
+
+  .uses-card__body {
+    display: grid;
+    gap: 0.5rem;
   }
 
   .uses-card__name {
@@ -269,7 +446,7 @@ const macosApps = [
       text-decoration: none;
 
       &:hover {
-        color: var(--color-pink);
+        color: var(--uses-accent);
       }
     }
   }

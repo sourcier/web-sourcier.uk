@@ -31,12 +31,12 @@ const pageTitle = "Contact — Sourcier";
 
 <BaseLayout
   pageTitle={pageTitle}
-  description="Get in touch about career-transition support, engineering growth, or help improving how your team builds software."
+  description="Get in touch about the day I set aside each month for charity or community work, career-transition support, engineering growth, or help improving how your team builds software."
 >
   <PageHero
     kicker="Get in touch"
     title="Get support"
-    subtitle="Career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
+    subtitle="The day I set aside each month for charity or community work, career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
   />
 
   <!-- Contact reasons -->
@@ -89,11 +89,14 @@ const pageTitle = "Contact — Sourcier";
         <div class="contact-form-col">
           <p class="contact-form__intro">
             If you are changing careers, trying to level up as an engineer, or
-            need help improving how your team builds software, send a note and I
-            will get back to you as soon as I can.
+            need help improving how your team builds software, or you work with
+            a charity or community organisation that could use the day I set
+            aside each month, send a note and I will get back to you as soon as
+            I can.
           </p>
 
           <form
+            id="contact-form"
             class="contact-form"
             name="contact"
             method="post"
@@ -145,6 +148,9 @@ const pageTitle = "Contact — Sourcier";
                 <option value="career-growth">Career growth</option>
                 <option value="engineering-practice"
                   >Engineering practice</option
+                >
+                <option value="charity-support"
+                  >Charity or community work</option
                 >
                 <option value="project">Project</option>
                 <option value="speaking">Speaking</option>
@@ -448,18 +454,37 @@ const pageTitle = "Contact — Sourcier";
     "#contact-other-reason",
   ) as HTMLInputElement | null;
 
-  reasonSelect?.addEventListener("change", () => {
+  const syncReasonState = () => {
+    if (!reasonSelect) {
+      return;
+    }
+
     const isOther = reasonSelect.value === "other";
     otherReasonField?.classList.toggle("is-hidden", !isOther);
     if (otherReasonInput) {
       otherReasonInput.required = isOther;
     }
     reasonSelect.classList.toggle("is-placeholder", reasonSelect.value === "");
-  });
+  };
+
+  reasonSelect?.addEventListener("change", syncReasonState);
 
   // Set initial placeholder state
   if (reasonSelect) {
-    reasonSelect.classList.add("is-placeholder");
+    const requestedReason = new URLSearchParams(window.location.search).get(
+      "reason",
+    );
+    const hasMatchingOption =
+      requestedReason &&
+      Array.from(reasonSelect.options).some(
+        (option) => option.value === requestedReason,
+      );
+
+    if (hasMatchingOption) {
+      reasonSelect.value = requestedReason;
+    }
+
+    syncReasonState();
   }
 
   document

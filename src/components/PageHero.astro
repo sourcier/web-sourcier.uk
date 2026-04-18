@@ -120,9 +120,14 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     padding: 5rem 1.5rem 4rem;
     background:
       radial-gradient(
-        ellipse 80% 60% at 70% 0%,
+        ellipse 80% 60% at 74% 0%,
         rgba(232, 0, 106, 0.18) 0%,
-        transparent 65%
+        transparent 62%
+      ),
+      radial-gradient(
+        ellipse 86% 74% at 12% 0%,
+        color-mix(in srgb, var(--color-secondary) 24%, transparent) 0%,
+        transparent 62%
       ),
       #0a0a0a;
     color: #ffffff;
@@ -210,7 +215,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
   }
 
   .page-hero__inner {
-    max-width: 780px;
+    max-width: 820px;
   }
 
   .page-hero__title {
@@ -223,11 +228,12 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
   }
 
   .page-hero__subtitle {
-    font-size: 1.25rem;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.65);
-    margin-bottom: 1.5rem;
-    font-weight: 300;
+    max-width: 56ch;
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.65rem;
+    font-weight: 400;
   }
 
   .page-hero__meta {

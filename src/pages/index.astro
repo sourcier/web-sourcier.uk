@@ -58,7 +58,7 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     aria-labelledby="audience-paths-heading"
   >
     <div class="container is-max-desktop">
-      <p class="section-label">Who this site is for</p>
+      <p class="section-label section-label--secondary">Who this site is for</p>
       <h2 class="audience-paths__heading" id="audience-paths-heading">
         Choose the guide that matches where you are now
       </h2>
@@ -80,7 +80,7 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 
   <section class="section" aria-label="Recent Posts">
     <div class="container is-max-desktop">
-      <p class="section-label">Latest writing</p>
+      <p class="section-label section-label--secondary">Latest writing</p>
       <div
         class="fixed-grid has-1-cols-mobile has-3-cols-tablet has-3-cols-desktop"
       >
@@ -124,6 +124,52 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
 
   <CourseLaunchSection />
 
+  <section
+    class="section community-offer"
+    aria-labelledby="community-offer-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="community-offer__grid">
+        <div class="community-offer__main page-panel page-panel--secondary">
+          <p class="section-label section-label--secondary">Community</p>
+          <h2 class="community-offer__heading" id="community-offer-heading">
+            One free day each month for a charity
+          </h2>
+          <p class="community-offer__body">
+            The charity sector is close to my heart, so I set aside one day each
+            month for a charity or community organisation that could use
+            practical help moving a digital problem or piece of work forward.
+          </p>
+          <div class="community-offer__chips" aria-label="Offer details">
+            <span class="community-offer__chip">1 day/month</span>
+            <span class="community-offer__chip">Free</span>
+            <span class="community-offer__chip">Clearly scoped</span>
+          </div>
+          <div class="community-offer__actions">
+            <a href="/charity-support" class="button is-ink is-medium">
+              See how it works
+            </a>
+            <a
+              href="/contact?reason=charity-support#contact-form"
+              class="community-offer__link"
+            >
+              Ask if it is a fit
+            </a>
+          </div>
+        </div>
+
+        <aside class="community-offer__aside page-panel page-panel--secondary">
+          <p class="community-offer__aside-label">What a day can cover</p>
+          <ul class="community-offer__list" role="list">
+            <li>Website, form, and accessibility improvements</li>
+            <li>Small workflow fixes or lightweight automation</li>
+            <li>Advice on scope, priorities, and next steps</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <Testimonials />
   <MailingListCTA />
 </BaseLayout>
@@ -153,31 +199,45 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
   }
 
   .audience-card {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     min-height: 100%;
     padding: 1.5rem;
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
-    border-radius: 10px;
+    border-top: 3px solid var(--color-secondary);
+    border-radius: var(--radius-panel);
     background:
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
+        color-mix(in srgb, var(--color-secondary) 9%, var(--color-surface)) 0%,
         var(--color-surface) 58%
       ),
       var(--color-surface);
-    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+    box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease,
       border-color 0.18s ease;
 
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-secondary) 7%, transparent) 0%,
+        transparent 42%
+      );
+      pointer-events: none;
+    }
+
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 22px 44px rgba(232, 0, 106, 0.12);
-      border-color: rgba(232, 0, 106, 0.26);
+      box-shadow: var(--shadow-lift);
+      border-color: color-mix(in srgb, var(--color-secondary) 22%, transparent);
     }
   }
 
@@ -209,7 +269,121 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
   }
 
   .audience-card__primary {
-    color: var(--color-pink);
+    color: var(--color-secondary);
+  }
+
+  .community-offer {
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+    padding-bottom: clamp(1rem, 2vw, 2rem);
+  }
+
+  .community-offer__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: 960px) {
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.85fr);
+    }
+  }
+
+  .community-offer__main,
+  .community-offer__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .community-offer__heading {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .community-offer__body {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.75;
+  }
+
+  .community-offer__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .community-offer__chip,
+  .community-offer__aside-label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .community-offer__chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid
+      color-mix(in srgb, var(--color-secondary) 20%, transparent);
+    background: color-mix(in srgb, var(--color-secondary) 7%, transparent);
+    color: var(--color-secondary);
+  }
+
+  .community-offer__aside-label {
+    margin: 0;
+    color: var(--color-secondary);
+  }
+
+  .community-offer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .community-offer__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-secondary);
+  }
+
+  .community-offer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .community-offer__list li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.68rem;
+      left: 0;
+      width: 0.38rem;
+      height: 0.38rem;
+      border-radius: 999px;
+      background: var(--color-secondary);
+      transform: translateY(-50%);
+    }
   }
 
   .card__blog--placeholder {

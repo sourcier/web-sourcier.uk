@@ -37,6 +37,8 @@ const allTagPosts = (await getCollection("posts"))
 const totalPages = Math.ceil(allTagPosts.length / PAGE_SIZE);
 const posts = allTagPosts.slice(0, PAGE_SIZE);
 const nextUrl = totalPages > 1 ? `/tags/${tag}/2` : null;
+const postCountLabel =
+  allTagPosts.length === 1 ? "1 post" : `${allTagPosts.length} posts`;
 ---
 
 <BaseLayout
@@ -44,15 +46,42 @@ const nextUrl = totalPages > 1 ? `/tags/${tag}/2` : null;
   description={`Blog posts tagged with "${label}" on Sourcier.`}
 >
   <PageHero
-    kicker="Tag"
+    kicker="Topic"
     title={label}
-    subtitle={`All posts tagged with "${label}".`}
+    subtitle={`Every published post tagged ${label}.`}
     crumbs={[
       { label: "Blog", href: "/blog" },
       { label: "Tags", href: "/tags" },
       { label },
     ]}
   />
+
+  <section class="topic-overview" aria-labelledby="topic-overview-heading">
+    <div class="container is-max-desktop">
+      <div class="page-panel topic-overview__panel">
+        <div class="topic-overview__copy">
+          <p class="topic-overview__eyebrow">Topic archive</p>
+          <h2 class="topic-overview__title" id="topic-overview-heading">
+            {postCountLabel} about {label}
+          </h2>
+          <p class="topic-overview__text">
+            This archive keeps every article filed under this topic in one
+            place, newest first, so you can stay with one theme without jumping
+            around the rest of the site.
+          </p>
+        </div>
+        <div class="topic-overview__actions">
+          <a href="/tags" class="topic-overview__link">All topics</a>
+          <a
+            href="/blog"
+            class="topic-overview__link topic-overview__link--secondary"
+          >
+            Latest writing
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <BlogGrid
     posts={posts}
@@ -61,7 +90,108 @@ const nextUrl = totalPages > 1 ? `/tags/${tag}/2` : null;
     prevUrl={null}
     nextUrl={nextUrl}
     paginationBase={`/tags/${tag}`}
+    sectionLabel="Latest in this topic"
+    sectionTitle={`Posts about ${label}`}
+    sectionDescription={`Newest first${totalPages > 1 ? `, across ${totalPages} pages.` : "."}`}
   />
 
   <MailingListCTA />
 </BaseLayout>
+
+<style lang="scss">
+  .topic-overview {
+    padding: clamp(2.5rem, 5vw, 3.25rem) 1.5rem 0;
+  }
+
+  .topic-overview__panel {
+    display: grid;
+    gap: 1.25rem;
+    border-top-color: var(--color-secondary);
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        transparent 34%
+      ),
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
+        var(--color-surface) 62%
+      ),
+      var(--color-surface);
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.45fr) auto;
+      gap: 2rem;
+      align-items: center;
+    }
+  }
+
+  .topic-overview__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .topic-overview__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .topic-overview__text {
+    margin: 0.85rem 0 0;
+    max-width: 58ch;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .topic-overview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .topic-overview__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.85rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(41, 92, 69, 0.18);
+    border-radius: 999px;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary) 8%,
+      var(--color-surface)
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      border-color: rgba(41, 92, 69, 0.32);
+      transform: translateY(-1px);
+    }
+  }
+
+  .topic-overview__link--secondary {
+    border-color: rgba(232, 0, 106, 0.22);
+    background: color-mix(in srgb, var(--color-pink) 8%, var(--color-surface));
+    color: var(--color-pink);
+  }
+</style>

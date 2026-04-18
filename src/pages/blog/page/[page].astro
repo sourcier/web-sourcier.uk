@@ -45,6 +45,32 @@ const nextUrl =
     subtitle="Practical writing for career switchers, engineers building confidence, and teams improving how they build software."
   />
 
+  <section class="archive-overview" aria-labelledby="archive-overview-heading">
+    <div class="container is-max-desktop">
+      <div class="page-panel archive-overview__panel">
+        <div class="archive-overview__copy">
+          <p class="archive-overview__eyebrow">Archive page</p>
+          <h2 class="archive-overview__title" id="archive-overview-heading">
+            Page {currentPage} of {totalPages}
+          </h2>
+          <p class="archive-overview__text">
+            You are browsing older writing from the archive. Jump back to the
+            latest posts or browse by topic if you want a quicker way in.
+          </p>
+        </div>
+        <div class="archive-overview__actions">
+          <a href="/blog" class="archive-overview__link">Latest posts</a>
+          <a
+            href="/tags"
+            class="archive-overview__link archive-overview__link--secondary"
+          >
+            All topics
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <BlogTagCloud />
 
   <BlogGrid
@@ -53,7 +79,99 @@ const nextUrl =
     totalPages={totalPages}
     prevUrl={prevUrl}
     nextUrl={nextUrl}
+    sectionLabel="Archive"
+    sectionTitle={`Posts on page ${currentPage}`}
+    sectionDescription={`Page ${currentPage} of ${totalPages} from the blog archive.`}
   />
 
   <MailingListCTA />
 </BaseLayout>
+
+<style lang="scss">
+  .archive-overview {
+    padding: clamp(2.5rem, 5vw, 3.25rem) 1.5rem 0;
+  }
+
+  .archive-overview__panel {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.4fr) auto;
+      gap: 2rem;
+    }
+  }
+
+  .archive-overview__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .archive-overview__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .archive-overview__text {
+    margin: 0.85rem 0 0;
+    max-width: 56ch;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .archive-overview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .archive-overview__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.85rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(41, 92, 69, 0.18);
+    border-radius: 999px;
+    background: color-mix(
+      in srgb,
+      var(--color-secondary) 8%,
+      var(--color-surface)
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      border-color: rgba(41, 92, 69, 0.32);
+      transform: translateY(-1px);
+    }
+  }
+
+  .archive-overview__link--secondary {
+    border-color: rgba(232, 0, 106, 0.18);
+    background: color-mix(in srgb, var(--color-pink) 8%, var(--color-surface));
+    color: var(--color-pink);
+
+    &:hover {
+      border-color: rgba(232, 0, 106, 0.3);
+    }
+  }
+</style>
