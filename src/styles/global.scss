@@ -22,6 +22,10 @@
   --radius-panel: 16px;
   --shadow-panel: 0 18px 40px rgba(15, 15, 15, 0.08);
   --shadow-lift: 0 28px 60px rgba(15, 15, 15, 0.12);
+  --page-atmosphere-pink: rgba(232, 0, 106, 0.08);
+  --page-atmosphere-secondary: rgba(41, 92, 69, 0.08);
+  --page-backdrop-top: #fff9fc;
+  --page-backdrop-bottom: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -30,6 +34,10 @@
   --color-muted: #999999;
   --color-surface: #1c1c1c;
   --color-border: rgba(255, 255, 255, 0.1);
+  --page-atmosphere-pink: rgba(232, 0, 106, 0.12);
+  --page-atmosphere-secondary: rgba(41, 92, 69, 0.14);
+  --page-backdrop-top: #151315;
+  --page-backdrop-bottom: #111111;
 
   --bulma-body-background-color: #111111;
   --bulma-body-color: #f0f0f0;
@@ -85,7 +93,23 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-paper);
+  background-color: var(--page-backdrop-bottom);
+  background:
+    radial-gradient(
+      ellipse 82% 66% at 0% 0%,
+      var(--page-atmosphere-pink) 0%,
+      transparent 66%
+    ),
+    radial-gradient(
+      ellipse 70% 58% at 100% 0%,
+      var(--page-atmosphere-secondary) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      var(--page-backdrop-top) 0%,
+      var(--page-backdrop-bottom) 100%
+    );
   color: var(--color-ink);
 }
 
