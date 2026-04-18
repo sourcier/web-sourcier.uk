@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { isPublished } from "../../utils/drafts";
+import { isPubliclyPublished, isPublished } from "../../utils/drafts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
@@ -14,6 +14,7 @@ const allPosts = (await getCollection("posts"))
   .filter(isPublished)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const publishedArticleCount = allPosts.filter(isPubliclyPublished).length;
 const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
 const posts = allPosts.slice(0, PAGE_SIZE);
 const nextUrl = totalPages > 1 ? "/blog/page/2" : null;
@@ -46,7 +47,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
         <ul class="blog-intro__stats" role="list">
           <li class="blog-intro__stat">
             <span class="blog-intro__stat-label">Published</span>
-            <span class="blog-intro__stat-value">{allPosts.length}</span>
+            <span class="blog-intro__stat-value">{publishedArticleCount}</span>
           </li>
           <li class="blog-intro__stat">
             <span class="blog-intro__stat-label">Topics</span>
