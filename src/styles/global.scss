@@ -22,6 +22,9 @@
   --radius-panel: 16px;
   --shadow-panel: 0 18px 40px rgba(15, 15, 15, 0.08);
   --shadow-lift: 0 28px 60px rgba(15, 15, 15, 0.12);
+  --space-section: clamp(2rem, 4vw, 3rem);
+  --space-section-tight: clamp(1.5rem, 3vw, 2rem);
+  --space-section-loose: clamp(2.75rem, 5vw, 4rem);
   --page-atmosphere-pink: rgba(232, 0, 106, 0.08);
   --page-atmosphere-secondary: rgba(41, 92, 69, 0.08);
   --page-backdrop-top: #fff9fc;
@@ -111,6 +114,28 @@ body {
       var(--page-backdrop-bottom) 100%
     );
   color: var(--color-ink);
+}
+
+main > :where(.stack-space, .flow-section) {
+  --section-space: var(--space-section);
+  margin-top: var(--section-space);
+}
+
+main > :where(.stack-space--tight, .flow-section--tight) {
+  --section-space: var(--space-section-tight);
+}
+
+main > :where(.stack-space--loose, .flow-section--loose) {
+  --section-space: var(--space-section-loose);
+}
+
+main > :where(.stack-space, .flow-section):first-child {
+  margin-top: 0;
+}
+
+main > .flow-section {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 h1,

@@ -113,7 +113,10 @@ const ringStyle = (ringIdx: number) => {
     subtitle="Browse every topic covered on the blog."
   />
 
-  <section class="tag-summary" aria-labelledby="tag-summary-heading">
+  <section
+    class="tag-summary flow-section flow-section--loose"
+    aria-labelledby="tag-summary-heading"
+  >
     <div class="container is-max-desktop">
       <div class="page-panel tag-summary__panel">
         <div class="tag-summary__copy">
@@ -140,7 +143,7 @@ const ringStyle = (ringIdx: number) => {
     </div>
   </section>
 
-  <section class="section cloud-section">
+  <section class="section cloud-section flow-section">
     <div class="container is-max-desktop">
       <div class="cloud-surface page-panel">
         <div class="cloud-intro">
@@ -204,7 +207,7 @@ const ringStyle = (ringIdx: number) => {
 
 <style lang="scss">
   .tag-summary {
-    padding: clamp(2.5rem, 5vw, 3.25rem) 1.5rem 0;
+    padding: 0 1.5rem;
   }
 
   .tag-summary__panel {
@@ -297,7 +300,8 @@ const ringStyle = (ringIdx: number) => {
   }
 
   .cloud-section {
-    padding-bottom: 5rem;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .cloud-surface {

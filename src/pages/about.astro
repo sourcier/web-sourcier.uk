@@ -64,7 +64,10 @@ const pageTitle = "About — Roger Rajaratnam";
     subtitle="Helping people move into tech, engineers grow, and teams improve how they build software"
   />
 
-  <section class="about-intro" aria-labelledby="about-intro-heading">
+  <section
+    class="about-intro flow-section flow-section--loose"
+    aria-labelledby="about-intro-heading"
+  >
     <div class="container is-max-desktop">
       <div class="page-panel about-intro__panel">
         <div class="about-intro__copy">
@@ -88,7 +91,7 @@ const pageTitle = "About — Roger Rajaratnam";
   </section>
 
   <!-- Stats bar -->
-  <div class="about-stats">
+  <div class="about-stats flow-section">
     <div class="container is-max-desktop">
       <ul class="about-stats__list" role="list">
         <li class="about-stats__item">
@@ -112,7 +115,7 @@ const pageTitle = "About — Roger Rajaratnam";
   </div>
 
   <!-- Bio sections -->
-  <section class="section about-bio" aria-labelledby="bio-heading">
+  <section class="section about-bio flow-section" aria-labelledby="bio-heading">
     <div class="container is-max-desktop">
       <div class="about-bio__grid">
         <!-- Left: labelled narrative blocks -->
@@ -213,7 +216,7 @@ const pageTitle = "About — Roger Rajaratnam";
   </section>
 
   <!-- Pullquote -->
-  <div class="about-pullquote" aria-hidden="false">
+  <div class="about-pullquote stack-space" aria-hidden="false">
     <div class="container is-max-desktop">
       <blockquote
         class="about-pullquote__inner page-panel page-panel--secondary"
@@ -228,7 +231,10 @@ const pageTitle = "About — Roger Rajaratnam";
   </div>
 
   <!-- Tech stack section -->
-  <section class="section about-stack" aria-labelledby="stack-heading">
+  <section
+    class="section about-stack flow-section"
+    aria-labelledby="stack-heading"
+  >
     <div class="container is-max-desktop">
       <p class="section-label" id="stack-heading">Tech stack</p>
       <div class="about-stack__grid">
@@ -292,7 +298,7 @@ const pageTitle = "About — Roger Rajaratnam";
 
 <style lang="scss">
   .about-intro {
-    padding: clamp(2.5rem, 5vw, 3.5rem) 1.5rem 0;
+    padding: 0 1.5rem;
   }
 
   .about-intro__panel {
@@ -371,8 +377,7 @@ const pageTitle = "About — Roger Rajaratnam";
 
   /* ── Stats bar ─────────────────────────────────────────────── */
   .about-stats {
-    padding: clamp(2.25rem, 4vw, 3.25rem) 1.5rem 0;
-    margin-top: 0;
+    padding: 0 1.5rem;
   }
 
   .about-stats__list {
@@ -448,8 +453,8 @@ const pageTitle = "About — Roger Rajaratnam";
 
   /* ── Bio grid ──────────────────────────────────────────────── */
   .about-bio {
-    padding-top: 3rem;
-    padding-bottom: 4rem;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .about-bio__grid {
@@ -608,8 +613,8 @@ const pageTitle = "About — Roger Rajaratnam";
 
   /* ── Tech stack section ────────────────────────────────────── */
   .about-stack {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .about-stack__grid {
@@ -709,7 +714,7 @@ const pageTitle = "About — Roger Rajaratnam";
 
   /* ── Pullquote ─────────────────────────────────────────────── */
   .about-pullquote {
-    padding: 4rem 1.5rem;
+    padding: 0 1.5rem;
   }
 
   .about-pullquote__inner {

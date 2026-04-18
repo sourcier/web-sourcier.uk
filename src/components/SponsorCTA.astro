@@ -75,7 +75,7 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
 ---
 
 <section
-  class={`support-cta support-cta--${mode} support-cta--${placement}`}
+  class={`support-cta stack-space support-cta--${mode} support-cta--${placement}`}
   aria-labelledby={headingId}
 >
   <div class="container is-max-desktop">
@@ -160,7 +160,7 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
 
 <style lang="scss">
   .support-cta {
-    padding: 0 1.5rem 4rem;
+    padding: 0 1.5rem;
   }
 
   .support-cta--sidebar {
@@ -543,7 +543,7 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
   }
 
   .support-cta--support {
-    padding-bottom: 3rem;
+    padding-bottom: 0;
   }
 
   .support-cta--sidebar.support-cta--support {

@@ -48,7 +48,10 @@ const guidePosts = guide.currentPostIds
     subtitle={guide.pageSubtitle}
   />
 
-  <section class="section guide-intro" aria-labelledby="guide-intro-heading">
+  <section
+    class="section guide-intro flow-section flow-section--loose"
+    aria-labelledby="guide-intro-heading"
+  >
     <div class="container is-max-desktop">
       <div class="guide-intro__panel page-panel">
         <p class="section-label">Overview</p>
@@ -60,7 +63,10 @@ const guidePosts = guide.currentPostIds
     </div>
   </section>
 
-  <section class="section guide-panels" aria-labelledby="guide-panels-heading">
+  <section
+    class="section guide-panels flow-section"
+    aria-labelledby="guide-panels-heading"
+  >
     <div class="container is-max-desktop">
       <div class="guide-panels__grid">
         <article class="guide-panel">
@@ -85,7 +91,7 @@ const guidePosts = guide.currentPostIds
   </section>
 
   <section
-    class="section guide-current"
+    class="section guide-current flow-section"
     aria-labelledby="guide-current-heading"
   >
     <div class="container is-max-desktop">
@@ -119,7 +125,7 @@ const guidePosts = guide.currentPostIds
   </section>
 
   <section
-    class="section guide-planned"
+    class="section guide-planned flow-section"
     aria-labelledby="guide-planned-heading"
   >
     <div class="container is-max-desktop">
@@ -145,7 +151,10 @@ const guidePosts = guide.currentPostIds
     </div>
   </section>
 
-  <section class="section guide-cta" aria-labelledby="guide-cta-heading">
+  <section
+    class="section guide-cta flow-section"
+    aria-labelledby="guide-cta-heading"
+  >
     <div class="container is-max-desktop">
       <div class="guide-cta__panel">
         <div>
@@ -174,7 +183,8 @@ const guidePosts = guide.currentPostIds
 
 <style lang="scss">
   .guide-intro {
-    padding-top: clamp(2.75rem, 5vw, 4rem);
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .guide-panels,
@@ -183,6 +193,7 @@ const guidePosts = guide.currentPostIds
   .guide-planned,
   .guide-cta {
     padding-top: 0;
+    padding-bottom: 0;
   }
 
   .guide-intro__panel {
