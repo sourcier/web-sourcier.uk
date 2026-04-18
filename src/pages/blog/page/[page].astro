@@ -71,8 +71,6 @@ const nextUrl =
     </div>
   </section>
 
-  <BlogTagCloud />
-
   <BlogGrid
     posts={posts}
     currentPage={currentPage}
@@ -83,6 +81,8 @@ const nextUrl =
     sectionTitle={`Posts on page ${currentPage}`}
     sectionDescription={`Page ${currentPage} of ${totalPages} from the blog archive.`}
   />
+
+  <BlogTagCloud />
 
   <MailingListCTA />
 </BaseLayout>

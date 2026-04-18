@@ -88,8 +88,6 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     </div>
   </section>
 
-  <BlogTagCloud />
-
   <BlogGrid
     posts={posts}
     currentPage={1}
@@ -100,6 +98,8 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     sectionTitle="Recent articles from the blog"
     sectionDescription="Newest practical articles, notes, and implementation write-ups from across the site."
   />
+
+  <BlogTagCloud />
 
   <MailingListCTA />
 </BaseLayout>

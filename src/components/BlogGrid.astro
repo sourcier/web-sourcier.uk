@@ -18,9 +18,18 @@ interface Props {
 const { posts, currentPage, totalPages, prevUrl, nextUrl, paginationBase } =
   Astro.props;
 
-const COLS = 3;
-const placeholderCount =
-  currentPage === totalPages ? (COLS - (posts.length % COLS)) % COLS : 0;
+const showGhostCards = currentPage === totalPages;
+const TABLET_COLS = 2;
+const DESKTOP_COLS = 3;
+const tabletGhostCount = showGhostCards
+  ? (TABLET_COLS - (posts.length % TABLET_COLS)) % TABLET_COLS
+  : 0;
+const desktopGhostCount = showGhostCards
+  ? (DESKTOP_COLS - (posts.length % DESKTOP_COLS)) % DESKTOP_COLS
+  : 0;
+const sharedGhostCount = Math.min(tabletGhostCount, desktopGhostCount);
+const tabletOnlyGhostCount = tabletGhostCount - sharedGhostCount;
+const desktopOnlyGhostCount = desktopGhostCount - sharedGhostCount;
 
 function pageUrl(n: number) {
   if (paginationBase) {
@@ -49,43 +58,71 @@ function pageUrl(n: number) {
         </div>
       )
     }
-    <div
-      class="fixed-grid has-1-cols-mobile has-2-cols-tablet has-3-cols-desktop"
-    >
-      <div class="grid">
-        {
-          posts.map((post) => (
-            <div class="cell">
-              <BlogPost
-                title={post.data.title}
-                subTitle={post.data.subTitle}
-                description={post.data.description}
-                url={`/blog/${post.id}`}
-                cover={post.data.cover}
-                pubDate={post.data.pubDate}
-                draft={post.data.draft}
-                readingTime={readingTime(post.body ?? "").text}
-              />
-            </div>
-          ))
-        }
-        {
-          Array.from({ length: placeholderCount }).map(() => (
-            <div class="cell">
-              <div
-                class="card card__blog card__blog--placeholder"
-                aria-hidden="true"
-              >
-                <div class="card__blog--placeholder-inner">
-                  <span class="card__blog--placeholder-label">
-                    More posts coming soon
-                  </span>
-                </div>
+    <div class="blog-grid__layout">
+      {
+        posts.map((post) => (
+          <div class="blog-grid__cell">
+            <BlogPost
+              title={post.data.title}
+              subTitle={post.data.subTitle}
+              description={post.data.description}
+              url={`/blog/${post.id}`}
+              cover={post.data.cover}
+              pubDate={post.data.pubDate}
+              draft={post.data.draft}
+              readingTime={readingTime(post.body ?? "").text}
+            />
+          </div>
+        ))
+      }
+      {
+        Array.from({ length: sharedGhostCount }).map(() => (
+          <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--tablet-up">
+            <div
+              class="card card__blog card__blog--placeholder"
+              aria-hidden="true"
+            >
+              <div class="card__blog--placeholder-inner">
+                <span class="card__blog--placeholder-label">
+                  More posts coming soon
+                </span>
               </div>
             </div>
-          ))
-        }
-      </div>
+          </div>
+        ))
+      }
+      {
+        Array.from({ length: tabletOnlyGhostCount }).map(() => (
+          <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--tablet-only">
+            <div
+              class="card card__blog card__blog--placeholder"
+              aria-hidden="true"
+            >
+              <div class="card__blog--placeholder-inner">
+                <span class="card__blog--placeholder-label">
+                  More posts coming soon
+                </span>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+      {
+        Array.from({ length: desktopOnlyGhostCount }).map(() => (
+          <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--desktop-only">
+            <div
+              class="card card__blog card__blog--placeholder"
+              aria-hidden="true"
+            >
+              <div class="card__blog--placeholder-inner">
+                <span class="card__blog--placeholder-label">
+                  More posts coming soon
+                </span>
+              </div>
+            </div>
+          </div>
+        ))
+      }
     </div>
 
     {
@@ -158,30 +195,40 @@ function pageUrl(n: number) {
     line-height: 1.7;
   }
 
+  .blog-grid__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    > .blog-grid__cell {
+      min-width: 0;
+
+      > * {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
   /* ── Pagination ───────────────────────────────────────────── */
   .pagination-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 3rem;
-    padding: 1.25rem 1.35rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-panel);
-    background:
-      radial-gradient(
-        circle at top right,
-        color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%,
-        transparent 34%
-      ),
-      linear-gradient(
-        150deg,
-        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
-      ),
-      var(--color-surface);
-    box-shadow: var(--shadow-panel);
+    gap: 0.85rem;
+    margin-top: 2.25rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-border) 82%, transparent);
   }
 
   .pagination-nav__pages {
@@ -196,13 +243,13 @@ function pageUrl(n: number) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.65rem;
-    height: 2.65rem;
-    border: 1px solid transparent;
+    width: 2.35rem;
+    height: 2.35rem;
+    border: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
     border-radius: 999px;
-    background-color: color-mix(in srgb, var(--color-border) 45%, transparent);
+    background-color: transparent;
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--color-ink);
     text-decoration: none;
@@ -215,10 +262,10 @@ function pageUrl(n: number) {
     &:hover {
       background-color: color-mix(
         in srgb,
-        var(--color-pink) 8%,
+        var(--color-pink) 6%,
         var(--color-surface)
       );
-      border-color: rgba(232, 0, 106, 0.2);
+      border-color: rgba(232, 0, 106, 0.16);
       transform: translateY(-1px);
     }
 
@@ -226,7 +273,7 @@ function pageUrl(n: number) {
       background-color: var(--color-secondary);
       border-color: var(--color-secondary);
       color: #fff;
-      box-shadow: 0 12px 24px rgba(41, 92, 69, 0.2);
+      box-shadow: 0 8px 18px rgba(41, 92, 69, 0.14);
 
       &:hover {
         background-color: var(--color-secondary);
@@ -240,14 +287,13 @@ function pageUrl(n: number) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 3rem;
-    padding: 0.75rem 1.1rem;
-    border: 1px solid var(--color-border);
+    min-height: 2.55rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-border) 65%, transparent);
     border-radius: 999px;
-    background-color: var(--color-surface);
-    box-shadow: 0 10px 24px rgba(15, 15, 15, 0.04);
+    background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -260,15 +306,37 @@ function pageUrl(n: number) {
 
     &:hover {
       color: var(--color-pink);
-      border-color: rgba(232, 0, 106, 0.28);
+      border-color: rgba(232, 0, 106, 0.18);
       transform: translateY(-1px);
     }
 
     &--disabled {
       color: var(--color-muted);
       background-color: transparent;
-      box-shadow: none;
       pointer-events: none;
+      border-color: color-mix(in srgb, var(--color-border) 35%, transparent);
+    }
+  }
+
+  .blog-grid__ghost-cell {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .blog-grid__ghost-cell--tablet-only,
+    .blog-grid__ghost-cell--tablet-up {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-grid__ghost-cell--tablet-only {
+      display: none;
+    }
+
+    .blog-grid__ghost-cell--desktop-only,
+    .blog-grid__ghost-cell--tablet-up {
+      display: flex;
     }
   }
 
