@@ -96,7 +96,7 @@ const totalPosts = allPosts.length;
 
 // Per-ring visual treatment
 const ringStyle = (ringIdx: number) => {
-  if (ringIdx === 0) return "color: var(--color-pink); opacity: 1";
+  if (ringIdx === 0) return "color: var(--accent-primary); opacity: 1";
   if (ringIdx === 1) return "opacity: 1";
   if (ringIdx === 2) return "opacity: 0.85";
   return "opacity: 0.7";
@@ -213,19 +213,20 @@ const ringStyle = (ringIdx: number) => {
   .tag-summary__panel {
     display: grid;
     gap: 1.25rem;
-    border-top-color: var(--color-secondary);
+    border-top-color: var(--accent-secondary);
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         150deg,
-        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-secondary) 8%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
 
     @media (min-width: 768px) {
       grid-template-columns: minmax(0, 1.5fr) auto;
@@ -241,7 +242,7 @@ const ringStyle = (ringIdx: number) => {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .tag-summary__title {
@@ -250,14 +251,14 @@ const ringStyle = (ringIdx: number) => {
     font-size: clamp(2rem, 4vw, 2.8rem);
     line-height: 0.98;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .tag-summary__text {
     margin: 0.85rem 0 0;
     max-width: 58ch;
     line-height: 1.7;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .tag-summary__stats {
@@ -273,12 +274,12 @@ const ringStyle = (ringIdx: number) => {
     gap: 0.35rem;
     min-width: 9rem;
     padding: 1rem 1.1rem;
-    border: 1px solid rgba(41, 92, 69, 0.16);
-    border-radius: 14px;
+    border: 1px solid var(--accent-secondary-alpha-16);
+    border-radius: var(--radius-soft);
     background: color-mix(
       in srgb,
-      var(--color-secondary) 8%,
-      var(--color-surface)
+      var(--accent-secondary) 8%,
+      var(--surface-elevated)
     );
   }
 
@@ -287,7 +288,7 @@ const ringStyle = (ringIdx: number) => {
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .tag-summary__value {
@@ -296,7 +297,7 @@ const ringStyle = (ringIdx: number) => {
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .cloud-section {
@@ -310,15 +311,15 @@ const ringStyle = (ringIdx: number) => {
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 10%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 10%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         150deg,
-        color-mix(in srgb, var(--color-pink) 3%, var(--color-surface)) 0%,
-        var(--color-surface) 66%
+        color-mix(in srgb, var(--accent-primary) 3%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 66%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
   }
 
   // — Intro + legend
@@ -328,7 +329,7 @@ const ringStyle = (ringIdx: number) => {
     gap: 1.5rem;
     margin-bottom: 2.5rem;
     padding-bottom: 2rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border-subtle);
 
     @media (min-width: 768px) {
       flex-direction: row;
@@ -342,7 +343,7 @@ const ringStyle = (ringIdx: number) => {
     margin: 0;
     font-size: 1rem;
     line-height: 1.75;
-    color: var(--color-muted);
+    color: var(--text-muted);
     max-width: 52ch;
   }
 
@@ -354,7 +355,7 @@ const ringStyle = (ringIdx: number) => {
   }
 
   .cloud-legend__arrow {
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
     font-size: 1.25rem;
   }
 
@@ -363,7 +364,7 @@ const ringStyle = (ringIdx: number) => {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .cloud-legend__example--sm {
@@ -373,7 +374,7 @@ const ringStyle = (ringIdx: number) => {
 
   .cloud-legend__example--lg {
     font-size: 2rem;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   // — Circular cloud (≥ 640px)
@@ -398,7 +399,7 @@ const ringStyle = (ringIdx: number) => {
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--border-subtle);
       pointer-events: none;
     }
 
@@ -408,7 +409,7 @@ const ringStyle = (ringIdx: number) => {
       position: absolute;
       inset: 22%;
       border-radius: 50%;
-      border: 1px dashed rgba(41, 92, 69, 0.18);
+      border: 1px dashed var(--accent-secondary-alpha-18);
       pointer-events: none;
     }
   }
@@ -421,7 +422,7 @@ const ringStyle = (ringIdx: number) => {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     text-decoration: none;
-    color: var(--color-ink);
+    color: var(--text-primary);
     white-space: nowrap;
     transition:
       color 0.2s ease,
@@ -429,7 +430,7 @@ const ringStyle = (ringIdx: number) => {
       transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     &:hover {
-      color: var(--color-secondary) !important;
+      color: var(--accent-secondary) !important;
       opacity: 1 !important;
       transform: translate(-50%, -50%) scale(1.18);
       z-index: 1;
@@ -469,7 +470,7 @@ const ringStyle = (ringIdx: number) => {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     text-decoration: none;
     opacity: 0.75;
     white-space: nowrap;
@@ -478,7 +479,7 @@ const ringStyle = (ringIdx: number) => {
       opacity 0.15s ease;
 
     &:hover {
-      color: var(--color-secondary);
+      color: var(--accent-secondary);
       opacity: 1;
     }
   }

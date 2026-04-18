@@ -109,19 +109,20 @@ const postCountLabel =
   .topic-overview__panel {
     display: grid;
     gap: 1.25rem;
-    border-top-color: var(--color-secondary);
+    border-top-color: var(--accent-secondary);
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         150deg,
-        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-secondary) 8%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
 
     @media (min-width: 768px) {
       grid-template-columns: minmax(0, 1.45fr) auto;
@@ -137,7 +138,7 @@ const postCountLabel =
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .topic-overview__title {
@@ -146,14 +147,14 @@ const postCountLabel =
     font-size: clamp(1.9rem, 4vw, 2.7rem);
     line-height: 0.98;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .topic-overview__text {
     margin: 0.85rem 0 0;
     max-width: 58ch;
     line-height: 1.7;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .topic-overview__actions {
@@ -168,33 +169,37 @@ const postCountLabel =
     justify-content: center;
     min-height: 2.85rem;
     padding: 0.7rem 1rem;
-    border: 1px solid rgba(41, 92, 69, 0.18);
-    border-radius: 999px;
+    border: 1px solid var(--accent-secondary-alpha-18);
+    border-radius: var(--radius-pill);
     background: color-mix(
       in srgb,
-      var(--color-secondary) 8%,
-      var(--color-surface)
+      var(--accent-secondary) 8%,
+      var(--surface-elevated)
     );
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
     text-decoration: none;
     transition:
       border-color 0.15s ease,
       transform 0.15s ease;
 
     &:hover {
-      border-color: rgba(41, 92, 69, 0.32);
+      border-color: var(--accent-secondary-alpha-32);
       transform: translateY(-1px);
     }
   }
 
   .topic-overview__link--secondary {
-    border-color: rgba(232, 0, 106, 0.22);
-    background: color-mix(in srgb, var(--color-pink) 8%, var(--color-surface));
-    color: var(--color-pink);
+    border-color: var(--accent-primary-alpha-22);
+    background: color-mix(
+      in srgb,
+      var(--accent-primary) 8%,
+      var(--surface-elevated)
+    );
+    color: var(--accent-primary);
   }
 </style>

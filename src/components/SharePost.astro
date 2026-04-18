@@ -84,8 +84,8 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     align-items: center;
     gap: 1rem;
     padding: 1.25rem 0;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
     margin: 2.5rem 0;
 
     @media (max-width: 639px) {
@@ -98,7 +98,7 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
       flex-direction: column;
       align-items: flex-start;
       gap: 0.75rem;
-      border-top: 2px solid var(--color-pink);
+      border-top: 2px solid var(--accent-primary);
       border-bottom: none;
       padding-top: 1.25rem;
       padding-bottom: 0;
@@ -122,7 +122,7 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     flex-shrink: 0;
   }
 
@@ -137,10 +137,10 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     align-items: center;
     gap: 0.4rem;
     padding: 0.25rem 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-tight);
     background: transparent;
-    color: var(--color-muted);
+    color: var(--text-muted);
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.75rem;
 
@@ -163,9 +163,9 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     }
 
     &:hover {
-      color: var(--color-pink);
-      border-color: var(--color-pink);
-      background-color: rgba(232, 0, 106, 0.05);
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background-color: rgba(var(--accent-primary-rgb), 0.05);
     }
   }
 </style>

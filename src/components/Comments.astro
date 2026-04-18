@@ -285,8 +285,8 @@ const { postId } = Astro.props;
   <style lang="scss">
     .comments {
       padding: 4rem 1.5rem;
-      border-top: 1px solid var(--color-border);
-      background-color: var(--color-surface);
+      border-top: 1px solid var(--border-subtle);
+      background-color: var(--surface-elevated);
 
       :global(.reactions) {
         border-top: none;
@@ -306,7 +306,7 @@ const { postId } = Astro.props;
       font-size: 1.75rem;
       text-transform: uppercase;
       letter-spacing: -0.01em;
-      color: var(--color-ink);
+      color: var(--text-primary);
       margin-bottom: 2rem;
     }
 
@@ -319,9 +319,9 @@ const { postId } = Astro.props;
       gap: 1rem;
       padding: 1.5rem;
       margin-bottom: 1rem;
-      background-color: var(--color-paper);
-      border: 1px solid var(--color-border);
-      border-left: 3px solid var(--color-pink);
+      background-color: var(--surface-page);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--accent-primary);
     }
 
     :global(.comment__avatar) {
@@ -330,8 +330,8 @@ const { postId } = Astro.props;
       width: 2.75rem;
       height: 2.75rem;
       border-radius: 50%;
-      background-color: var(--color-pink);
-      color: #fff;
+      background-color: var(--accent-primary);
+      color: var(--text-on-strong);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -373,18 +373,18 @@ const { postId } = Astro.props;
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--color-ink);
+      color: var(--text-primary);
     }
 
     :global(.comment__meta-sep) {
-      color: var(--color-pink);
+      color: var(--accent-primary);
       font-size: 0.875rem;
       line-height: 1;
     }
 
     :global(.comment__date) {
       font-size: 0.8125rem;
-      color: var(--color-muted);
+      color: var(--text-muted);
       letter-spacing: 0.02em;
     }
 
@@ -394,13 +394,13 @@ const { postId } = Astro.props;
       border: none;
       font-size: 0.9375rem;
       line-height: 1.8;
-      color: var(--color-ink);
+      color: var(--text-primary);
       white-space: pre-wrap;
     }
 
     .comments__status-line {
       font-size: 0.875rem;
-      color: var(--color-muted);
+      color: var(--text-muted);
     }
 
     @keyframes comments-fade-out {
@@ -437,7 +437,7 @@ const { postId } = Astro.props;
       padding-top: 0.5rem;
 
       .label {
-        color: var(--color-ink);
+        color: var(--text-primary);
         font-weight: 600;
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -446,30 +446,30 @@ const { postId } = Astro.props;
 
       .input,
       .textarea {
-        background-color: var(--color-surface);
-        border-color: var(--color-border);
-        color: var(--color-ink);
-        border-radius: 4px;
+        background-color: var(--surface-elevated);
+        border-color: var(--border-subtle);
+        color: var(--text-primary);
+        border-radius: var(--radius-tight);
 
         &:focus {
-          border-color: var(--color-pink);
-          box-shadow: 0 0 0 2px rgba(232, 0, 106, 0.15);
+          border-color: var(--accent-primary);
+          box-shadow: 0 0 0 2px rgba(var(--accent-primary-rgb), 0.15);
         }
       }
 
       .button.is-primary {
-        background-color: var(--color-pink);
-        border-color: var(--color-pink);
-        color: #fff;
+        background-color: var(--accent-primary);
+        border-color: var(--accent-primary);
+        color: var(--text-on-strong);
         font-family: "Barlow Condensed", sans-serif;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        border-radius: 4px;
+        border-radius: var(--radius-tight);
 
         &:hover {
-          background-color: #c4005a;
-          border-color: #c4005a;
+          background-color: var(--accent-primary-deep);
+          border-color: var(--accent-primary-deep);
         }
 
         &:disabled {
@@ -484,7 +484,7 @@ const { postId } = Astro.props;
       font-weight: 400;
       text-transform: none;
       letter-spacing: 0;
-      color: var(--color-muted);
+      color: var(--text-muted);
     }
 
     .comments__form-status {
@@ -493,36 +493,36 @@ const { postId } = Astro.props;
       padding-left: 0.5rem;
 
       &.is-success {
-        color: #257942;
+        color: var(--color-success);
       }
 
       &.is-error {
-        color: var(--color-pink);
+        color: var(--accent-primary);
       }
     }
 
     [data-theme="dark"] {
       :global(.comment) {
-        background-color: #1a1a1a;
-        border-color: var(--color-border);
-        border-left-color: var(--color-pink);
+        background-color: var(--surface-elevated);
+        border-color: var(--border-subtle);
+        border-left-color: var(--accent-primary);
       }
 
       .comments__form-wrapper {
         .input,
         .textarea {
-          background-color: #1c1c1c;
-          border-color: var(--color-border);
-          color: var(--color-ink);
+          background-color: var(--surface-elevated);
+          border-color: var(--border-subtle);
+          color: var(--text-primary);
 
           &::placeholder {
-            color: var(--color-muted);
+            color: var(--text-muted);
           }
         }
       }
 
       .comments__form-status.is-success {
-        color: #48c774;
+        color: var(--color-success-bright);
       }
     }
   </style>

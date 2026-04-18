@@ -121,16 +121,16 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     background:
       radial-gradient(
         ellipse 80% 60% at 74% 0%,
-        rgba(232, 0, 106, 0.18) 0%,
+        rgba(var(--accent-primary-rgb), 0.18) 0%,
         transparent 62%
       ),
       radial-gradient(
         ellipse 86% 74% at 12% 0%,
-        color-mix(in srgb, var(--color-secondary) 24%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 24%, transparent) 0%,
         transparent 62%
       ),
-      #0a0a0a;
-    color: #ffffff;
+      var(--surface-strong-top);
+    color: var(--text-on-strong);
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -142,7 +142,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       z-index: -1;
       background-image: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.18) 1px,
+        rgba(var(--text-on-strong-rgb), 0.18) 1px,
         transparent 1px
       );
       background-size: 28px 28px;
@@ -187,22 +187,22 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
         z-index: -2;
         background: linear-gradient(
           to bottom,
-          rgba(0, 0, 0, 0.35) 0%,
-          rgba(0, 0, 0, 0.7) 55%,
-          rgba(0, 0, 0, 0.92) 100%
+          rgba(var(--overlay-rgb), 0.35) 0%,
+          rgba(var(--overlay-rgb), 0.7) 55%,
+          rgba(var(--overlay-rgb), 0.92) 100%
         );
         pointer-events: none;
       }
 
       .page-hero__tag {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.25);
-        color: rgba(255, 255, 255, 0.7);
+        background-color: rgba(var(--text-on-strong-rgb), 0.1);
+        border-color: rgba(var(--text-on-strong-rgb), 0.25);
+        color: rgba(var(--text-on-strong-rgb), 0.7);
 
         &:hover {
-          background-color: rgba(232, 0, 106, 0.12);
-          border-color: rgba(232, 0, 106, 0.5);
-          color: var(--color-pink);
+          background-color: rgba(var(--accent-primary-rgb), 0.12);
+          border-color: rgba(var(--accent-primary-rgb), 0.5);
+          color: var(--accent-primary);
         }
       }
     }
@@ -224,14 +224,14 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     line-height: 1.05;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
-    color: #ffffff;
+    color: var(--text-on-strong);
   }
 
   .page-hero__subtitle {
     max-width: 56ch;
     font-size: clamp(1.05rem, 1.8vw, 1.2rem);
     line-height: 1.65;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--text-on-strong-rgb), 0.8);
     margin-bottom: 1.65rem;
     font-weight: 400;
   }
@@ -245,25 +245,25 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     font-family: "Barlow Condensed", sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(var(--text-on-strong-rgb), 0.5);
   }
 
   .page-hero__author {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(var(--text-on-strong-rgb), 0.85);
   }
 
   .page-hero__date {
     &::before {
       content: "·";
       margin-right: 1rem;
-      color: var(--color-pink);
+      color: var(--accent-primary);
     }
   }
 
   .page-hero__divider {
     &::before {
       content: "·";
-      color: var(--color-pink);
+      color: var(--accent-primary);
     }
 
     @media (max-width: 639px) {
@@ -284,9 +284,9 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 4px;
+    color: rgba(var(--text-on-strong-rgb), 0.55);
+    border: 1px solid rgba(var(--text-on-strong-rgb), 0.18);
+    border-radius: var(--radius-tight);
     padding: 0.25rem 0.6rem;
 
     @media (max-width: 639px) {
@@ -299,9 +299,9 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       border-color 0.15s ease;
 
     &:hover {
-      background-color: rgba(232, 0, 106, 0.12);
-      border-color: rgba(232, 0, 106, 0.5);
-      color: var(--color-pink);
+      background-color: rgba(var(--accent-primary-rgb), 0.12);
+      border-color: rgba(var(--accent-primary-rgb), 0.5);
+      color: var(--accent-primary);
     }
   }
 
@@ -311,7 +311,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--color-pink);
+    color: var(--accent-primary);
     margin-bottom: 0.75rem;
   }
 
@@ -319,25 +319,25 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     margin-top: 1.5rem;
 
     :global(.share-post) {
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(var(--text-on-strong-rgb), 0.15);
       border-bottom: none;
       padding: 1.25rem 0 0;
       margin: 0;
     }
 
     :global(.share-post__label) {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(var(--text-on-strong-rgb), 0.4);
     }
 
     :global(.share-post__btn) {
-      color: rgba(255, 255, 255, 0.55);
-      border-color: rgba(255, 255, 255, 0.18);
-      background-color: rgba(255, 255, 255, 0.06);
+      color: rgba(var(--text-on-strong-rgb), 0.55);
+      border-color: rgba(var(--text-on-strong-rgb), 0.18);
+      background-color: rgba(var(--text-on-strong-rgb), 0.06);
 
       &:hover {
-        color: var(--color-pink);
-        border-color: rgba(232, 0, 106, 0.5);
-        background-color: rgba(232, 0, 106, 0.12);
+        color: var(--accent-primary);
+        border-color: rgba(var(--accent-primary-rgb), 0.5);
+        background-color: rgba(var(--accent-primary-rgb), 0.12);
       }
     }
   }

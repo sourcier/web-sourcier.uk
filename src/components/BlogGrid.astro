@@ -185,13 +185,13 @@ function pageUrl(n: number) {
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .blog-grid__description {
     margin: 0;
     max-width: 60ch;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.7;
   }
 
@@ -228,7 +228,7 @@ function pageUrl(n: number) {
     margin-top: 2.25rem;
     padding-top: 0.9rem;
     border-top: 1px solid
-      color-mix(in srgb, var(--color-border) 82%, transparent);
+      color-mix(in srgb, var(--border-subtle) 82%, transparent);
   }
 
   .pagination-nav__pages {
@@ -245,13 +245,13 @@ function pageUrl(n: number) {
     justify-content: center;
     width: 2.35rem;
     height: 2.35rem;
-    border: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
-    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 55%, transparent);
+    border-radius: var(--radius-pill);
     background-color: transparent;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--color-ink);
+    color: var(--text-primary);
     text-decoration: none;
     transition:
       background-color 0.15s ease,
@@ -262,22 +262,22 @@ function pageUrl(n: number) {
     &:hover {
       background-color: color-mix(
         in srgb,
-        var(--color-pink) 6%,
-        var(--color-surface)
+        var(--accent-primary) 6%,
+        var(--surface-elevated)
       );
-      border-color: rgba(232, 0, 106, 0.16);
+      border-color: var(--accent-primary-alpha-16);
       transform: translateY(-1px);
     }
 
     &--active {
-      background-color: var(--color-secondary);
-      border-color: var(--color-secondary);
-      color: #fff;
-      box-shadow: 0 8px 18px rgba(41, 92, 69, 0.14);
+      background-color: var(--accent-secondary);
+      border-color: var(--accent-secondary);
+      color: var(--text-on-strong);
+      box-shadow: var(--shadow-secondary-soft);
 
       &:hover {
-        background-color: var(--color-secondary);
-        border-color: var(--color-secondary);
+        background-color: var(--accent-secondary);
+        border-color: var(--accent-secondary);
         transform: none;
       }
     }
@@ -289,15 +289,19 @@ function pageUrl(n: number) {
     justify-content: center;
     min-height: 2.55rem;
     padding: 0.55rem 0.9rem;
-    border: 1px solid color-mix(in srgb, var(--color-border) 65%, transparent);
-    border-radius: 999px;
-    background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 65%, transparent);
+    border-radius: var(--radius-pill);
+    background-color: color-mix(
+      in srgb,
+      var(--surface-elevated) 88%,
+      transparent
+    );
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     text-decoration: none;
     transition:
       border-color 0.15s ease,
@@ -305,16 +309,16 @@ function pageUrl(n: number) {
       transform 0.15s ease;
 
     &:hover {
-      color: var(--color-pink);
-      border-color: rgba(232, 0, 106, 0.18);
+      color: var(--accent-primary);
+      border-color: var(--accent-primary-alpha-18);
       transform: translateY(-1px);
     }
 
     &--disabled {
-      color: var(--color-muted);
+      color: var(--text-muted);
       background-color: transparent;
       pointer-events: none;
-      border-color: color-mix(in srgb, var(--color-border) 35%, transparent);
+      border-color: color-mix(in srgb, var(--border-subtle) 35%, transparent);
     }
   }
 
@@ -358,13 +362,14 @@ function pageUrl(n: number) {
   /* ── Placeholder card ────────────────────────────────────── */
   .card__blog--placeholder {
     pointer-events: none;
-    border: 2px dashed var(--color-border);
-    border-top: 2px dashed rgba(41, 92, 69, 0.22);
+    border: 2px dashed var(--border-subtle);
+    border-top: 2px dashed var(--accent-secondary-alpha-22);
     border-radius: var(--radius-panel);
     background:
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--color-secondary) 4%, var(--color-surface)) 0%,
+        color-mix(in srgb, var(--accent-secondary) 4%, var(--surface-elevated))
+          0%,
         transparent 62%
       ),
       transparent;
@@ -384,7 +389,7 @@ function pageUrl(n: number) {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--color-muted);
+      color: var(--text-muted);
     }
   }
 </style>

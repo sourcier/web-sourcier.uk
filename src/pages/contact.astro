@@ -273,24 +273,24 @@ const pageTitle = "Contact — Sourcier";
     gap: 1rem;
     align-items: center;
     padding: 1.5rem 1.25rem;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-primary);
     border-radius: 10px;
     background:
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
+        color-mix(in srgb, var(--accent-primary) 5%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 58%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(232, 0, 106, 0.12);
+      box-shadow: 0 8px 24px rgba(var(--accent-primary-rgb), 0.12);
     }
   }
 
@@ -341,16 +341,16 @@ const pageTitle = "Contact — Sourcier";
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background-color: rgba(232, 0, 106, 0.1);
+    background-color: rgba(var(--accent-primary-rgb), 0.1);
     transition: background-color 0.18s ease;
 
     .contact-reasons__item:hover & {
-      background-color: rgba(232, 0, 106, 0.18);
+      background-color: rgba(var(--accent-primary-rgb), 0.18);
     }
   }
 
   .contact-reasons__icon {
-    color: var(--color-pink);
+    color: var(--accent-primary);
     line-height: 1;
     display: flex;
   }
@@ -361,21 +361,21 @@ const pageTitle = "Contact — Sourcier";
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
   }
 
   .contact-reasons__desc {
     font-size: 0.9375rem;
     line-height: 1.6;
-    color: var(--color-muted);
+    color: var(--text-muted);
     margin: 0;
   }
 
   /* ── Form intro ────────────────────────────────────────────── */
   .contact-form__intro {
     font-size: 0.9375rem;
-    color: var(--color-ink);
+    color: var(--text-primary);
     margin-bottom: 2rem;
   }
 
@@ -389,12 +389,12 @@ const pageTitle = "Contact — Sourcier";
     cursor: pointer;
 
     &.is-placeholder {
-      color: var(--color-muted);
+      color: var(--text-muted);
       opacity: 0.6;
     }
 
     option {
-      color: var(--color-ink);
+      color: var(--text-primary);
       opacity: 1;
     }
   }

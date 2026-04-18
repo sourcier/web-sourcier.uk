@@ -49,16 +49,20 @@
     background:
       radial-gradient(
         ellipse 80% 70% at 18% 0%,
-        rgba(232, 0, 106, 0.18) 0%,
+        rgba(var(--accent-primary-rgb), 0.18) 0%,
         transparent 60%
       ),
       radial-gradient(
         ellipse 70% 60% at 85% 0%,
-        color-mix(in srgb, var(--color-secondary) 18%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 18%, transparent) 0%,
         transparent 58%
       ),
-      linear-gradient(180deg, #141414 0%, #090909 100%);
-    color: rgba(255, 255, 255, 0.64);
+      linear-gradient(
+        180deg,
+        var(--surface-footer-top) 0%,
+        var(--surface-footer-bottom) 100%
+      );
+    color: rgba(var(--text-on-strong-rgb), 0.64);
     padding: 4rem 1.5rem 2.35rem;
 
     &::before {
@@ -67,7 +71,7 @@
       inset: 0;
       background-image: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.12) 1px,
+        rgba(var(--text-on-strong-rgb), 0.12) 1px,
         transparent 1px
       );
       background-size: 28px 28px;
@@ -115,14 +119,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--color-pink);
+    color: var(--accent-primary);
   }
 
   .footer__summary {
     margin: 0;
     font-size: 1.02rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.76);
+    color: rgba(var(--text-on-strong-rgb), 0.76);
   }
 
   .footer__tagline {
@@ -133,7 +137,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: rgba(255, 255, 255, 0.18);
+    color: rgba(var(--text-on-strong-rgb), 0.18);
     line-height: 1;
     display: flex;
     flex-wrap: wrap;
@@ -150,7 +154,7 @@
     left: 50%;
     width: 100vw;
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--text-on-strong-rgb), 0.08);
     transform: translateX(-50%);
     pointer-events: none;
   }
@@ -158,11 +162,11 @@
   .footer__word {
     display: inline-flex;
     align-items: center;
-    color: rgba(255, 255, 255, 0.18);
+    color: rgba(var(--text-on-strong-rgb), 0.18);
   }
 
   .footer__arrow {
-    color: var(--color-pink);
+    color: var(--accent-primary);
     opacity: 0.25;
   }
 
@@ -171,13 +175,13 @@
     @keyframes word-highlight {
       0%,
       100% {
-        color: rgba(255, 255, 255, 0.15);
+        color: rgba(var(--text-on-strong-rgb), 0.15);
       }
       5% {
-        color: rgba(255, 255, 255, 0.45);
+        color: rgba(var(--text-on-strong-rgb), 0.45);
       }
       20% {
-        color: rgba(255, 255, 255, 0.15);
+        color: rgba(var(--text-on-strong-rgb), 0.15);
       }
     }
 
@@ -221,7 +225,7 @@
     display: inline-flex;
     align-items: center;
     line-height: 1;
-    color: var(--color-pink);
+    color: var(--accent-primary);
     opacity: 0.4;
   }
 
@@ -247,14 +251,14 @@
     left: 50%;
     width: 100vw;
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--text-on-strong-rgb), 0.08);
     transform: translateX(-50%);
     pointer-events: none;
   }
 
   .footer__copy {
     font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.38);
+    color: rgba(var(--text-on-strong-rgb), 0.38);
     margin: 0;
     text-align: center;
   }
@@ -272,16 +276,16 @@
     align-items: center;
     min-height: 2.4rem;
     padding: 0.5rem 0.8rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(var(--text-on-strong-rgb), 0.75);
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(var(--text-on-strong-rgb), 0.04);
+    border: 1px solid rgba(var(--text-on-strong-rgb), 0.08);
     transition:
       color 0.2s ease,
       border-color 0.2s ease,
@@ -290,9 +294,9 @@
 
     &:hover,
     &:focus-visible {
-      color: var(--color-pink);
-      border-color: rgba(232, 0, 106, 0.28);
-      background: rgba(232, 0, 106, 0.08);
+      color: var(--accent-primary);
+      border-color: rgba(var(--accent-primary-rgb), 0.28);
+      background: rgba(var(--accent-primary-rgb), 0.08);
       transform: translateY(-1px);
     }
   }

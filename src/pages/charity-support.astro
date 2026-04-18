@@ -319,17 +319,18 @@ const charityExperience = [
     gap: 0.4rem;
     min-height: 100%;
     padding: 1.25rem 1.3rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-secondary);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-secondary);
     border-radius: 10px;
     background:
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-secondary) 5%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
+        color-mix(in srgb, var(--accent-secondary) 5%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 58%
       ),
-      var(--color-surface);
-    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+      var(--surface-elevated);
+    box-shadow: var(--shadow-panel-soft);
   }
 
   .charity-stats__label {
@@ -338,7 +339,7 @@ const charityExperience = [
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .charity-stats__value {
@@ -347,7 +348,7 @@ const charityExperience = [
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .charity-intro,
@@ -382,13 +383,13 @@ const charityExperience = [
     font-size: clamp(1.85rem, 4vw, 3rem);
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .charity-intro__body,
   .charity-cta__body {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.75;
     font-size: 1rem;
   }
@@ -410,7 +411,7 @@ const charityExperience = [
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .charity-callout__label {
@@ -420,7 +421,7 @@ const charityExperience = [
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .charity-callout__title,
@@ -430,14 +431,14 @@ const charityExperience = [
     font-size: clamp(1.4rem, 3vw, 1.9rem);
     line-height: 1.1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .charity-callout__body,
   .charity-fit__note,
   .charity-step__body {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.7;
   }
 
@@ -456,7 +457,7 @@ const charityExperience = [
   .charity-area-card__examples li {
     position: relative;
     padding-left: 1rem;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.65;
 
     &::before {
@@ -466,14 +467,14 @@ const charityExperience = [
       left: 0;
       width: 0.38rem;
       height: 0.38rem;
-      border-radius: 999px;
-      background: var(--color-secondary);
+      border-radius: var(--radius-pill);
+      background: var(--accent-secondary);
       transform: translateY(-50%);
     }
   }
 
   .charity-callout__list li::before {
-    background: var(--color-secondary);
+    background: var(--accent-secondary);
   }
 
   .charity-callout__org,
@@ -488,7 +489,7 @@ const charityExperience = [
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .charity-callout__context {
@@ -514,16 +515,17 @@ const charityExperience = [
     gap: 1rem;
     min-height: 100%;
     padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-secondary);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-secondary);
     border-radius: var(--radius-panel);
     background:
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
+        color-mix(in srgb, var(--accent-secondary) 8%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 58%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
     box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
@@ -533,7 +535,11 @@ const charityExperience = [
     &:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lift);
-      border-color: color-mix(in srgb, var(--color-secondary) 22%, transparent);
+      border-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 22%,
+        transparent
+      );
     }
   }
 
@@ -543,12 +549,12 @@ const charityExperience = [
     font-size: 1.28rem;
     line-height: 1.1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .charity-area-card__body {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.7;
   }
 
@@ -569,10 +575,10 @@ const charityExperience = [
     background:
       radial-gradient(
         ellipse 120% 120% at 100% 0%,
-        color-mix(in srgb, var(--color-secondary) 16%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 16%, transparent) 0%,
         transparent 55%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
   }
 
   .charity-cta__actions {
@@ -591,6 +597,6 @@ const charityExperience = [
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 </style>

@@ -51,9 +51,9 @@ const tags = [...tagCounts.entries()]
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-pink);
+    color: var(--accent-primary);
     padding-top: 0.75rem;
-    border-top: 2px solid var(--color-pink);
+    border-top: 2px solid var(--accent-primary);
     margin-bottom: 0.75rem;
   }
 
@@ -72,15 +72,15 @@ const tags = [...tagCounts.entries()]
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0.45rem 0;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border-subtle);
     text-decoration: none;
-    color: var(--color-muted);
+    color: var(--text-muted);
     transition:
       color 0.15s ease,
       padding-left 0.15s ease;
 
     &:hover {
-      color: var(--color-pink);
+      color: var(--accent-primary);
       padding-left: 0.35rem;
     }
   }
@@ -97,9 +97,9 @@ const tags = [...tagCounts.entries()]
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--color-muted);
-    background-color: var(--color-border);
-    border-radius: 4px;
+    color: var(--text-muted);
+    background-color: var(--border-subtle);
+    border-radius: var(--radius-tight);
     padding: 0.1rem 0.4rem;
     min-width: 1.4rem;
     text-align: center;
@@ -108,8 +108,8 @@ const tags = [...tagCounts.entries()]
       color 0.15s ease;
 
     .tags-sidebar__tag:hover & {
-      background-color: rgba(232, 0, 106, 0.12);
-      color: var(--color-pink);
+      background-color: rgba(var(--accent-primary-rgb), 0.12);
+      color: var(--accent-primary);
     }
   }
 
@@ -121,12 +121,12 @@ const tags = [...tagCounts.entries()]
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     text-decoration: none;
     transition: color 0.15s ease;
 
     &:hover {
-      color: var(--color-pink);
+      color: var(--accent-primary);
     }
   }
 </style>

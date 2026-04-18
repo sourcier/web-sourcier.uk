@@ -140,9 +140,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
     display: flex;
     justify-content: center;
     overflow-x: auto;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    background: #fafafa;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-compact);
+    background: var(--surface-media-stage);
     padding: 2rem 1.5rem;
   }
 
@@ -153,7 +153,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
 
   :global([data-theme="dark"] .mermaid-diagram),
   :global([data-theme="dark"] .zoomable-image) {
-    background: #282c34;
+    background: var(--surface-media-stage-dark);
   }
 
   :global(.media-expand-btn) {
@@ -167,9 +167,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
     height: 2rem;
     padding: 0;
     background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(var(--overlay-rgb), 0.25);
+    border-radius: var(--radius-tight);
+    color: rgba(var(--overlay-rgb), 0.5);
     cursor: pointer;
     transition:
       opacity 0.2s ease,
@@ -179,8 +179,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   :global([data-theme="dark"] .media-expand-btn) {
-    border-color: rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.5);
+    border-color: var(--text-on-strong-alpha-25);
+    color: var(--text-on-strong-alpha-50);
   }
 
   @media (hover: hover) {
@@ -199,9 +199,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   :global(.media-expand-btn:hover) {
-    background: rgba(232, 0, 106, 0.1);
-    border-color: rgba(232, 0, 106, 0.5);
-    color: #e8006a;
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    border-color: rgba(var(--accent-primary-rgb), 0.5);
+    color: var(--accent-primary);
   }
 
   :global(.media-lightbox) {
@@ -209,7 +209,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(var(--overlay-rgb), 0.85);
     align-items: center;
     justify-content: center;
     padding: 2rem;
@@ -221,12 +221,12 @@ const thumbSrc = frontmatter.cover?.thumbnail
 
   :global(.media-lightbox__inner) {
     position: relative;
-    background: #fafafa;
+    background: var(--surface-media-stage);
     width: 98vw;
     max-width: 98vw;
     height: 94vh;
     max-height: 94vh;
-    border-radius: 6px;
+    border-radius: var(--radius-compact);
     overflow: hidden;
 
     &::after {
@@ -244,11 +244,11 @@ const thumbSrc = frontmatter.cover?.thumbnail
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.05em;
-      color: rgba(0, 0, 0, 0.45);
+      color: rgba(var(--overlay-rgb), 0.45);
       background: linear-gradient(
         to bottom,
         transparent,
-        rgba(250, 250, 250, 1)
+        var(--surface-media-stage)
       );
       transition: opacity 0.2s ease;
     }
@@ -275,12 +275,16 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   :global([data-theme="dark"] .media-lightbox__inner) {
-    background: #282c34;
+    background: var(--surface-media-stage-dark);
   }
 
   :global([data-theme="dark"] .media-lightbox__inner::after) {
-    color: rgba(255, 255, 255, 0.35);
-    background: linear-gradient(to bottom, transparent, rgba(40, 44, 52, 1));
+    color: rgba(var(--text-on-strong-rgb), 0.35);
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--surface-media-stage-dark)
+    );
   }
 
   :global(.media-lightbox__close) {
@@ -294,9 +298,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
     height: 2rem;
     padding: 0;
     background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(var(--overlay-rgb), 0.25);
+    border-radius: var(--radius-tight);
+    color: rgba(var(--overlay-rgb), 0.5);
     cursor: pointer;
     transition:
       background 0.15s ease,
@@ -305,14 +309,14 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   :global([data-theme="dark"] .media-lightbox__close) {
-    border-color: rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(var(--text-on-strong-rgb), 0.25);
+    color: rgba(var(--text-on-strong-rgb), 0.5);
   }
 
   :global(.media-lightbox__close:hover) {
-    background: rgba(232, 0, 106, 0.1);
-    border-color: rgba(232, 0, 106, 0.5);
-    color: #e8006a;
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    border-color: rgba(var(--accent-primary-rgb), 0.5);
+    color: var(--accent-primary);
   }
 
   :global(.mermaid-diagram[data-loading]) {
@@ -337,9 +341,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
     inset: 0;
     background: linear-gradient(
       90deg,
-      var(--color-border) 25%,
-      rgba(232, 0, 106, 0.1) 50%,
-      var(--color-border) 75%
+      var(--border-subtle) 25%,
+      rgba(var(--accent-primary-rgb), 0.1) 50%,
+      var(--border-subtle) 75%
     );
     background-size: 600px 100%;
     animation: mermaid-skeleton-shimmer 1.6s ease-in-out infinite;
@@ -372,9 +376,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
   :global([data-theme="dark"] .zoomable-image[data-loading])::before {
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(232, 0, 106, 0.12) 50%,
-      rgba(255, 255, 255, 0.05) 75%
+      rgba(var(--text-on-strong-rgb), 0.05) 25%,
+      rgba(var(--accent-primary-rgb), 0.12) 50%,
+      rgba(var(--text-on-strong-rgb), 0.05) 75%
     );
     background-size: 600px 100%;
   }
@@ -415,12 +419,12 @@ const thumbSrc = frontmatter.cover?.thumbnail
     height: 2.25rem;
     flex: 1;
     max-width: 140px;
-    border-radius: 4px;
+    border-radius: var(--radius-tight);
     background: linear-gradient(
       90deg,
-      var(--color-border) 25%,
-      rgba(232, 0, 106, 0.12) 50%,
-      var(--color-border) 75%
+      var(--border-subtle) 25%,
+      rgba(var(--accent-primary-rgb), 0.12) 50%,
+      var(--border-subtle) 75%
     );
     background-size: 400px 100%;
     animation: mermaid-skeleton-shimmer 1.6s ease-in-out infinite;
@@ -437,7 +441,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
   :global(.mermaid-skeleton__connector) {
     width: 2px;
     height: 1.5rem;
-    background: var(--color-border);
+    background: var(--border-subtle);
     border-radius: 1px;
     opacity: 0.6;
   }
@@ -445,9 +449,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
   :global([data-theme="dark"] .mermaid-skeleton__node) {
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.06) 25%,
-      rgba(232, 0, 106, 0.15) 50%,
-      rgba(255, 255, 255, 0.06) 75%
+      rgba(var(--text-on-strong-rgb), 0.06) 25%,
+      rgba(var(--accent-primary-rgb), 0.15) 50%,
+      rgba(var(--text-on-strong-rgb), 0.06) 75%
     );
     background-size: 400px 100%;
   }
@@ -458,25 +462,25 @@ const thumbSrc = frontmatter.cover?.thumbnail
   }
 
   :global(.mermaid-diagram text) {
-    fill: var(--color-ink) !important;
+    fill: var(--text-primary) !important;
   }
 
   :global(.mermaid-diagram .messageText),
   :global(.mermaid-diagram .labelText),
   :global(.mermaid-diagram .loopText),
   :global(.mermaid-diagram .noteText) {
-    fill: var(--color-ink) !important;
+    fill: var(--text-primary) !important;
     stroke: none !important;
   }
 
   :global(.mermaid-diagram line),
   :global(.mermaid-diagram path.arrowMarkerPath) {
-    stroke: var(--color-ink) !important;
+    stroke: var(--text-primary) !important;
   }
 
   :global(.mermaid-diagram .messageLine0),
   :global(.mermaid-diagram .messageLine1) {
-    stroke: var(--color-ink) !important;
+    stroke: var(--text-primary) !important;
   }
 </style>
 
@@ -495,41 +499,63 @@ const thumbSrc = frontmatter.cover?.thumbnail
   const ICON_EXPAND = toSvgIcon(faExpand);
   const ICON_XMARK = toSvgIcon(faCircleXmark);
 
+  const cssRgb = (name: string): string =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  const cssColor = (name: string): string =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  const cssRgba = (name: string, alpha: number): string =>
+    `rgba(${cssRgb(name)}, ${alpha})`;
+
+  const mermaidThemePalette = {
+    dark: {
+      primaryColor: "#3d1528",
+      primaryTextColor: "#abb2bf",
+      lineColor: "#767c89",
+      secondaryColor: "#2c313a",
+      titleColor: "#dcdcdc",
+    },
+    light: {
+      primaryColor: "#fce8f2",
+      primaryTextColor: "#383a42",
+      lineColor: "#6b6b6b",
+      secondaryColor: "#f0f0f0",
+      titleColor: "#383a42",
+    },
+  } as const;
+
   function getMermaidConfig(isDark: boolean): MermaidConfig {
+    const themePalette = isDark
+      ? mermaidThemePalette.dark
+      : mermaidThemePalette.light;
+    const background = isDark
+      ? cssColor("--surface-media-stage-dark")
+      : cssColor("--surface-media-stage");
+    const primaryBorderColor = cssRgba(
+      "--accent-primary-rgb",
+      isDark ? 0.4 : 0.3,
+    );
+
     return {
       startOnLoad: false,
       theme: "base",
       darkMode: isDark,
       look: "handDrawn",
-      themeVariables: isDark
-        ? {
-            background: "#282c34",
-            primaryColor: "#3d1528",
-            primaryTextColor: "#abb2bf",
-            primaryBorderColor: "rgba(232, 0, 106, 0.4)",
-            lineColor: "#767c89",
-            secondaryColor: "#2c313a",
-            tertiaryColor: "#282c34",
-            edgeLabelBackground: "#282c34",
-            clusterBkg: "#2c313a",
-            titleColor: "#dcdcdc",
-            nodeTextColor: "#abb2bf",
-            fontFamily: '"Barlow Condensed", sans-serif',
-          }
-        : {
-            background: "#fafafa",
-            primaryColor: "#fce8f2",
-            primaryTextColor: "#383a42",
-            primaryBorderColor: "rgba(232, 0, 106, 0.3)",
-            lineColor: "#6b6b6b",
-            secondaryColor: "#f0f0f0",
-            tertiaryColor: "#fafafa",
-            edgeLabelBackground: "#fafafa",
-            clusterBkg: "#f0f0f0",
-            titleColor: "#383a42",
-            nodeTextColor: "#383a42",
-            fontFamily: '"Barlow Condensed", sans-serif',
-          },
+      themeVariables: {
+        background,
+        primaryColor: themePalette.primaryColor,
+        primaryTextColor: themePalette.primaryTextColor,
+        primaryBorderColor,
+        lineColor: themePalette.lineColor,
+        secondaryColor: themePalette.secondaryColor,
+        tertiaryColor: background,
+        edgeLabelBackground: background,
+        clusterBkg: themePalette.secondaryColor,
+        titleColor: themePalette.titleColor,
+        nodeTextColor: themePalette.primaryTextColor,
+        fontFamily: '"Barlow Condensed", sans-serif',
+      },
     };
   }
 

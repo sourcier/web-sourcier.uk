@@ -271,15 +271,15 @@ const setupPrinciples = [
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         150deg,
-        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
 
     @media (min-width: 768px) {
       grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.9fr);
@@ -295,7 +295,7 @@ const setupPrinciples = [
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .uses-intro__title {
@@ -304,14 +304,14 @@ const setupPrinciples = [
     font-size: clamp(2rem, 4vw, 2.85rem);
     line-height: 0.98;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .uses-intro__text {
     margin: 0.9rem 0 0;
     max-width: 58ch;
     line-height: 1.75;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .uses-intro__list {
@@ -324,19 +324,19 @@ const setupPrinciples = [
 
   .uses-intro__list li {
     padding: 0.95rem 1rem;
-    border: 1px solid rgba(41, 92, 69, 0.16);
-    border-radius: 14px;
+    border: 1px solid var(--accent-secondary-alpha-16);
+    border-radius: var(--radius-soft);
     background: color-mix(
       in srgb,
-      var(--color-secondary) 8%,
-      var(--color-surface)
+      var(--accent-secondary) 8%,
+      var(--surface-elevated)
     );
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .uses-page {
@@ -344,7 +344,7 @@ const setupPrinciples = [
   }
 
   .uses-section {
-    --uses-accent: var(--color-pink);
+    --uses-accent: var(--accent-primary);
     margin-bottom: 3.5rem;
 
     &:last-child {
@@ -353,11 +353,11 @@ const setupPrinciples = [
   }
 
   .uses-section--development {
-    --uses-accent: var(--color-secondary);
+    --uses-accent: var(--accent-secondary);
   }
 
   .uses-section--apps {
-    --uses-accent: var(--color-ink);
+    --uses-accent: var(--text-primary);
   }
 
   .uses-section__header {
@@ -370,7 +370,7 @@ const setupPrinciples = [
   .uses-section__intro {
     margin: 0;
     line-height: 1.7;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .uses-grid {
@@ -390,18 +390,18 @@ const setupPrinciples = [
     display: flex;
     gap: 1rem;
     min-height: 100%;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
     border-top: 3px solid var(--uses-accent);
     border-radius: var(--radius-panel);
     padding: 1.5rem 1.25rem 1.25rem;
     background:
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--uses-accent) 6%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--uses-accent) 6%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
     box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
@@ -421,7 +421,7 @@ const setupPrinciples = [
     width: 3rem;
     height: 3rem;
     margin-top: 0.1rem;
-    border-radius: 12px;
+    border-radius: var(--radius-panel);
     color: var(--uses-accent);
     background: color-mix(in srgb, var(--uses-accent) 10%, transparent);
 
@@ -441,7 +441,7 @@ const setupPrinciples = [
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 
     a {
@@ -456,7 +456,7 @@ const setupPrinciples = [
 
   .uses-card__desc {
     font-size: 0.9rem;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.6;
     margin: 0;
   }

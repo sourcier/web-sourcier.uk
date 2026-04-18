@@ -151,7 +151,7 @@ const reactions = [
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     margin: 0 0 1.25rem;
   }
 
@@ -168,8 +168,8 @@ const reactions = [
     gap: 0.25rem;
     min-width: 5rem;
     padding: 1rem 1.25rem;
-    border: 2px solid var(--color-border);
-    border-radius: 6px;
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-compact);
     background: transparent;
     cursor: pointer;
     transition:
@@ -183,8 +183,8 @@ const reactions = [
     }
 
     &:hover {
-      border-color: var(--color-pink);
-      background-color: rgba(232, 0, 106, 0.04);
+      border-color: var(--accent-primary);
+      background-color: rgba(var(--accent-primary-rgb), 0.04);
       transform: translateY(-2px);
 
       .reactions__emoji {
@@ -193,14 +193,14 @@ const reactions = [
     }
 
     &--active {
-      border-color: var(--color-pink);
-      background-color: rgba(232, 0, 106, 0.08);
+      border-color: var(--accent-primary);
+      background-color: rgba(var(--accent-primary-rgb), 0.08);
 
       .reactions__count {
-        color: var(--color-pink);
+        color: var(--accent-primary);
       }
       .reactions__label {
-        color: var(--color-pink);
+        color: var(--accent-primary);
       }
     }
 
@@ -224,7 +224,7 @@ const reactions = [
     font-size: 1.25rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--color-ink);
+    color: var(--text-primary);
     transition: color 0.15s ease;
   }
 
@@ -234,7 +234,7 @@ const reactions = [
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     transition: color 0.15s ease;
   }
 </style>

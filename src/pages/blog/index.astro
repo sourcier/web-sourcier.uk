@@ -134,7 +134,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .blog-paths {
@@ -147,7 +147,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .blog-paths__grid {
@@ -165,21 +165,21 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     gap: 0.9rem;
     min-height: 100%;
     padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-secondary);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-secondary);
     border-radius: var(--radius-panel);
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 12%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
         transparent 32%
       ),
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
+        color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 58%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
     box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
@@ -189,7 +189,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     &:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lift);
-      border-color: rgba(41, 92, 69, 0.24);
+      border-color: var(--accent-secondary-alpha-24);
     }
   }
 
@@ -200,7 +200,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .blog-path-card__title {
@@ -209,12 +209,12 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-size: 1.15rem;
     line-height: 1.1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .blog-path-card__body {
     margin: 0;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.65;
   }
 
@@ -227,12 +227,12 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--text-muted);
 
     span {
       padding: 0.3rem 0.55rem;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--color-secondary) 8%, transparent);
+      border-radius: var(--radius-pill);
+      background: color-mix(in srgb, var(--accent-secondary) 8%, transparent);
     }
   }
 
@@ -245,21 +245,21 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
     text-decoration: none;
   }
 
   .blog-intro__quote {
     margin: 0;
     padding-left: clamp(1.25rem, 3vw, 1.75rem);
-    border-left: 3px solid var(--color-pink);
+    border-left: 3px solid var(--accent-primary);
     position: relative;
 
     p {
       font-size: clamp(1.02rem, 1.9vw, 1.16rem);
       font-weight: 500;
       line-height: 1.72;
-      color: var(--color-ink);
+      color: var(--text-primary);
       margin: 0;
     }
   }
@@ -277,12 +277,12 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     gap: 0.35rem;
     padding: 1rem 1.1rem;
     border: 1px solid
-      color-mix(in srgb, var(--color-secondary) 18%, transparent);
-    border-radius: 14px;
+      color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+    border-radius: var(--radius-soft);
     background: color-mix(
       in srgb,
-      var(--color-secondary) 7%,
-      var(--color-surface)
+      var(--accent-secondary) 7%,
+      var(--surface-elevated)
     );
   }
 
@@ -291,7 +291,7 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .blog-intro__stat-value {
@@ -300,6 +300,6 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 </style>

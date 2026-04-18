@@ -263,7 +263,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       font-size: clamp(1.75rem, 4vw, 2.5rem);
       font-weight: 800;
       letter-spacing: -0.01em;
-      color: var(--color-ink);
+      color: var(--text-primary);
       margin-bottom: 1rem;
 
       @media (min-width: 640px) {
@@ -274,7 +274,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
     .career-section-intro {
       max-width: 60ch;
       margin: 0 auto 2.5rem;
-      color: var(--color-muted);
+      color: var(--text-muted);
       line-height: 1.7;
 
       @media (min-width: 640px) {
@@ -299,7 +299,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
         top: 0;
         bottom: 0;
         width: 2px;
-        background: var(--color-border);
+        background: var(--border-subtle);
 
         @media (min-width: 640px) {
           left: 50%;
@@ -325,8 +325,8 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
 
       span {
         display: inline-block;
-        background: var(--color-pink);
-        color: #ffffff;
+        background: var(--accent-primary);
+        color: var(--text-on-strong);
         font-family: "Barlow Condensed", sans-serif;
         font-size: 0.75rem;
         font-weight: 700;
@@ -368,21 +368,21 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: var(--color-surface);
-      border: 2px solid var(--color-pink);
+      background: var(--surface-elevated);
+      border: 2px solid var(--accent-primary);
       z-index: 1;
       transition:
         background-color 0.18s ease,
         box-shadow 0.18s ease;
 
       .career-timeline__item:hover & {
-        background: var(--color-pink);
-        box-shadow: 0 0 0 4px rgba(232, 0, 106, 0.2);
+        background: var(--accent-primary);
+        box-shadow: var(--shadow-accent-primary-focus);
       }
 
       &.is-current {
-        background: var(--color-pink);
-        box-shadow: 0 0 0 4px rgba(232, 0, 106, 0.2);
+        background: var(--accent-primary);
+        box-shadow: var(--shadow-accent-primary-focus);
       }
 
       @media (min-width: 640px) {
@@ -402,12 +402,13 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       background:
         linear-gradient(
           160deg,
-          color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-          var(--color-surface) 62%
+          color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated))
+            0%,
+          var(--surface-elevated) 62%
         ),
-        var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-top: 3px solid rgba(232, 0, 106, 0.24);
+        var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-top: 3px solid var(--accent-primary-alpha-24);
       border-radius: var(--radius-panel);
       padding: 1.25rem 1.5rem;
       box-shadow: var(--shadow-panel);
@@ -425,11 +426,16 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       background:
         linear-gradient(
           160deg,
-          color-mix(in srgb, var(--color-secondary) 6%, var(--color-surface)) 0%,
-          var(--color-surface) 62%
+          color-mix(
+              in srgb,
+              var(--accent-secondary) 6%,
+              var(--surface-elevated)
+            )
+            0%,
+          var(--surface-elevated) 62%
         ),
-        var(--color-surface);
-      border-top-color: rgba(41, 92, 69, 0.24);
+        var(--surface-elevated);
+      border-top-color: var(--accent-secondary-alpha-24);
     }
 
     .career-timeline__period {
@@ -438,7 +444,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--color-pink);
+      color: var(--accent-primary);
       margin-bottom: 0.4rem;
     }
 
@@ -447,14 +453,14 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       font-size: 1.25rem;
       font-weight: 700;
       line-height: 1.2;
-      color: var(--color-ink);
+      color: var(--text-primary);
       margin-bottom: 0.2rem;
     }
 
     .career-timeline__company {
       font-size: 0.9rem;
       font-weight: 600;
-      color: var(--color-muted);
+      color: var(--text-muted);
       margin-bottom: 0.75rem;
     }
 
@@ -473,10 +479,10 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--color-muted);
+      color: var(--text-muted);
       background: none;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-tight);
       padding: 0.6rem 1.25rem;
       cursor: pointer;
       transition:
@@ -488,8 +494,8 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
       }
 
       &:hover {
-        color: var(--color-pink);
-        border-color: var(--color-pink);
+        color: var(--accent-primary);
+        border-color: var(--accent-primary);
       }
 
       &[aria-expanded="true"] :global(.career-timeline__more-icon) {
@@ -506,7 +512,7 @@ const careerToggleIcon = faIcon(faSquareCaretDown, {
     .career-timeline__description {
       font-size: 0.9rem;
       line-height: 1.7;
-      color: var(--color-muted);
+      color: var(--text-muted);
     }
   </style>
 </section>

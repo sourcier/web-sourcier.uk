@@ -174,12 +174,12 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     justify-content: center;
     width: 3.25rem;
     height: 3.25rem;
-    background-color: var(--color-pink);
-    color: #fff;
+    background-color: var(--accent-primary);
+    color: var(--text-on-strong);
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 16px rgba(var(--overlay-rgb), 0.18);
     transition: opacity 0.15s ease;
 
     &[aria-expanded="true"] .page-menu__btn-icon :global(svg) {
@@ -191,7 +191,7 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     }
 
     &:focus-visible {
-      outline: 3px solid var(--color-pink);
+      outline: 3px solid var(--accent-primary);
       outline-offset: 3px;
     }
 
@@ -217,11 +217,11 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     width: min(360px, calc(100vw - 2rem));
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
-    border-radius: 6px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-primary);
+    border-radius: var(--radius-compact);
+    box-shadow: 0 8px 32px rgba(var(--overlay-rgb), 0.14);
     padding: 1rem 0.75rem;
   }
 
@@ -231,13 +231,13 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-pink);
+    color: var(--accent-primary);
     margin: 0 0.25rem 0.5rem;
   }
 
   .page-menu__actions {
     &--with-toc {
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid var(--border-subtle);
       margin-top: 0.75rem;
       padding-top: 0.5rem;
     }
@@ -262,7 +262,7 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     padding: 0.75rem 1rem;
     background: none;
     border: none;
-    color: var(--color-muted);
+    color: var(--text-muted);
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.875rem;
     font-weight: 700;
@@ -272,13 +272,13 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     transition: color 0.15s ease;
 
     &:hover {
-      color: var(--color-pink);
+      color: var(--accent-primary);
     }
 
     &:focus-visible {
-      outline: 3px solid var(--color-pink);
+      outline: 3px solid var(--accent-primary);
       outline-offset: 2px;
-      color: var(--color-pink);
+      color: var(--accent-primary);
     }
   }
 

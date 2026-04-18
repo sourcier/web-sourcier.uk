@@ -90,18 +90,22 @@ const tags = [...tagCounts.entries()]
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
         transparent 34%
       ),
       radial-gradient(
         circle at left bottom,
-        rgba(232, 0, 106, 0.08) 0%,
+        var(--accent-primary-alpha-08) 0%,
         transparent 30%
       ),
       linear-gradient(
         145deg,
-        color-mix(in srgb, var(--color-paper) 88%, var(--color-secondary) 12%),
-        var(--color-surface)
+        color-mix(
+          in srgb,
+          var(--surface-page) 88%,
+          var(--accent-secondary) 12%
+        ),
+        var(--surface-elevated)
       );
   }
 
@@ -128,14 +132,14 @@ const tags = [...tagCounts.entries()]
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .tag-cloud__description {
     margin: 0.5rem 0 0;
     max-width: 48ch;
     line-height: 1.65;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .tag-cloud__all-link {
@@ -145,19 +149,19 @@ const tags = [...tagCounts.entries()]
     min-height: 2.85rem;
     padding: 0.75rem 1.05rem;
     border: 1px solid
-      color-mix(in srgb, var(--color-secondary) 20%, transparent);
-    border-radius: 999px;
+      color-mix(in srgb, var(--accent-secondary) 20%, transparent);
+    border-radius: var(--radius-pill);
     background: color-mix(
       in srgb,
-      var(--color-secondary) 9%,
-      var(--color-surface)
+      var(--accent-secondary) 9%,
+      var(--surface-elevated)
     );
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     text-decoration: none;
     transition:
       color 0.15s ease,
@@ -165,8 +169,8 @@ const tags = [...tagCounts.entries()]
       transform 0.15s ease;
 
     &:hover {
-      color: var(--color-secondary);
-      border-color: rgba(41, 92, 69, 0.28);
+      color: var(--accent-secondary);
+      border-color: var(--accent-secondary-alpha-28);
       transform: translateY(-1px);
     }
 
@@ -194,11 +198,15 @@ const tags = [...tagCounts.entries()]
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    border: 1.5px solid var(--color-border);
-    border-radius: 999px;
-    color: var(--color-muted);
-    background-color: color-mix(in srgb, var(--color-surface) 78%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    color: var(--text-muted);
+    background-color: color-mix(
+      in srgb,
+      var(--surface-elevated) 78%,
+      transparent
+    );
+    box-shadow: inset 0 1px 0 var(--text-on-strong-alpha-45);
     transition:
       color 0.15s ease,
       border-color 0.15s ease,
@@ -206,12 +214,12 @@ const tags = [...tagCounts.entries()]
       transform 0.15s ease;
 
     &:hover {
-      color: var(--color-secondary);
-      border-color: rgba(41, 92, 69, 0.26);
+      color: var(--accent-secondary);
+      border-color: var(--accent-secondary-alpha-26);
       background-color: color-mix(
         in srgb,
-        var(--color-secondary) 9%,
-        var(--color-surface)
+        var(--accent-secondary) 9%,
+        var(--surface-elevated)
       );
       transform: translateY(-1px);
     }
@@ -233,29 +241,29 @@ const tags = [...tagCounts.entries()]
       font-size: 1.04rem;
       padding: 0.42rem 0.82rem;
       border-width: 2px;
-      color: var(--color-ink);
-      border-color: rgba(41, 92, 69, 0.18);
+      color: var(--text-primary);
+      border-color: var(--accent-secondary-alpha-18);
     }
   }
 
   .tag-cloud__count {
     font-size: 0.65em;
     font-weight: 700;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
     background-color: color-mix(
       in srgb,
-      var(--color-secondary) 12%,
+      var(--accent-secondary) 12%,
       transparent
     );
     padding: 0.05rem 0.35rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     transition:
       background-color 0.15s ease,
       color 0.15s ease;
 
     .tag-cloud__pill:hover & {
-      background-color: rgba(41, 92, 69, 0.16);
-      color: var(--color-secondary);
+      background-color: var(--accent-secondary-alpha-16);
+      color: var(--accent-secondary);
     }
   }
 </style>

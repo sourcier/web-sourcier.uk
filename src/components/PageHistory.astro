@@ -49,7 +49,7 @@ function formatDatetime(date: Date): string {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     margin: 0 0 0.75rem;
   }
 
@@ -57,7 +57,7 @@ function formatDatetime(date: Date): string {
     list-style: none;
     margin: 0;
     padding: 0 0 0 1rem;
-    border-left: 2px solid var(--color-border);
+    border-left: 2px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -71,7 +71,7 @@ function formatDatetime(date: Date): string {
     position: relative;
 
     & + & {
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid var(--border-subtle);
     }
 
     &::before {
@@ -82,8 +82,8 @@ function formatDatetime(date: Date): string {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--color-border);
-      box-shadow: 0 0 0 2px var(--color-surface);
+      background: var(--border-subtle);
+      box-shadow: 0 0 0 2px var(--surface-elevated);
     }
   }
 
@@ -93,13 +93,13 @@ function formatDatetime(date: Date): string {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-muted);
+    color: var(--text-muted);
     opacity: 0.7;
   }
 
   .page-history__note {
     font-size: 0.85rem;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.5;
   }
 </style>

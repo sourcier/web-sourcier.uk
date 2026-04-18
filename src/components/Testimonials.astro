@@ -293,16 +293,16 @@ const testimonials = [
     background:
       radial-gradient(
         ellipse 90% 70% at 100% 0%,
-        color-mix(in srgb, var(--color-secondary) 12%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
         transparent 62%
       ),
       linear-gradient(
         180deg,
-        color-mix(in srgb, var(--color-secondary) 4%, var(--color-paper)) 0%,
-        var(--color-surface) 100%
+        color-mix(in srgb, var(--accent-secondary) 4%, var(--surface-page)) 0%,
+        var(--surface-elevated) 100%
       );
     border-top: 1px solid
-      color-mix(in srgb, var(--color-border) 72%, transparent);
+      color-mix(in srgb, var(--border-subtle) 72%, transparent);
   }
 
   .testimonials__header {
@@ -319,7 +319,7 @@ const testimonials = [
   .testimonials__intro {
     max-width: 62ch;
     margin: 0 0 1.5rem;
-    color: var(--color-muted);
+    color: var(--text-muted);
     line-height: 1.7;
   }
 
@@ -330,11 +330,11 @@ const testimonials = [
     width: 2rem;
     height: 2rem;
     flex-shrink: 0;
-    background: color-mix(in srgb, var(--color-secondary) 4%, transparent);
+    background: color-mix(in srgb, var(--accent-secondary) 4%, transparent);
     border: 1px solid
-      color-mix(in srgb, var(--color-secondary) 18%, transparent);
-    border-radius: 4px;
-    color: var(--color-muted);
+      color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+    border-radius: var(--radius-tight);
+    color: var(--text-muted);
     cursor: pointer;
     transition:
       color 0.15s ease,
@@ -354,8 +354,12 @@ const testimonials = [
     }
 
     &:hover {
-      color: var(--color-secondary);
-      border-color: color-mix(in srgb, var(--color-secondary) 42%, transparent);
+      color: var(--accent-secondary);
+      border-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 42%,
+        transparent
+      );
     }
   }
 
@@ -388,14 +392,14 @@ const testimonials = [
     display: flex;
     flex-direction: column;
     padding: 1.75rem 1.5rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-secondary);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-secondary);
     border-radius: var(--radius-panel);
     background: linear-gradient(
       150deg,
-      color-mix(in srgb, var(--color-secondary) 8%, var(--color-paper)) 0%,
-      var(--color-paper) 48%,
-      var(--color-paper) 100%
+      color-mix(in srgb, var(--accent-secondary) 8%, var(--surface-page)) 0%,
+      var(--surface-page) 48%,
+      var(--surface-page) 100%
     );
     box-shadow: var(--shadow-panel);
 
@@ -411,14 +415,14 @@ const testimonials = [
     p {
       font-size: 0.9375rem;
       line-height: 1.8;
-      color: var(--color-ink);
+      color: var(--text-primary);
       margin: 0;
       font-style: italic;
     }
   }
 
   .testimonials__footer {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-subtle);
     padding-top: 1rem;
   }
 
@@ -468,7 +472,7 @@ const testimonials = [
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-ink);
+    color: var(--text-primary);
     margin: 0 0 0.2rem;
   }
 
@@ -478,11 +482,11 @@ const testimonials = [
     gap: 0.35rem;
 
     &:hover .testimonials__name-link {
-      color: var(--color-secondary);
+      color: var(--accent-secondary);
     }
 
     &:hover .testimonials__linkedin {
-      color: var(--color-secondary);
+      color: var(--accent-secondary);
     }
   }
 
@@ -495,14 +499,14 @@ const testimonials = [
   .testimonials__linkedin {
     display: inline-flex;
     align-items: center;
-    color: var(--color-muted);
+    color: var(--text-muted);
     transition: color 0.15s ease;
     flex-shrink: 0;
   }
 
   .testimonials__meta {
     font-size: 0.8125rem;
-    color: var(--color-muted);
+    color: var(--text-muted);
     margin: 0;
   }
 
@@ -518,7 +522,7 @@ const testimonials = [
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--color-border);
+    background: var(--border-subtle);
     border: none;
     padding: 0;
     cursor: pointer;
@@ -527,12 +531,12 @@ const testimonials = [
       transform 0.2s ease;
 
     &.is-active {
-      background: var(--color-secondary);
+      background: var(--accent-secondary);
       transform: scale(1.375);
     }
 
     &:hover:not(.is-active) {
-      background: var(--color-muted);
+      background: var(--text-muted);
     }
 
     &.is-hidden {

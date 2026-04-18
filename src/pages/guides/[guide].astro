@@ -208,7 +208,7 @@ const guidePosts = guide.currentPostIds
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .guide-intro__body,
@@ -217,7 +217,7 @@ const guidePosts = guide.currentPostIds
     max-width: 64ch;
     margin: 0;
     line-height: 1.75;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .guide-panels__grid,
@@ -233,17 +233,17 @@ const guidePosts = guide.currentPostIds
   .guide-panel,
   .planned-article-card,
   .guide-cta__panel {
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-primary);
     border-radius: 10px;
     background:
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--color-pink) 5%, var(--color-surface)) 0%,
-        var(--color-surface) 58%
+        color-mix(in srgb, var(--accent-primary) 5%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 58%
       ),
-      var(--color-surface);
-    box-shadow: 0 18px 40px rgba(15, 15, 15, 0.06);
+      var(--surface-elevated);
+    box-shadow: var(--shadow-panel-soft);
   }
 
   .guide-panel,
@@ -260,7 +260,7 @@ const guidePosts = guide.currentPostIds
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-pink);
+    color: var(--accent-primary);
   }
 
   .guide-panel__title,
@@ -271,7 +271,7 @@ const guidePosts = guide.currentPostIds
     font-size: 1.2rem;
     line-height: 1.1;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .guide-panel__list {
@@ -286,7 +286,7 @@ const guidePosts = guide.currentPostIds
       position: relative;
       padding-left: 1rem;
       line-height: 1.65;
-      color: var(--color-muted);
+      color: var(--text-muted);
 
       &::before {
         content: "";
@@ -295,8 +295,8 @@ const guidePosts = guide.currentPostIds
         top: 0.72em;
         width: 0.35rem;
         height: 0.35rem;
-        border-radius: 999px;
-        background: var(--color-pink);
+        border-radius: var(--radius-pill);
+        background: var(--accent-primary);
       }
     }
   }
@@ -304,7 +304,7 @@ const guidePosts = guide.currentPostIds
   .planned-article-card__body {
     margin: 0;
     line-height: 1.7;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .guide-cta__panel {
@@ -331,7 +331,7 @@ const guidePosts = guide.currentPostIds
     justify-content: center;
     min-height: 2.75rem;
     padding: 0.75rem 1rem;
-    border-radius: 4px;
+    border-radius: var(--radius-tight);
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
@@ -341,13 +341,13 @@ const guidePosts = guide.currentPostIds
   }
 
   .guide-cta__primary {
-    background: var(--color-pink);
-    color: #fff;
+    background: var(--accent-primary);
+    color: var(--text-on-strong);
   }
 
   .guide-cta__secondary {
-    border: 1px solid var(--color-border);
-    color: var(--color-ink);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
     background: transparent;
   }
 </style>

@@ -102,15 +102,15 @@ const corePages = [
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 14%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         150deg,
-        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
 
     @media (min-width: 768px) {
       grid-template-columns: minmax(9rem, 0.6fr) minmax(0, 1.4fr);
@@ -125,7 +125,7 @@ const corePages = [
     line-height: 0.9;
     letter-spacing: -0.03em;
     color: transparent;
-    -webkit-text-stroke: 2px var(--color-pink);
+    -webkit-text-stroke: 2px var(--accent-primary);
     user-select: none;
     position: relative;
 
@@ -133,7 +133,7 @@ const corePages = [
       content: "404";
       position: absolute;
       inset: 0;
-      color: rgba(232, 0, 106, 0.07);
+      color: rgba(var(--accent-primary-rgb), 0.07);
       -webkit-text-stroke: 0;
       transform: translate(6px, 6px);
       z-index: -1;
@@ -147,7 +147,7 @@ const corePages = [
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .not-found__heading {
@@ -156,14 +156,14 @@ const corePages = [
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 0.95;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .not-found__sub {
     margin: 0.95rem 0 0;
     max-width: 58ch;
     line-height: 1.75;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .not-found__actions {
@@ -179,7 +179,7 @@ const corePages = [
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     line-height: 1.02;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .not-found__grid {
@@ -197,16 +197,16 @@ const corePages = [
     gap: 0.85rem;
     min-height: 100%;
     padding: 1.4rem;
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-pink);
+    border: 1px solid var(--border-subtle);
+    border-top: 3px solid var(--accent-primary);
     border-radius: var(--radius-panel);
     background:
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--color-pink) 4%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
     box-shadow: var(--shadow-panel);
     transition:
       transform 0.18s ease,
@@ -220,19 +220,19 @@ const corePages = [
   }
 
   .not-found-card--guide {
-    border-top-color: var(--color-secondary);
+    border-top-color: var(--accent-secondary);
     background:
       radial-gradient(
         circle at top right,
-        color-mix(in srgb, var(--color-secondary) 12%, transparent) 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
         transparent 34%
       ),
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--color-pink) 3%, var(--color-surface)) 0%,
-        var(--color-surface) 62%
+        color-mix(in srgb, var(--accent-primary) 3%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 62%
       ),
-      var(--color-surface);
+      var(--surface-elevated);
   }
 
   .not-found-card__eyebrow {
@@ -242,11 +242,11 @@ const corePages = [
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .not-found-card--guide .not-found-card__eyebrow {
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 
   .not-found-card__title {
@@ -255,13 +255,13 @@ const corePages = [
     font-size: 1.15rem;
     line-height: 1.05;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--text-primary);
   }
 
   .not-found-card__body {
     margin: 0;
     line-height: 1.65;
-    color: var(--color-muted);
+    color: var(--text-muted);
   }
 
   .not-found-card__cta {
@@ -273,11 +273,11 @@ const corePages = [
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-pink);
+    color: var(--accent-primary);
     text-decoration: none;
   }
 
   .not-found-card--guide .not-found-card__cta {
-    color: var(--color-secondary);
+    color: var(--accent-secondary);
   }
 </style>
