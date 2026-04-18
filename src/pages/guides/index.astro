@@ -6,7 +6,7 @@ import { audienceGuides } from "../../data/audienceGuides";
 ---
 
 <BaseLayout
-  pageTitle="Start Here — Sourcier"
+  pageTitle="Guides — Sourcier"
   description="Choose a practical guide for transitioning into tech, growing as an engineer, or improving engineering practice on your team."
 >
   <PageHero
@@ -15,26 +15,23 @@ import { audienceGuides } from "../../data/audienceGuides";
     subtitle="Whether you are transitioning into tech, growing as an engineer, or improving engineering practice on a team, start with the guide that fits your situation."
   />
 
-  <section
-    class="section start-here-grid"
-    aria-labelledby="start-here-grid-heading"
-  >
+  <section class="section guides-grid" aria-labelledby="guides-grid-heading">
     <div class="container is-max-desktop">
       <p class="section-label">Guides</p>
-      <h2 class="start-here-grid__heading" id="start-here-grid-heading">
+      <h2 class="guides-grid__heading" id="guides-grid-heading">
         Three practical routes into the site
       </h2>
-      <div class="start-here-grid__cards">
+      <div class="guides-grid__cards">
         {
           audienceGuides.map((guide) => (
-            <article class="start-here-card">
-              <h3 class="start-here-card__title">{guide.title}</h3>
-              <p class="start-here-card__body">{guide.summary}</p>
-              <div class="start-here-card__meta" aria-label="Guide coverage">
+            <article class="guide-card">
+              <h3 class="guide-card__title">{guide.title}</h3>
+              <p class="guide-card__body">{guide.summary}</p>
+              <div class="guide-card__meta" aria-label="Guide coverage">
                 <span>{guide.currentPostIds.length} published now</span>
                 <span>{guide.plannedArticles.length} planned next</span>
               </div>
-              <a class="start-here-card__cta" href={guide.href}>
+              <a class="guide-card__cta" href={guide.href}>
                 Open the guide
               </a>
             </article>
@@ -48,11 +45,11 @@ import { audienceGuides } from "../../data/audienceGuides";
 </BaseLayout>
 
 <style lang="scss">
-  .start-here-grid {
+  .guides-grid {
     padding-top: clamp(2.75rem, 5vw, 4rem);
   }
 
-  .start-here-grid__heading {
+  .guides-grid__heading {
     margin: 0 0 1.5rem;
     font-family: "Barlow Condensed", sans-serif;
     font-size: clamp(1.8rem, 4vw, 2.75rem);
@@ -61,7 +58,7 @@ import { audienceGuides } from "../../data/audienceGuides";
     color: var(--color-ink);
   }
 
-  .start-here-grid__cards {
+  .guides-grid__cards {
     display: grid;
     gap: 1rem;
 
@@ -70,7 +67,7 @@ import { audienceGuides } from "../../data/audienceGuides";
     }
   }
 
-  .start-here-card {
+  .guide-card {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -99,7 +96,7 @@ import { audienceGuides } from "../../data/audienceGuides";
     }
   }
 
-  .start-here-card__title {
+  .guide-card__title {
     margin: 0;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 1.2rem;
@@ -108,13 +105,13 @@ import { audienceGuides } from "../../data/audienceGuides";
     color: var(--color-ink);
   }
 
-  .start-here-card__body {
+  .guide-card__body {
     margin: 0;
     color: var(--color-muted);
     line-height: 1.65;
   }
 
-  .start-here-card__meta {
+  .guide-card__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.65rem;
@@ -126,7 +123,7 @@ import { audienceGuides } from "../../data/audienceGuides";
     color: var(--color-muted);
   }
 
-  .start-here-card__cta {
+  .guide-card__cta {
     margin-top: auto;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.88rem;

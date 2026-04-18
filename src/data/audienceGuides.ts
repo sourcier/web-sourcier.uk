@@ -23,7 +23,7 @@ export interface AudienceGuide {
 export const audienceGuides: AudienceGuide[] = [
   {
     slug: "transition-into-tech",
-    href: "/start-here/transition-into-tech",
+    href: "/guides/transition-into-tech",
     title: "Transitioning into tech",
     summary:
       "Clear explanations, practical examples, and guidance for moving from learning to shipping real software.",
@@ -72,7 +72,7 @@ export const audienceGuides: AudienceGuide[] = [
   },
   {
     slug: "engineering-career-growth",
-    href: "/start-here/engineering-career-growth",
+    href: "/guides/engineering-career-growth",
     title: "Growing as an engineer",
     summary:
       "Advice for engineers who want stronger habits, better judgment, and more confidence at work.",
@@ -120,7 +120,7 @@ export const audienceGuides: AudienceGuide[] = [
   },
   {
     slug: "engineering-practice",
-    href: "/start-here/engineering-practice",
+    href: "/guides/engineering-practice",
     title: "Improving engineering practice",
     summary:
       "Practical guidance for teams that want healthier delivery habits, clearer expectations, and better software outcomes.",
