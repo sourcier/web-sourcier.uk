@@ -131,30 +131,34 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     <div class="container is-max-desktop">
       <div class="community-offer__grid">
         <div class="community-offer__main page-panel page-panel--secondary">
-          <p class="section-label section-label--secondary">Community</p>
-          <h2 class="community-offer__heading" id="community-offer-heading">
-            One free day each month for a charity
-          </h2>
-          <p class="community-offer__body">
-            The charity sector is close to my heart, so I set aside one day each
-            month for a charity or community organisation that could use
-            practical help moving a digital problem or piece of work forward.
-          </p>
-          <div class="community-offer__chips" aria-label="Offer details">
-            <span class="community-offer__chip">1 day/month</span>
-            <span class="community-offer__chip">Free</span>
-            <span class="community-offer__chip">Clearly scoped</span>
+          <div class="community-offer__intro">
+            <p class="section-label section-label--secondary">Community</p>
+            <div class="community-offer__chips" aria-label="Offer details">
+              <span class="community-offer__chip">1 day/month</span>
+              <span class="community-offer__chip">Free</span>
+              <span class="community-offer__chip">Clearly scoped</span>
+            </div>
+            <h2 class="community-offer__heading" id="community-offer-heading">
+              One free day each month for a charity
+            </h2>
+            <p class="community-offer__body">
+              The charity sector is close to my heart, so I set aside one day
+              each month for a charity or community organisation that could use
+              practical help moving a digital problem or piece of work forward.
+            </p>
           </div>
-          <div class="community-offer__actions">
-            <a href="/charity-support" class="button is-ink is-medium">
-              See how it works
-            </a>
-            <a
-              href="/contact?reason=charity-support#contact-form"
-              class="community-offer__link"
-            >
-              Ask if it is a fit
-            </a>
+          <div class="community-offer__footer">
+            <div class="community-offer__actions">
+              <a href="/charity-support" class="button is-ink is-medium">
+                See how it works
+              </a>
+              <a
+                href="/contact?reason=charity-support#contact-form"
+                class="community-offer__link"
+              >
+                Ask if it is a fit
+              </a>
+            </div>
           </div>
         </div>
 
@@ -293,6 +297,11 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     gap: 1rem;
   }
 
+  .community-offer__intro {
+    display: grid;
+    gap: 0.95rem;
+  }
+
   .community-offer__heading {
     margin: 0;
     font-family: "Barlow Condensed", sans-serif;
@@ -311,7 +320,8 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
   .community-offer__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.65rem;
+    gap: 0.5rem;
+    max-width: 34rem;
   }
 
   .community-offer__chip,
@@ -326,12 +336,12 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
   .community-offer__chip {
     display: inline-flex;
     align-items: center;
-    min-height: 2rem;
-    padding: 0.35rem 0.7rem;
+    min-height: 1.85rem;
+    padding: 0.28rem 0.62rem;
     border-radius: 999px;
     border: 1px solid
-      color-mix(in srgb, var(--color-secondary) 20%, transparent);
-    background: color-mix(in srgb, var(--color-secondary) 7%, transparent);
+      color-mix(in srgb, var(--color-secondary) 16%, transparent);
+    background: color-mix(in srgb, var(--color-secondary) 5%, transparent);
     color: var(--color-secondary);
   }
 
@@ -340,16 +350,35 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     color: var(--color-secondary);
   }
 
+  .community-offer__footer {
+    display: grid;
+    gap: 0.95rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-border) 78%, transparent);
+  }
+
   .community-offer__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem 1rem;
     align-items: center;
+
+    @media (max-width: 639px) {
+      align-items: stretch;
+
+      > .button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   }
 
   .community-offer__link {
     display: inline-flex;
     align-items: center;
+    min-height: 2.55rem;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
@@ -357,6 +386,14 @@ const placeholderCount = Math.max(0, GRID_SIZE - allPosts.length);
     text-transform: uppercase;
     text-decoration: none;
     color: var(--color-secondary);
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      color: var(--color-pink);
+      transform: translateY(-1px);
+    }
   }
 
   .community-offer__list {
