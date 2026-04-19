@@ -60,19 +60,19 @@ const formattedDate = pubDate
     margin: 0;
     font-size: 0.93rem;
     line-height: 1.65;
-    color: color-mix(in srgb, var(--text-primary) 70%, white);
+    color: var(--text-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: initial;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
   }
 
   .card__title {
     display: -webkit-box;
     overflow: hidden;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
@@ -118,7 +118,7 @@ const formattedDate = pubDate
 
   @media (max-width: 639px) {
     .card__description {
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 4;
     }
   }
 </style>

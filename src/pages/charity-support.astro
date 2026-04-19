@@ -86,6 +86,7 @@ const charityExperience = [
   <PageHero
     kicker="Community"
     title="One free day each month for a charity"
+    tone="secondary"
     subtitle="The charity sector is close to my heart, so I set aside one day each month to help a charity or community organisation move an important piece of work forward."
   />
 
@@ -292,9 +293,17 @@ const charityExperience = [
 </BaseLayout>
 
 <style lang="scss">
+  :global(.page-hero) {
+    min-height: clamp(225px, 30vw, 295px);
+    padding-bottom: clamp(2rem, 4vw, 2.7rem);
+  }
+
   .charity-stats {
     padding-top: 0;
     padding-bottom: 0;
+    margin-top: clamp(-1.9rem, -2.4vw, -1.1rem);
+    position: relative;
+    z-index: 1;
   }
 
   .charity-stats__list {
@@ -331,6 +340,14 @@ const charityExperience = [
       ),
       var(--surface-elevated);
     box-shadow: var(--shadow-panel-soft);
+
+    &:nth-child(2n) {
+      border-top-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 74%,
+        var(--accent-primary)
+      );
+    }
   }
 
   .charity-stats__label {
@@ -382,7 +399,8 @@ const charityExperience = [
     font-family: "Barlow Condensed", sans-serif;
     font-size: clamp(1.85rem, 4vw, 3rem);
     line-height: 1.05;
-    text-transform: uppercase;
+    text-transform: none;
+    letter-spacing: -0.015em;
     color: var(--text-primary);
   }
 
@@ -430,7 +448,8 @@ const charityExperience = [
     font-family: "Barlow Condensed", sans-serif;
     font-size: clamp(1.4rem, 3vw, 1.9rem);
     line-height: 1.1;
-    text-transform: uppercase;
+    text-transform: none;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
   }
 
@@ -510,18 +529,28 @@ const charityExperience = [
 
   .charity-area-card,
   .charity-step {
+    --charity-card-accent: var(--accent-secondary);
     display: flex;
     flex-direction: column;
     gap: 1rem;
     min-height: 100%;
     padding: 1.5rem;
     border: 1px solid var(--border-subtle);
-    border-top: 3px solid var(--accent-secondary);
+    border-top: 3px solid var(--charity-card-accent);
     border-radius: var(--radius-panel);
     background:
+      radial-gradient(
+        circle at 100% 0%,
+        color-mix(in srgb, var(--charity-card-accent) 10%, transparent) 0%,
+        transparent 42%
+      ),
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--accent-secondary) 8%, var(--surface-elevated))
+        color-mix(
+            in srgb,
+            var(--charity-card-accent) 8%,
+            var(--surface-elevated)
+          )
           0%,
         var(--surface-elevated) 58%
       ),
@@ -537,10 +566,24 @@ const charityExperience = [
       box-shadow: var(--shadow-lift);
       border-color: color-mix(
         in srgb,
-        var(--accent-secondary) 22%,
+        var(--charity-card-accent) 22%,
         transparent
       );
     }
+  }
+
+  .charity-area-card:nth-child(2),
+  .charity-step:nth-child(2) {
+    --charity-card-accent: var(--accent-primary);
+  }
+
+  .charity-area-card:nth-child(3),
+  .charity-step:nth-child(3) {
+    --charity-card-accent: color-mix(
+      in srgb,
+      var(--accent-secondary) 76%,
+      var(--text-primary)
+    );
   }
 
   .charity-area-card__title {
@@ -548,7 +591,8 @@ const charityExperience = [
     font-family: "Barlow Condensed", sans-serif;
     font-size: 1.28rem;
     line-height: 1.1;
-    text-transform: uppercase;
+    text-transform: none;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
   }
 
@@ -564,10 +608,70 @@ const charityExperience = [
     }
   }
 
+  .charity-fit__panel:first-child {
+    background:
+      radial-gradient(
+        ellipse 100% 100% at 100% 0%,
+        color-mix(in srgb, var(--accent-secondary) 14%, transparent) 0%,
+        transparent 52%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--accent-secondary) 5%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+  }
+
+  .charity-fit__panel:last-child {
+    border-color: color-mix(
+      in srgb,
+      var(--text-primary) 12%,
+      var(--border-subtle)
+    );
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--text-primary) 2.5%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+  }
+
+  .charity-fit__panel:last-child .charity-fit__title {
+    color: color-mix(in srgb, var(--text-primary) 72%, var(--accent-primary));
+  }
+
   .charity-process__grid {
+    gap: 1.25rem;
+
     @media (min-width: 768px) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+  }
+
+  .charity-step {
+    position: relative;
+    padding-top: 2.3rem;
+  }
+
+  .charity-step__label {
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid
+      color-mix(in srgb, var(--charity-card-accent) 18%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--charity-card-accent) 8%,
+      var(--surface-elevated)
+    );
+    color: var(--charity-card-accent);
   }
 
   .charity-cta__panel {

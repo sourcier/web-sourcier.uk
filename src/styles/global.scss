@@ -19,10 +19,10 @@
   --text-muted: #6b6b6b;
   --text-on-strong: #ffffff;
   --text-on-strong-rgb: 255, 255, 255;
-  --surface-page: #f2ece4;
-  --surface-elevated: #fbf8f3;
-  --surface-page-top: #f7f1eb;
-  --surface-page-bottom: #efe8df;
+  --surface-page: #ece1d4;
+  --surface-elevated: #fffaf4;
+  --surface-page-top: #f6ece1;
+  --surface-page-bottom: #e5d8c9;
 
   --bulma-primary-h: var(--accent-primary-h);
   --bulma-primary-s: var(--accent-primary-s);
@@ -227,17 +227,16 @@ h3,
 h4,
 h5,
 h6,
-.title,
-.hero-title,
-.navbar-brand-name {
+.title {
   font-family:
     "Barlow Condensed",
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  text-wrap: balance;
 }
 
 // — Navbar: frosted glass with pink accent on hover
@@ -723,31 +722,56 @@ h6,
 }
 
 .page-panel {
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border: 1px solid var(--border-subtle);
-  border-top: 3px solid var(--accent-primary);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.35rem, 3vw, 2.1rem);
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 82%, transparent);
   border-radius: var(--radius-panel);
   background:
     linear-gradient(
-      155deg,
-      color-mix(in srgb, var(--accent-primary) 5%, var(--surface-elevated)) 0%,
-      var(--surface-elevated) 58%
-    ),
-    var(--surface-elevated);
-  box-shadow: var(--shadow-panel);
-}
-
-.page-panel--secondary {
-  border-top-color: var(--accent-secondary);
-  background:
-    linear-gradient(
-      150deg,
-      color-mix(in srgb, var(--accent-secondary) 10%, var(--surface-page)) 0%,
-      color-mix(in srgb, var(--accent-secondary) 3%, var(--surface-elevated))
-        42%,
+      180deg,
+      color-mix(in srgb, var(--surface-elevated) 94%, white) 0%,
       var(--surface-elevated) 100%
     ),
     var(--surface-elevated);
+  box-shadow: 0 14px 30px rgba(var(--shadow-rgb), 0.05);
+}
+
+.page-panel--secondary {
+  border-color: color-mix(
+    in srgb,
+    var(--accent-secondary) 14%,
+    var(--border-subtle)
+  );
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--accent-secondary) 10%, transparent) 0%,
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-secondary) 4%, var(--surface-elevated)) 0%,
+      var(--surface-elevated) 100%
+    ),
+    var(--surface-elevated);
+  box-shadow: 0 16px 34px
+    color-mix(in srgb, var(--accent-secondary) 10%, transparent);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: clamp(1.35rem, 3vw, 2.1rem);
+    width: 4rem;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-secondary) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
 }
 
 // — Series callout banner (used at the top of series posts)
@@ -815,12 +839,12 @@ h6,
   border: 1px solid var(--border-subtle);
   background:
     linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--accent-primary) 3%, var(--surface-elevated)) 0%,
-      var(--surface-elevated) 64%
+      180deg,
+      color-mix(in srgb, var(--surface-elevated) 96%, white) 0%,
+      var(--surface-elevated) 100%
     ),
     var(--surface-elevated);
-  box-shadow: var(--shadow-panel);
+  box-shadow: 0 16px 34px rgba(var(--shadow-rgb), 0.05);
   text-decoration: none;
   color: inherit;
   overflow: hidden;
@@ -831,9 +855,9 @@ h6,
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 44px
-      color-mix(in srgb, var(--accent-secondary) 20%, transparent);
-    border-color: color-mix(in srgb, var(--accent-secondary) 26%, transparent);
+    box-shadow: 0 20px 40px
+      color-mix(in srgb, var(--accent-secondary) 16%, transparent);
+    border-color: color-mix(in srgb, var(--accent-secondary) 22%, transparent);
 
     .card__cover img {
       transform: scale(1.04);
@@ -844,8 +868,12 @@ h6,
     }
 
     .card__cta {
-      background-color: var(--accent-secondary);
-      color: var(--surface-page);
+      background-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 14%,
+        var(--surface-elevated)
+      );
+      color: var(--text-primary);
     }
   }
 }
@@ -880,34 +908,28 @@ h6,
   flex: 1;
   display: grid;
   align-content: start;
-  gap: 0.55rem;
-  padding: 1.35rem 1.25rem 1rem;
-  border-left: 3px solid transparent;
-  transition: border-color 0.18s ease;
-
-  .card.card__blog:hover & {
-    border-left-color: var(--accent-secondary);
-  }
+  gap: 0.7rem;
+  padding: 1.35rem 1.25rem 1.05rem;
 }
 
 .card__title {
   font-family: "Barlow Condensed", sans-serif;
-  font-weight: 800;
-  font-size: 1.22rem;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  line-height: 1.12;
+  font-weight: 700;
+  font-size: 1.28rem;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   margin: 0;
   color: var(--text-primary);
 }
 
 .card__subtitle {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: color-mix(in srgb, var(--text-primary) 58%, white);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  opacity: 0.88;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  opacity: 1;
   margin: 0;
 }
 
@@ -918,7 +940,7 @@ h6,
   padding: 0.78rem 1.25rem;
   background-color: color-mix(
     in srgb,
-    var(--accent-secondary) 5%,
+    var(--accent-secondary) 4%,
     var(--surface-elevated)
   );
   border-top: 1px solid var(--border-subtle);
@@ -935,8 +957,12 @@ h6,
 }
 
 .card-meta {
-  font-size: 0.74rem;
-  color: var(--accent-secondary);
+  font-size: 0.72rem;
+  color: color-mix(
+    in srgb,
+    var(--accent-secondary-deep) 72%,
+    var(--accent-secondary)
+  );
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.09em;

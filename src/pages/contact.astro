@@ -36,6 +36,7 @@ const pageTitle = "Contact — Sourcier";
   <PageHero
     kicker="Get in touch"
     title="Get support"
+    tone="secondary"
     subtitle="The day I set aside each month for charity or community work, career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
   />
 
@@ -87,159 +88,168 @@ const pageTitle = "Contact — Sourcier";
     <div class="container is-max-desktop">
       <div class="contact-layout">
         <div class="contact-form-col">
-          <p class="contact-form__intro">
-            If you are changing careers, trying to level up as an engineer, or
-            need help improving how your team builds software, or you work with
-            a charity or community organisation that could use the day I set
-            aside each month, send a note and I will get back to you as soon as
-            I can.
-          </p>
-
-          <form
-            id="contact-form"
-            class="contact-form"
-            name="contact"
-            method="post"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-          >
-            <div class="contact-form__row">
-              <div class="contact-form__field">
-                <label class="contact-form__label" for="contact-name"
-                  >Name</label
-                >
-                <input
-                  class="contact-form__input"
-                  id="contact-name"
-                  type="text"
-                  placeholder="Your name"
-                  name="name"
-                  required
-                />
-              </div>
-              <div class="contact-form__field">
-                <label class="contact-form__label" for="contact-email"
-                  >Email</label
-                >
-                <input
-                  class="contact-form__input"
-                  id="contact-email"
-                  type="email"
-                  placeholder="your@email.com"
-                  name="email"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="contact-form__field">
-              <label class="contact-form__label" for="contact-reason"
-                >Reason</label
-              >
-              <select
-                class="contact-form__input"
-                id="contact-reason"
-                name="reason"
-                style={`--contact-select-caret-icon: ${selectCaretIcon}`}
-                required
-              >
-                <option value="" disabled selected>Select a reason…</option>
-                <option value="career-transition">Transition into tech</option>
-                <option value="career-growth">Career growth</option>
-                <option value="engineering-practice"
-                  >Engineering practice</option
-                >
-                <option value="charity-support"
-                  >Charity or community work</option
-                >
-                <option value="project">Project</option>
-                <option value="speaking">Speaking</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div class="contact-form__field is-hidden" id="other-reason-field">
-              <label class="contact-form__label" for="contact-other-reason"
-                >Please specify</label
-              >
-              <input
-                class="contact-form__input"
-                id="contact-other-reason"
-                type="text"
-                placeholder="Please specify your reason…"
-                name="other-reason"
-              />
-            </div>
-
-            <div class="contact-form__field">
-              <label class="contact-form__label" for="contact-message"
-                >Message</label
-              >
-              <textarea
-                class="contact-form__textarea"
-                id="contact-message"
-                placeholder="Tell me about your situation, your goals, or the team challenge you want to solve…"
-                name="message"
-                rows="6"
-                required></textarea>
-            </div>
-
-            <div class="field is-hidden" aria-hidden="true">
-              <input name="bot-field" type="text" />
-            </div>
-
-            <button class="contact-form__submit" type="submit"
-              >Send Message &rarr;</button
-            >
-          </form>
-
-          <div class="contact-success is-hidden" data-success-message>
-            <p class="contact-success__text">
-              &#10003; Message sent — I'll get back to you soon.
+          <div class="contact-form__panel page-panel page-panel--secondary">
+            <p class="contact-form__intro">
+              If you are changing careers, trying to level up as an engineer,
+              need help improving how your team builds software, or you work
+              with a charity or community organisation that could use the day I
+              set aside each month, send a note and I will get back to you as
+              soon as I can.
             </p>
-            <button class="contact-success__close" type="button">Dismiss</button
+
+            <form
+              id="contact-form"
+              class="contact-form"
+              name="contact"
+              method="post"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
             >
+              <div class="contact-form__row">
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="contact-name"
+                    >Name</label
+                  >
+                  <input
+                    class="contact-form__input"
+                    id="contact-name"
+                    type="text"
+                    placeholder="Your name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="contact-email"
+                    >Email</label
+                  >
+                  <input
+                    class="contact-form__input"
+                    id="contact-email"
+                    type="email"
+                    placeholder="your@email.com"
+                    name="email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="contact-reason"
+                  >Reason</label
+                >
+                <select
+                  class="contact-form__input"
+                  id="contact-reason"
+                  name="reason"
+                  style={`--contact-select-caret-icon: ${selectCaretIcon}`}
+                  required
+                >
+                  <option value="" disabled selected>Select a reason…</option>
+                  <option value="career-transition">Transition into tech</option
+                  >
+                  <option value="career-growth">Career growth</option>
+                  <option value="engineering-practice"
+                    >Engineering practice</option
+                  >
+                  <option value="charity-support"
+                    >Charity or community work</option
+                  >
+                  <option value="project">Project</option>
+                  <option value="speaking">Speaking</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div
+                class="contact-form__field is-hidden"
+                id="other-reason-field"
+              >
+                <label class="contact-form__label" for="contact-other-reason"
+                  >Please specify</label
+                >
+                <input
+                  class="contact-form__input"
+                  id="contact-other-reason"
+                  type="text"
+                  placeholder="Please specify your reason…"
+                  name="other-reason"
+                />
+              </div>
+
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="contact-message"
+                  >Message</label
+                >
+                <textarea
+                  class="contact-form__textarea"
+                  id="contact-message"
+                  placeholder="Tell me about your situation, your goals, or the team challenge you want to solve…"
+                  name="message"
+                  rows="6"
+                  required></textarea>
+              </div>
+
+              <div class="field is-hidden" aria-hidden="true">
+                <input name="bot-field" type="text" />
+              </div>
+
+              <button class="contact-form__submit" type="submit"
+                >Send Message &rarr;</button
+              >
+            </form>
+
+            <div class="contact-success is-hidden" data-success-message>
+              <p class="contact-success__text">
+                &#10003; Message sent — I'll get back to you soon.
+              </p>
+              <button class="contact-success__close" type="button"
+                >Dismiss</button
+              >
+            </div>
           </div>
         </div>
 
         <aside class="contact-sidebar">
-          <h2 class="contact-sidebar__heading">Find me online</h2>
-          <div class="contact-sidebar__links">
-            <a
-              class="contact-sidebar__link"
-              href="https://www.linkedin.com/in/roger-rajaratnam"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span class="contact-sidebar__link-label">
-                <span
-                  class="contact-sidebar__link-icon"
-                  set:html={linkedinIcon}
-                />
-                LinkedIn
-              </span>
-              <span class="contact-sidebar__link-desc"
-                >Mentoring, growth, and engineering leadership</span
+          <div class="contact-sidebar__panel page-panel">
+            <h2 class="contact-sidebar__heading">Find me online</h2>
+            <div class="contact-sidebar__links">
+              <a
+                class="contact-sidebar__link"
+                href="https://www.linkedin.com/in/roger-rajaratnam"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-            </a>
+                <span class="contact-sidebar__link-label">
+                  <span
+                    class="contact-sidebar__link-icon"
+                    set:html={linkedinIcon}
+                  />
+                  LinkedIn
+                </span>
+                <span class="contact-sidebar__link-desc"
+                  >Mentoring, growth, and engineering leadership</span
+                >
+              </a>
 
-            <a
-              class="contact-sidebar__link"
-              href="https://github.com/sourcier"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span class="contact-sidebar__link-label">
-                <span
-                  class="contact-sidebar__link-icon"
-                  set:html={githubIcon}
-                />
-                GitHub
-              </span>
-              <span class="contact-sidebar__link-desc"
-                >Blog code, tooling, and experiments</span
+              <a
+                class="contact-sidebar__link"
+                href="https://github.com/sourcier"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-            </a>
+                <span class="contact-sidebar__link-label">
+                  <span
+                    class="contact-sidebar__link-icon"
+                    set:html={githubIcon}
+                  />
+                  GitHub
+                </span>
+                <span class="contact-sidebar__link-desc"
+                  >Blog code, tooling, and experiments</span
+                >
+              </a>
+            </div>
           </div>
         </aside>
       </div>
@@ -250,9 +260,17 @@ const pageTitle = "Contact — Sourcier";
 </BaseLayout>
 
 <style lang="scss">
+  :global(.page-hero) {
+    min-height: clamp(220px, 28vw, 290px);
+    padding-bottom: clamp(1.9rem, 4vw, 2.5rem);
+  }
+
   /* ── Contact reasons bar ───────────────────────────────────── */
   .contact-reasons {
     padding: 0 1.5rem;
+    margin-top: clamp(-1.8rem, -2.4vw, -1.1rem);
+    position: relative;
+    z-index: 1;
   }
 
   .contact-reasons__list {
@@ -269,67 +287,58 @@ const pageTitle = "Contact — Sourcier";
   }
 
   .contact-reasons__item {
+    --contact-reason-accent: var(--accent-secondary);
     display: flex;
     gap: 1rem;
     align-items: center;
     padding: 1.5rem 1.25rem;
     background-color: var(--surface-elevated);
     border: 1px solid var(--border-subtle);
-    border-top: 3px solid var(--accent-primary);
-    border-radius: 10px;
+    border-top: 3px solid var(--contact-reason-accent);
+    border-radius: var(--radius-panel);
     background:
+      radial-gradient(
+        circle at 100% 0%,
+        color-mix(in srgb, var(--contact-reason-accent) 10%, transparent) 0%,
+        transparent 40%
+      ),
       linear-gradient(
         155deg,
-        color-mix(in srgb, var(--accent-primary) 5%, var(--surface-elevated)) 0%,
+        color-mix(
+            in srgb,
+            var(--contact-reason-accent) 7%,
+            var(--surface-elevated)
+          )
+          0%,
         var(--surface-elevated) 58%
       ),
       var(--surface-elevated);
+    box-shadow: var(--shadow-panel-soft);
     transition:
       transform 0.18s ease,
-      box-shadow 0.18s ease;
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+
+    &:nth-child(2) {
+      --contact-reason-accent: var(--accent-primary);
+    }
+
+    &:nth-child(3) {
+      --contact-reason-accent: color-mix(
+        in srgb,
+        var(--accent-secondary) 70%,
+        var(--accent-primary)
+      );
+    }
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(var(--accent-primary-rgb), 0.12);
-    }
-  }
-
-  @keyframes icon-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-5px);
-    }
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .contact-reasons__item {
-    animation: fade-in-up 0.4s ease both;
-
-    &:nth-child(1) {
-      animation-delay: 0ms;
-    }
-    &:nth-child(2) {
-      animation-delay: 80ms;
-    }
-    &:nth-child(3) {
-      animation-delay: 160ms;
-    }
-
-    &:hover .contact-reasons__icon-wrap {
-      animation: icon-float 0.6s ease infinite;
+      box-shadow: var(--shadow-lift);
+      border-color: color-mix(
+        in srgb,
+        var(--contact-reason-accent) 20%,
+        var(--border-subtle)
+      );
     }
   }
 
@@ -341,26 +350,37 @@ const pageTitle = "Contact — Sourcier";
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background-color: rgba(var(--accent-primary-rgb), 0.1);
-    transition: background-color 0.18s ease;
+    background-color: color-mix(
+      in srgb,
+      var(--contact-reason-accent) 10%,
+      var(--surface-elevated)
+    );
+    transition:
+      background-color 0.18s ease,
+      transform 0.18s ease;
 
     .contact-reasons__item:hover & {
-      background-color: rgba(var(--accent-primary-rgb), 0.18);
+      background-color: color-mix(
+        in srgb,
+        var(--contact-reason-accent) 16%,
+        var(--surface-elevated)
+      );
+      transform: translateY(-2px);
     }
   }
 
   .contact-reasons__icon {
-    color: var(--accent-primary);
+    color: var(--contact-reason-accent);
     line-height: 1;
     display: flex;
   }
 
   .contact-reasons__title {
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    text-transform: none;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     margin-bottom: 0.25rem;
   }
@@ -374,9 +394,30 @@ const pageTitle = "Contact — Sourcier";
 
   /* ── Form intro ────────────────────────────────────────────── */
   .contact-form__intro {
-    font-size: 0.9375rem;
+    margin: 0;
+    max-width: 60ch;
+    font-size: 1rem;
+    line-height: 1.8;
     color: var(--text-primary);
-    margin-bottom: 2rem;
+  }
+
+  .contact-form__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    background:
+      radial-gradient(
+        ellipse 100% 100% at 100% 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
+        transparent 56%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--accent-secondary) 4%, var(--surface-elevated))
+          0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
   }
 
   /* ── Select styling ────────────────────────────────────────── */
@@ -397,6 +438,65 @@ const pageTitle = "Contact — Sourcier";
     option {
       color: var(--text-primary);
       background-color: var(--surface-elevated);
+    }
+  }
+
+  .contact-sidebar {
+    padding-top: 0;
+
+    @media (min-width: 768px) {
+      padding-top: 0.25rem;
+      position: sticky;
+      top: 5rem;
+      align-self: start;
+    }
+  }
+
+  .contact-sidebar__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-sidebar__heading {
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-sidebar__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contact-sidebar__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-soft);
+    background: color-mix(in srgb, var(--text-primary) 2.5%, transparent);
+    transition:
+      padding-left 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+
+    &:hover {
+      padding-left: 1.2rem;
+      border-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 16%,
+        var(--border-subtle)
+      );
+      background: color-mix(in srgb, var(--accent-secondary) 5%, transparent);
+
+      .contact-sidebar__link-label {
+        color: var(--accent-secondary);
+      }
+
+      .contact-sidebar__link-icon {
+        color: var(--accent-secondary);
+      }
     }
   }
 </style>
