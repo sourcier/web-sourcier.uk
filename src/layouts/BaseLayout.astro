@@ -35,7 +35,7 @@ const siteName = "Sourcier";
 <html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <!-- Runs synchronously before first paint to prevent flash of unstyled theme -->
+    <!-- Runs synchronously before first paint to prevent flash of the stored theme -->
     <script is:inline>
       const stored = localStorage.getItem("theme");
       if (stored === "dark") {

@@ -11,18 +11,18 @@
   );
   --accent-primary-rgb: 232, 0, 106;
   --accent-primary-deep: #c4005a;
-  --accent-secondary: #295c45;
-  --accent-secondary-rgb: 41, 92, 69;
-  --accent-secondary-deep: #173326;
+  --accent-secondary: #2a7d5b;
+  --accent-secondary-rgb: 42, 125, 91;
+  --accent-secondary-deep: #1b5a40;
 
   --text-primary: #0f0f0f;
   --text-muted: #6b6b6b;
   --text-on-strong: #ffffff;
   --text-on-strong-rgb: 255, 255, 255;
-  --surface-page: #ffffff;
-  --surface-elevated: #ffffff;
-  --surface-page-top: #fff9fc;
-  --surface-page-bottom: var(--surface-page);
+  --surface-page: #f2ece4;
+  --surface-elevated: #fbf8f3;
+  --surface-page-top: #f7f1eb;
+  --surface-page-bottom: #efe8df;
 
   --bulma-primary-h: var(--accent-primary-h);
   --bulma-primary-s: var(--accent-primary-s);
@@ -93,8 +93,8 @@
   --shadow-secondary-soft: 0 8px 18px var(--accent-secondary-alpha-14);
   --shadow-panel-soft: 0 18px 40px rgba(var(--shadow-rgb), 0.06);
   --shadow-accent-primary-focus: 0 0 0 4px var(--accent-primary-alpha-20);
-  --page-atmosphere-primary: var(--accent-primary-alpha-08);
-  --page-atmosphere-secondary: var(--accent-secondary-alpha-08);
+  --page-atmosphere-primary: rgba(var(--accent-primary-rgb), 0.05);
+  --page-atmosphere-secondary: rgba(var(--accent-secondary-rgb), 0.06);
   --page-backdrop-top: var(--surface-page-top);
   --page-backdrop-bottom: var(--surface-page-bottom);
 
