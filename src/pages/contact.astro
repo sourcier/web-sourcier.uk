@@ -382,20 +382,21 @@ const pageTitle = "Contact — Sourcier";
   /* ── Select styling ────────────────────────────────────────── */
   select.contact-form__input {
     appearance: none;
+    background-color: var(--surface-elevated);
     background-image: var(--contact-select-caret-icon);
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 0.75rem 0.75rem;
+    padding-right: 2.75rem;
     cursor: pointer;
 
     &.is-placeholder {
       color: var(--text-muted);
-      opacity: 0.6;
     }
 
     option {
       color: var(--text-primary);
-      opacity: 1;
+      background-color: var(--surface-elevated);
     }
   }
 </style>

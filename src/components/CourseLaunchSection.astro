@@ -84,7 +84,7 @@
             id="course-launch-email"
             name="email"
             type="email"
-            class="input course-launch__input"
+            class="course-launch__input"
             placeholder="your@email.com"
             autocomplete="email"
             required
@@ -322,17 +322,35 @@
   }
 
   .course-launch__input {
+    width: 100%;
+    padding: 0.75rem 1rem;
     min-height: 2.75rem;
     border-radius: var(--radius-tight);
     border: 1px solid var(--border-subtle);
-    background: var(--surface-page);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 92%, var(--surface-page)) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
     color: var(--text-primary);
+    font-family: "Barlow", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow: 0 1px 0 rgba(var(--shadow-rgb), 0.05);
+    appearance: none;
 
-    &:focus {
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    &:focus-visible {
       border-color: var(--accent-secondary);
-      box-shadow: 0 0 0 2px
-        color-mix(in srgb, var(--accent-secondary) 20%, transparent);
-      outline: none;
+      outline: 3px solid
+        color-mix(in srgb, var(--accent-secondary) 24%, transparent);
+      outline-offset: 0;
     }
   }
 
