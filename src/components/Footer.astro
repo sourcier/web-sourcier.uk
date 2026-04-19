@@ -84,7 +84,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: clamp(0.95rem, 1.8vw, 1.3rem);
   }
 
   .footer__top {
@@ -123,6 +123,7 @@
     align-items: center;
     gap: 1.15rem;
     padding-top: 1.25rem;
+    margin-top: clamp(0.25rem, 1vw, 0.6rem);
 
     @media (min-width: 768px) {
       flex-direction: row;

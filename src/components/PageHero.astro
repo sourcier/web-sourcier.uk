@@ -121,6 +121,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     --page-hero-ink: var(--text-primary);
     --page-hero-muted: color-mix(in srgb, var(--text-primary) 72%, transparent);
     --page-hero-soft: color-mix(in srgb, var(--text-primary) 56%, transparent);
+    --page-hero-kicker-ink: var(--page-hero-accent);
     --page-hero-kicker-bg: color-mix(
       in srgb,
       var(--page-hero-accent) 10%,
@@ -278,6 +279,21 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       transparent
     );
     --page-hero-accent-alt: var(--accent-secondary);
+    --page-hero-kicker-ink: color-mix(
+      in srgb,
+      var(--text-primary) 84%,
+      var(--accent-secondary-deep)
+    );
+    --page-hero-kicker-bg: color-mix(
+      in srgb,
+      var(--accent-secondary) 10%,
+      var(--surface-elevated)
+    );
+    --page-hero-kicker-border: color-mix(
+      in srgb,
+      var(--accent-secondary) 22%,
+      var(--border-subtle)
+    );
   }
 
   .page-hero__inner {
@@ -419,7 +435,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--page-hero-accent);
+    color: var(--page-hero-kicker-ink);
     border: 1px solid var(--page-hero-kicker-border);
     border-radius: var(--radius-pill);
     background: var(--page-hero-kicker-bg);
