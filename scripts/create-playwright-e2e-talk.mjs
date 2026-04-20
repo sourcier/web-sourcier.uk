@@ -922,13 +922,141 @@ function addPyramidSlide(pptx) {
   addFooter(slide, "sourcier.uk / Use E2E for critical journeys");
 }
 
+function addSkillDefinitionSlide(pptx) {
+  const slide = pptx.addSlide();
+
+  addHeader(
+    slide,
+    "What the skill actually is",
+    "A reusable Copilot SKILL.md file that tells Copilot when and how to use Playwright MCP.",
+  );
+
+  addCard(slide, {
+    x: 0.55,
+    y: 2.35,
+    w: 5.95,
+    h: 4.2,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
+  });
+  addCard(slide, {
+    x: 6.83,
+    y: 2.35,
+    w: 5.95,
+    h: 4.2,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
+  });
+
+  slide.addText("Skill file", {
+    x: 0.9,
+    y: 2.72,
+    w: 5.0,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 24,
+  });
+
+  addCodePanel(slide, {
+    x: 0.9,
+    y: 3.14,
+    w: 5.02,
+    h: 1.88,
+    title: "playwright-explore-website/SKILL.md",
+    lines: [
+      "~/.copilot/skills/",
+      "---",
+      "name: playwright-explore-website",
+      "description: Website exploration for testing",
+      "using Playwright MCP",
+      "---",
+    ],
+    fontSize: 9.9,
+    lineGap: 0.23,
+    lineHeight: 0.18,
+  });
+
+  addCard(slide, {
+    x: 0.9,
+    y: 5.28,
+    w: 5.02,
+    h: 0.9,
+    fill: COLORS.soft,
+    line: COLORS.borderWarm,
+  });
+  slide.addText(
+    "Think of it as a reusable prompt with guardrails, not a test file and not a browser script.",
+    {
+      x: 1.15,
+      y: 5.57,
+      w: 4.55,
+      h: 0.22,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 12.8,
+      align: "center",
+      fit: "shrink",
+    },
+  );
+
+  slide.addText("What it tells Copilot", {
+    x: 7.18,
+    y: 2.72,
+    w: 5.0,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 24,
+  });
+
+  addBulletList(
+    slide,
+    [
+      "How to discover the skill: the name and description are in frontmatter.",
+      "How to recover if Playwright MCP is missing: bootstrap setup instructions are built in.",
+      "How to explore: open the provided URL and inspect the rendered UI directly.",
+      "What to capture: flows, likely locators, and expected outcomes.",
+      "What to return: concise findings, candidate tests, and cleaned-up artifacts.",
+    ],
+    { x: 7.18, y: 3.18, w: 5.0, h: 2.95 },
+  );
+
+  addCard(slide, {
+    x: 7.18,
+    y: 5.28,
+    w: 5.02,
+    h: 0.9,
+    fill: COLORS.pinkSoft,
+    line: COLORS.pink,
+  });
+  slide.addText(
+    "The file has four jobs: discovery, setup, execution rules, and output requirements.",
+    {
+      x: 7.42,
+      y: 5.57,
+      w: 4.54,
+      h: 0.2,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 13,
+      align: "center",
+      fit: "shrink",
+    },
+  );
+
+  addFooter(slide, "sourcier.uk / A skill is a reusable instruction file");
+}
+
 function addCatchSlide(pptx) {
   const slide = pptx.addSlide();
 
   addHeader(
     slide,
     "What the skill does",
-    "A small Copilot skill backed by Playwright MCP and a real browser session.",
+    "Once Copilot loads the skill, this is the shape of the output it brings back.",
   );
 
   addCard(slide, {
@@ -1023,6 +1151,176 @@ function addCatchSlide(pptx) {
   );
 
   addFooter(slide, "sourcier.uk / Explore first, automate second");
+}
+
+function addDemoSlide(pptx) {
+  const slide = pptx.addSlide();
+
+  addHeader(
+    slide,
+    "Live demo: exploration output",
+    "Copilot uses a real browser on the local site, then returns grounded inputs for a Playwright test.",
+  );
+
+  addCard(slide, {
+    x: 0.55,
+    y: 2.2,
+    w: 5.95,
+    h: 4.55,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
+  });
+  addCard(slide, {
+    x: 6.83,
+    y: 2.2,
+    w: 5.95,
+    h: 4.55,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
+  });
+
+  slide.addText("Prompt we run", {
+    x: 0.9,
+    y: 2.55,
+    w: 2.8,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 22,
+  });
+
+  addCodePanel(slide, {
+    x: 0.9,
+    y: 2.95,
+    w: 5.05,
+    h: 2.08,
+    title: "localhost demo",
+    lines: [
+      "Use the playwright-explore-website skill",
+      "on http://localhost:8888/.",
+      "Explore the home page, one blog post,",
+      "and the search flow.",
+      "Document likely stable locators,",
+      "expected outcomes, and one draft test.",
+    ],
+    fontSize: 9.6,
+    lineGap: 0.22,
+    lineHeight: 0.18,
+  });
+
+  addCard(slide, {
+    x: 0.9,
+    y: 5.32,
+    w: 5.05,
+    h: 0.92,
+    fill: COLORS.pinkSoft,
+    line: COLORS.pink,
+  });
+  slide.addText(
+    "Runs against http://localhost:8888/ with Playwright MCP controlling a real browser session.",
+    {
+      x: 1.15,
+      y: 5.58,
+      w: 4.55,
+      h: 0.28,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 13,
+      align: "center",
+      fit: "shrink",
+    },
+  );
+
+  slide.addText("What the demo shows", {
+    x: 7.18,
+    y: 2.55,
+    w: 2.8,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 22,
+  });
+
+  const steps = [
+    "Copilot opens a real browser on the local site.",
+    "It explores the home page, one post, and search.",
+    "It returns the user journey and likely stable locators.",
+    "It proposes expected outcomes and one draft Playwright test.",
+    "We stop there: exploration first, final test authoring later.",
+  ];
+
+  steps.forEach((step, index) => {
+    const y = 3.02 + index * 0.56;
+    const isStopStep = index === steps.length - 1;
+
+    slide.addShape("roundRect", {
+      x: 7.18,
+      y,
+      w: 0.42,
+      h: 0.42,
+      rectRadius: 0.08,
+      fill: { color: isStopStep ? COLORS.green : COLORS.paper },
+      line: {
+        color: isStopStep ? COLORS.greenDeep : COLORS.border,
+        pt: 1,
+      },
+    });
+
+    slide.addText(String(index + 1), {
+      x: 7.18,
+      y: y + 0.09,
+      w: 0.42,
+      h: 0.16,
+      fontFace: FONT.heading,
+      bold: true,
+      color: isStopStep ? COLORS.paper : COLORS.ink,
+      fontSize: 15,
+      align: "center",
+      margin: 0,
+    });
+
+    slide.addText(step, {
+      x: 7.78,
+      y: y + 0.01,
+      w: 4.35,
+      h: 0.34,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 13.5,
+      fit: "shrink",
+      margin: 0,
+    });
+  });
+
+  addCard(slide, {
+    x: 7.18,
+    y: 5.92,
+    w: 5.02,
+    h: 0.82,
+    fill: COLORS.soft,
+    line: COLORS.borderWarm,
+  });
+  slide.addText(
+    "Key message: AI helps with discovery. Playwright still handles the real automation and verification.",
+    {
+      x: 7.42,
+      y: 6.17,
+      w: 4.54,
+      h: 0.22,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 12.5,
+      align: "center",
+      fit: "shrink",
+    },
+  );
+
+  addFooter(
+    slide,
+    "sourcier.uk / Real browser exploration, then real Playwright automation",
+  );
 }
 
 function addWhyPlaywrightSlide(pptx) {
@@ -1639,7 +1937,9 @@ async function createTalkDeck() {
   addSpeakerIntroSlide(pptx);
   addHookSlide(pptx);
   addPyramidSlide(pptx);
+  addSkillDefinitionSlide(pptx);
   addCatchSlide(pptx);
+  addDemoSlide(pptx);
   addWhyPlaywrightSlide(pptx);
   addFirstTestSlide(pptx);
   addReliabilitySlide(pptx);
