@@ -1,0 +1,499 @@
+---
+import SharePost from "./SharePost.astro";
+import { tagSlug } from "../utils/tags";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  coverImage?: { src: string; alt?: string };
+  tags?: string[];
+  date?: string;
+  readingTime?: string;
+  crumbs?: Crumb[];
+  shareUrl?: string;
+}
+
+const {
+  title,
+  subtitle,
+  coverImage,
+  tags,
+  date,
+  readingTime,
+  crumbs = [],
+  shareUrl,
+} = Astro.props;
+
+const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
+const facts = [
+  date ? { label: "Published", value: date } : null,
+  readingTime ? { label: "Read time", value: readingTime } : null,
+].filter(Boolean) as { label: string; value: string }[];
+const hasCover = Boolean(coverImage?.src);
+const hasShare = Boolean(shareUrl);
+---
+
+<header class:list={["post-hero", { "post-hero--with-cover": hasCover }]}>
+  <div class="container">
+    <div class="post-hero__frame">
+      {
+        hasCover && (
+          <div class="post-hero__cover-shell" aria-hidden="true">
+            <img
+              class="post-hero__cover"
+              src={coverImage!.src}
+              alt=""
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        )
+      }
+      <div class="post-hero__inner">
+        <div class="post-hero__content">
+          {
+            hasCover && coverImage?.alt && (
+              <span class="visually-hidden">Cover image: {coverImage.alt}</span>
+            )
+          }
+
+          {
+            allCrumbs.length > 0 && (
+              <nav aria-label="Breadcrumb" class="post-hero__breadcrumbs">
+                <ol
+                  class="post-hero__breadcrumb-list"
+                  itemscope
+                  itemtype="https://schema.org/BreadcrumbList"
+                >
+                  {allCrumbs.map((crumb, index) => {
+                    const isLast = index === allCrumbs.length - 1;
+                    return (
+                      <li
+                        class="post-hero__breadcrumb-item"
+                        itemprop="itemListElement"
+                        itemscope
+                        itemtype="https://schema.org/ListItem"
+                      >
+                        {!isLast && crumb.href ? (
+                          <a
+                            href={crumb.href}
+                            class="post-hero__breadcrumb-link"
+                            itemprop="item"
+                          >
+                            <span itemprop="name">{crumb.label}</span>
+                          </a>
+                        ) : (
+                          <span
+                            class="post-hero__breadcrumb-current"
+                            aria-current="page"
+                            itemprop="name"
+                          >
+                            {crumb.label}
+                          </span>
+                        )}
+                        <meta itemprop="position" content={String(index + 1)} />
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+            )
+          }
+
+          {
+            tags && tags.length > 0 && (
+              <div class="post-hero__tags" aria-label="Post topics">
+                {tags.map((tag: string) => (
+                  <a href={`/tags/${tagSlug(tag)}`} class="post-hero__tag">
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+
+          <h1 class="post-hero__title">{title}</h1>
+          {subtitle && <p class="post-hero__subtitle">{subtitle}</p>}
+
+          {
+            facts.length > 0 && (
+              <dl class="post-hero__facts">
+                {facts.map((fact) => (
+                  <div class="post-hero__fact">
+                    <dt class="post-hero__fact-label">{fact.label}</dt>
+                    <dd class="post-hero__fact-value">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )
+          }
+
+          {
+            hasShare && (
+              <SharePost title={title} url={shareUrl!} variant="hero" />
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style lang="scss">
+  .post-hero {
+    padding: clamp(1.4rem, 3vw, 2.4rem) 0 0;
+  }
+
+  .post-hero__frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 10%, var(--border-subtle));
+    border-radius: calc(var(--radius-panel-large) + 2px);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-elevated) 96%, white) 0%,
+      color-mix(in srgb, var(--surface-page) 24%, var(--surface-elevated)) 100%
+    );
+    box-shadow: 0 18px 40px rgba(var(--shadow-rgb), 0.08);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: min(18rem, 42%);
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-secondary) 0%,
+        color-mix(in srgb, var(--accent-primary) 36%, var(--accent-secondary))
+          72%,
+        transparent 100%
+      );
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          var(--surface-elevated) 0%,
+          color-mix(in srgb, var(--surface-elevated) 96%, transparent) 24%,
+          color-mix(in srgb, var(--surface-page) 58%, transparent) 42%,
+          transparent 56%
+        ),
+        linear-gradient(
+          135deg,
+          rgba(var(--overlay-rgb), 0.02) 0%,
+          rgba(var(--overlay-rgb), 0) 100%
+        ),
+        radial-gradient(
+          circle at 100% 0%,
+          color-mix(in srgb, var(--accent-secondary) 6%, transparent) 0%,
+          transparent 42%
+        ),
+        linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(var(--overlay-rgb), 0.03) 48%,
+          rgba(var(--overlay-rgb), 0.005) 100%
+        ),
+        linear-gradient(
+          94deg,
+          color-mix(in srgb, var(--surface-elevated) 18%, transparent) 0%,
+          color-mix(in srgb, var(--surface-page) 8%, transparent) 24%,
+          rgba(var(--overlay-rgb), 0.02) 72%,
+          transparent 100%
+        );
+      pointer-events: none;
+    }
+  }
+
+  .post-hero__cover-shell {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 76%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .post-hero__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 52% 18%;
+  }
+
+  .post-hero__inner {
+    padding: clamp(1.35rem, 3vw, 2.35rem);
+  }
+
+  .post-hero__content {
+    min-width: 0;
+    max-width: min(48rem, 100%);
+    position: relative;
+    z-index: 1;
+  }
+
+  .post-hero__breadcrumbs {
+    margin-bottom: 1rem;
+  }
+
+  .post-hero__breadcrumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .post-hero__breadcrumb-item {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: "/";
+      margin: 0 0.5rem;
+      color: color-mix(in srgb, var(--text-primary) 28%, transparent);
+      font-weight: 400;
+    }
+  }
+
+  .post-hero__breadcrumb-link {
+    color: color-mix(in srgb, var(--text-primary) 74%, transparent);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--accent-secondary);
+    }
+  }
+
+  .post-hero__breadcrumb-current {
+    color: var(--text-primary);
+  }
+
+  .post-hero__title {
+    margin: 0;
+    max-width: 14.5ch;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(2.55rem, 6vw, 4.9rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  .post-hero__subtitle {
+    margin: 1rem 0 0;
+    max-width: 34ch;
+    position: relative;
+    z-index: 0;
+    font-size: clamp(1.02rem, 1.7vw, 1.18rem);
+    font-weight: 500;
+    line-height: 1.72;
+    color: var(--text-primary);
+    text-wrap: pretty;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -0.5rem -3rem -0.45rem -0.85rem;
+      background:
+        radial-gradient(
+          circle at 18% 50%,
+          color-mix(
+              in srgb,
+              var(--surface-elevated) 94%,
+              rgba(var(--overlay-rgb), 0.02)
+            )
+            0%,
+          color-mix(
+              in srgb,
+              var(--surface-page) 82%,
+              rgba(var(--overlay-rgb), 0.03)
+            )
+            38%,
+          color-mix(in srgb, var(--surface-page) 42%, transparent) 68%,
+          transparent 100%
+        ),
+        linear-gradient(
+          92deg,
+          color-mix(
+              in srgb,
+              var(--surface-elevated) 88%,
+              rgba(var(--overlay-rgb), 0.03)
+            )
+            0%,
+          color-mix(
+              in srgb,
+              var(--surface-page) 74%,
+              rgba(var(--overlay-rgb), 0.04)
+            )
+            48%,
+          color-mix(in srgb, var(--surface-page) 26%, transparent) 76%,
+          transparent 100%
+        );
+      filter: blur(12px);
+      pointer-events: none;
+      z-index: -1;
+    }
+  }
+
+  .post-hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.15rem;
+    margin: 1.35rem 0 0;
+    max-width: 46rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(var(--overlay-rgb), 0.12);
+  }
+
+  .post-hero__fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+    margin: 0;
+    padding-right: 1.15rem;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 0.15rem;
+      right: 0;
+      bottom: 0.15rem;
+      width: 1px;
+      background: rgba(var(--overlay-rgb), 0.12);
+    }
+  }
+
+  .post-hero__fact-label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  .post-hero__fact-value {
+    margin: 0;
+    font-size: 0.96rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+  }
+
+  .post-hero__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0 0 0.95rem;
+  }
+
+  .post-hero__tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.34rem 0.75rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid
+      color-mix(
+        in srgb,
+        rgba(var(--overlay-rgb), 0.14) 36%,
+        var(--border-subtle)
+      );
+    background: color-mix(
+      in srgb,
+      var(--surface-elevated) 72%,
+      rgba(var(--overlay-rgb), 0.06)
+    );
+    color: color-mix(in srgb, var(--accent-secondary) 62%, var(--text-primary));
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      transform 0.15s ease;
+    backdrop-filter: blur(5px);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--accent-primary);
+      border-color: color-mix(in srgb, var(--accent-primary) 36%, transparent);
+      background: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+      transform: translateY(-1px);
+    }
+  }
+
+  .post-hero:not(.post-hero--with-cover) .post-hero__title {
+    max-width: 16ch;
+  }
+
+  .post-hero:not(.post-hero--with-cover) .post-hero__frame {
+    background-position: center;
+  }
+
+  .post-hero:not(.post-hero--with-cover) .post-hero__cover {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .post-hero__frame {
+      border-radius: var(--radius-panel);
+    }
+
+    .post-hero__cover-shell {
+      width: 100%;
+    }
+
+    .post-hero__cover {
+      object-position: 50% 14%;
+    }
+
+    .post-hero__title {
+      max-width: none;
+    }
+
+    .post-hero__facts {
+      gap: 0.75rem;
+      padding-top: 0.85rem;
+    }
+
+    .post-hero__fact {
+      width: 100%;
+      padding-right: 0;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+</style>

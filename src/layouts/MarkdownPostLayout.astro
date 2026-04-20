@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import PageHero from "../components/PageHero.astro";
+import PostHero from "../components/PostHero.astro";
 import Comments from "../components/Comments.astro";
 import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
-import SharePost from "../components/SharePost.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import SupportCTA from "../components/SponsorCTA.astro";
 
@@ -62,25 +61,23 @@ const thumbSrc = frontmatter.cover?.thumbnail
         />
       )
     }
-    <PageHero
+    <PostHero
       title={frontmatter.title}
       subtitle={frontmatter.subTitle}
       coverImage={frontmatter.cover
-        ? { src: frontmatter.cover.image.src }
+        ? { src: frontmatter.cover.image.src, alt: frontmatter.cover.alt }
         : undefined}
       tags={frontmatter.tags}
-      author={frontmatter.author}
       date={formattedDate ?? undefined}
       readingTime={readingTime}
       crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
       shareUrl={Astro.url.href}
-      shareTitle={frontmatter.title}
     />
 
     <div class="post__body">
       <div class="post__layout">
         <div class="post__layout__content">
-          <div class="post__content content">
+          <div class="post__content content" id="post-content">
             <slot />
           </div>
         </div>
@@ -102,7 +99,6 @@ const thumbSrc = frontmatter.cover?.thumbnail
             )
           }
           <SupportCTA mode="support" placement="sidebar" />
-          <SharePost title={frontmatter.title} url={Astro.url.href} vertical />
           <TagsSidebar />
         </aside>
       </div>
