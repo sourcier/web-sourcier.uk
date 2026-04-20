@@ -31,13 +31,13 @@ const pageTitle = "Contact — Sourcier";
 
 <BaseLayout
   pageTitle={pageTitle}
-  description="Get in touch about the day I set aside each month for charity or community work, career-transition support, engineering growth, or help improving how your team builds software."
+  description="Get in touch about courses, the day I set aside each month for charity or community work, career-transition support, engineering growth, or help improving how your team builds software."
 >
   <PageHero
     kicker="Get in touch"
     title="Get support"
     tone="secondary"
-    subtitle="The day I set aside each month for charity or community work, career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
+    subtitle="Courses, the day I set aside each month for charity or community work, career-transition mentoring, engineering growth, and practical help for teams improving how they build software."
   />
 
   <!-- Contact reasons -->
@@ -90,11 +90,11 @@ const pageTitle = "Contact — Sourcier";
         <div class="contact-form-col">
           <div class="contact-form__panel page-panel page-panel--secondary">
             <p class="contact-form__intro">
-              If you are changing careers, trying to level up as an engineer,
-              need help improving how your team builds software, or you work
-              with a charity or community organisation that could use the day I
-              set aside each month, send a note and I will get back to you as
-              soon as I can.
+              If you want to ask about the courses, are changing careers, trying
+              to level up as an engineer, need help improving how your team
+              builds software, or you work with a charity or community
+              organisation that could use the day I set aside each month, send a
+              note and I will get back to you as soon as I can.
             </p>
 
             <form
@@ -146,6 +146,9 @@ const pageTitle = "Contact — Sourcier";
                   required
                 >
                   <option value="" disabled selected>Select a reason…</option>
+                  <option value="course-enquiry"
+                    >Course questions or enrolment</option
+                  >
                   <option value="career-transition">Transition into tech</option
                   >
                   <option value="career-growth">Career growth</option>

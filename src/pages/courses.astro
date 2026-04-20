@@ -1,0 +1,863 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import CourseInterestForm from "../components/CourseInterestForm.astro";
+import {
+  courseBundle,
+  courseLaunchLabel,
+  courseOffers,
+  courseSupportOffer,
+} from "../data/courses";
+
+const learningModel = [
+  {
+    title: "Buy the full bundle or one course",
+    body: "Take the end-to-end bundle for broader context, or pick the single course that solves your next problem right now.",
+  },
+  {
+    title: "Study self-paced",
+    body: "Work through the material on your own schedule without waiting for a live cohort or weekly timetable.",
+  },
+  {
+    title: "1:1 support is included",
+    body: `${courseSupportOffer.singleDetail} ${courseSupportOffer.bundleDetail} ${courseSupportOffer.additionalSessionsDetail}`,
+  },
+];
+
+const supportMoments = [
+  "Project reviews when you want a second pair of eyes on architecture, code, or delivery decisions.",
+  "Debugging sessions when you are stuck and need to move faster than a forum thread or recorded lesson can help.",
+  "Roadmap resets when you are not sure what to learn next or how to connect isolated topics into real project work.",
+];
+
+const purchasePaths = [
+  {
+    title: "Take the full bundle",
+    body: "Best if you want the whole web stack to connect: foundations, frontend, backend, and delivery in one arc as the launch opens.",
+    href: "/contact?reason=course-enquiry#contact-form",
+    label: "Ask about the bundle launch",
+  },
+  {
+    title: "Start with one course",
+    body: "Best if you already know where the gap is and want focused help without buying more than you need when access opens.",
+    href: "/contact?reason=course-enquiry#contact-form",
+    label: "Ask about single-course launch access",
+  },
+];
+---
+
+<BaseLayout
+  pageTitle="Courses — Sourcier"
+  description="Launching soon: self-paced web development courses in web foundations, frontend JavaScript, backend JavaScript, and DevOps, available individually or as a full bundle with included 1:1 support."
+>
+  <PageHero
+    kicker="Courses"
+    title="Choose the full bundle or start with one course"
+    tone="secondary"
+    subtitle="Launching soon: self-paced courses in web foundations, frontend, backend, and DevOps. Buy the full bundle for an end-to-end route, or pick the course you need right now. Each course includes a 90-minute 1:1 support pack split across up to three calls, and the full bundle includes six hours of support across the programme."
+  />
+
+  <section
+    class="section courses-launch-note flow-section flow-section--tight"
+    aria-labelledby="courses-launch-note-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="courses-launch-note__panel page-panel">
+        <div class="courses-launch-note__copy">
+          <p class="courses-launch-note__status">{courseLaunchLabel}</p>
+          <h2
+            class="courses-launch-note__title"
+            id="courses-launch-note-heading"
+          >
+            Founding enrolment opens soon
+          </h2>
+          <p class="courses-launch-note__body">
+            These courses are in their pre-launch window now. Join the launch
+            list if you want first access, launch updates, and the earliest
+            enrolment details.
+          </p>
+        </div>
+        <div class="courses-launch-note__actions">
+          <a href="#course-interest-heading" class="button is-ink is-medium">
+            Join the launch list
+          </a>
+          <a
+            href="/contact?reason=course-enquiry#contact-form"
+            class="courses-launch-note__link"
+          >
+            Ask about launch access
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section courses-model flow-section flow-section--loose"
+    aria-labelledby="courses-model-heading"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label section-label--secondary">How it works</p>
+      <h2 class="courses-model__heading" id="courses-model-heading">
+        A practical offer built around flexibility, not fixed cohort dates
+      </h2>
+      <div class="courses-model__grid">
+        {
+          learningModel.map((item) => (
+            <article class="courses-model__card">
+              <h3 class="courses-model__card-title">{item.title}</h3>
+              <p class="courses-model__card-body">{item.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section courses-bundle flow-section"
+    aria-labelledby="courses-bundle-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="courses-bundle__panel">
+        <div class="courses-bundle__intro">
+          <p class="courses-bundle__kicker">Full bundle</p>
+          <div class="courses-bundle__chips" aria-label="Bundle details">
+            <span class="courses-bundle__chip courses-bundle__chip--status">
+              {courseLaunchLabel}
+            </span>
+            <span class="courses-bundle__chip">4 courses</span>
+            <span class="courses-bundle__chip">Self-paced</span>
+            <span class="courses-bundle__chip"
+              >{courseSupportOffer.singleShort}</span
+            >
+          </div>
+          <h2 class="courses-bundle__title" id="courses-bundle-heading">
+            {courseBundle.title}
+          </h2>
+          <p class="courses-bundle__body">{courseBundle.summary}</p>
+          <ul class="courses-bundle__benefits" role="list">
+            {courseBundle.benefits.map((benefit) => <li>{benefit}</li>)}
+          </ul>
+          <div class="courses-bundle__actions">
+            <a
+              href="/contact?reason=course-enquiry#contact-form"
+              class="button is-ink is-medium"
+            >
+              Ask about the full bundle
+            </a>
+            <a href="#course-catalogue" class="courses-bundle__link">
+              Compare the individual courses
+            </a>
+          </div>
+        </div>
+
+        <div class="courses-bundle__aside page-panel page-panel--secondary">
+          <p class="courses-bundle__aside-label">Good fit for</p>
+          <ul class="courses-bundle__audience" role="list">
+            {courseBundle.audience.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="courses-bundle__support">
+            <p class="courses-bundle__support-label">Included support</p>
+            <p class="courses-bundle__support-copy">
+              {courseSupportOffer.singleDetail}
+            </p>
+            <p class="courses-bundle__support-copy">
+              {courseSupportOffer.bundleDetail}
+            </p>
+            <p class="courses-bundle__support-copy">
+              {courseSupportOffer.additionalSessionsDetail}
+            </p>
+          </div>
+        </div>
+
+        <div class="courses-bundle__course-grid">
+          {
+            courseOffers.map((course) => (
+              <a
+                class="courses-bundle__course-card"
+                href={`#course-${course.slug}`}
+                aria-label={`Jump to ${course.title} details`}
+              >
+                <p class="courses-bundle__course-focus">{course.focus}</p>
+                <h3 class="courses-bundle__course-title">{course.title}</h3>
+                <p class="courses-bundle__course-copy">{course.teaser}</p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section course-catalogue flow-section"
+    aria-labelledby="course-catalogue-heading"
+    id="course-catalogue"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label section-label--secondary">Course catalogue</p>
+      <h2 class="course-catalogue__heading" id="course-catalogue-heading">
+        Four focused courses you can take on their own or as one connected
+        bundle
+      </h2>
+      <div class="course-catalogue__grid">
+        {
+          courseOffers.map((course) => (
+            <article class="course-card" id={`course-${course.slug}`}>
+              <p class="course-card__status">{courseLaunchLabel}</p>
+              <p class="course-card__eyebrow">{course.focus}</p>
+              <h3 class="course-card__title">{course.title}</h3>
+              <p class="course-card__summary">{course.summary}</p>
+
+              <div class="course-card__details">
+                <div class="course-card__detail-block">
+                  <p class="course-card__label">Topics</p>
+                  <ul class="course-card__list" role="list">
+                    {course.topics.map((topic) => (
+                      <li>{topic}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="course-card__detail-block">
+                  <p class="course-card__label">You will leave with</p>
+                  <ul class="course-card__list" role="list">
+                    {course.outcomes.map((outcome) => (
+                      <li>{outcome}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <a
+                href="/contact?reason=course-enquiry#contact-form"
+                class="course-card__cta"
+              >
+                Ask about this course
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section course-support flow-section"
+    aria-labelledby="course-support-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="course-support__grid">
+        <article class="course-support__panel page-panel page-panel--secondary">
+          <p class="course-support__kicker">1:1 support</p>
+          <h2 class="course-support__title" id="course-support-heading">
+            1:1 that feels usable, not token
+          </h2>
+          <p class="course-support__body">
+            The recorded material and notes are built for independent study, but
+            the support offer needs to be strong enough to matter. That is why
+            each individual course includes a 90-minute 1:1 support pack you can
+            split across up to three calls, and the full bundle includes six
+            hours across the programme. If you need more help after that,
+            additional 1:1 sessions can be purchased separately.
+          </p>
+          <ul class="course-support__list" role="list">
+            {supportMoments.map((item) => <li>{item}</li>)}
+          </ul>
+          <a
+            href="/contact?reason=course-enquiry#contact-form"
+            class="course-support__link"
+          >
+            Ask about the included support pack
+          </a>
+        </article>
+
+        <article class="course-support__panel page-panel">
+          <p class="course-support__kicker">Choose your route</p>
+          <h2 class="course-support__title">
+            Bundle access or individual enrolment
+          </h2>
+          <p class="course-support__body">
+            The offer is designed so you can commit at the level that makes
+            sense for you now, instead of forcing the same path on everyone.
+          </p>
+          <div class="course-support__path-grid">
+            {
+              purchasePaths.map((path) => (
+                <article class="course-support__path-card">
+                  <h3 class="course-support__path-title">{path.title}</h3>
+                  <p class="course-support__path-body">{path.body}</p>
+                  <a href={path.href} class="course-support__path-link">
+                    {path.label}
+                  </a>
+                </article>
+              ))
+            }
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section course-interest flow-section flow-section--loose"
+    aria-labelledby="course-interest-heading"
+  >
+    <div class="container is-max-desktop">
+      <div class="course-interest__panel page-panel page-panel--secondary">
+        <div class="course-interest__copy">
+          <p class="course-interest__kicker">Launch list</p>
+          <h2 class="course-interest__title" id="course-interest-heading">
+            Join the launch list or ask about enrolment
+          </h2>
+          <p class="course-interest__body">
+            If you want first access, launch updates, bundle pricing, or details
+            about the included support, leave your email for the launch list or
+            send a message directly.
+          </p>
+          <div class="course-interest__actions">
+            <a
+              href="/contact?reason=course-enquiry#contact-form"
+              class="button is-ink is-medium"
+            >
+              Send a message
+            </a>
+          </div>
+        </div>
+        <div class="course-interest__form-wrap">
+          <CourseInterestForm
+            idPrefix="courses-interest"
+            source="courses-page"
+            buttonLabel="Join the launch list"
+            fineprint="Launch updates, first access, and earliest enrolment details only."
+            successMessage="You're on the launch list. I'll email you when founding enrolment opens."
+            ariaLabel="Register interest for courses from the courses page"
+            stackFields
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  .courses-model,
+  .courses-launch-note,
+  .courses-bundle,
+  .course-catalogue,
+  .course-support,
+  .course-interest {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .course-interest {
+    padding-bottom: var(--space-section-tight);
+    margin-bottom: var(--space-section-tight);
+  }
+
+  .courses-model__heading,
+  .courses-launch-note__title,
+  .course-catalogue__heading {
+    margin: 0 0 1.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    line-height: 1.06;
+    color: var(--text-primary);
+  }
+
+  .courses-model__grid,
+  .courses-bundle__course-grid,
+  .course-catalogue__grid,
+  .course-support__grid,
+  .course-support__path-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .courses-model__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .courses-bundle__course-grid,
+    .course-support__path-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .courses-model__card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.45rem 1.3rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 14%, var(--border-subtle));
+    border-radius: var(--radius-panel);
+    background:
+      radial-gradient(
+        circle at 100% 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
+        transparent 42%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 94%, white) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+    box-shadow: 0 14px 30px rgba(var(--shadow-rgb), 0.05);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 1.3rem;
+      width: 3.5rem;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-secondary) 0%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+  }
+
+  .courses-model__card-title,
+  .courses-bundle__title,
+  .course-card__title,
+  .course-support__title,
+  .course-interest__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    line-height: 1.05;
+    color: var(--text-primary);
+  }
+
+  .courses-model__card-title {
+    font-size: 1.15rem;
+  }
+
+  .courses-model__card-body,
+  .courses-launch-note__body,
+  .courses-bundle__body,
+  .course-card__summary,
+  .course-support__body,
+  .course-interest__body {
+    margin: 0.7rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .courses-bundle__panel {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.45rem, 3vw, 2.25rem);
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 14%, var(--border-subtle));
+    border-radius: var(--radius-panel-large);
+    background:
+      radial-gradient(
+        ellipse 62% 74% at 0% 0%,
+        color-mix(in srgb, var(--accent-primary) 10%, transparent) 0%,
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 54% 62% at 100% 0%,
+        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
+        transparent 74%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 96%, white) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+    box-shadow: 0 22px 48px rgba(var(--shadow-rgb), 0.08);
+  }
+
+  .courses-launch-note__panel {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .courses-launch-note__status,
+  .courses-bundle__kicker,
+  .course-support__kicker,
+  .course-interest__kicker,
+  .course-card__eyebrow,
+  .courses-bundle__course-focus,
+  .courses-bundle__aside-label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .courses-launch-note__status,
+  .courses-bundle__kicker,
+  .course-card__eyebrow,
+  .courses-bundle__course-focus,
+  .course-interest__kicker {
+    color: var(--accent-primary);
+  }
+
+  .courses-launch-note__status,
+  .course-card__status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    min-height: 1.9rem;
+    padding: 0.28rem 0.72rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent-secondary);
+    color: var(--text-on-strong);
+    box-shadow: 0 10px 24px
+      color-mix(in srgb, var(--accent-secondary) 22%, transparent);
+  }
+
+  .courses-launch-note__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .courses-launch-note__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.85rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent-primary);
+  }
+
+  .course-support__kicker,
+  .courses-bundle__aside-label {
+    color: var(--accent-secondary);
+  }
+
+  .courses-bundle__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0.9rem 0 1rem;
+  }
+
+  .courses-bundle__chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 18%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--accent-primary) 8%,
+      var(--surface-elevated)
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text-primary) 82%, var(--accent-primary));
+  }
+
+  .courses-bundle__chip--status {
+    border-color: color-mix(in srgb, var(--accent-secondary) 16%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--accent-secondary) 14%,
+      var(--surface-elevated)
+    );
+    color: color-mix(in srgb, var(--text-primary) 84%, var(--accent-secondary));
+  }
+
+  .courses-bundle__title,
+  .course-support__title,
+  .course-interest__title {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+  }
+
+  .courses-bundle__benefits,
+  .courses-bundle__audience,
+  .course-card__list,
+  .course-support__list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .courses-bundle__benefits li,
+  .courses-bundle__audience li,
+  .course-card__list li,
+  .course-support__list li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--text-primary);
+    line-height: 1.65;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.72rem;
+      left: 0;
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+      transform: translateY(-50%);
+    }
+  }
+
+  .courses-bundle__actions,
+  .course-interest__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .courses-bundle__link,
+  .course-support__link,
+  .course-support__path-link,
+  .course-card__cta {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .courses-bundle__actions .courses-bundle__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.85rem;
+  }
+
+  .courses-bundle__link,
+  .course-card__cta {
+    color: var(--accent-primary);
+  }
+
+  .course-support__link,
+  .course-support__path-link {
+    color: var(--accent-secondary);
+  }
+
+  .course-support__link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .courses-bundle__course-grid {
+    margin-top: 0;
+  }
+
+  .course-support__path-grid {
+    margin-top: 1.25rem;
+  }
+
+  .courses-bundle__support {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 14%, transparent);
+    border-radius: var(--radius-soft);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 90%,
+      var(--accent-secondary) 10%
+    );
+  }
+
+  .courses-bundle__support-label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  .courses-bundle__support-copy {
+    margin: 0.55rem 0 0;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .courses-bundle__course-card,
+  .course-support__path-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 84%, transparent);
+    border-radius: var(--radius-soft);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 94%, white) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+  }
+
+  .courses-bundle__course-card {
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+      border-color: color-mix(
+        in srgb,
+        var(--accent-primary) 18%,
+        var(--border-subtle)
+      );
+      box-shadow: 0 14px 28px rgba(var(--shadow-rgb), 0.08);
+    }
+  }
+
+  .courses-bundle__course-title,
+  .course-support__path-title {
+    margin: 0.35rem 0 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.08;
+    color: var(--text-primary);
+  }
+
+  .courses-bundle__course-copy,
+  .course-support__path-body {
+    margin: 0.55rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .course-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-margin-top: 6rem;
+    min-height: 100%;
+    padding: 1.55rem 1.45rem 1.4rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 10%, var(--border-subtle));
+    border-radius: var(--radius-panel);
+    background:
+      radial-gradient(
+        circle at 100% 0%,
+        color-mix(in srgb, var(--accent-primary) 10%, transparent) 0%,
+        transparent 42%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 95%, white) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+    box-shadow: 0 14px 30px rgba(var(--shadow-rgb), 0.05);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 1.45rem;
+      width: 3.6rem;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-primary) 0%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+  }
+
+  .course-card__status {
+    margin: 0;
+  }
+
+  .course-card__title {
+    font-size: 1.35rem;
+  }
+
+  .course-card__details {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .course-card__label {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  .course-card__cta {
+    margin-top: auto;
+  }
+
+  .course-interest__panel {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .course-interest__form-wrap {
+    width: 100%;
+  }
+
+  @media (min-width: 960px) {
+    .courses-launch-note__panel {
+      grid-template-columns: minmax(0, 1.2fr) auto;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .courses-bundle__panel {
+      grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.82fr);
+      align-items: start;
+      gap: 1.35rem;
+    }
+
+    .courses-bundle__course-grid {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .course-catalogue__grid,
+    .course-support__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .course-interest__panel {
+      grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr);
+      align-items: center;
+      gap: 1.5rem;
+    }
+  }
+</style>

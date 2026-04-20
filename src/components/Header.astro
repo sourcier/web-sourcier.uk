@@ -72,6 +72,11 @@ function isActive(href: string) {
         >
         <a
           class="navbar-item"
+          href="/courses"
+          aria-current={isActive("/courses") ? "page" : undefined}>Courses</a
+        >
+        <a
+          class="navbar-item"
           href="/uses"
           aria-current={isActive("/uses") ? "page" : undefined}>Uses</a
         >

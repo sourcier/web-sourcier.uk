@@ -1,0 +1,251 @@
+---
+interface Props {
+  idPrefix?: string;
+  source?: string;
+  buttonLabel?: string;
+  placeholder?: string;
+  fineprint?: string;
+  successMessage?: string;
+  ariaLabel?: string;
+  stackFields?: boolean;
+}
+
+const {
+  idPrefix = "course-interest",
+  source = "course-interest",
+  buttonLabel = "Get course updates",
+  placeholder = "your@email.com",
+  fineprint = "No spam. Course updates and early access only.",
+  successMessage = "You're on the list. I'll email you when enrolment opens.",
+  ariaLabel = "Register interest for courses",
+  stackFields = false,
+} = Astro.props;
+
+const formId = `${idPrefix}-form`;
+const feedbackId = `${idPrefix}-feedback`;
+const emailId = `${idPrefix}-email`;
+const websiteId = `${idPrefix}-website`;
+const formClassName = [
+  "course-interest-form",
+  stackFields ? "course-interest-form--stacked" : "",
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<form class={formClassName} id={formId} novalidate aria-label={ariaLabel}>
+  <p class="course-interest-form__fineprint">{fineprint}</p>
+  <p class="course-interest-form__honeypot" aria-hidden="true">
+    <label for={websiteId}>Leave this blank</label>
+    <input
+      id={websiteId}
+      name="website"
+      type="text"
+      tabindex="-1"
+      autocomplete="off"
+    />
+  </p>
+  <div class="course-interest-form__field">
+    <label for={emailId} class="visually-hidden">Email address</label>
+    <input
+      id={emailId}
+      name="email"
+      type="email"
+      class="course-interest-form__input"
+      placeholder={placeholder}
+      autocomplete="email"
+      required
+    />
+    <button
+      type="submit"
+      class="button course-interest-form__btn is-ink is-medium"
+    >
+      {buttonLabel}
+    </button>
+  </div>
+  <p
+    class="course-interest-form__feedback"
+    id={feedbackId}
+    aria-live="polite"
+    hidden
+  >
+  </p>
+</form>
+
+<script
+  define:vars={{
+    formId,
+    feedbackId,
+    emailId,
+    source,
+    successMessage,
+    buttonLabel,
+  }}
+>
+  const form = document.getElementById(formId);
+  const feedback = document.getElementById(feedbackId);
+  const input = document.getElementById(emailId);
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!(input instanceof HTMLInputElement) || !feedback) return;
+
+    const email = input.value.trim();
+    if (!email) return;
+
+    const button = form.querySelector("button[type=submit]");
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    button.disabled = true;
+    button.textContent = "Registering...";
+    feedback.hidden = true;
+    feedback.className = "course-interest-form__feedback";
+
+    try {
+      const response = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          website:
+            (form.elements.namedItem("website") instanceof HTMLInputElement
+              ? form.elements.namedItem("website").value
+              : "") ?? "",
+          source,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        feedback.textContent = successMessage;
+        feedback.classList.add("course-interest-form__feedback--success");
+        form.reset();
+        button.textContent = "Registered";
+      } else {
+        feedback.textContent =
+          data.error ?? "Something went wrong. Please try again.";
+        feedback.classList.add("course-interest-form__feedback--error");
+        button.disabled = false;
+        button.textContent = buttonLabel;
+      }
+    } catch {
+      feedback.textContent = "Something went wrong. Please try again.";
+      feedback.classList.add("course-interest-form__feedback--error");
+      button.disabled = false;
+      button.textContent = buttonLabel;
+    } finally {
+      feedback.hidden = false;
+    }
+  });
+</script>
+
+<style lang="scss">
+  .course-interest-form {
+    width: 100%;
+  }
+
+  .course-interest-form__fineprint {
+    margin: 0 0 0.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .course-interest-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .course-interest-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .course-interest-form__input {
+    width: 100%;
+    min-height: 2.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-tight);
+    border: 1px solid var(--border-subtle);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-elevated) 92%, var(--surface-page)) 0%,
+        var(--surface-elevated) 100%
+      ),
+      var(--surface-elevated);
+    box-shadow: 0 1px 0 rgba(var(--shadow-rgb), 0.05);
+    color: var(--text-primary);
+    font-family: "Barlow", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    appearance: none;
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    &:focus-visible {
+      border-color: var(--accent-secondary);
+      outline: 3px solid
+        color-mix(in srgb, var(--accent-secondary) 24%, transparent);
+      outline-offset: 0;
+    }
+  }
+
+  .course-interest-form__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.85rem;
+    letter-spacing: 0.04em;
+
+    &:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+  }
+
+  .course-interest-form__feedback {
+    margin-top: 0.6rem;
+    font-size: 0.875rem;
+
+    &--success {
+      color: var(--color-success);
+    }
+
+    &--error {
+      color: var(--color-danger);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .course-interest-form__field {
+      align-items: stretch;
+      flex-direction: row;
+    }
+
+    .course-interest-form__btn {
+      min-width: 13.5rem;
+    }
+
+    .course-interest-form--stacked .course-interest-form__field {
+      flex-direction: column;
+    }
+
+    .course-interest-form--stacked .course-interest-form__btn {
+      min-width: 0;
+    }
+  }
+</style>

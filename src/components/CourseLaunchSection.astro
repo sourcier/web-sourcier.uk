@@ -1,5 +1,22 @@
 ---
+import CourseInterestForm from "./CourseInterestForm.astro";
+import {
+  courseLaunchLabel,
+  courseOffers,
+  courseSupportOffer,
+} from "../data/courses";
 
+const launchModules = courseOffers.map((course) => ({
+  slug: course.slug,
+  title: course.title,
+  teaser: course.teaser,
+}));
+
+const launchSignals = [
+  "Founding launch",
+  "Self-paced",
+  courseSupportOffer.singleShort,
+];
 ---
 
 <section
@@ -15,18 +32,37 @@
     </p>
     <div class="course-launch__card">
       <div class="course-launch__intro">
-        <p class="course-launch__status">Launching soon</p>
+        <p class="course-launch__status">{courseLaunchLabel}</p>
+        <div class="course-launch__signals" aria-label="Launch details">
+          {
+            launchSignals.map((signal) => (
+              <span class="course-launch__signal">{signal}</span>
+            ))
+          }
+        </div>
         <p class="course-launch__kicker">
           For career switchers and engineers building confidence
         </p>
         <h2 class="course-launch__heading" id="course-launch-heading">
-          Full Stack Developer Course
+          Choose the full bundle or start with one course
         </h2>
         <p class="course-launch__body">
-          A practical learning path for people moving into tech and engineers
-          who want stronger full-stack foundations. First cohort details are
-          coming soon.
+          Founding enrolment opens soon. Take the full bundle for end-to-end
+          context, or pick up the single course that matches what you need right
+          now. {courseSupportOffer.singleDetail}
+          {courseSupportOffer.bundleDetail}
         </p>
+        <div class="course-launch__actions">
+          <a href="/courses" class="button is-ink is-medium">
+            See the launch details
+          </a>
+          <a
+            href="/contact?reason=course-enquiry#contact-form"
+            class="course-launch__link"
+          >
+            Ask about the launch and support
+          </a>
+        </div>
       </div>
 
       <ul
@@ -34,143 +70,35 @@
         role="list"
         aria-label="Course modules"
       >
-        <li class="course-launch__module">
-          <p class="course-launch__module-title">Web foundations</p>
-          <p class="course-launch__module-copy">
-            Semantic HTML, modern CSS, accessibility, and the layout patterns
-            you actually use on real projects.
-          </p>
-        </li>
-        <li class="course-launch__module">
-          <p class="course-launch__module-title">JavaScript across the stack</p>
-          <p class="course-launch__module-copy">
-            Build front-end features, design APIs, and understand how full-stack
-            applications fit together.
-          </p>
-        </li>
-        <li class="course-launch__module">
-          <p class="course-launch__module-title">Shipping and team habits</p>
-          <p class="course-launch__module-copy">
-            Testing, deployments, debugging, and the engineering habits that
-            help you work confidently in a team.
-          </p>
-        </li>
+        {
+          launchModules.map((module) => (
+            <li>
+              <a
+                class="course-launch__module"
+                href={`/courses#course-${module.slug}`}
+                aria-label={`Jump to ${module.title} details`}
+              >
+                <p class="course-launch__module-title">{module.title}</p>
+                <p class="course-launch__module-copy">{module.teaser}</p>
+              </a>
+            </li>
+          ))
+        }
       </ul>
 
-      <form
-        class="course-launch__form"
-        id="course-launch-form"
-        novalidate
-        aria-label="Register interest for full stack course"
-      >
-        <p class="course-launch__fineprint">
-          No spam. Course updates and early access only.
-        </p>
-        <p class="course-launch__honeypot" aria-hidden="true">
-          <label for="course-launch-website">Leave this blank</label>
-          <input
-            id="course-launch-website"
-            name="website"
-            type="text"
-            tabindex="-1"
-            autocomplete="off"
-          />
-        </p>
-        <div class="course-launch__field">
-          <label for="course-launch-email" class="is-sr-only"
-            >Email address</label
-          >
-          <input
-            id="course-launch-email"
-            name="email"
-            type="email"
-            class="course-launch__input"
-            placeholder="your@email.com"
-            autocomplete="email"
-            required
-          />
-          <button type="submit" class="button course-launch__btn is-ink">
-            Get course updates
-          </button>
-        </div>
-        <p
-          class="course-launch__feedback"
-          id="course-launch-feedback"
-          aria-live="polite"
-          hidden
-        >
-        </p>
-      </form>
+      <div class="course-launch__form">
+        <CourseInterestForm
+          idPrefix="course-launch"
+          source="course-launch-home"
+          buttonLabel="Join the launch list"
+          fineprint="Launch updates, first access, and earliest enrolment details only."
+          successMessage="You're on the launch list. I'll email you when founding enrolment opens."
+          ariaLabel="Register interest for courses from the homepage"
+        />
+      </div>
     </div>
   </div>
 </section>
-
-<script>
-  const form = document.getElementById(
-    "course-launch-form",
-  ) as HTMLFormElement | null;
-  const feedback = document.getElementById(
-    "course-launch-feedback",
-  ) as HTMLElement | null;
-  const input = document.getElementById(
-    "course-launch-email",
-  ) as HTMLInputElement | null;
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!input || !feedback) return;
-
-    const email = input.value.trim();
-    if (!email) return;
-
-    const button = form.querySelector(
-      "button[type=submit]",
-    ) as HTMLButtonElement | null;
-    if (!button) return;
-
-    button.disabled = true;
-    button.textContent = "Registering…";
-    feedback.hidden = true;
-    feedback.className = "course-launch__feedback";
-
-    try {
-      const response = await fetch("/.netlify/functions/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          website:
-            (form.elements.namedItem("website") as HTMLInputElement)?.value ??
-            "",
-          source: "full-stack-course",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        feedback.textContent =
-          "You're on the list. I'll email you when enrolment opens.";
-        feedback.classList.add("course-launch__feedback--success");
-        form.reset();
-        button.textContent = "Registered";
-      } else {
-        feedback.textContent =
-          data.error ?? "Something went wrong. Please try again.";
-        feedback.classList.add("course-launch__feedback--error");
-        button.disabled = false;
-        button.textContent = "Get course updates";
-      }
-    } catch {
-      feedback.textContent = "Something went wrong. Please try again.";
-      feedback.classList.add("course-launch__feedback--error");
-      button.disabled = false;
-      button.textContent = "Get course updates";
-    } finally {
-      feedback.hidden = false;
-    }
-  });
-</script>
 
 <style lang="scss">
   .course-launch {
@@ -213,6 +141,54 @@
 
   .course-launch__intro {
     margin-bottom: 1rem;
+  }
+
+  .course-launch__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .course-launch__signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0 0 0.85rem;
+  }
+
+  .course-launch__signal {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.85rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 14%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 86%,
+      var(--accent-secondary) 14%
+    );
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--text-primary) 84%, var(--accent-secondary));
+  }
+
+  .course-launch__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.85rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent-secondary);
   }
 
   .course-launch__status {
@@ -265,6 +241,7 @@
   }
 
   .course-launch__module {
+    display: block;
     border: 1px solid color-mix(in srgb, var(--border-subtle) 75%, transparent);
     border-radius: var(--radius-compact);
     padding: 0.85rem 0.9rem;
@@ -273,15 +250,36 @@
       var(--surface-page) 88%,
       var(--accent-secondary) 12%
     );
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
     animation: course-module-in 320ms ease both;
 
-    &:nth-child(2) {
-      animation-delay: 80ms;
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-2px);
+      border-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 22%,
+        transparent
+      );
+      box-shadow: 0 14px 28px rgba(var(--shadow-rgb), 0.08);
     }
+  }
 
-    &:nth-child(3) {
-      animation-delay: 160ms;
-    }
+  .course-launch__modules li:nth-child(2) .course-launch__module {
+    animation-delay: 80ms;
+  }
+
+  .course-launch__modules li:nth-child(3) .course-launch__module {
+    animation-delay: 160ms;
+  }
+
+  .course-launch__modules li:nth-child(4) .course-launch__module {
+    animation-delay: 240ms;
   }
 
   .course-launch__module-title {
@@ -305,88 +303,6 @@
     margin-top: 1rem;
   }
 
-  .course-launch__fineprint {
-    margin: 0 0 0.5rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .course-launch__field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .course-launch__input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    min-height: 2.75rem;
-    border-radius: var(--radius-tight);
-    border: 1px solid var(--border-subtle);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--surface-elevated) 92%, var(--surface-page)) 0%,
-        var(--surface-elevated) 100%
-      ),
-      var(--surface-elevated);
-    color: var(--text-primary);
-    font-family: "Barlow", sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
-    box-shadow: 0 1px 0 rgba(var(--shadow-rgb), 0.05);
-    appearance: none;
-
-    &::placeholder {
-      color: var(--text-muted);
-      opacity: 0.6;
-    }
-
-    &:focus-visible {
-      border-color: var(--accent-secondary);
-      outline: 3px solid
-        color-mix(in srgb, var(--accent-secondary) 24%, transparent);
-      outline-offset: 0;
-    }
-  }
-
-  .course-launch__btn {
-    min-height: 2.75rem;
-    letter-spacing: 0.04em;
-
-    &:disabled {
-      opacity: 0.75;
-      cursor: not-allowed;
-    }
-  }
-
-  .course-launch__honeypot {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .course-launch__feedback {
-    margin-top: 0.6rem;
-    font-size: 0.875rem;
-
-    &--success {
-      color: var(--color-success);
-    }
-
-    &--error {
-      color: var(--color-danger);
-    }
-  }
-
   @keyframes course-module-in {
     from {
       opacity: 0;
@@ -400,16 +316,13 @@
 
   @media (min-width: 768px) {
     .course-launch__modules {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
 
-    .course-launch__field {
-      align-items: stretch;
-      flex-direction: row;
-    }
-
-    .course-launch__btn {
-      min-width: 13.5rem;
+  @media (min-width: 1100px) {
+    .course-launch__modules {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
