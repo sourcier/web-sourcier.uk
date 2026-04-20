@@ -21,15 +21,22 @@ const publicTalkPath = `/talks/${talkSlug}.pptx`;
 const COLORS = {
   pink: "E8006A",
   pinkSoft: "FDEAF2",
+  green: "2A7D5B",
+  greenDeep: "1B5A40",
   ink: "0F0F0F",
   paper: "FFFFFF",
+  elevated: "FFFAF4",
   muted: "6B6B6B",
+  mutedLight: "D8D8D8",
   darkBg: "0A0A0A",
+  darkBgBottom: "101410",
   border: "D7D7D7",
-  soft: "F6F6F4",
+  borderWarm: "D8C5AE",
+  soft: "F6ECE1",
+  warmTop: "F6ECE1",
+  warmBottom: "E5D8C9",
   codeBg: "121212",
   codeLine: "262626",
-  green: "2E8B74",
 };
 
 const CODE_COLORS = {
@@ -49,19 +56,56 @@ const FONT = {
 };
 
 const URLs = {
-  jsLondon: "https://www.meetup.com/javascript-london/",
+  jsLondon: "https://www.javascriptlondon.com",
   linkedin: "https://www.linkedin.com/in/roger-rajaratnam",
+  article: `https://sourcier.uk/blog/${postSlug}`,
   website: "https://sourcier.uk",
 };
 
+function addAtmosphere(slide) {
+  slide.background = { color: COLORS.warmTop };
+
+  slide.addShape("roundRect", {
+    x: -2.1,
+    y: -1.2,
+    w: 5.9,
+    h: 4.9,
+    rectRadius: 0.3,
+    fill: { color: COLORS.pink, transparency: 92 },
+    line: { color: COLORS.pink, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 9.2,
+    y: -1.5,
+    w: 6.2,
+    h: 5.6,
+    rectRadius: 0.3,
+    fill: { color: COLORS.green, transparency: 90 },
+    line: { color: COLORS.green, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 7.1,
+    y: 5.5,
+    w: 8.1,
+    h: 3.4,
+    rectRadius: 0.3,
+    fill: { color: COLORS.warmBottom, transparency: 24 },
+    line: { color: COLORS.warmBottom, transparency: 100 },
+  });
+}
+
 function addHeader(slide, title, subtitle = "") {
+  addAtmosphere(slide);
+
   slide.addShape("rect", {
     x: 0,
     y: 0,
     w: 13.333,
     h: 0.72,
-    fill: { color: COLORS.darkBg },
-    line: { color: COLORS.darkBg },
+    fill: { color: COLORS.darkBgBottom },
+    line: { color: COLORS.darkBgBottom },
   });
 
   slide.addShape("line", {
@@ -70,6 +114,14 @@ function addHeader(slide, title, subtitle = "") {
     w: 13.333,
     h: 0,
     line: { color: COLORS.pink, pt: 2.25 },
+  });
+
+  slide.addShape("line", {
+    x: 0,
+    y: 0.68,
+    w: 13.333,
+    h: 0,
+    line: { color: COLORS.green, pt: 0.75, transparency: 24 },
   });
 
   slide.addText("SOURCIER", {
@@ -150,7 +202,15 @@ function addSlideNumber(slide, options = {}) {
 
 function addCard(
   slide,
-  { x, y, w, h, fill = COLORS.paper, line = COLORS.border, radius = 0.08 },
+  {
+    x,
+    y,
+    w,
+    h,
+    fill = COLORS.elevated,
+    line = COLORS.borderWarm,
+    radius = 0.08,
+  },
 ) {
   slide.addShape("roundRect", {
     x,
@@ -171,8 +231,8 @@ function addLinkBadge(
     w,
     label,
     url,
-    fill = COLORS.soft,
-    line = COLORS.border,
+    fill = COLORS.elevated,
+    line = COLORS.borderWarm,
     color = COLORS.ink,
   },
 ) {
@@ -450,7 +510,7 @@ function addMiniBrowser(slide, { x, y, w, h }) {
 function addTitleSlide(pptx) {
   const slide = pptx.addSlide();
 
-  slide.background = { color: COLORS.darkBg };
+  slide.background = { color: COLORS.darkBgBottom };
 
   slide.addShape("roundRect", {
     x: 9.4,
@@ -460,6 +520,16 @@ function addTitleSlide(pptx) {
     rectRadius: 0.3,
     fill: { color: COLORS.pink, transparency: 74 },
     line: { color: COLORS.pink, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 8.05,
+    y: -1.0,
+    w: 4.9,
+    h: 4.9,
+    rectRadius: 0.3,
+    fill: { color: COLORS.green, transparency: 82 },
+    line: { color: COLORS.green, transparency: 100 },
   });
 
   slide.addShape("roundRect", {
@@ -492,44 +562,38 @@ function addTitleSlide(pptx) {
     line: { color: COLORS.pink, pt: 2.5 },
   });
 
-  slide.addText("SHIP WITH\nCONFIDENCE", {
+  slide.addText("PLAYWRIGHT E2E\nTESTING AI SKILLS", {
     x: 0.8,
-    y: 2.0,
-    w: 6.2,
-    h: 1.6,
+    y: 1.95,
+    w: 6.7,
+    h: 1.8,
     fontFace: FONT.heading,
     bold: true,
     color: COLORS.paper,
-    fontSize: 40,
+    fontSize: 39,
     breakLine: true,
     fit: "shrink",
     margin: 0,
   });
 
-  slide.addText("End-to-end testing with Playwright", {
-    x: 0.8,
-    y: 3.75,
-    w: 5.8,
-    h: 0.35,
-    fontFace: FONT.body,
-    color: "E5E5E5",
-    fontSize: 20,
-  });
+  slide.addText(
+    "Using Playwright and the playwright-explore-website skill to test real user journeys",
+    {
+      x: 0.8,
+      y: 3.82,
+      w: 5.95,
+      h: 0.6,
+      fontFace: FONT.body,
+      color: "E5E5E5",
+      fontSize: 18,
+      fit: "shrink",
+    },
+  );
 
-  slide.addText("A 10-minute intro for junior and mid-level engineers", {
-    x: 0.8,
-    y: 4.18,
-    w: 6.2,
-    h: 0.28,
-    fontFace: FONT.body,
-    color: "C9C9C9",
-    fontSize: 14,
-  });
-
-  slide.addText("JavaScript London · April 2026", {
+  slide.addText("JavaScript London talk at NewDay", {
     x: 0.8,
     y: 4.52,
-    w: 4.1,
+    w: 4.9,
     h: 0.24,
     fontFace: FONT.body,
     color: COLORS.pink,
@@ -543,14 +607,13 @@ function addTitleSlide(pptx) {
     y: 4.22,
     w: 5.45,
     h: 1.95,
-    title: "playwright test",
+    title: "exploration prompt",
     lines: [
-      'test("checkout works", async ({ page }) => {',
-      '  await page.goto("/checkout");',
-      '  await page.getByRole("button",',
-      '    { name: "Place order" }).click();',
-      '  await expect(page.getByText("Order confirmed")).toBeVisible();',
-      "});",
+      "Use the playwright-explore-website skill",
+      "on https://staging.example.com.",
+      "Explore sign-in, password reset, and checkout.",
+      "Document likely locators and expected outcomes.",
+      "Draft one candidate Playwright test case.",
     ],
     fontSize: 10.5,
     lineGap: 0.24,
@@ -585,7 +648,7 @@ function addSpeakerIntroSlide(pptx) {
   addHeader(
     slide,
     "About the speaker",
-    "A short intro before we get into the testing trade-offs.",
+    "A short intro before we get into the browser-testing workflow.",
   );
 
   addCard(slide, {
@@ -633,7 +696,7 @@ function addSpeakerIntroSlide(pptx) {
     [
       "I work at NewDay, focusing on technical leadership, delivery, and mentoring.",
       "I write about software engineering, frontend tooling, and pragmatic architecture at sourcier.uk.",
-      "This version of the talk is for JavaScript London, so I am keeping it practical and beginner-friendly.",
+      "This version of the talk keeps the AI part grounded in real browser work instead of blind test generation.",
     ],
     { x: 1.02, y: 3.5, w: 6.15, h: 1.85 },
   );
@@ -685,8 +748,8 @@ function addHookSlide(pptx) {
 
   addHeader(
     slide,
-    "The Bug Unit Tests Can't Find",
-    "Users experience the assembled product, not the isolated parts.",
+    "Why AI Shows Up Here",
+    "The useful part is exploration, not blind test generation.",
   );
 
   addCard(slide, {
@@ -709,25 +772,28 @@ function addHookSlide(pptx) {
     fontSize: 70,
   });
 
-  slide.addText("All your unit tests pass. Your users are still angry.", {
-    x: 2.1,
-    y: 3.1,
-    w: 9.0,
-    h: 1.2,
-    fontFace: FONT.body,
-    color: COLORS.ink,
-    fontSize: 28,
-    italic: true,
-    align: "center",
-    valign: "mid",
-    fit: "shrink",
-  });
+  slide.addText(
+    "Use AI to explore and propose. Use Playwright to automate and verify.",
+    {
+      x: 2.1,
+      y: 2.95,
+      w: 9.0,
+      h: 1.35,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 27,
+      italic: true,
+      align: "center",
+      valign: "mid",
+      fit: "shrink",
+    },
+  );
 
   slide.addText(
-    "E2E tests answer a different question: can a real user complete the journey in a real browser?",
+    "Use humans to decide what is worth keeping. That keeps the browser tests honest.",
     {
       x: 2.0,
-      y: 4.65,
+      y: 4.72,
       w: 9.2,
       h: 0.42,
       fontFace: FONT.body,
@@ -737,7 +803,7 @@ function addHookSlide(pptx) {
     },
   );
 
-  addFooter(slide, "sourcier.uk / End-to-end testing with Playwright");
+  addFooter(slide, "sourcier.uk / AI helps before the test");
 }
 
 function addPyramidSlide(pptx) {
@@ -746,44 +812,60 @@ function addPyramidSlide(pptx) {
   addHeader(
     slide,
     "Where E2E Fits",
-    "A few high-signal tests at the top of the pyramid.",
+    "Fast, cheap feedback at the base. A few real browser journeys at the top.",
   );
 
   addBulletList(
     slide,
     [
-      "Unit tests check small pieces quickly.",
-      "Integration tests check boundaries and contracts.",
-      "E2E tests protect the journeys users actually depend on.",
-      "Aim for risk coverage, not blanket coverage.",
+      "Unit tests cover small decisions quickly and cheaply.",
+      "Integration tests prove boundaries, contracts, and composed behaviour.",
+      "E2E tests protect the user journeys where failure would really hurt.",
+      "As cost per test rises, the number of tests should fall.",
     ],
     { x: 0.8, y: 2.45, w: 5.2, h: 3.4 },
   );
 
+  slide.addText("TEST COUNT FALLS AS COST PER TEST RISES", {
+    x: 7.05,
+    y: 2.28,
+    w: 5.65,
+    h: 0.22,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.greenDeep,
+    fontSize: 13,
+    align: "center",
+    charSpace: 1,
+  });
+
   const blocks = [
     {
-      x: 8.0,
-      y: 4.95,
-      w: 3.85,
-      h: 0.78,
-      color: COLORS.soft,
+      x: 7.25,
+      y: 5.0,
+      w: 5.15,
+      h: 1.0,
+      color: COLORS.elevated,
       label: "Many unit tests",
+      note: "Fast feedback · lowest setup cost",
     },
     {
-      x: 8.45,
-      y: 4.0,
-      w: 2.95,
-      h: 0.78,
+      x: 7.95,
+      y: 3.85,
+      w: 3.75,
+      h: 1.0,
       color: COLORS.pinkSoft,
       label: "Some integration tests",
+      note: "Boundaries · contracts · seams",
     },
     {
-      x: 8.9,
-      y: 3.05,
-      w: 2.05,
-      h: 0.78,
+      x: 8.65,
+      y: 2.7,
+      w: 2.35,
+      h: 1.0,
       color: COLORS.pink,
       label: "Few E2E tests",
+      note: "Critical journeys",
     },
   ];
 
@@ -795,27 +877,39 @@ function addPyramidSlide(pptx) {
       h: block.h,
       rectRadius: 0.06,
       fill: { color: block.color },
-      line: { color: index === 2 ? COLORS.pink : COLORS.border, pt: 1 },
+      line: { color: index === 2 ? COLORS.pink : COLORS.borderWarm, pt: 1 },
     });
 
     slide.addText(block.label, {
       x: block.x + 0.12,
-      y: block.y + 0.22,
+      y: block.y + 0.17,
       w: block.w - 0.24,
-      h: 0.2,
+      h: 0.22,
       fontFace: FONT.heading,
       bold: true,
       color: index === 2 ? COLORS.paper : COLORS.ink,
       fontSize: 18,
       align: "center",
     });
+
+    slide.addText(block.note, {
+      x: block.x + 0.12,
+      y: block.y + 0.52,
+      w: block.w - 0.24,
+      h: 0.16,
+      fontFace: FONT.body,
+      color: index === 2 ? COLORS.paper : COLORS.muted,
+      fontSize: 10.5,
+      align: "center",
+      fit: "shrink",
+    });
   });
 
   slide.addText(
-    "Protect the 3-5 paths where failure would actually hurt users.",
+    "Confidence and realism go up as you move higher. The number of tests should go down.",
     {
-      x: 7.35,
-      y: 5.95,
+      x: 7.1,
+      y: 6.18,
       w: 5.15,
       h: 0.4,
       fontFace: FONT.body,
@@ -833,8 +927,8 @@ function addCatchSlide(pptx) {
 
   addHeader(
     slide,
-    "What E2E Sees",
-    "The browser runtime is where the seams show.",
+    "What the skill does",
+    "A small Copilot skill backed by Playwright MCP and a real browser session.",
   );
 
   addCard(slide, {
@@ -842,19 +936,19 @@ function addCatchSlide(pptx) {
     y: 2.35,
     w: 5.95,
     h: 4.2,
-    fill: COLORS.paper,
-    line: COLORS.border,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
   });
   addCard(slide, {
     x: 6.83,
     y: 2.35,
     w: 5.95,
     h: 4.2,
-    fill: COLORS.paper,
-    line: COLORS.border,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
   });
 
-  slide.addText("Great At Catching", {
+  slide.addText("What you get back", {
     x: 0.9,
     y: 2.72,
     w: 5.0,
@@ -868,15 +962,15 @@ function addCatchSlide(pptx) {
   addBulletList(
     slide,
     [
-      "Broken auth and redirect flows.",
-      "Forms that submit the wrong thing or nothing at all.",
-      "Buttons hidden by banners, overlays, or layout regressions.",
-      "Browser-specific navigation and storage issues.",
+      "A walkthrough of a few important user flows in a real browser.",
+      "Likely stable locators tied to what is on the page now.",
+      "Expected outcomes worth asserting.",
+      "Candidate test cases before you write the final Playwright file.",
     ],
     { x: 0.9, y: 3.18, w: 5.0, h: 2.95 },
   );
 
-  slide.addText("Better Covered Elsewhere", {
+  slide.addText("Example prompt", {
     x: 7.18,
     y: 2.72,
     w: 5.0,
@@ -887,18 +981,48 @@ function addCatchSlide(pptx) {
     fontSize: 24,
   });
 
-  addBulletList(
-    slide,
-    [
-      "Business rules and algorithm edge cases.",
-      "Small component state changes.",
-      "Pure validation logic.",
-      "Anything a unit test can check in seconds.",
+  addCodePanel(slide, {
+    x: 7.18,
+    y: 3.14,
+    w: 5.02,
+    h: 1.88,
+    title: "playwright-explore-website",
+    lines: [
+      "Use the playwright-explore-website skill",
+      "on https://staging.example.com.",
+      "Explore sign-in, password reset, and checkout.",
+      "Document likely stable locators and expected outcomes.",
+      "Draft one candidate Playwright test case.",
     ],
-    { x: 7.18, y: 3.18, w: 5.0, h: 2.95 },
+    fontSize: 10.1,
+    lineGap: 0.23,
+    lineHeight: 0.18,
+  });
+
+  addCard(slide, {
+    x: 7.18,
+    y: 5.28,
+    w: 5.02,
+    h: 0.9,
+    fill: COLORS.pinkSoft,
+    line: COLORS.pink,
+  });
+  slide.addText(
+    "Output: flows · locators · expected outcomes · candidate tests",
+    {
+      x: 7.42,
+      y: 5.57,
+      w: 4.54,
+      h: 0.2,
+      fontFace: FONT.body,
+      color: COLORS.ink,
+      fontSize: 13,
+      align: "center",
+      fit: "shrink",
+    },
   );
 
-  addFooter(slide, "sourcier.uk / E2E covers journeys, not everything");
+  addFooter(slide, "sourcier.uk / Explore first, automate second");
 }
 
 function addWhyPlaywrightSlide(pptx) {
@@ -907,7 +1031,7 @@ function addWhyPlaywrightSlide(pptx) {
   addHeader(
     slide,
     "Why Playwright",
-    "A pragmatic default for modern browser automation.",
+    "A pragmatic default for browser automation and browser-based exploration.",
   );
 
   addBulletList(
@@ -916,6 +1040,7 @@ function addWhyPlaywrightSlide(pptx) {
       "Cross-browser support out of the box: Chromium, Firefox, and WebKit.",
       "Auto-waiting removes most timing hacks and sleep calls.",
       "TypeScript-first APIs with a clean test runner.",
+      "Playwright MCP gives Copilot a real browser to inspect instead of guessing.",
       "Codegen gives you a fast starting point for real flows.",
       "Trace Viewer makes CI failures debuggable instead of mysterious.",
     ],
@@ -930,6 +1055,7 @@ function addWhyPlaywrightSlide(pptx) {
     title: "getting started",
     lines: [
       "pnpm create playwright@latest",
+      "pnpm playwright codegen https://your-app.example",
       "pnpm playwright test",
       "pnpm playwright show-trace trace.zip",
     ],
@@ -975,40 +1101,30 @@ function addFirstTestSlide(pptx) {
 
   addHeader(
     slide,
-    "Your First Useful Test",
-    "Assert the outcome a real user cares about.",
+    "Exploration and codegen",
+    "They solve different problems, and you will usually want both.",
   );
 
-  addCodePanel(slide, {
+  addCard(slide, {
     x: 0.55,
     y: 2.2,
-    w: 7.45,
+    w: 6.05,
     h: 4.55,
-    title: "tests/newsletter.spec.ts",
-    lines: [
-      'import { test, expect } from "@playwright/test";',
-      "",
-      'test("newsletter signup works", async ({ page }) => {',
-      '  await page.goto("/newsletter");',
-      '  await page.getByLabel("Email").fill("alice@example.com");',
-      '  await page.getByRole("button", { name: "Subscribe" }).click();',
-      '  await expect(page.getByText("Check your inbox")).toBeVisible();',
-      "});",
-    ],
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
   });
-
   addCard(slide, {
-    x: 8.32,
+    x: 6.72,
     y: 2.2,
-    w: 4.45,
+    w: 6.05,
     h: 4.55,
-    fill: COLORS.paper,
-    line: COLORS.border,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
   });
-  slide.addText("What to notice", {
-    x: 8.65,
+  slide.addText("Explore with the skill", {
+    x: 0.88,
     y: 2.55,
-    w: 2.5,
+    w: 2.9,
     h: 0.25,
     fontFace: FONT.heading,
     bold: true,
@@ -1018,28 +1134,56 @@ function addFirstTestSlide(pptx) {
   addBulletList(
     slide,
     [
-      "Use role and label locators first.",
-      "Let Playwright wait for the element to be actionable.",
-      "Assert the visible success state, not an implementation detail.",
-      "If the test reads like a user journey, you're on the right track.",
+      "Map the journey before you commit to code.",
+      "Capture likely locators and expected outcomes.",
+      "Use it when the product area is unfamiliar or the bug report is vague.",
+      "This is where the AI work earns its keep.",
     ],
-    { x: 8.65, y: 3.0, w: 3.6, h: 2.7 },
+    { x: 0.88, y: 3.0, w: 5.2, h: 2.8 },
   );
 
-  slide.addShape("line", {
-    x: 8.65,
-    y: 5.98,
-    w: 3.45,
-    h: 0,
-    line: { color: COLORS.pink, pt: 1.4 },
+  slide.addText("Reach for codegen", {
+    x: 7.05,
+    y: 2.55,
+    w: 2.9,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 22,
+  });
+  addBulletList(
+    slide,
+    [
+      "Capture a quick action scaffold once you understand the journey.",
+      "Use it for awkward flows and raw selector hints.",
+      "Rewrite the generated result so the test reads like a real scenario.",
+      "Exploration gives testing intent. Codegen gives interaction history.",
+    ],
+    { x: 7.05, y: 3.0, w: 5.2, h: 2.4 },
+  );
+
+  addCodePanel(slide, {
+    x: 7.05,
+    y: 5.15,
+    w: 5.15,
+    h: 1.1,
+    title: "quick scaffold",
+    lines: [
+      "pnpm create playwright@latest",
+      "pnpm playwright codegen https://your-app.example",
+    ],
+    fontSize: 10.5,
+    lineGap: 0.26,
+    lineHeight: 0.19,
   });
 
   slide.addText(
-    "No sleeps. No brittle CSS selectors. No hidden implementation coupling.",
+    "Use the skill to explore first. Use codegen when you need a fast scaffold. Clean up the final test yourself.",
     {
-      x: 8.65,
-      y: 6.1,
-      w: 3.55,
+      x: 0.88,
+      y: 6.05,
+      w: 5.2,
       h: 0.42,
       fontFace: FONT.body,
       color: COLORS.muted,
@@ -1048,7 +1192,7 @@ function addFirstTestSlide(pptx) {
     },
   );
 
-  addFooter(slide, "sourcier.uk / Start with one realistic journey");
+  addFooter(slide, "sourcier.uk / Exploration gives testing intent");
 }
 
 function addReliabilitySlide(pptx) {
@@ -1276,7 +1420,7 @@ function addTraceSlide(pptx) {
 function addClosingSlide(pptx) {
   const slide = pptx.addSlide();
 
-  slide.background = { color: COLORS.darkBg };
+  slide.background = { color: COLORS.darkBgBottom };
 
   slide.addShape("roundRect", {
     x: 8.7,
@@ -1288,15 +1432,15 @@ function addClosingSlide(pptx) {
     line: { color: COLORS.pink, transparency: 100 },
   });
 
-  slide.addText("START SMALL", {
+  slide.addText("START WITH ONE FLOW", {
     x: 0.9,
-    y: 1.6,
-    w: 6.5,
+    y: 1.55,
+    w: 7.3,
     h: 0.9,
     fontFace: FONT.heading,
     bold: true,
     color: COLORS.paper,
-    fontSize: 58,
+    fontSize: 54,
     fit: "shrink",
   });
 
@@ -1311,9 +1455,9 @@ function addClosingSlide(pptx) {
   });
 
   [
-    "Pick one critical user journey.",
-    "Use semantic locators before brittle selectors.",
-    "Treat flaky tests as bugs, not background noise.",
+    "Pick one risky user journey.",
+    "Explore it with playwright-explore-website.",
+    "Turn the best path into one clean Playwright test.",
   ].forEach((line, index) => {
     slide.addText(`• ${line}`, {
       x: 1.0,
@@ -1342,6 +1486,38 @@ function addClosingSlide(pptx) {
     fontFace: FONT.body,
     color: "D8D8D8",
     fontSize: 22,
+  });
+
+  addCard(slide, {
+    x: 8.0,
+    y: 4.95,
+    w: 4.2,
+    h: 1.28,
+    fill: COLORS.paper,
+    line: COLORS.paper,
+    radius: 0.12,
+  });
+  slide.addText("Read the companion article", {
+    x: 8.28,
+    y: 5.22,
+    w: 3.64,
+    h: 0.22,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 22,
+    fit: "shrink",
+  });
+  slide.addText("sourcier.uk/blog/playwright-e2e-testing-talk", {
+    x: 8.28,
+    y: 5.6,
+    w: 3.64,
+    h: 0.18,
+    fontFace: FONT.body,
+    color: COLORS.pink,
+    fontSize: 12,
+    hyperlink: { url: URLs.article },
+    fit: "shrink",
   });
 
   slide.addText("Roger Rajaratnam", {
@@ -1384,13 +1560,14 @@ function buildCoverSvg() {
     <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="1600" height="900" fill="#0A0A0A"/>
       <rect x="1130" y="-120" width="520" height="520" rx="48" fill="#E8006A" fill-opacity="0.22"/>
+      <rect x="1020" y="-80" width="420" height="420" rx="44" fill="#2A7D5B" fill-opacity="0.16"/>
       <rect x="-140" y="700" width="500" height="320" rx="44" fill="#FFFFFF" fill-opacity="0.07"/>
       <text x="96" y="96" fill="#FFFFFF" font-size="34" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" letter-spacing="3">SOURCIER</text>
       <rect x="96" y="118" width="210" height="7" fill="#E8006A"/>
-      <text x="96" y="252" fill="#FFFFFF" font-size="96" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">END-TO-END</text>
-      <text x="96" y="352" fill="#FFFFFF" font-size="96" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">TESTING</text>
-      <text x="96" y="452" fill="#E8006A" font-size="96" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">WITH PLAYWRIGHT</text>
-      <text x="96" y="534" fill="#D8D8D8" font-size="34" font-family="Barlow, Arial, sans-serif">A practical starting point for junior and mid-level engineers</text>
+      <text x="96" y="252" fill="#FFFFFF" font-size="92" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">PLAYWRIGHT E2E</text>
+      <text x="96" y="348" fill="#FFFFFF" font-size="92" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">TESTING</text>
+      <text x="96" y="444" fill="#E8006A" font-size="92" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800">AI SKILLS</text>
+      <text x="96" y="528" fill="#D8D8D8" font-size="30" font-family="Barlow, Arial, sans-serif">Using Playwright and the playwright-explore-website skill to test real user journeys</text>
 
       <rect x="936" y="166" width="540" height="356" rx="22" fill="#FFFFFF" stroke="#D7D7D7" stroke-width="3"/>
       <rect x="936" y="166" width="540" height="44" rx="22" fill="#F4F4F4"/>
@@ -1409,12 +1586,12 @@ function buildCoverSvg() {
 
       <rect x="860" y="510" width="560" height="258" rx="22" fill="#121212" stroke="#1F1F1F" stroke-width="3"/>
       <rect x="860" y="510" width="560" height="40" rx="22" fill="#1B1B1B"/>
-      <text x="888" y="535" fill="#D9D9D9" font-size="14" font-family="Barlow, Arial, sans-serif">checkout.spec.ts</text>
-      <text x="890" y="590" fill="#8BD6C0" font-size="22" font-family="Menlo, Monaco, monospace">test(&quot;checkout works&quot;, async ({ page }) =&gt; {</text>
-      <text x="890" y="632" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">  await page.goto(&quot;/checkout&quot;);</text>
-      <text x="890" y="674" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">  await page.getByRole(&quot;button&quot;, { name: &quot;Place order&quot; }).click();</text>
-      <text x="890" y="716" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">  await expect(page.getByText(&quot;Order confirmed&quot;)).toBeVisible();</text>
-      <text x="890" y="758" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">});</text>
+      <text x="888" y="535" fill="#D9D9D9" font-size="14" font-family="Barlow, Arial, sans-serif">exploration prompt</text>
+      <text x="890" y="590" fill="#8BD6C0" font-size="22" font-family="Menlo, Monaco, monospace">Use the playwright-explore-website skill</text>
+      <text x="890" y="632" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">on https://staging.example.com.</text>
+      <text x="890" y="674" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">Explore sign-in, password reset, and checkout.</text>
+      <text x="890" y="716" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">Document likely locators and expected outcomes.</text>
+      <text x="890" y="758" fill="#EFEFEF" font-size="22" font-family="Menlo, Monaco, monospace">Draft one candidate Playwright test case.</text>
     </svg>
   `;
 }
@@ -1454,8 +1631,8 @@ async function createTalkDeck() {
   pptx.author = "Roger Rajaratnam";
   pptx.company = "Sourcier";
   pptx.subject =
-    "10 minute talk on end-to-end testing with Playwright for JavaScript London";
-  pptx.title = "Ship With Confidence: End-to-End Testing With Playwright";
+    "JavaScript London talk on using Playwright and GitHub Copilot skills for E2E testing and browser exploration";
+  pptx.title = "Playwright E2E testing AI skills";
   pptx.lang = "en-GB";
 
   addTitleSlide(pptx);

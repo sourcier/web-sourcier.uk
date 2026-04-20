@@ -23,6 +23,13 @@
   --surface-elevated: #fffaf4;
   --surface-page-top: #f6ece1;
   --surface-page-bottom: #e5d8c9;
+  --surface-inline-code: var(--surface-elevated);
+  --surface-inline-code-border: rgba(var(--accent-primary-rgb), 0.14);
+  --text-inline-code: color-mix(
+    in srgb,
+    var(--accent-primary) 68%,
+    var(--text-primary) 32%
+  );
 
   --bulma-primary-h: var(--accent-primary-h);
   --bulma-primary-s: var(--accent-primary-s);
@@ -103,6 +110,8 @@
   --bulma-text: var(--text-primary);
   --bulma-text-strong: var(--text-primary);
   --bulma-background: var(--surface-page);
+  --bulma-code-background: var(--surface-inline-code);
+  --bulma-code: var(--text-inline-code);
   --bulma-border: var(--border-subtle);
   --bulma-link-text: var(--accent-primary);
 }
@@ -114,6 +123,13 @@
   --surface-elevated: #1c1c1c;
   --surface-page-top: #151315;
   --surface-page-bottom: var(--surface-page);
+  --surface-inline-code: var(--surface-elevated);
+  --surface-inline-code-border: rgba(var(--accent-primary-rgb), 0.2);
+  --text-inline-code: color-mix(
+    in srgb,
+    var(--accent-primary) 55%,
+    var(--text-primary) 45%
+  );
   --border-subtle: rgba(var(--text-on-strong-rgb), 0.1);
 
   --page-atmosphere-primary: var(--accent-primary-alpha-12);
@@ -126,8 +142,14 @@
   --bulma-text: var(--text-primary);
   --bulma-text-strong: var(--text-primary);
   --bulma-background: var(--surface-elevated);
+  --bulma-code-background: var(--surface-inline-code);
+  --bulma-code: var(--text-inline-code);
   --bulma-border: var(--border-subtle);
   --bulma-link-text: var(--accent-primary);
+}
+
+code:not(pre code) {
+  border: 1px solid var(--surface-inline-code-border);
 }
 
 .visually-hidden {
@@ -214,6 +236,27 @@ main > :where(.stack-space--loose, .flow-section--loose) {
 
 main > :where(.stack-space, .flow-section):first-child {
   margin-top: 0;
+}
+
+main
+  > .post
+  > :where(.stack-space, .flow-section)
+  + :where(.stack-space, .flow-section) {
+  --section-space: var(--space-section);
+  margin-top: var(--section-space);
+}
+
+main > .post > :where(.stack-space--tight, .flow-section--tight) {
+  --section-space: var(--space-section-tight);
+}
+
+main > .post > :where(.stack-space--loose, .flow-section--loose) {
+  --section-space: var(--space-section-loose);
+}
+
+main > .post > .flow-section {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 main > .flow-section {
