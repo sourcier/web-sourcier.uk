@@ -68,6 +68,7 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 - Environment variables via `process.env` in Netlify functions, `import.meta.env` in Astro
 - All secrets in Netlify dashboard, never in code — see `.env.example` for the list
 - Draft posts controlled by `SHOW_DRAFTS` env var and `isPublished()` utility
+- Use `isPublished()` for preview visibility, and use `isPubliclyPublished()` for anything labelled `Published` and any public-only counts or stats
 - Posts with future dates auto-publish via daily scheduled build (07:45 UTC)
 
 ## Astro Conventions

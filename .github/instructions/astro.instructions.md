@@ -178,6 +178,8 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - `process.env` in Netlify functions
 - All secrets in Netlify dashboard, never in code — see `.env.example`
 - Draft posts: controlled by `SHOW_DRAFTS` env var and `isPublished()` utility
+- Use `isPublished()` for visibility in dev and preview, where `SHOW_DRAFTS=true` may intentionally expose draft and scheduled posts.
+- Use `isPubliclyPublished()` for anything labelled `Published` and for any public-only counts, totals, or stats.
 - `SHOW_DRAFTS=true` is for visibility only. It may expose draft and scheduled posts in dev or preview, but it must not collapse their status into a published presentation.
 
 ## Performance

@@ -47,6 +47,7 @@ history:
 - `draft: false` plus a past or current `pubDate` means the post is published.
 - Use `draft: true` for work in progress. Use a future `pubDate` only when the content is ready but intentionally scheduled.
 - In local preview with `SHOW_DRAFTS=true`, both draft and scheduled posts may be visible, but they must still present explicit status instead of looking published.
+- For implementation, use `isPublished()` to decide visibility in preview or dev, and use `isPubliclyPublished()` for published labels, public counts, and public-only stats.
 
 ## Slug Changes
 
