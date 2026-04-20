@@ -11,11 +11,19 @@ const outputFile = path.join(outputDir, "sourcier-blog-template.pptx");
 
 const COLORS = {
   pink: "E8006A",
+  green: "2A7D5B",
+  greenDeep: "1B5A40",
   ink: "0F0F0F",
   paper: "FFFFFF",
+  elevated: "FFFAF4",
+  warmTop: "F6ECE1",
+  warmBottom: "E5D8C9",
   muted: "6B6B6B",
+  mutedLight: "D8D8D8",
   darkBg: "0A0A0A",
+  darkBgBottom: "101410",
   border: "D7D7D7",
+  borderWarm: "D8C5AE",
 };
 
 const FONT = {
@@ -23,14 +31,48 @@ const FONT = {
   body: "Barlow",
 };
 
+function addAtmosphere(slide) {
+  slide.background = { color: COLORS.warmTop };
+
+  slide.addShape("roundRect", {
+    x: -2.1,
+    y: -1.2,
+    w: 5.9,
+    h: 4.9,
+    rectRadius: 0.3,
+    fill: { color: COLORS.pink, transparency: 92 },
+    line: { color: COLORS.pink, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 9.2,
+    y: -1.5,
+    w: 6.2,
+    h: 5.6,
+    rectRadius: 0.3,
+    fill: { color: COLORS.green, transparency: 90 },
+    line: { color: COLORS.green, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 7.1,
+    y: 5.5,
+    w: 8.1,
+    h: 3.4,
+    rectRadius: 0.3,
+    fill: { color: COLORS.warmBottom, transparency: 24 },
+    line: { color: COLORS.warmBottom, transparency: 100 },
+  });
+}
+
 function addHeader(slide, title, subtitle = "") {
   slide.addShape("rect", {
     x: 0,
     y: 0,
     w: 13.333,
     h: 0.72,
-    fill: { color: COLORS.darkBg },
-    line: { color: COLORS.darkBg },
+    fill: { color: COLORS.darkBgBottom },
+    line: { color: COLORS.darkBgBottom },
   });
 
   slide.addShape("line", {
@@ -39,6 +81,14 @@ function addHeader(slide, title, subtitle = "") {
     w: 13.333,
     h: 0,
     line: { color: COLORS.pink, pt: 2.25 },
+  });
+
+  slide.addShape("line", {
+    x: 0,
+    y: 0.68,
+    w: 13.333,
+    h: 0,
+    line: { color: COLORS.green, pt: 0.75, transparency: 24 },
   });
 
   slide.addText("SOURCIER", {
@@ -129,6 +179,16 @@ function addTitleSlide(pptx) {
   });
 
   slide.addShape("roundRect", {
+    x: 8.2,
+    y: -1.2,
+    w: 4.9,
+    h: 4.9,
+    rectRadius: 0.3,
+    fill: { color: COLORS.green, transparency: 82 },
+    line: { color: COLORS.green, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
     x: -2.2,
     y: 4.8,
     w: 6.2,
@@ -205,6 +265,8 @@ function addTitleSlide(pptx) {
 function addSectionSlide(pptx) {
   const slide = pptx.addSlide();
 
+  addAtmosphere(slide);
+
   addHeader(slide, "Section Heading", "Use this slide to split major themes.");
 
   slide.addShape("roundRect", {
@@ -213,8 +275,8 @@ function addSectionSlide(pptx) {
     w: 12.333,
     h: 3.55,
     rectRadius: 0.08,
-    fill: { color: "F9F9F9" },
-    line: { color: "F1F1F1", pt: 1 },
+    fill: { color: COLORS.elevated },
+    line: { color: COLORS.borderWarm, pt: 1 },
   });
 
   slide.addShape("rect", {
@@ -253,6 +315,8 @@ function addSectionSlide(pptx) {
 function addContentSlide(pptx) {
   const slide = pptx.addSlide();
 
+  addAtmosphere(slide);
+
   addHeader(
     slide,
     "Content Layout",
@@ -264,8 +328,8 @@ function addContentSlide(pptx) {
     y: 2.35,
     w: 5.95,
     h: 4.35,
-    fill: { color: "FFFFFF" },
-    line: { color: COLORS.border, pt: 1 },
+    fill: { color: COLORS.elevated },
+    line: { color: COLORS.borderWarm, pt: 1 },
   });
 
   slide.addShape("rect", {
@@ -273,8 +337,8 @@ function addContentSlide(pptx) {
     y: 2.35,
     w: 5.95,
     h: 4.35,
-    fill: { color: "FFFFFF" },
-    line: { color: COLORS.border, pt: 1 },
+    fill: { color: COLORS.elevated },
+    line: { color: COLORS.borderWarm, pt: 1 },
   });
 
   slide.addText("Left column heading", {
@@ -317,8 +381,8 @@ function addContentSlide(pptx) {
     w: 5.2,
     h: 3.1,
     rectRadius: 0.08,
-    fill: { color: "F5F5F5" },
-    line: { color: "EEEEEE", pt: 1 },
+    fill: { color: COLORS.warmTop },
+    line: { color: COLORS.borderWarm, pt: 1 },
   });
 
   slide.addText("Drop chart, screenshot, or code image here", {
@@ -338,6 +402,8 @@ function addContentSlide(pptx) {
 function addQuoteSlide(pptx) {
   const slide = pptx.addSlide();
 
+  addAtmosphere(slide);
+
   addHeader(
     slide,
     "Quote Layout",
@@ -350,8 +416,17 @@ function addQuoteSlide(pptx) {
     w: 10.85,
     h: 3.35,
     rectRadius: 0.1,
-    fill: { color: "FFFFFF" },
+    fill: { color: COLORS.elevated },
     line: { color: COLORS.pink, pt: 1.5 },
+  });
+
+  slide.addShape("rect", {
+    x: 1.25,
+    y: 2.45,
+    w: 0.14,
+    h: 3.35,
+    fill: { color: COLORS.green },
+    line: { color: COLORS.green, pt: 0 },
   });
 
   slide.addText('"', {
@@ -398,6 +473,8 @@ function addQuoteSlide(pptx) {
 function addImageSlide(pptx) {
   const slide = pptx.addSlide();
 
+  addAtmosphere(slide);
+
   addHeader(
     slide,
     "Image + Caption",
@@ -409,8 +486,8 @@ function addImageSlide(pptx) {
     y: 2.2,
     w: 11.75,
     h: 4.3,
-    fill: { color: "F4F4F4" },
-    line: { color: COLORS.border, pt: 1 },
+    fill: { color: COLORS.elevated },
+    line: { color: COLORS.borderWarm, pt: 1 },
   });
 
   slide.addShape("line", {
@@ -418,7 +495,7 @@ function addImageSlide(pptx) {
     y: 2.2,
     w: 11.75,
     h: 4.3,
-    line: { color: "D0D0D0", pt: 1 },
+    line: { color: COLORS.border, pt: 1 },
   });
 
   slide.addShape("line", {
@@ -426,7 +503,7 @@ function addImageSlide(pptx) {
     y: 2.2,
     w: -11.75,
     h: 4.3,
-    line: { color: "D0D0D0", pt: 1 },
+    line: { color: COLORS.border, pt: 1 },
   });
 
   slide.addText("Replace with image", {
@@ -456,7 +533,7 @@ function addImageSlide(pptx) {
 function addClosingSlide(pptx) {
   const slide = pptx.addSlide();
 
-  slide.background = { color: COLORS.darkBg };
+  slide.background = { color: COLORS.darkBgBottom };
 
   slide.addShape("roundRect", {
     x: 8.7,
@@ -466,6 +543,16 @@ function addClosingSlide(pptx) {
     rectRadius: 0.3,
     fill: { color: COLORS.pink, transparency: 70 },
     line: { color: COLORS.pink, transparency: 100 },
+  });
+
+  slide.addShape("roundRect", {
+    x: 10.3,
+    y: -0.8,
+    w: 5,
+    h: 5,
+    rectRadius: 0.3,
+    fill: { color: COLORS.green, transparency: 82 },
+    line: { color: COLORS.green, transparency: 100 },
   });
 
   slide.addText("THANK YOU", {
@@ -486,7 +573,7 @@ function addClosingSlide(pptx) {
     w: 4,
     h: 0.4,
     fontFace: FONT.body,
-    color: "D8D8D8",
+    color: COLORS.mutedLight,
     fontSize: 22,
   });
 

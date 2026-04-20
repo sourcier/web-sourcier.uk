@@ -1,9 +1,12 @@
 # Sourcier PowerPoint Template
 
-This folder contains a branded PowerPoint template aligned with the blog design system:
+This folder contains a branded PowerPoint template aligned with the current blog design system:
 
-- Accent: `#e8006a`
-- Dark hero tone: `#0a0a0a`
+- Primary accent: `#e8006a`
+- Secondary accent: `#2a7d5b`
+- Warm surface tones: `#f6ece1` to `#e5d8c9`
+- Elevated card surface: `#fffaf4`
+- Dark hero tones: `#0a0a0a` to `#101410`
 - Body text colour: `#0f0f0f`
 - Heading font: `Barlow Condensed`
 - Body font: `Barlow`
