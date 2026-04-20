@@ -1,20 +1,34 @@
 ---
+import SharePost from "./SharePost.astro";
+import Reactions from "./Reactions.astro";
 import { faPlus, faCircleUp } from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 interface Props {
   tocHeadings?: { depth: number; slug: string; text: string }[];
+  shareTitle?: string;
+  shareUrl?: string;
+  postId?: string;
 }
 
-const { tocHeadings = [] } = Astro.props;
+const { tocHeadings = [], shareTitle, shareUrl, postId } = Astro.props;
 const hasToc = tocHeadings.length > 1;
+const hasShare = Boolean(shareTitle && shareUrl);
+const hasReactions = Boolean(postId);
+const hasPanel = hasToc || hasShare || hasReactions;
 const plusIcon = faIcon(faPlus, { size: 18 });
 const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
 ---
 
-<div class="page-menu" id="page-menu" aria-hidden="true" data-has-toc={hasToc}>
+<div
+  class="page-menu"
+  id="page-menu"
+  aria-hidden="true"
+  data-has-toc={hasToc}
+  data-has-panel={hasPanel}
+>
   {
-    hasToc ? (
+    hasPanel ? (
       <>
         <button
           class="page-menu__btn"
@@ -26,19 +40,45 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
           <span class="page-menu__btn-icon" set:html={plusIcon} />
         </button>
         <div class="page-menu__panel" id="page-menu-panel" hidden>
-          <nav aria-label="Table of contents">
-            <p class="page-menu__section-label">On this page</p>
-            <ol class="toc__list">
-              {tocHeadings.map((h) => (
-                <li class={`toc__item toc__item--h${h.depth}`}>
-                  <a class="toc__link page-menu__toc-link" href={`#${h.slug}`}>
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-          <div class="page-menu__actions page-menu__actions--with-toc">
+          {hasToc && (
+            <nav class="page-menu__section" aria-label="Table of contents">
+              <p class="page-menu__section-label">On this page</p>
+              <ol class="toc__list">
+                {tocHeadings.map((h) => (
+                  <li class={`toc__item toc__item--h${h.depth}`}>
+                    <a
+                      class="toc__link page-menu__toc-link"
+                      href={`#${h.slug}`}
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+          {hasReactions && (
+            <section class="page-menu__section page-menu__section--engagement">
+              <p class="page-menu__section-label">React to this post</p>
+              <div class="page-menu__reactions">
+                <Reactions postId={postId!} compact />
+              </div>
+            </section>
+          )}
+          {hasShare && (
+            <section class="page-menu__section page-menu__section--engagement">
+              <SharePost title={shareTitle!} url={shareUrl!} variant="menu" />
+            </section>
+          )}
+          <div
+            class:list={[
+              "page-menu__actions",
+              {
+                "page-menu__actions--with-sections":
+                  hasToc || hasShare || hasReactions,
+              },
+            ]}
+          >
             <button
               class="page-menu__top-btn"
               id="page-menu-top-btn"
@@ -69,7 +109,7 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
   ) as HTMLButtonElement | null;
 
   if (menuEl && btn) {
-    const hasToc = menuEl.dataset.hasToc === "true";
+    const hasPanel = menuEl.dataset.hasPanel === "true";
     const panel = document.getElementById(
       "page-menu-panel",
     ) as HTMLElement | null;
@@ -93,7 +133,7 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
       toggleVisibility();
     }
 
-    if (hasToc && panel) {
+    if (hasPanel && panel) {
       const close = () => {
         btn.setAttribute("aria-expanded", "false");
         panel.hidden = true;
@@ -235,8 +275,29 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
     margin: 0 0.25rem 0.5rem;
   }
 
+  .page-menu__section + .page-menu__section {
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .page-menu__section--engagement {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .page-menu__reactions :global(.reactions) {
+    margin: 0;
+  }
+
+  .page-menu__reactions
+    :global(.reactions.reactions--compact .reactions__buttons) {
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
   .page-menu__actions {
-    &--with-toc {
+    &--with-sections {
       border-top: 1px solid var(--border-subtle);
       margin-top: 0.75rem;
       padding-top: 0.5rem;

@@ -56,6 +56,9 @@ const thumbSrc = frontmatter.cover?.thumbnail
   author={frontmatter.author}
   tags={frontmatter.tags}
   tocHeadings={tocHeadings}
+  pageMenuShareTitle={frontmatter.title}
+  pageMenuShareUrl={Astro.url.href}
+  pageMenuPostId={postId}
 >
   <script
     is:inline
