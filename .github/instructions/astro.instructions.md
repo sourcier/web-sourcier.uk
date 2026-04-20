@@ -103,6 +103,13 @@ const posts = defineCollection({
 - If a footer divider or similar separator is meant to read as page-wide, implement it as a full-bleed line instead of a container-width border
 - For guides and similar navigation sections, prefer positive orientation headings over “problem” wording
 
+## UI Verification
+
+- For any change that affects rendered UI, use Playwright to inspect the live interface before and after the change. Do not rely on code inspection alone for visual verification.
+- Inspect multiple breakpoints or pages serially, or in separate tabs. Do not queue parallel navigations or screenshots against the same Playwright page context.
+- During visual QA, explicitly check supporting-label readability, hero-to-first-section spacing, footer divider spacing, and last-section-to-footer separation when those surfaces are present.
+- Delete temporary screenshots created during Playwright review before handing off, unless the user explicitly asks to keep them.
+
 ## Thumbnail Pipeline
 
 Pagefind search results display a thumbnail per post. The pipeline:

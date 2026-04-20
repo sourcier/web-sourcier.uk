@@ -59,6 +59,10 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 - If a course, feature, or CTA is launching soon, surface that as a distinct status badge or label rather than burying it in paragraph copy
 - Footer dividers that are meant to read as full-width separators should use full-bleed lines, not container-width borders
 - Prefer positive, orientation-based section headings for navigation blocks; avoid “problem” framing when the section is helping readers choose where to start
+- For any task that changes rendered UI, use Playwright to inspect the live interface before and after the change. Do not rely on code inspection alone for visual verification.
+- Inspect multiple pages or breakpoints serially or in separate tabs. Do not issue parallel navigations or screenshots against the same Playwright page context.
+- During visual QA, explicitly check supporting-label readability, hero-to-first-section spacing, footer divider spacing, and last-section-to-footer separation when relevant.
+- Delete temporary screenshots created during Playwright review before handing off, unless the user explicitly asks to keep them.
 
 ## Coding Conventions
 
