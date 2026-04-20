@@ -26,11 +26,14 @@ This command regenerates:
 ## Included slide layouts
 
 1. Title slide
-2. Section divider
-3. Two-column content slide
-4. Quote slide
-5. Image + caption slide
-6. Closing slide
+2. About Roger intro slide
+3. Section divider
+4. Guide map (start/build/ship orientation)
+5. Two-column working slide
+6. Technical decision (problem, constraints, decision, trade-offs)
+7. Quote slide
+8. Image + caption slide
+9. Closing slide
 
 ## Use as a reusable PowerPoint template
 
