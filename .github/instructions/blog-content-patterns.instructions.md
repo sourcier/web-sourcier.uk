@@ -40,6 +40,14 @@ history:
 - `history`: only add entries **after** publication. Do not add pre-publish revision notes.
 - Post slug is the folder name. If you rename it, rename the folder and every slug-derived asset in the same operation.
 
+## Publication States
+
+- `draft: true` always means the post is a draft, regardless of `pubDate`.
+- `draft: false` plus a future `pubDate` means the post is scheduled.
+- `draft: false` plus a past or current `pubDate` means the post is published.
+- Use `draft: true` for work in progress. Use a future `pubDate` only when the content is ready but intentionally scheduled.
+- In local preview with `SHOW_DRAFTS=true`, both draft and scheduled posts may be visible, but they must still present explicit status instead of looking published.
+
 ## Slug Changes
 
 When renaming a post slug:

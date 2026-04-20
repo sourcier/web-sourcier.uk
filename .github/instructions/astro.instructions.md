@@ -98,6 +98,8 @@ const posts = defineCollection({
 - Audience-navigation surfaces on Sourcier should call these curated routes **guides**; prefer “guide” over “path” in headings, buttons, and supporting copy unless the user explicitly asks otherwise
 - In compact stat cards, place the small uppercase label above the value and keep the value short enough to avoid awkward wrapping; longer role or employer details belong in sidebar-style fact cards instead
 - When something is launching soon, promote that status into a distinct badge or label instead of relying on paragraph copy alone
+- Draft and scheduled posts are distinct preview states. When they are visible in dev or preview, keep explicit status labels in cards and post heroes, and do not present either state as published.
+- Blog cards should use the same faded preview treatment for draft and scheduled posts, with ribbons that read `Draft` or `Scheduled` to match the underlying publication state.
 - If a footer divider or similar separator is meant to read as page-wide, implement it as a full-bleed line instead of a container-width border
 - For guides and similar navigation sections, prefer positive orientation headings over “problem” wording
 
@@ -176,6 +178,7 @@ This applies to the **site repo** (`web-sourcier.uk`) only — not the content r
 - `process.env` in Netlify functions
 - All secrets in Netlify dashboard, never in code — see `.env.example`
 - Draft posts: controlled by `SHOW_DRAFTS` env var and `isPublished()` utility
+- `SHOW_DRAFTS=true` is for visibility only. It may expose draft and scheduled posts in dev or preview, but it must not collapse their status into a published presentation.
 
 ## Performance
 
