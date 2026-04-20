@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { isPublished } from "../../utils/drafts";
+import { isPubliclyPublished, isPublished } from "../../utils/drafts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
@@ -92,7 +92,7 @@ function seededShuffle<T>(arr: T[]): T[] {
 
 const shuffled = seededShuffle(sorted);
 const totalTags = sorted.length;
-const totalPosts = allPosts.length;
+const publishedPostCount = allPosts.filter(isPubliclyPublished).length;
 
 // Per-ring visual treatment
 const ringStyle = (ringIdx: number) => {
@@ -132,7 +132,7 @@ const ringStyle = (ringIdx: number) => {
         <ul class="tag-summary__stats" role="list">
           <li class="tag-summary__stat">
             <span class="tag-summary__label">Published</span>
-            <span class="tag-summary__value">{totalPosts}</span>
+            <span class="tag-summary__value">{publishedPostCount}</span>
           </li>
           <li class="tag-summary__stat">
             <span class="tag-summary__label">Topics</span>
