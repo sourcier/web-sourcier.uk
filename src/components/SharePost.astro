@@ -41,9 +41,12 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
       rel="noopener noreferrer"
       class="share-post__btn"
       aria-label="Share on LinkedIn"
+      title="Share on LinkedIn"
     >
-      <Fragment set:html={linkedinIcon} />
-      <span>LinkedIn</span>
+      <span class="share-post__icon">
+        <Fragment set:html={linkedinIcon} />
+      </span>
+      <span class="share-post__text">LinkedIn</span>
     </a>
     <a
       href={redditUrl}
@@ -51,13 +54,23 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
       rel="noopener noreferrer"
       class="share-post__btn"
       aria-label="Share on Reddit"
+      title="Share on Reddit"
     >
-      <Fragment set:html={redditIcon} />
-      <span>Reddit</span>
+      <span class="share-post__icon">
+        <Fragment set:html={redditIcon} />
+      </span>
+      <span class="share-post__text">Reddit</span>
     </a>
-    <a href={emailUrl} class="share-post__btn" aria-label="Share by email">
-      <Fragment set:html={emailIcon} />
-      <span>Email</span>
+    <a
+      href={emailUrl}
+      class="share-post__btn"
+      aria-label="Share by email"
+      title="Share by email"
+    >
+      <span class="share-post__icon">
+        <Fragment set:html={emailIcon} />
+      </span>
+      <span class="share-post__text">Email</span>
     </a>
     <button
       type="button"
@@ -65,9 +78,10 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
       data-copy-link-btn
       aria-label="Copy link"
       data-url={url}
+      title="Copy link"
     >
-      <span class="copy-link-icon" set:html={linkIcon} />
-      <span class="copy-link-label">Copy link</span>
+      <span class="share-post__icon copy-link-icon" set:html={linkIcon} />
+      <span class="share-post__text copy-link-label">Copy link</span>
     </button>
   </div>
 </div>
@@ -90,9 +104,13 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
 
         const label = btn.querySelector(".copy-link-label");
         if (label) {
+          btn.setAttribute("aria-label", "Link copied");
+          btn.setAttribute("title", "Link copied");
           label.textContent = "Copied!";
           setTimeout(() => {
             label.textContent = "Copy link";
+            btn.setAttribute("aria-label", "Copy link");
+            btn.setAttribute("title", "Copy link");
           }, 2000);
         }
       });
@@ -148,6 +166,10 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
         color: color-mix(in srgb, var(--text-primary) 72%, transparent);
       }
 
+      .share-post__buttons {
+        gap: 0.45rem;
+      }
+
       .share-post__btn {
         border-color: color-mix(
           in srgb,
@@ -174,6 +196,15 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
             var(--accent-primary) 9%,
             rgba(var(--overlay-rgb), 0.04)
           );
+        }
+      }
+
+      @media (max-width: 1023px) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .share-post__buttons {
+          width: 100%;
         }
       }
     }
@@ -257,6 +288,13 @@ const emailIcon = faIcon(faEnvelope, { size: 16 });
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  .share-post__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .share-post__btn {

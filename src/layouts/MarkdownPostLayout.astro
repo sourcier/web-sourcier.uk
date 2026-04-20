@@ -92,6 +92,7 @@ const thumbSrc = frontmatter.cover?.thumbnail
       readingTime={readingTime}
       crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
       shareUrl={Astro.url.href}
+      postId={postId}
     />
 
     <div class="post__body">
@@ -131,9 +132,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
     </div>
 
     <SupportCTA />
-    <MailingListCTA />
-
     {postId && <Comments postId={postId} />}
+    <MailingListCTA />
     {
       (frontmatter.history?.length > 0 || frontmatter.credits?.length > 0) && (
         <section
