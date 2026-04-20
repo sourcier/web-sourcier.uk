@@ -1,11 +1,13 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import PostHero from "../components/PostHero.astro";
+import SharePost from "../components/SharePost.astro";
 import Comments from "../components/Comments.astro";
 import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import SupportCTA from "../components/SponsorCTA.astro";
+import { getPublicationStatus } from "../utils/drafts";
 
 import TagsSidebar from "../components/TagsSidebar.astro";
 const { frontmatter, postId, headings = [], readingTime } = Astro.props;
@@ -20,6 +22,22 @@ const formattedDate = frontmatter.pubDate
       timeZone: "Europe/London",
     })
   : null;
+const publicationStatus = getPublicationStatus({
+  draft: frontmatter.draft,
+  pubDate: frontmatter.pubDate,
+});
+const statusValue =
+  publicationStatus === "draft"
+    ? "Draft"
+    : publicationStatus === "scheduled"
+      ? "Scheduled"
+      : undefined;
+const dateLabel =
+  publicationStatus === "draft"
+    ? "Target date"
+    : publicationStatus === "scheduled"
+      ? "Scheduled for"
+      : "Published";
 
 const ogImage = frontmatter.cover?.image?.src ?? undefined;
 const pageTitle = `${frontmatter.title} — Sourcier`;
@@ -68,6 +86,8 @@ const thumbSrc = frontmatter.cover?.thumbnail
         ? { src: frontmatter.cover.image.src, alt: frontmatter.cover.alt }
         : undefined}
       tags={frontmatter.tags}
+      status={statusValue}
+      dateLabel={dateLabel}
       date={formattedDate ?? undefined}
       readingTime={readingTime}
       crumbs={[{ label: "Blog", href: "/blog" }, { label: frontmatter.title }]}
@@ -98,6 +118,12 @@ const thumbSrc = frontmatter.cover?.thumbnail
               </nav>
             )
           }
+          <SharePost
+            title={frontmatter.title}
+            url={Astro.url.href}
+            vertical
+            variant="sidebar"
+          />
           <SupportCTA mode="support" placement="sidebar" />
           <TagsSidebar />
         </aside>

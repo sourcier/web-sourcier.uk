@@ -1,4 +1,6 @@
 ---
+import { getPublicationStatus } from "../utils/drafts";
+
 const {
   description,
   title,
@@ -9,6 +11,16 @@ const {
   draft,
   readingTime,
 } = Astro.props;
+
+const publicationStatus = getPublicationStatus({ draft, pubDate });
+const previewLabel =
+  publicationStatus === "draft"
+    ? "Draft"
+    : publicationStatus === "scheduled"
+      ? "Scheduled"
+      : null;
+const isPreview = publicationStatus !== "published";
+
 const formattedDate = pubDate
   ? new Date(pubDate).toLocaleDateString("en-GB", {
       year: "numeric",
@@ -20,11 +32,22 @@ const formattedDate = pubDate
   : null;
 ---
 
-<a href={url} class={`card card__blog${draft ? " card__blog--draft" : ""}`}>
+<a
+  href={url}
+  class={`card card__blog${isPreview ? " card__blog--preview" : ""}`}
+>
   {
-    draft && (
-      <span class="card__draft-badge" aria-label="Draft">
-        Draft
+    previewLabel && (
+      <span
+        class:list={[
+          "card__status-badge",
+          {
+            "card__status-badge--scheduled": publicationStatus === "scheduled",
+          },
+        ]}
+        aria-label={previewLabel}
+      >
+        {previewLabel}
       </span>
     )
   }
@@ -86,7 +109,7 @@ const formattedDate = pubDate
     -webkit-box-orient: vertical;
   }
 
-  .card__draft-badge {
+  .card__status-badge {
     position: absolute;
     top: 0.625rem;
     left: 0.625rem;
@@ -100,9 +123,13 @@ const formattedDate = pubDate
     text-transform: uppercase;
     letter-spacing: 0.1em;
     line-height: 1;
+
+    &--scheduled {
+      background-color: var(--accent-secondary);
+    }
   }
 
-  .card__blog--draft {
+  .card__blog--preview {
     position: relative;
 
     &::after {

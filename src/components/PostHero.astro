@@ -12,6 +12,8 @@ interface Props {
   subtitle?: string;
   coverImage?: { src: string; alt?: string };
   tags?: string[];
+  status?: string;
+  dateLabel?: string;
   date?: string;
   readingTime?: string;
   crumbs?: Crumb[];
@@ -23,6 +25,8 @@ const {
   subtitle,
   coverImage,
   tags,
+  status,
+  dateLabel = "Published",
   date,
   readingTime,
   crumbs = [],
@@ -31,7 +35,8 @@ const {
 
 const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
 const facts = [
-  date ? { label: "Published", value: date } : null,
+  status ? { label: "Status", value: status } : null,
+  date ? { label: dateLabel, value: date } : null,
   readingTime ? { label: "Read time", value: readingTime } : null,
 ].filter(Boolean) as { label: string; value: string }[];
 const hasCover = Boolean(coverImage?.src);
