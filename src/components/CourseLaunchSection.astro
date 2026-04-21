@@ -5,11 +5,13 @@ import {
   courseOffers,
   courseSupportOffer,
 } from "../data/courses";
+import { getCourseIcon } from "../utils/contentIcons";
 
 const launchModules = courseOffers.map((course) => ({
   slug: course.slug,
   title: course.title,
   teaser: course.teaser,
+  icon: getCourseIcon(course.slug, 18),
 }));
 
 const launchSignals = [
@@ -78,7 +80,14 @@ const launchSignals = [
                 href={`/courses#course-${module.slug}`}
                 aria-label={`Jump to ${module.title} details`}
               >
-                <p class="course-launch__module-title">{module.title}</p>
+                <div class="course-launch__module-header">
+                  <span
+                    class="course-launch__module-icon"
+                    aria-hidden="true"
+                    set:html={module.icon}
+                  />
+                  <p class="course-launch__module-title">{module.title}</p>
+                </div>
                 <p class="course-launch__module-copy">{module.teaser}</p>
               </a>
             </li>
@@ -238,10 +247,17 @@ const launchSignals = [
     display: grid;
     gap: 0.75rem;
     grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .course-launch__modules li {
+    display: flex;
   }
 
   .course-launch__module {
-    display: block;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     border: 1px solid color-mix(in srgb, var(--border-subtle) 75%, transparent);
     border-radius: var(--radius-compact);
     padding: 0.85rem 0.9rem;
@@ -290,6 +306,32 @@ const launchSignals = [
     letter-spacing: 0.06em;
     color: var(--text-primary);
     font-weight: 700;
+  }
+
+  .course-launch__module-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .course-launch__module-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-secondary) 18%
+    );
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .course-launch__module-copy {

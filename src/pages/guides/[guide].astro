@@ -7,7 +7,15 @@ import PageHero from "../../components/PageHero.astro";
 import BlogPost from "../../components/BlogPost.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
 import { audienceGuides, getAudienceGuide } from "../../data/audienceGuides";
+import { getGuideIcon } from "../../utils/contentIcons";
+import { faIcon } from "../../utils/icons";
 import { isPublished } from "../../utils/drafts";
+import {
+  faCircleInfo,
+  faClock,
+  faListCheck,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
 export async function getStaticPaths() {
   return audienceGuides.map((guide) => ({
@@ -36,6 +44,12 @@ function isPostEntry(
 const guidePosts = guide.currentPostIds
   .map((postId) => postsById.get(postId))
   .filter(isPostEntry);
+
+const guidePageIcon = getGuideIcon(guide.slug, 18);
+const overviewIcon = faIcon(faCircleInfo, { size: 16 });
+const audienceIcon = faIcon(faUsers, { size: 16 });
+const coverageIcon = faIcon(faListCheck, { size: 16 });
+const plannedIcon = faIcon(faClock, { size: 14 });
 ---
 
 <BaseLayout
@@ -55,10 +69,24 @@ const guidePosts = guide.currentPostIds
   >
     <div class="container is-max-desktop">
       <div class="guide-intro__panel page-panel">
-        <p class="section-label">Overview</p>
-        <h2 class="guide-intro__heading" id="guide-intro-heading">
-          A practical guide, not just a list of links
-        </h2>
+        <p class="section-label guide-intro__label">
+          <span
+            class="guide-intro__label-icon"
+            aria-hidden="true"
+            set:html={overviewIcon}
+          />
+          <span>Overview</span>
+        </p>
+        <div class="guide-intro__heading-row">
+          <span
+            class="guide-intro__icon"
+            aria-hidden="true"
+            set:html={guidePageIcon}
+          />
+          <h2 class="guide-intro__heading" id="guide-intro-heading">
+            A practical guide, not just a list of links
+          </h2>
+        </div>
         <p class="guide-intro__body">{guide.intro}</p>
       </div>
     </div>
@@ -71,7 +99,14 @@ const guidePosts = guide.currentPostIds
     <div class="container is-max-desktop">
       <div class="guide-panels__grid">
         <article class="guide-panel">
-          <p class="guide-panel__kicker">Who this is for</p>
+          <p class="guide-panel__kicker">
+            <span
+              class="guide-panel__kicker-icon"
+              aria-hidden="true"
+              set:html={audienceIcon}
+            />
+            <span>Who this is for</span>
+          </p>
           <h2 class="guide-panel__title" id="guide-panels-heading">
             Start here if this sounds like you
           </h2>
@@ -81,7 +116,14 @@ const guidePosts = guide.currentPostIds
         </article>
 
         <article class="guide-panel">
-          <p class="guide-panel__kicker">What you will get</p>
+          <p class="guide-panel__kicker">
+            <span
+              class="guide-panel__kicker-icon"
+              aria-hidden="true"
+              set:html={coverageIcon}
+            />
+            <span>What you will get</span>
+          </p>
           <h2 class="guide-panel__title">What this guide will cover</h2>
           <ul class="guide-panel__list" role="list">
             {guide.whatYouWillGet.map((item) => <li>{item}</li>)}
@@ -142,7 +184,14 @@ const guidePosts = guide.currentPostIds
         {
           guide.plannedArticles.map((article) => (
             <article class="planned-article-card">
-              <p class="planned-article-card__status">Planned</p>
+              <p class="planned-article-card__status">
+                <span
+                  class="planned-article-card__status-icon"
+                  aria-hidden="true"
+                  set:html={plannedIcon}
+                />
+                <span>Planned</span>
+              </p>
               <h3 class="planned-article-card__title">{article.title}</h3>
               <p class="planned-article-card__body">{article.description}</p>
             </article>
@@ -199,6 +248,44 @@ const guidePosts = guide.currentPostIds
 
   .guide-intro__panel {
     padding-top: 1.5rem;
+  }
+
+  .guide-intro__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .guide-intro__label-icon,
+  .guide-panel__kicker-icon,
+  .planned-article-card__status-icon,
+  .guide-intro__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .guide-intro__heading-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .guide-intro__icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-primary) 18%
+    );
+    color: var(--accent-primary);
   }
 
   .guide-intro__heading,
@@ -261,6 +348,19 @@ const guidePosts = guide.currentPostIds
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+
+  .guide-panel__kicker,
+  .planned-article-card__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .guide-panel__kicker-icon,
+  .planned-article-card__status-icon,
+  .guide-intro__label-icon {
     color: var(--accent-primary);
   }
 

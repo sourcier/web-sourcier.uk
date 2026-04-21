@@ -3,23 +3,33 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import CourseInterestForm from "../components/CourseInterestForm.astro";
 import {
+  faClock,
+  faLayerGroup,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import {
   courseBundle,
   courseLaunchLabel,
   courseOffers,
   courseSupportOffer,
 } from "../data/courses";
+import { getCourseIcon } from "../utils/contentIcons";
+import { faIcon } from "../utils/icons";
 
 const learningModel = [
   {
     title: "Buy the full bundle or one course",
+    icon: faIcon(faLayerGroup, { size: 18 }),
     body: "Take the end-to-end bundle for broader context, or pick the single course that solves your next problem right now.",
   },
   {
     title: "Study self-paced",
+    icon: faIcon(faClock, { size: 18 }),
     body: "Work through the material on your own schedule without waiting for a live cohort or weekly timetable.",
   },
   {
     title: "1:1 support is included",
+    icon: faIcon(faUsers, { size: 18 }),
     body: `${courseSupportOffer.singleDetail} ${courseSupportOffer.bundleDetail} ${courseSupportOffer.additionalSessionsDetail}`,
   },
 ];
@@ -105,7 +115,14 @@ const purchasePaths = [
         {
           learningModel.map((item) => (
             <article class="courses-model__card">
-              <h3 class="courses-model__card-title">{item.title}</h3>
+              <div class="courses-model__card-header">
+                <span
+                  class="courses-model__card-icon"
+                  aria-hidden="true"
+                  set:html={item.icon}
+                />
+                <h3 class="courses-model__card-title">{item.title}</h3>
+              </div>
               <p class="courses-model__card-body">{item.body}</p>
             </article>
           ))
@@ -179,8 +196,17 @@ const purchasePaths = [
                 href={`#course-${course.slug}`}
                 aria-label={`Jump to ${course.title} details`}
               >
-                <p class="courses-bundle__course-focus">{course.focus}</p>
-                <h3 class="courses-bundle__course-title">{course.title}</h3>
+                <div class="courses-bundle__course-header">
+                  <span
+                    class="courses-bundle__course-icon"
+                    aria-hidden="true"
+                    set:html={getCourseIcon(course.slug, 18)}
+                  />
+                  <div class="courses-bundle__course-heading">
+                    <p class="courses-bundle__course-focus">{course.focus}</p>
+                    <h3 class="courses-bundle__course-title">{course.title}</h3>
+                  </div>
+                </div>
                 <p class="courses-bundle__course-copy">{course.teaser}</p>
               </a>
             ))
@@ -205,9 +231,20 @@ const purchasePaths = [
         {
           courseOffers.map((course) => (
             <article class="course-card" id={`course-${course.slug}`}>
-              <p class="course-card__status">{courseLaunchLabel}</p>
-              <p class="course-card__eyebrow">{course.focus}</p>
-              <h3 class="course-card__title">{course.title}</h3>
+              <div class="course-card__top">
+                <div class="course-card__header">
+                  <span
+                    class="course-card__icon"
+                    aria-hidden="true"
+                    set:html={getCourseIcon(course.slug, 20)}
+                  />
+                  <div class="course-card__heading">
+                    <p class="course-card__eyebrow">{course.focus}</p>
+                    <h3 class="course-card__title">{course.title}</h3>
+                  </div>
+                </div>
+                <p class="course-card__status">{courseLaunchLabel}</p>
+              </div>
               <p class="course-card__summary">{course.summary}</p>
 
               <div class="course-card__details">
@@ -437,6 +474,32 @@ const purchasePaths = [
 
   .courses-model__card-title {
     font-size: 1.15rem;
+  }
+
+  .courses-model__card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .courses-model__card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-secondary) 18%
+    );
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .courses-model__card-body,
@@ -737,6 +800,41 @@ const purchasePaths = [
     }
   }
 
+  .courses-bundle__course-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .courses-bundle__course-heading {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .courses-bundle__course-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-primary) 18%
+    );
+    color: var(--accent-primary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .courses-bundle__course-header .courses-bundle__course-title {
+    margin: 0;
+  }
+
   .courses-bundle__course-title,
   .course-support__path-title {
     margin: 0.35rem 0 0;
@@ -797,6 +895,48 @@ const purchasePaths = [
 
   .course-card__status {
     margin: 0;
+    justify-self: end;
+  }
+
+  .course-card__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "header status";
+    align-items: flex-start;
+    gap: 0.8rem 1rem;
+  }
+
+  .course-card__header {
+    grid-area: header;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+
+  .course-card__heading {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .course-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 80%,
+      var(--accent-primary) 20%
+    );
+    color: var(--accent-primary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .course-card__title {
@@ -858,6 +998,15 @@ const purchasePaths = [
       grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr);
       align-items: center;
       gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .course-card__top {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "status"
+        "header";
     }
   }
 </style>

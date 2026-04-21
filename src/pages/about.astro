@@ -17,6 +17,9 @@ import {
   faPostgresql,
 } from "@fortawesome/free-brands-svg-icons";
 import {
+  faBriefcase,
+  faArrowTrendUp,
+  faUserGraduate,
   faPaperPlane,
   faRectangleList,
   faHexagonNodes,
@@ -51,6 +54,26 @@ const toolingStack = [
   { label: "Netlify", icon: faIcon(faCloud, { size: 18 }) },
 ];
 
+const focusAreas = [
+  {
+    label: "Career switchers who need clarity",
+    icon: faIcon(faUserGraduate, { size: 16 }),
+  },
+  {
+    label: "Engineers growing into more ownership",
+    icon: faIcon(faArrowTrendUp, { size: 16 }),
+  },
+  {
+    label: "Teams raising the bar without process theatre",
+    icon: faIcon(faBriefcase, { size: 16 }),
+  },
+];
+
+const howIWorkIcon = faIcon(faRectangleList, { size: 14 });
+const transitionIntoTechIcon = faIcon(faUserGraduate, { size: 14 });
+const engineeringGrowthIcon = faIcon(faArrowTrendUp, { size: 14 });
+const engineeringPracticeIcon = faIcon(faHexagonNodes, { size: 14 });
+
 const pageTitle = "About — Roger Rajaratnam";
 ---
 
@@ -83,9 +106,18 @@ const pageTitle = "About — Roger Rajaratnam";
           </p>
         </div>
         <ul class="about-intro__list" role="list">
-          <li>Career switchers who need clarity</li>
-          <li>Engineers growing into more ownership</li>
-          <li>Teams raising the bar without process theatre</li>
+          {
+            focusAreas.map(({ label, icon }) => (
+              <li>
+                <span
+                  class="about-intro__list-icon"
+                  aria-hidden="true"
+                  set:html={icon}
+                />
+                <span>{label}</span>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
@@ -122,7 +154,14 @@ const pageTitle = "About — Roger Rajaratnam";
         <!-- Left: labelled narrative blocks -->
         <div class="about-bio__main">
           <div class="about-bio__block">
-            <h2 class="about-bio__kicker">How I work</h2>
+            <h2 class="about-bio__kicker">
+              <span
+                class="about-bio__kicker-icon"
+                aria-hidden="true"
+                set:html={howIWorkIcon}
+              />
+              <span>How I work</span>
+            </h2>
             <p class="about-bio__text">
               I am a software engineer based in London with more than 20 years
               of experience across product engineering, delivery, mentoring, and
@@ -134,7 +173,12 @@ const pageTitle = "About — Roger Rajaratnam";
 
           <div class="about-bio__block" id="career-support">
             <h2 class="about-bio__kicker">
-              For people transitioning into tech
+              <span
+                class="about-bio__kicker-icon"
+                aria-hidden="true"
+                set:html={transitionIntoTechIcon}
+              />
+              <span>For people transitioning into tech</span>
             </h2>
             <p class="about-bio__text">
               I teach the parts that often stay fuzzy when you are new: how the
@@ -148,7 +192,12 @@ const pageTitle = "About — Roger Rajaratnam";
 
           <div class="about-bio__block" id="career-growth-support">
             <h2 class="about-bio__kicker">
-              For engineers growing in confidence
+              <span
+                class="about-bio__kicker-icon"
+                aria-hidden="true"
+                set:html={engineeringGrowthIcon}
+              />
+              <span>For engineers growing in confidence</span>
             </h2>
             <p class="about-bio__text">
               A lot of career progression comes down to better habits rather
@@ -161,7 +210,12 @@ const pageTitle = "About — Roger Rajaratnam";
 
           <div class="about-bio__block" id="team-standards-support">
             <h2 class="about-bio__kicker">
-              For teams improving engineering practice
+              <span
+                class="about-bio__kicker-icon"
+                aria-hidden="true"
+                set:html={engineeringPracticeIcon}
+              />
+              <span>For teams improving engineering practice</span>
             </h2>
             <p class="about-bio__text">
               Most teams do not need more process. They need clearer
@@ -219,9 +273,7 @@ const pageTitle = "About — Roger Rajaratnam";
   <!-- Pullquote -->
   <div class="about-pullquote stack-space" aria-hidden="false">
     <div class="container is-max-desktop">
-      <blockquote
-        class="about-pullquote__inner page-panel page-panel--secondary"
-      >
+      <blockquote class="about-pullquote__inner page-panel">
         <p>
           I write for people getting into tech, engineers figuring out their
           next level, and teams that want practical engineering practice rather
@@ -360,6 +412,9 @@ const pageTitle = "About — Roger Rajaratnam";
   }
 
   .about-intro__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 0.95rem 1rem;
     border: 1px solid var(--accent-secondary-alpha-16);
     border-radius: var(--radius-soft);
@@ -374,6 +429,26 @@ const pageTitle = "About — Roger Rajaratnam";
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-primary);
+  }
+
+  .about-intro__list-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 84%,
+      var(--accent-secondary) 16%
+    );
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   /* ── Stats bar ─────────────────────────────────────────────── */
@@ -487,6 +562,9 @@ const pageTitle = "About — Roger Rajaratnam";
   }
 
   .about-bio__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
@@ -494,6 +572,17 @@ const pageTitle = "About — Roger Rajaratnam";
     letter-spacing: 0.12em;
     color: var(--accent-primary);
     margin-bottom: 0.75rem;
+  }
+
+  .about-bio__kicker-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .about-bio__text {

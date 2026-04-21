@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHero from "../../components/PageHero.astro";
 import MailingListCTA from "../../components/MailingListCTA.astro";
 import { audienceGuides } from "../../data/audienceGuides";
+import { getGuideIcon } from "../../utils/contentIcons";
 ---
 
 <BaseLayout
@@ -29,7 +30,16 @@ import { audienceGuides } from "../../data/audienceGuides";
         {
           audienceGuides.map((guide) => (
             <article class="guide-card">
-              <h3 class="guide-card__title">{guide.title}</h3>
+              <div class="guide-card__header">
+                <span
+                  class="guide-card__icon"
+                  aria-hidden="true"
+                  set:html={getGuideIcon(guide.slug, 18)}
+                />
+                <div class="guide-card__heading-group">
+                  <h3 class="guide-card__title">{guide.title}</h3>
+                </div>
+              </div>
               <p class="guide-card__body">{guide.summary}</p>
               <div class="guide-card__meta" aria-label="Guide coverage">
                 <span>{guide.currentPostIds.length} published now</span>
@@ -128,6 +138,36 @@ import { audienceGuides } from "../../data/audienceGuides";
     font-size: 1.2rem;
     line-height: 1.1;
     color: var(--text-primary);
+  }
+
+  .guide-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .guide-card__heading-group {
+    display: grid;
+  }
+
+  .guide-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-primary) 18%
+    );
+    color: var(--accent-primary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .guide-card__body {

@@ -7,6 +7,7 @@ import MailingListCTA from "../../components/MailingListCTA.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
 import BlogTagCloud from "../../components/BlogTagCloud.astro";
 import { audienceGuides } from "../../data/audienceGuides";
+import { getGuideIcon } from "../../utils/contentIcons";
 
 const PAGE_SIZE = 9;
 
@@ -72,8 +73,16 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
         {
           audienceGuides.map((guide) => (
             <article class="blog-path-card">
-              <p class="blog-path-card__eyebrow">Guide</p>
-              <h3 class="blog-path-card__title">{guide.title}</h3>
+              <div class="blog-path-card__header">
+                <span
+                  class="blog-path-card__icon"
+                  aria-hidden="true"
+                  set:html={getGuideIcon(guide.slug, 18)}
+                />
+                <div class="blog-path-card__heading-group">
+                  <h3 class="blog-path-card__title">{guide.title}</h3>
+                </div>
+              </div>
               <p class="blog-path-card__body">{guide.summary}</p>
               <div class="blog-path-card__meta" aria-label="Guide coverage">
                 <span>{guide.currentPostIds.length} published now</span>
@@ -193,14 +202,34 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     }
   }
 
-  .blog-path-card__eyebrow {
-    margin: 0;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .blog-path-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .blog-path-card__heading-group {
+    display: grid;
+  }
+
+  .blog-path-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-secondary) 18%
+    );
     color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .blog-path-card__title {

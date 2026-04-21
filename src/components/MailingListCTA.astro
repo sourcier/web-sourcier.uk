@@ -37,15 +37,18 @@
             />
           </p>
           <div class="mailing-cta__field">
-            <label for="mailing-cta-email" class="is-sr-only"
-              >Email address</label
-            >
+            <label for="mailing-cta-email" class="mailing-cta__label">
+              <span class="mailing-cta__label-title">Email for new posts</span>
+              <span class="mailing-cta__label-note"
+                >One short email when something practical goes live.</span
+              >
+            </label>
             <input
               id="mailing-cta-email"
               name="email"
               type="email"
               class="input mailing-cta__input"
-              placeholder="your@email.com"
+              placeholder="you@example.com"
               autocomplete="email"
               required
             />
@@ -258,10 +261,27 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+  }
 
-    @media (min-width: 640px) {
-      flex-direction: row;
-    }
+  .mailing-cta__label {
+    display: grid;
+    gap: 0.2rem;
+    margin: 0;
+  }
+
+  .mailing-cta__label-title {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-on-strong);
+  }
+
+  .mailing-cta__label-note {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: rgba(var(--text-on-strong-rgb), 0.68);
   }
 
   .mailing-cta__input {
@@ -290,6 +310,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     background-color: var(--text-on-strong);
     border-color: rgba(var(--text-on-strong-rgb), 0.92);
     color: var(--accent-secondary-deep);

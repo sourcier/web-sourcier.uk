@@ -5,11 +5,14 @@ import MailingListCTA from "../components/MailingListCTA.astro";
 import SupportCTA from "../components/SponsorCTA.astro";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
+  faBolt,
+  faBriefcase,
   faLaptop,
   faMobileScreen,
   faHeadphones,
   faCode,
   faTerminal,
+  faHeart,
   faRobot,
   faMagnifyingGlass,
   faWindowRestore,
@@ -102,9 +105,18 @@ const macosApps = [
 ];
 
 const setupPrinciples = [
-  "Fast enough to stay out of the way",
-  "Portable between home and office",
-  "Low-friction tools I genuinely enjoy using",
+  {
+    label: "Fast enough to stay out of the way",
+    icon: faIcon(faBolt, { size: 16 }),
+  },
+  {
+    label: "Portable between home and office",
+    icon: faIcon(faBriefcase, { size: 16 }),
+  },
+  {
+    label: "Low-friction tools I genuinely enjoy using",
+    icon: faIcon(faHeart, { size: 16 }),
+  },
 ];
 ---
 
@@ -137,7 +149,18 @@ const setupPrinciples = [
           </p>
         </div>
         <ul class="uses-intro__list" role="list">
-          {setupPrinciples.map((item) => <li>{item}</li>)}
+          {
+            setupPrinciples.map((item) => (
+              <li>
+                <span
+                  class="uses-intro__list-icon"
+                  aria-hidden="true"
+                  set:html={item.icon}
+                />
+                <span>{item.label}</span>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
@@ -324,6 +347,9 @@ const setupPrinciples = [
   }
 
   .uses-intro__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
     padding: 0.95rem 1rem;
     border: 1px solid var(--accent-secondary-alpha-16);
     border-radius: var(--radius-soft);
@@ -338,6 +364,26 @@ const setupPrinciples = [
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-primary);
+  }
+
+  .uses-intro__list-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-secondary) 18%
+    );
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
   }
 
   .uses-page {
