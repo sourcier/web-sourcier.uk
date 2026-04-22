@@ -256,6 +256,7 @@ const launchSignals = [
     list-style: none;
     margin: 0;
     padding: 0;
+    padding-top: 0.75rem;
     display: grid;
     gap: 0.75rem;
     grid-template-columns: 1fr;
@@ -284,7 +285,7 @@ const launchSignals = [
       transform 180ms ease,
       border-color 180ms ease,
       box-shadow 180ms ease;
-    animation: course-module-in 320ms ease both;
+    animation: course-module-in 320ms ease backwards;
 
     &:hover,
     &:focus-visible {
@@ -294,7 +295,8 @@ const launchSignals = [
         var(--accent-secondary) 22%,
         transparent
       );
-      box-shadow: 0 14px 28px rgba(var(--shadow-rgb), 0.08);
+      box-shadow: 0 18px 34px
+        color-mix(in srgb, var(--accent-secondary) 10%, transparent);
     }
   }
 
