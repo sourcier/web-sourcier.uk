@@ -68,6 +68,228 @@ const purchasePaths = [
   />
 
   <section
+    class="section courses-bundle flow-section"
+    aria-label="Course purchase options"
+  >
+    <div class="container is-max-desktop">
+      <div class="courses-bundle__panel" data-course-tabs>
+        <div class="courses-bundle__section-intro">
+          <p class="section-label section-label--secondary">
+            Choose your route
+          </p>
+          <p class="courses-bundle__section-body">
+            Start with the full bundle for end-to-end context, or switch to the
+            course catalogue when you want a single course that solves the next
+            gap first.
+          </p>
+        </div>
+
+        <div
+          class="courses-bundle__tab-list"
+          role="tablist"
+          aria-label="Course purchase options"
+        >
+          <button
+            type="button"
+            id="courses-bundle-tab"
+            class="courses-bundle__tab is-active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="courses-bundle-panel"
+            tabindex="0"
+            data-course-tab="bundle"
+          >
+            Full bundle
+          </button>
+          <button
+            type="button"
+            id="course-catalogue-tab"
+            class="courses-bundle__tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="course-catalogue"
+            tabindex="-1"
+            data-course-tab="catalogue"
+          >
+            Course catalogue
+          </button>
+        </div>
+
+        <div
+          class="courses-bundle__tab-panel"
+          id="courses-bundle-panel"
+          role="tabpanel"
+          aria-labelledby="courses-bundle-tab"
+          tabindex="0"
+          data-course-panel="bundle"
+        >
+          <div class="courses-bundle__panel-grid">
+            <div class="courses-bundle__intro">
+              <p class="courses-bundle__kicker">Full bundle</p>
+              <div class="courses-bundle__chips" aria-label="Bundle details">
+                <span class="courses-bundle__chip courses-bundle__chip--status">
+                  {courseLaunchLabel}
+                </span>
+                <span class="courses-bundle__chip">4 courses</span>
+                <span class="courses-bundle__chip">Self-paced</span>
+                <span class="courses-bundle__chip"
+                  >{courseSupportOffer.bundleShort}</span
+                >
+              </div>
+              <h2 class="courses-bundle__title" id="courses-bundle-heading">
+                {courseBundle.title}
+              </h2>
+              <p class="courses-bundle__body">{courseBundle.summary}</p>
+              <ul class="courses-bundle__benefits" role="list">
+                {courseBundle.benefits.map((benefit) => <li>{benefit}</li>)}
+              </ul>
+              <div class="courses-bundle__actions">
+                <a
+                  href="/contact?reason=course-enquiry#contact-form"
+                  class="button is-ink is-medium"
+                >
+                  Ask about the full bundle
+                </a>
+                <a
+                  href="#course-catalogue"
+                  class="courses-bundle__link"
+                  data-course-switch="catalogue"
+                >
+                  Open the course catalogue
+                </a>
+              </div>
+            </div>
+
+            <div class="courses-bundle__aside page-panel page-panel--secondary">
+              <p class="courses-bundle__aside-label">Good fit for</p>
+              <ul class="courses-bundle__audience" role="list">
+                {courseBundle.audience.map((item) => <li>{item}</li>)}
+              </ul>
+              <div class="courses-bundle__support">
+                <p class="courses-bundle__support-label">Included support</p>
+                <p class="courses-bundle__support-copy">
+                  {courseSupportOffer.singleDetail}
+                </p>
+                <p class="courses-bundle__support-copy">
+                  {courseSupportOffer.bundleDetail}
+                </p>
+                <p class="courses-bundle__support-copy">
+                  {courseSupportOffer.additionalSessionsDetail}
+                </p>
+              </div>
+            </div>
+
+            <div class="courses-bundle__course-grid">
+              {
+                courseOffers.map((course) => (
+                  <a
+                    class="courses-bundle__course-card"
+                    href={`#course-${course.slug}`}
+                    aria-label={`Show ${course.title} in the course catalogue`}
+                    data-course-switch="catalogue"
+                  >
+                    <div class="courses-bundle__course-header">
+                      <span
+                        class="courses-bundle__course-icon"
+                        aria-hidden="true"
+                        set:html={getCourseIcon(course.slug, 18)}
+                      />
+                      <div class="courses-bundle__course-heading">
+                        <p class="courses-bundle__course-focus">
+                          {course.focus}
+                        </p>
+                        <h3 class="courses-bundle__course-title">
+                          {course.title}
+                        </h3>
+                      </div>
+                    </div>
+                    <p class="courses-bundle__course-copy">{course.teaser}</p>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="courses-bundle__tab-panel courses-bundle__tab-panel--catalogue"
+          id="course-catalogue"
+          role="tabpanel"
+          aria-labelledby="course-catalogue-tab"
+          tabindex="0"
+          data-course-panel="catalogue"
+          hidden
+        >
+          <div class="courses-bundle__catalogue-intro">
+            <p class="section-label section-label--secondary">
+              Course catalogue
+            </p>
+            <h2 class="course-catalogue__heading" id="course-catalogue-heading">
+              Four focused courses you can take on their own or as one connected
+              bundle
+            </h2>
+            <p class="courses-bundle__catalogue-body">
+              Choose the one that matches the gap you need to close now, or use
+              the bundle if you want the whole stack to connect from foundations
+              to delivery.
+            </p>
+          </div>
+          <div class="course-catalogue__grid">
+            {
+              courseOffers.map((course) => (
+                <article class="course-card" id={`course-${course.slug}`}>
+                  <div class="course-card__top">
+                    <div class="course-card__header">
+                      <span
+                        class="course-card__icon"
+                        aria-hidden="true"
+                        set:html={getCourseIcon(course.slug, 20)}
+                      />
+                      <div class="course-card__heading">
+                        <p class="course-card__eyebrow">{course.focus}</p>
+                        <h3 class="course-card__title">{course.title}</h3>
+                      </div>
+                    </div>
+                    <p class="course-card__status">{courseLaunchLabel}</p>
+                  </div>
+                  <p class="course-card__summary">{course.summary}</p>
+
+                  <div class="course-card__details">
+                    <div class="course-card__detail-block">
+                      <p class="course-card__label">Topics</p>
+                      <ul class="course-card__list" role="list">
+                        {course.topics.map((topic) => (
+                          <li>{topic}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div class="course-card__detail-block">
+                      <p class="course-card__label">You will leave with</p>
+                      <ul class="course-card__list" role="list">
+                        {course.outcomes.map((outcome) => (
+                          <li>{outcome}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <a
+                    href="/contact?reason=course-enquiry#contact-form"
+                    class="course-card__cta"
+                  >
+                    Ask about this course
+                  </a>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
     class="section courses-launch-note flow-section flow-section--tight"
     aria-labelledby="courses-launch-note-heading"
   >
@@ -124,155 +346,6 @@ const purchasePaths = [
                 <h3 class="courses-model__card-title">{item.title}</h3>
               </div>
               <p class="courses-model__card-body">{item.body}</p>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <section
-    class="section courses-bundle flow-section"
-    aria-labelledby="courses-bundle-heading"
-  >
-    <div class="container is-max-desktop">
-      <div class="courses-bundle__panel">
-        <div class="courses-bundle__intro">
-          <p class="courses-bundle__kicker">Full bundle</p>
-          <div class="courses-bundle__chips" aria-label="Bundle details">
-            <span class="courses-bundle__chip courses-bundle__chip--status">
-              {courseLaunchLabel}
-            </span>
-            <span class="courses-bundle__chip">4 courses</span>
-            <span class="courses-bundle__chip">Self-paced</span>
-            <span class="courses-bundle__chip"
-              >{courseSupportOffer.singleShort}</span
-            >
-          </div>
-          <h2 class="courses-bundle__title" id="courses-bundle-heading">
-            {courseBundle.title}
-          </h2>
-          <p class="courses-bundle__body">{courseBundle.summary}</p>
-          <ul class="courses-bundle__benefits" role="list">
-            {courseBundle.benefits.map((benefit) => <li>{benefit}</li>)}
-          </ul>
-          <div class="courses-bundle__actions">
-            <a
-              href="/contact?reason=course-enquiry#contact-form"
-              class="button is-ink is-medium"
-            >
-              Ask about the full bundle
-            </a>
-            <a href="#course-catalogue" class="courses-bundle__link">
-              Compare the individual courses
-            </a>
-          </div>
-        </div>
-
-        <div class="courses-bundle__aside page-panel page-panel--secondary">
-          <p class="courses-bundle__aside-label">Good fit for</p>
-          <ul class="courses-bundle__audience" role="list">
-            {courseBundle.audience.map((item) => <li>{item}</li>)}
-          </ul>
-          <div class="courses-bundle__support">
-            <p class="courses-bundle__support-label">Included support</p>
-            <p class="courses-bundle__support-copy">
-              {courseSupportOffer.singleDetail}
-            </p>
-            <p class="courses-bundle__support-copy">
-              {courseSupportOffer.bundleDetail}
-            </p>
-            <p class="courses-bundle__support-copy">
-              {courseSupportOffer.additionalSessionsDetail}
-            </p>
-          </div>
-        </div>
-
-        <div class="courses-bundle__course-grid">
-          {
-            courseOffers.map((course) => (
-              <a
-                class="courses-bundle__course-card"
-                href={`#course-${course.slug}`}
-                aria-label={`Jump to ${course.title} details`}
-              >
-                <div class="courses-bundle__course-header">
-                  <span
-                    class="courses-bundle__course-icon"
-                    aria-hidden="true"
-                    set:html={getCourseIcon(course.slug, 18)}
-                  />
-                  <div class="courses-bundle__course-heading">
-                    <p class="courses-bundle__course-focus">{course.focus}</p>
-                    <h3 class="courses-bundle__course-title">{course.title}</h3>
-                  </div>
-                </div>
-                <p class="courses-bundle__course-copy">{course.teaser}</p>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section
-    class="section course-catalogue flow-section"
-    aria-labelledby="course-catalogue-heading"
-    id="course-catalogue"
-  >
-    <div class="container is-max-desktop">
-      <p class="section-label section-label--secondary">Course catalogue</p>
-      <h2 class="course-catalogue__heading" id="course-catalogue-heading">
-        Four focused courses you can take on their own or as one connected
-        bundle
-      </h2>
-      <div class="course-catalogue__grid">
-        {
-          courseOffers.map((course) => (
-            <article class="course-card" id={`course-${course.slug}`}>
-              <div class="course-card__top">
-                <div class="course-card__header">
-                  <span
-                    class="course-card__icon"
-                    aria-hidden="true"
-                    set:html={getCourseIcon(course.slug, 20)}
-                  />
-                  <div class="course-card__heading">
-                    <p class="course-card__eyebrow">{course.focus}</p>
-                    <h3 class="course-card__title">{course.title}</h3>
-                  </div>
-                </div>
-                <p class="course-card__status">{courseLaunchLabel}</p>
-              </div>
-              <p class="course-card__summary">{course.summary}</p>
-
-              <div class="course-card__details">
-                <div class="course-card__detail-block">
-                  <p class="course-card__label">Topics</p>
-                  <ul class="course-card__list" role="list">
-                    {course.topics.map((topic) => (
-                      <li>{topic}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div class="course-card__detail-block">
-                  <p class="course-card__label">You will leave with</p>
-                  <ul class="course-card__list" role="list">
-                    {course.outcomes.map((outcome) => (
-                      <li>{outcome}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <a
-                href="/contact?reason=course-enquiry#contact-form"
-                class="course-card__cta"
-              >
-                Ask about this course
-              </a>
             </article>
           ))
         }
@@ -378,11 +451,127 @@ const purchasePaths = [
   </section>
 </BaseLayout>
 
+<script is:inline>
+  const courseTabGroups = document.querySelectorAll("[data-course-tabs]");
+
+  const getCourseTabFromHash = () => {
+    const hash = window.location.hash.slice(1);
+
+    if (hash === "course-catalogue" || hash.startsWith("course-")) {
+      return "catalogue";
+    }
+
+    return null;
+  };
+
+  courseTabGroups.forEach((group) => {
+    const tabs = Array.from(group.querySelectorAll("[role='tab']"));
+    const panels = Array.from(group.querySelectorAll("[role='tabpanel']"));
+    const switches = Array.from(group.querySelectorAll("[data-course-switch]"));
+
+    const activateTab = (tabName, { focus = false } = {}) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.courseTab === tabName;
+
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+        tab.classList.toggle("is-active", active);
+
+        if (active && focus) {
+          tab.focus();
+        }
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.coursePanel !== tabName;
+      });
+    };
+
+    const activateTabByIndex = (index) => {
+      const targetTab = tabs[(index + tabs.length) % tabs.length];
+
+      if (!targetTab?.dataset.courseTab) {
+        return;
+      }
+
+      activateTab(targetTab.dataset.courseTab, { focus: true });
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        if (tab.dataset.courseTab) {
+          activateTab(tab.dataset.courseTab);
+        }
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        switch (event.key) {
+          case "ArrowRight":
+          case "ArrowDown":
+            event.preventDefault();
+            activateTabByIndex(index + 1);
+            break;
+          case "ArrowLeft":
+          case "ArrowUp":
+            event.preventDefault();
+            activateTabByIndex(index - 1);
+            break;
+          case "Home":
+            event.preventDefault();
+            activateTabByIndex(0);
+            break;
+          case "End":
+            event.preventDefault();
+            activateTabByIndex(tabs.length - 1);
+            break;
+        }
+      });
+    });
+
+    switches.forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const targetTab = trigger.getAttribute("data-course-switch");
+
+        if (targetTab) {
+          activateTab(targetTab);
+        }
+      });
+    });
+
+    const initialTab =
+      getCourseTabFromHash() ??
+      tabs.find((tab) => tab.getAttribute("aria-selected") === "true")?.dataset
+        .courseTab ??
+      tabs[0]?.dataset.courseTab;
+
+    if (initialTab) {
+      activateTab(initialTab);
+    }
+
+    if (window.location.hash && getCourseTabFromHash()) {
+      const target = document.getElementById(window.location.hash.slice(1));
+
+      if (target) {
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ block: "start" });
+        });
+      }
+    }
+
+    window.addEventListener("hashchange", () => {
+      const hashTab = getCourseTabFromHash();
+
+      if (hashTab) {
+        activateTab(hashTab);
+      }
+    });
+  });
+</script>
+
 <style lang="scss">
   .courses-model,
   .courses-launch-note,
   .courses-bundle,
-  .course-catalogue,
   .course-support,
   .course-interest {
     padding-top: 0;
@@ -405,6 +594,7 @@ const purchasePaths = [
   }
 
   .courses-model__grid,
+  .courses-bundle__panel-grid,
   .courses-bundle__course-grid,
   .course-catalogue__grid,
   .course-support__grid,
@@ -419,6 +609,7 @@ const purchasePaths = [
     }
 
     .courses-bundle__course-grid,
+    .course-catalogue__grid,
     .course-support__path-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -504,6 +695,8 @@ const purchasePaths = [
 
   .courses-model__card-body,
   .courses-launch-note__body,
+  .courses-bundle__section-body,
+  .courses-bundle__catalogue-body,
   .courses-bundle__body,
   .course-card__summary,
   .course-support__body,
@@ -514,8 +707,6 @@ const purchasePaths = [
   }
 
   .courses-bundle__panel {
-    display: grid;
-    gap: 1.25rem;
     padding: clamp(1.45rem, 3vw, 2.25rem);
     border: 1px solid
       color-mix(in srgb, var(--accent-primary) 14%, var(--border-subtle));
@@ -538,6 +729,88 @@ const purchasePaths = [
       ),
       var(--surface-elevated);
     box-shadow: 0 22px 48px rgba(var(--shadow-rgb), 0.08);
+  }
+
+  .courses-bundle__section-intro {
+    max-width: 45rem;
+  }
+
+  .courses-bundle__section-body {
+    max-width: 38rem;
+  }
+
+  .courses-bundle__tab-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+    padding: 0.4rem;
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 12%, transparent);
+    border-radius: calc(var(--radius-soft) + 0.25rem);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 86%,
+      var(--accent-primary) 14%
+    );
+  }
+
+  .courses-bundle__tab {
+    appearance: none;
+    border: 0;
+    border-radius: var(--radius-pill);
+    min-height: 3rem;
+    padding: 0.7rem 1rem;
+    background: transparent;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent-primary) 55%, white);
+      outline-offset: 2px;
+    }
+
+    &[aria-selected="true"] {
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent-primary) 96%, white) 0%,
+        color-mix(in srgb, var(--accent-secondary) 74%, var(--accent-primary))
+          100%
+      );
+      color: var(--text-on-strong);
+      box-shadow: 0 12px 24px rgba(var(--shadow-rgb), 0.14);
+    }
+  }
+
+  .courses-bundle__tab-panel {
+    margin-top: 1.25rem;
+  }
+
+  .courses-bundle__tab-panel[hidden] {
+    display: none;
+  }
+
+  .courses-bundle__panel-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .courses-bundle__catalogue-intro {
+    max-width: 45rem;
   }
 
   .courses-launch-note__panel {
@@ -727,6 +1000,10 @@ const purchasePaths = [
 
   .courses-bundle__course-grid {
     margin-top: 0;
+  }
+
+  .course-catalogue__grid {
+    margin-top: 1.5rem;
   }
 
   .course-support__path-grid {
@@ -978,7 +1255,7 @@ const purchasePaths = [
       gap: 1.5rem;
     }
 
-    .courses-bundle__panel {
+    .courses-bundle__panel-grid {
       grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.82fr);
       align-items: start;
       gap: 1.35rem;
