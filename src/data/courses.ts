@@ -18,14 +18,12 @@ export interface CourseBundle {
 export const courseLaunchLabel = "Launching soon";
 
 export const courseSupportOffer = {
-  singleShort: "90-minute 1:1 support pack",
-  singleDetail:
-    "Each individual course includes a 90-minute 1:1 support pack you can split across up to three calls.",
-  bundleShort: "6 hours of 1:1 support",
-  bundleDetail:
-    "The full bundle includes six hours of 1:1 support you can use across the programme.",
+  singleShort: "1:1 included",
+  singleDetail: "Each individual course includes 1:1 support.",
+  bundleShort: "1:1 included",
+  bundleDetail: "The full bundle includes 1:1 support across the programme.",
   additionalSessionsDetail:
-    "If you need more help after that, additional 1:1 sessions can be purchased separately.",
+    "If you need more help, additional 1:1 sessions can be added.",
 };
 
 export const courseOffers: CourseOffer[] = [
@@ -114,10 +112,10 @@ export const courseOffers: CourseOffer[] = [
 export const courseBundle: CourseBundle = {
   title: "Full Stack Developer Bundle",
   summary:
-    "Four connected self-paced courses that take learners from semantic markup and CSS through frontend and backend JavaScript to deployment and delivery.",
+    "Four connected self-paced courses that help you build the judgment AI cannot replace: how to structure, debug, review, and ship real web products from semantic markup through deployment.",
   benefits: [
-    "Buy the whole bundle for end-to-end context instead of learning each layer in isolation.",
-    "Start with one course if you only need to unblock a specific skill area right now.",
+    "Take the whole bundle for end-to-end context instead of learning each layer in isolation.",
+    "Start with one course to keep the cost of entry smaller, then add more only when you need them.",
     courseSupportOffer.singleDetail,
     courseSupportOffer.bundleDetail,
   ],

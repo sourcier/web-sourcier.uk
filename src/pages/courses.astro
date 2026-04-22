@@ -18,69 +18,70 @@ import { faIcon } from "../utils/icons";
 
 const learningModel = [
   {
-    title: "Buy the full bundle or one course",
+    title: "Still relevant in the age of AI",
     icon: faIcon(faLayerGroup, { size: 18 }),
-    body: "Take the end-to-end bundle for broader context, or pick the single course that solves your next problem right now.",
+    body: "AI can help you move faster, but it cannot replace judgment about semantics, accessibility, architecture, debugging, and delivery. These courses build the context you need to use AI well instead of trusting it blindly.",
   },
   {
-    title: "Study self-paced",
+    title: "More attention than a boot camp cohort",
     icon: faIcon(faClock, { size: 18 }),
-    body: "Work through the material on your own schedule without waiting for a live cohort or weekly timetable.",
+    body: "When I taught at boot camps, one of the hardest things was giving every student the attention they needed at the exact moment they were stuck. The self-paced format plus included 1:1 support is designed to fix that.",
   },
   {
-    title: "1:1 support is included",
+    title: "Smaller upfront commitment",
     icon: faIcon(faUsers, { size: 18 }),
-    body: `${courseSupportOffer.singleDetail} ${courseSupportOffer.bundleDetail} ${courseSupportOffer.additionalSessionsDetail}`,
+    body: "You can start with one course instead of paying for an all-or-nothing programme, then add more only when it helps.",
   },
 ];
 
 const supportMoments = [
-  "Project reviews when you want a second pair of eyes on architecture, code, or delivery decisions.",
+  "Project reviews when you want grounded feedback on architecture, code, or delivery decisions.",
   "Debugging sessions when you are stuck and need to move faster than a forum thread or recorded lesson can help.",
   "Roadmap resets when you are not sure what to learn next or how to connect isolated topics into real project work.",
-];
-
-const purchasePaths = [
-  {
-    title: "Take the full bundle",
-    body: "Best if you want the whole web stack to connect: foundations, frontend, backend, and delivery in one arc as the launch opens.",
-    href: "/contact?reason=course-enquiry#contact-form",
-    label: "Ask about the bundle launch",
-  },
-  {
-    title: "Start with one course",
-    body: "Best if you already know where the gap is and want focused help without buying more than you need when access opens.",
-    href: "/contact?reason=course-enquiry#contact-form",
-    label: "Ask about single-course launch access",
-  },
 ];
 ---
 
 <BaseLayout
   pageTitle="Courses — Sourcier"
-  description="Launching soon: self-paced web development courses in web foundations, frontend JavaScript, backend JavaScript, and DevOps, available individually or as a full bundle with included 1:1 support."
+  description="Launching soon: self-paced web development courses built for the age of AI, with stronger fundamentals, included 1:1 support, and the option to start with one course or take the full bundle."
 >
   <PageHero
     kicker="Courses"
     title="Choose the full bundle or start with one course"
     tone="secondary"
-    subtitle="Launching soon: self-paced courses in web foundations, frontend, backend, and DevOps. Buy the full bundle for an end-to-end route, or pick the course you need right now. Each course includes a 90-minute 1:1 support pack split across up to three calls, and the full bundle includes six hours of support across the programme."
+    subtitle="Launching soon: self-paced courses in web foundations, frontend, backend, and DevOps for people who want stronger judgment, not just faster code generation. Start with one course to keep the cost of entry smaller, or take the full bundle for end-to-end context. 1:1 support is included, and additional sessions can be added if you need more help."
   />
 
   <section
     class="section courses-bundle flow-section"
-    aria-label="Course purchase options"
+    aria-labelledby="courses-bundle-section-heading"
   >
     <div class="container is-max-desktop">
+      <div class="courses-bundle__section-header">
+        <p class="section-label section-label--secondary">Choose your route</p>
+        <h2
+          class="courses-bundle__section-heading"
+          id="courses-bundle-section-heading"
+        >
+          Pick the route that matches what you need next
+        </h2>
+      </div>
+
       <div class="courses-bundle__panel" data-course-tabs>
         <div class="courses-bundle__section-intro">
           <p class="section-label section-label--secondary">
-            Choose your route
+            Why this offer works
           </p>
           <p class="courses-bundle__section-body">
-            Start with the full bundle for end-to-end context, or switch to the
-            course catalogue when you want a single course that solves the next
-            gap first.
+            AI makes it easier to generate code, but not to judge tradeoffs,
+            debug bad assumptions, or connect the stack end to end. These
+            courses are built to strengthen the fundamentals and decision-making
+            that still matter.
+          </p>
+          <p class="courses-bundle__section-body">
+            Take the full bundle if you want the whole journey, or start with
+            one course to keep the cost of entry smaller and add more only when
+            you need them.
           </p>
         </div>
 
@@ -136,9 +137,9 @@ const purchasePaths = [
                   >{courseSupportOffer.bundleShort}</span
                 >
               </div>
-              <h2 class="courses-bundle__title" id="courses-bundle-heading">
+              <h3 class="courses-bundle__title" id="courses-bundle-heading">
                 {courseBundle.title}
-              </h2>
+              </h3>
               <p class="courses-bundle__body">{courseBundle.summary}</p>
               <ul class="courses-bundle__benefits" role="list">
                 {courseBundle.benefits.map((benefit) => <li>{benefit}</li>)}
@@ -198,9 +199,9 @@ const purchasePaths = [
                         <p class="courses-bundle__course-focus">
                           {course.focus}
                         </p>
-                        <h3 class="courses-bundle__course-title">
+                        <h4 class="courses-bundle__course-title">
                           {course.title}
-                        </h3>
+                        </h4>
                       </div>
                     </div>
                     <p class="courses-bundle__course-copy">{course.teaser}</p>
@@ -224,10 +225,10 @@ const purchasePaths = [
             <p class="section-label section-label--secondary">
               Course catalogue
             </p>
-            <h2 class="course-catalogue__heading" id="course-catalogue-heading">
+            <h3 class="course-catalogue__heading" id="course-catalogue-heading">
               Four focused courses you can take on their own or as one connected
               bundle
-            </h2>
+            </h3>
             <p class="courses-bundle__catalogue-body">
               Choose the one that matches the gap you need to close now, or use
               the bundle if you want the whole stack to connect from foundations
@@ -290,48 +291,13 @@ const purchasePaths = [
   </section>
 
   <section
-    class="section courses-launch-note flow-section flow-section--tight"
-    aria-labelledby="courses-launch-note-heading"
-  >
-    <div class="container is-max-desktop">
-      <div class="courses-launch-note__panel page-panel">
-        <div class="courses-launch-note__copy">
-          <p class="courses-launch-note__status">{courseLaunchLabel}</p>
-          <h2
-            class="courses-launch-note__title"
-            id="courses-launch-note-heading"
-          >
-            Founding enrolment opens soon
-          </h2>
-          <p class="courses-launch-note__body">
-            These courses are in their pre-launch window now. Join the launch
-            list if you want first access, launch updates, and the earliest
-            enrolment details.
-          </p>
-        </div>
-        <div class="courses-launch-note__actions">
-          <a href="#course-interest-heading" class="button is-ink is-medium">
-            Join the launch list
-          </a>
-          <a
-            href="/contact?reason=course-enquiry#contact-form"
-            class="courses-launch-note__link"
-          >
-            Ask about launch access
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section
     class="section courses-model flow-section flow-section--loose"
     aria-labelledby="courses-model-heading"
   >
     <div class="container is-max-desktop">
-      <p class="section-label section-label--secondary">How it works</p>
+      <p class="section-label section-label--secondary">Why this format</p>
       <h2 class="courses-model__heading" id="courses-model-heading">
-        A practical offer built around flexibility, not fixed cohort dates
+        Why this setup fits how people actually learn now
       </h2>
       <div class="courses-model__grid">
         {
@@ -358,55 +324,36 @@ const purchasePaths = [
     aria-labelledby="course-support-heading"
   >
     <div class="container is-max-desktop">
-      <div class="course-support__grid">
-        <article class="course-support__panel page-panel page-panel--secondary">
-          <p class="course-support__kicker">1:1 support</p>
-          <h2 class="course-support__title" id="course-support-heading">
-            1:1 that feels usable, not token
-          </h2>
-          <p class="course-support__body">
-            The recorded material and notes are built for independent study, but
-            the support offer needs to be strong enough to matter. That is why
-            each individual course includes a 90-minute 1:1 support pack you can
-            split across up to three calls, and the full bundle includes six
-            hours across the programme. If you need more help after that,
-            additional 1:1 sessions can be purchased separately.
-          </p>
-          <ul class="course-support__list" role="list">
-            {supportMoments.map((item) => <li>{item}</li>)}
-          </ul>
-          <a
-            href="/contact?reason=course-enquiry#contact-form"
-            class="course-support__link"
-          >
-            Ask about the included support pack
-          </a>
-        </article>
-
-        <article class="course-support__panel page-panel">
-          <p class="course-support__kicker">Choose your route</p>
-          <h2 class="course-support__title">
-            Bundle access or individual enrolment
-          </h2>
-          <p class="course-support__body">
-            The offer is designed so you can commit at the level that makes
-            sense for you now, instead of forcing the same path on everyone.
-          </p>
-          <div class="course-support__path-grid">
-            {
-              purchasePaths.map((path) => (
-                <article class="course-support__path-card">
-                  <h3 class="course-support__path-title">{path.title}</h3>
-                  <p class="course-support__path-body">{path.body}</p>
-                  <a href={path.href} class="course-support__path-link">
-                    {path.label}
-                  </a>
-                </article>
-              ))
-            }
-          </div>
-        </article>
-      </div>
+      <p class="section-label section-label--secondary">1:1 support</p>
+      <h2 class="course-support__section-heading" id="course-support-heading">
+        1:1 that feels usable, not token
+      </h2>
+      <article
+        class="course-support__panel course-support__panel--solo page-panel page-panel--secondary"
+      >
+        <p class="course-support__kicker">Included support</p>
+        <p class="course-support__body">
+          Having taught at boot camps, I know one of the hardest things is
+          giving each student the attention they need at the exact moment they
+          are stuck. The recorded material and notes here make self-paced study
+          possible, and the included 1:1 support is there to restore that
+          missing attention without forcing everyone through the same timetable.
+        </p>
+        <p class="course-support__body">
+          {courseSupportOffer.singleDetail}
+          {courseSupportOffer.bundleDetail}
+          {" "}{courseSupportOffer.additionalSessionsDetail}
+        </p>
+        <ul class="course-support__list" role="list">
+          {supportMoments.map((item) => <li>{item}</li>)}
+        </ul>
+        <a
+          href="/contact?reason=course-enquiry#contact-form"
+          class="course-support__link"
+        >
+          Ask about the included support pack
+        </a>
+      </article>
     </div>
   </section>
 
@@ -417,14 +364,15 @@ const purchasePaths = [
     <div class="container is-max-desktop">
       <div class="course-interest__panel page-panel page-panel--secondary">
         <div class="course-interest__copy">
-          <p class="course-interest__kicker">Launch list</p>
+          <p class="course-interest__kicker">Next step</p>
           <h2 class="course-interest__title" id="course-interest-heading">
-            Join the launch list or ask about enrolment
+            If this feels like the right fit, join the launch list or ask about
+            enrolment
           </h2>
           <p class="course-interest__body">
-            If you want first access, launch updates, bundle pricing, or details
-            about the included support, leave your email for the launch list or
-            send a message directly.
+            If you want this mix of self-paced material and targeted 1:1
+            support, leave your email for launch updates, pricing, and earliest
+            enrolment details, or send a message directly.
           </p>
           <div class="course-interest__actions">
             <a
@@ -570,7 +518,6 @@ const purchasePaths = [
 
 <style lang="scss">
   .courses-model,
-  .courses-launch-note,
   .courses-bundle,
   .course-support,
   .course-interest {
@@ -583,8 +530,9 @@ const purchasePaths = [
     margin-bottom: var(--space-section-tight);
   }
 
+  .courses-bundle__section-heading,
   .courses-model__heading,
-  .courses-launch-note__title,
+  .course-support__section-heading,
   .course-catalogue__heading {
     margin: 0 0 1.5rem;
     font-family: "Barlow Condensed", sans-serif;
@@ -596,9 +544,7 @@ const purchasePaths = [
   .courses-model__grid,
   .courses-bundle__panel-grid,
   .courses-bundle__course-grid,
-  .course-catalogue__grid,
-  .course-support__grid,
-  .course-support__path-grid {
+  .course-catalogue__grid {
     display: grid;
     gap: 1rem;
   }
@@ -609,8 +555,7 @@ const purchasePaths = [
     }
 
     .courses-bundle__course-grid,
-    .course-catalogue__grid,
-    .course-support__path-grid {
+    .course-catalogue__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -655,7 +600,6 @@ const purchasePaths = [
   .courses-model__card-title,
   .courses-bundle__title,
   .course-card__title,
-  .course-support__title,
   .course-interest__title {
     margin: 0;
     font-family: "Barlow Condensed", sans-serif;
@@ -694,7 +638,6 @@ const purchasePaths = [
   }
 
   .courses-model__card-body,
-  .courses-launch-note__body,
   .courses-bundle__section-body,
   .courses-bundle__catalogue-body,
   .courses-bundle__body,
@@ -729,6 +672,10 @@ const purchasePaths = [
       ),
       var(--surface-elevated);
     box-shadow: 0 22px 48px rgba(var(--shadow-rgb), 0.08);
+  }
+
+  .courses-bundle__section-header {
+    max-width: 38rem;
   }
 
   .courses-bundle__section-intro {
@@ -813,12 +760,6 @@ const purchasePaths = [
     max-width: 45rem;
   }
 
-  .courses-launch-note__panel {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .courses-launch-note__status,
   .courses-bundle__kicker,
   .course-support__kicker,
   .course-interest__kicker,
@@ -833,7 +774,6 @@ const purchasePaths = [
     text-transform: uppercase;
   }
 
-  .courses-launch-note__status,
   .courses-bundle__kicker,
   .course-card__eyebrow,
   .courses-bundle__course-focus,
@@ -841,7 +781,6 @@ const purchasePaths = [
     color: var(--accent-primary);
   }
 
-  .courses-launch-note__status,
   .course-card__status {
     display: inline-flex;
     align-items: center;
@@ -853,25 +792,6 @@ const purchasePaths = [
     color: var(--text-on-strong);
     box-shadow: 0 10px 24px
       color-mix(in srgb, var(--accent-secondary) 22%, transparent);
-  }
-
-  .courses-launch-note__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .courses-launch-note__link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.85rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--accent-primary);
   }
 
   .course-support__kicker,
@@ -917,7 +837,6 @@ const purchasePaths = [
   }
 
   .courses-bundle__title,
-  .course-support__title,
   .course-interest__title {
     font-size: clamp(1.7rem, 4vw, 2.5rem);
   }
@@ -966,7 +885,6 @@ const purchasePaths = [
 
   .courses-bundle__link,
   .course-support__link,
-  .course-support__path-link,
   .course-card__cta {
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.88rem;
@@ -987,9 +905,12 @@ const purchasePaths = [
     color: var(--accent-primary);
   }
 
-  .course-support__link,
-  .course-support__path-link {
+  .course-support__link {
     color: var(--accent-secondary);
+  }
+
+  .course-support__panel--solo {
+    margin-top: 0;
   }
 
   .course-support__link {
@@ -1004,10 +925,6 @@ const purchasePaths = [
 
   .course-catalogue__grid {
     margin-top: 1.5rem;
-  }
-
-  .course-support__path-grid {
-    margin-top: 1.25rem;
   }
 
   .courses-bundle__support {
@@ -1040,11 +957,15 @@ const purchasePaths = [
   }
 
   .courses-bundle__course-card,
-  .course-support__path-card {
+  .course-support__panel--solo {
     position: relative;
     overflow: hidden;
+  }
+
+  .courses-bundle__course-card {
     display: flex;
     flex-direction: column;
+    min-height: 100%;
     padding: 1rem;
     border: 1px solid color-mix(in srgb, var(--border-subtle) 84%, transparent);
     border-radius: var(--radius-soft);
@@ -1055,9 +976,7 @@ const purchasePaths = [
         var(--surface-elevated) 100%
       ),
       var(--surface-elevated);
-  }
-
-  .courses-bundle__course-card {
+    box-shadow: 0 14px 30px rgba(var(--shadow-rgb), 0.05);
     color: inherit;
     text-decoration: none;
     transition:
@@ -1112,8 +1031,7 @@ const purchasePaths = [
     margin: 0;
   }
 
-  .courses-bundle__course-title,
-  .course-support__path-title {
+  .courses-bundle__course-title {
     margin: 0.35rem 0 0;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 1.05rem;
@@ -1121,8 +1039,7 @@ const purchasePaths = [
     color: var(--text-primary);
   }
 
-  .courses-bundle__course-copy,
-  .course-support__path-body {
+  .courses-bundle__course-copy {
     margin: 0.55rem 0 0;
     color: var(--text-muted);
     line-height: 1.6;
@@ -1249,12 +1166,6 @@ const purchasePaths = [
   }
 
   @media (min-width: 960px) {
-    .courses-launch-note__panel {
-      grid-template-columns: minmax(0, 1.2fr) auto;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
     .courses-bundle__panel-grid {
       grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.82fr);
       align-items: start;
@@ -1266,8 +1177,7 @@ const purchasePaths = [
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    .course-catalogue__grid,
-    .course-support__grid {
+    .course-catalogue__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
