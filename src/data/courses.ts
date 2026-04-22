@@ -120,7 +120,7 @@ export const courseBundle: CourseBundle = {
     courseSupportOffer.bundleDetail,
   ],
   audience: [
-    "Career switchers who want a practical route into modern web development.",
+    "Career switchers who want a practical path into modern web development.",
     "Frontend engineers who want stronger backend and delivery context.",
     "Developers who want a clearer picture of how real web products are built and shipped.",
   ],
