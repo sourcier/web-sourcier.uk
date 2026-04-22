@@ -39,6 +39,24 @@ const supportMoments = [
   "Debugging sessions when you are stuck and need to move faster than a forum thread or recorded lesson can help.",
   "Roadmap resets when you are not sure what to learn next or how to connect isolated topics into real project work.",
 ];
+
+const supportInclusions = [
+  {
+    title: "Every route includes 1:1",
+    body: "Whether you start with one course or take the full bundle, direct support is part of the offer.",
+    icon: faIcon(faUsers, { size: 18 }),
+  },
+  {
+    title: "Self-paced does not mean unsupported",
+    body: "Use 1:1 to turn the recorded material into help that fits your pace, questions, and project context.",
+    icon: faIcon(faLayerGroup, { size: 18 }),
+  },
+  {
+    title: "Add more if you need it",
+    body: "Top up with extra 1:1 sessions when you want more review, debugging, or planning time.",
+    icon: faIcon(faClock, { size: 18 }),
+  },
+];
 ---
 
 <BaseLayout
@@ -339,11 +357,23 @@ const supportMoments = [
           possible, and the included 1:1 support is there to restore that
           missing attention without forcing everyone through the same timetable.
         </p>
-        <p class="course-support__body">
-          {courseSupportOffer.singleDetail}
-          {courseSupportOffer.bundleDetail}
-          {" "}{courseSupportOffer.additionalSessionsDetail}
-        </p>
+        <div class="course-support__included-grid" role="list">
+          {
+            supportInclusions.map((item) => (
+              <div class="course-support__included-card" role="listitem">
+                <div class="course-support__included-header">
+                  <span
+                    class="course-support__included-icon"
+                    aria-hidden="true"
+                    set:html={item.icon}
+                  />
+                  <p class="course-support__included-title">{item.title}</p>
+                </div>
+                <p class="course-support__included-body">{item.body}</p>
+              </div>
+            ))
+          }
+        </div>
         <ul class="course-support__list" role="list">
           {supportMoments.map((item) => <li>{item}</li>)}
         </ul>
@@ -956,6 +986,64 @@ const supportMoments = [
     line-height: 1.6;
   }
 
+  .course-support__included-grid {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .course-support__included-card {
+    padding: 0.95rem 1rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 14%, var(--border-subtle));
+    border-radius: var(--radius-soft);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 90%,
+      var(--accent-secondary) 10%
+    );
+  }
+
+  .course-support__included-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .course-support__included-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 82%,
+      var(--accent-secondary) 18%
+    );
+    color: var(--accent-secondary);
+    flex-shrink: 0;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .course-support__included-title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.08;
+    color: var(--text-primary);
+  }
+
+  .course-support__included-body {
+    margin: 0.65rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
   .courses-bundle__course-card,
   .course-support__panel--solo {
     position: relative;
@@ -1179,6 +1267,10 @@ const supportMoments = [
 
     .course-catalogue__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .course-support__included-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .course-interest__panel {
