@@ -31,7 +31,7 @@ export const audienceGuides: AudienceGuide[] = [
     pageDescription:
       "A practical guide for people transitioning into tech and building the confidence to work on real software.",
     pageSubtitle:
-      "A practical path for people changing careers and trying to move from tutorials to real-world software work.",
+      "A free article guide for people changing careers and trying to move from tutorials to real-world software work.",
     intro:
       "This guide is for people who want more than a list of technologies to learn. It is about building context: how software projects fit together, how to make sense of trade-offs, and how to develop the judgment that helps you move from learning in isolation to contributing with confidence.",
     whoItsFor: [
@@ -80,7 +80,7 @@ export const audienceGuides: AudienceGuide[] = [
     pageDescription:
       "A practical guide for engineers who want to grow their judgment, communication, and technical confidence.",
     pageSubtitle:
-      "A path for engineers who want to move from completing tasks to becoming trusted contributors with better judgment.",
+      "A free article guide for engineers who want to move from completing tasks to becoming trusted contributors with better judgment.",
     intro:
       "Career growth usually comes from stronger habits rather than louder self-promotion. This guide focuses on the engineering behaviors that compound over time: writing maintainable code, communicating trade-offs, learning how to own outcomes, and turning technical work into visible impact.",
     whoItsFor: [
@@ -128,7 +128,7 @@ export const audienceGuides: AudienceGuide[] = [
     pageDescription:
       "A practical guide for teams and companies that want stronger engineering practice, healthier delivery habits, and better software quality.",
     pageSubtitle:
-      "A guide for teams that want stronger engineering practice without turning everything into process theatre.",
+      "A free article guide for teams that want stronger engineering practice without turning everything into process theatre.",
     intro:
       "Engineering practice does not have to mean bureaucracy. The real goal is to make teams easier to work in: clearer expectations, better reviews, healthier testing habits, more maintainable systems, and delivery practices that improve quality instead of slowing momentum.",
     whoItsFor: [

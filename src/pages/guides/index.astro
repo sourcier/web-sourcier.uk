@@ -8,13 +8,13 @@ import { getGuideIcon } from "../../utils/contentIcons";
 
 <BaseLayout
   pageTitle="Guides — Sourcier"
-  description="Choose a practical guide for transitioning into tech, growing as an engineer, or improving engineering practice on your team."
+  description="Choose a practical, article-led guide for transitioning into tech, growing as an engineer, or improving engineering practice on your team."
 >
   <PageHero
     kicker="Start here"
     title="Choose the guide that matches where you are now"
     tone="secondary"
-    subtitle="Whether you are transitioning into tech, growing as an engineer, or improving engineering practice on a team, start with the guide that fits your situation."
+    subtitle="Guides are the free, article-led way to get oriented. Start with the one that fits your situation, read the published pieces, and see what is planned next. If you want structured teaching with included 1:1 support, that is what courses are for."
   />
 
   <section
@@ -24,8 +24,13 @@ import { getGuideIcon } from "../../utils/contentIcons";
     <div class="container is-max-desktop">
       <p class="section-label">Guides</p>
       <h2 class="guides-grid__heading" id="guides-grid-heading">
-        Three practical routes into the site
+        Three practical reading guides into the site
       </h2>
+      <p class="guides-grid__intro">
+        Each guide groups the published articles for one audience and shows the
+        next topics still to come, so you can decide what to read first before
+        you commit to anything more structured.
+      </p>
       <div class="guides-grid__cards">
         {
           audienceGuides.map((guide) => (
@@ -70,6 +75,13 @@ import { getGuideIcon } from "../../utils/contentIcons";
     font-size: clamp(1.8rem, 4vw, 2.75rem);
     line-height: 1.05;
     color: var(--text-primary);
+  }
+
+  .guides-grid__intro {
+    max-width: 64ch;
+    margin: 0 0 1.5rem;
+    color: var(--text-muted);
+    line-height: 1.75;
   }
 
   .guides-grid__cards {

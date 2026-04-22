@@ -84,10 +84,15 @@ const plannedIcon = faIcon(faClock, { size: 14 });
             set:html={guidePageIcon}
           />
           <h2 class="guide-intro__heading" id="guide-intro-heading">
-            A practical guide, not just a list of links
+            A practical reading guide, not a course syllabus
           </h2>
         </div>
         <p class="guide-intro__body">{guide.intro}</p>
+        <p class="guide-intro__body">
+          Use this guide when you want a curated set of articles, examples, and
+          next topics in a sensible order. It is the free reading route through
+          the subject, not the structured teaching product.
+        </p>
       </div>
     </div>
   </section>
@@ -213,9 +218,9 @@ const plannedIcon = faIcon(faClock, { size: 14 });
             Want help beyond the articles?
           </h2>
           <p class="guide-cta__body">
-            If this path matches where you are now, you can either get in touch
-            directly or subscribe so you hear about new articles as this guide
-            grows.
+            If this guide matches where you are now and you want help beyond the
+            free articles, you can either get in touch directly or subscribe so
+            you hear about new pieces as this guide grows.
           </p>
         </div>
         <div class="guide-cta__actions">
@@ -306,6 +311,10 @@ const plannedIcon = faIcon(faClock, { size: 14 });
     margin: 0;
     line-height: 1.75;
     color: var(--text-muted);
+  }
+
+  .guide-intro__body + .guide-intro__body {
+    margin-top: 1rem;
   }
 
   .guide-panels__grid,
