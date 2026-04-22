@@ -133,4 +133,4 @@ Annotation labels sit to the **left or bottom** of the diagram. Lines go from la
 
 ## Naming
 
-SVG files follow the pattern `<slug>-wireframe.svg` and live alongside `index.md` in the post directory. They are automatically copied to `public/post-images/<slug>/` by `scripts/copy-post-images.mjs`.
+SVG files follow the pattern `<slug>-wireframe.svg` and live alongside `index.md` in the post directory. They are automatically mirrored to `public/post-images/<slug>/` by `pnpm post-images:copy`, which also generates PNG fallbacks for cross-posting.

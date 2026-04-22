@@ -121,7 +121,7 @@ SVG files cannot go through Astro's image pipeline. To include an SVG in a post:
 
 1. Place the `.svg` file in `collections/posts/<slug>/` alongside the article
 2. Reference it with an **absolute path** in markdown: `/post-images/<slug>/<filename>.svg`
-3. The `post-images:copy` script (run automatically by `pnpm dev`) copies it to `public/post-images/<slug>/`
+3. The `post-images:copy` command (run automatically by `pnpm dev`) mirrors it to `public/post-images/<slug>/` and generates PNG fallbacks for cross-posting
 
 ```md
 ![Alt text describing the diagram](/post-images/my-post/my-diagram.svg)

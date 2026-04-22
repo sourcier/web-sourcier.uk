@@ -23,8 +23,8 @@ pnpm build            # Production build to dist/
 pnpm search:index     # Full local Pagefind index rebuild
 pnpm talk:playwright  # Regenerate the Playwright JavaScript London talk deck and companion cover/thumbnail assets
 pnpm thumbnails:generate  # Generate <slug>-thumbnail.webp for any post with a cover but no thumbnail
-pnpm thumbnails:copy      # Copy <slug>-thumbnail.webp files to public/search-thumbnails/<slug>/
-pnpm post-images:copy     # Copy SVG files from collections/posts/<slug>/ to public/post-images/<slug>/
+pnpm thumbnails:copy      # Mirror <slug>-thumbnail.webp files to public/search-thumbnails/<slug>/
+pnpm post-images:copy     # Mirror SVG files to public/post-images/<slug>/ and generate PNG fallbacks
 ```
 
 `pnpm dev` and `pnpm search:index` automatically run `thumbnails:copy` and `post-images:copy` first.
@@ -117,7 +117,7 @@ Pagefind search results display a thumbnail per post. The pipeline:
 1. Cover images are stored as `<slug>-cover.webp` colocated with the article
 2. `<slug>-thumbnail.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbnails:generate`
 
-- `scripts/copy-thumbnails.mjs` copies thumbnails to `public/search-thumbnails/<slug>/<slug>-thumbnail.webp`
+- `pnpm thumbnails:copy` mirrors thumbnails to `public/search-thumbnails/<slug>/<slug>-thumbnail.webp`
 
 4. The layout references the stable path `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
 5. `public/search-thumbnails/` is gitignored — regenerated on every build
@@ -139,7 +139,8 @@ When renaming a post slug:
 
 Astro's image optimisation pipeline (Sharp) cannot process SVG files, so SVGs referenced in markdown body content must be served from `public/` as static files.
 
-- `scripts/copy-post-images.mjs` copies `.svg` files from `collections/posts/<slug>/` → `public/post-images/<slug>/`
+- `pnpm post-images:copy` mirrors `.svg` files from `collections/posts/<slug>/` → `public/post-images/<slug>/`
+- `scripts/rasterize-post-images.mjs` generates sibling `.png` fallbacks for cross-posting workflows
 - `public/post-images/` is gitignored — regenerated on every build and dev start
 - In markdown, reference SVGs with absolute paths: `/post-images/<slug>/<filename>.svg`
 - The rehype plugin `src/plugins/rehype-zoomable-images.js` adds `class="zoomable"` to every markdown `<img>` at build time, enabling the lightbox expand button
