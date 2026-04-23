@@ -49,6 +49,9 @@ importers:
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
+      stripe:
+        specifier: ^22.0.2
+        version: 22.0.2(@types/node@22.19.17)
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
@@ -5137,6 +5140,18 @@ packages:
       }
     engines: { node: ">=12" }
 
+  stripe@22.0.2:
+    resolution:
+      {
+        integrity: sha512-2/BLrQ3oB1zlNfeL/LfHFjTGx6EQn0j+ztrrTJHuDjV5VVIpk92oSDaxyKLUr3pG3dnee2LZqhFUv2Bf0G1/3g==,
+      }
+    engines: { node: ">=18" }
+    peerDependencies:
+      "@types/node": ">=18"
+    peerDependenciesMeta:
+      "@types/node":
+        optional: true
+
   strnum@2.2.2:
     resolution:
       {
@@ -9149,6 +9164,10 @@ snapshots:
   strip-ansi@7.2.0:
     dependencies:
       ansi-regex: 6.2.2
+
+  stripe@22.0.2(@types/node@22.19.17):
+    optionalDependencies:
+      "@types/node": 22.19.17
 
   strnum@2.2.2: {}
 

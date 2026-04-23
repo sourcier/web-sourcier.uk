@@ -1,0 +1,2584 @@
+---
+import { faCircleXmark, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faIcon } from "../utils/icons";
+
+interface TipOption {
+  id: string;
+  label: string;
+  note: string;
+  amountPence?: number;
+}
+
+interface Props {
+  publishableKey: string;
+}
+
+const { publishableKey } = Astro.props;
+
+const defaultTipPence = 1500;
+const closeIcon = faIcon(faCircleXmark, { size: 18 });
+const thankYouIcon = faIcon(faHeart, { size: 20 });
+const fallbackCurrencyFormatter = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+});
+const fallbackWholePoundCurrencyFormatter = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const formatFallbackSupportAmount = (amountPence: number) => {
+  if (amountPence % 100 === 0) {
+    return fallbackWholePoundCurrencyFormatter.format(amountPence / 100);
+  }
+
+  return fallbackCurrencyFormatter.format(amountPence / 100);
+};
+
+const defaultTipLabel = formatFallbackSupportAmount(defaultTipPence);
+const defaultSuccessMessage = `Thank you for your ${defaultTipLabel} support. I really appreciate it. It helps me keep publishing new articles and building the course material I'm working on behind the scenes.`;
+
+const tipOptions: TipOption[] = [
+  {
+    id: "tip-500",
+    label: "£5",
+    note: "A quick thank you",
+    amountPence: 500,
+  },
+  {
+    id: "tip-1500",
+    label: "£15",
+    note: "Back the next article",
+    amountPence: 1500,
+  },
+  {
+    id: "tip-3000",
+    label: "£30",
+    note: "Help fund deeper guides",
+    amountPence: 3000,
+  },
+  {
+    id: "tip-custom",
+    label: "Custom",
+    note: "Set your own amount",
+  },
+];
+---
+
+<dialog
+  class="support-modal"
+  data-support-modal
+  data-publishable-key={publishableKey}
+  data-endpoint="/.netlify/functions/support-checkout-session"
+  data-default-tip-pence={String(defaultTipPence)}
+  aria-labelledby="support-modal-heading"
+>
+  <div class="support-modal__panel" role="document">
+    <div class="support-modal__topbar">
+      <div class="support-modal__intro">
+        <p class="support-modal__eyebrow" data-topbar-eyebrow>One-off tip</p>
+        <h2 id="support-modal-heading" class="visually-hidden">
+          Support checkout
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="support-modal__close"
+        data-support-modal-close
+        aria-label="Close support checkout"
+      >
+        <Fragment set:html={closeIcon} />
+      </button>
+    </div>
+
+    <ol class="support-modal__steps" aria-label="Support checkout steps">
+      <li
+        class="support-modal__step"
+        data-step-indicator="amount"
+        data-state="active"
+      >
+        <span class="support-modal__step-number">1</span>
+        <span class="support-modal__step-label">Choose amount</span>
+      </li>
+      <li
+        class="support-modal__step"
+        data-step-indicator="payment"
+        data-state="upcoming"
+      >
+        <span class="support-modal__step-number">2</span>
+        <span class="support-modal__step-label">Payment</span>
+      </li>
+      <li
+        class="support-modal__step"
+        data-step-indicator="success"
+        data-state="upcoming"
+      >
+        <span class="support-modal__step-number">3</span>
+        <span class="support-modal__step-label">Thank you</span>
+      </li>
+    </ol>
+
+    <p class="support-modal__status" data-status aria-live="polite" hidden></p>
+
+    <div class="support-modal__frame">
+      <section
+        class="support-modal__stage"
+        data-step-panel="amount"
+        aria-labelledby="support-step-amount-title"
+      >
+        <div class="support-modal__stage-copy">
+          <h3 class="support-modal__stage-title" id="support-step-amount-title">
+            Choose amount
+          </h3>
+          <p class="support-modal__stage-body">
+            Pick the level of support that feels right. You can keep it simple
+            or enter a custom amount, then continue to secure payment.
+          </p>
+        </div>
+
+        <form class="support-modal__form" data-support-form novalidate>
+          <fieldset class="support-modal__fieldset">
+            <legend class="support-modal__legend"
+              >Choose a one-off amount</legend
+            >
+            <div class="support-modal__options" role="radiogroup">
+              {
+                tipOptions.map((option, index) => (
+                  <label class="support-modal__option" for={option.id}>
+                    <input
+                      id={option.id}
+                      type="radio"
+                      name="support-tip-amount"
+                      value={
+                        option.amountPence
+                          ? String(option.amountPence)
+                          : "custom"
+                      }
+                      checked={index === 1}
+                    />
+                    <span class="support-modal__option-chip">
+                      {option.label}
+                    </span>
+                    <span class="support-modal__option-note">
+                      {option.note}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="support-modal__custom-wrap" data-custom-wrap hidden>
+            <label class="support-modal__custom-label" for="support-custom-tip">
+              Custom amount in pounds
+            </label>
+            <div class="support-modal__custom-field">
+              <span class="support-modal__currency">£</span>
+              <input
+                id="support-custom-tip"
+                class="support-modal__custom-input"
+                type="number"
+                inputmode="decimal"
+                step="0.01"
+                placeholder="12.00"
+                data-custom-input
+              />
+            </div>
+            <p class="support-modal__fineprint">
+              Enter any amount in pounds and pence.
+            </p>
+          </div>
+
+          <div class="support-modal__footer">
+            <p
+              class="support-modal__fineprint support-modal__fineprint--inline"
+            >
+              Secure payment is handled by Stripe.
+            </p>
+            <button class="button is-ink is-medium" type="submit" data-launch>
+              Continue to payment
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section
+        class="support-modal__stage"
+        data-step-panel="payment"
+        aria-labelledby="support-step-payment-title"
+        hidden
+      >
+        <div class="support-modal__stage-header">
+          <div class="support-modal__stage-copy">
+            <h3
+              class="support-modal__stage-title"
+              id="support-step-payment-title"
+            >
+              Payment
+            </h3>
+            <p class="support-modal__stage-body">
+              <span class="support-modal__amount-inline" data-selected-amount>
+                {defaultTipLabel}
+              </span>
+              is ready below. Review the amount or change it, then enter your payment
+              details securely with Stripe.
+            </p>
+          </div>
+
+          <button type="button" class="support-modal__secondary" data-back>
+            Change amount
+          </button>
+        </div>
+
+        <div class="support-modal__summary">
+          <div>
+            <p class="support-modal__summary-label">Selected amount</p>
+            <p class="support-modal__summary-value" data-selected-amount>
+              {defaultTipLabel}
+            </p>
+          </div>
+        </div>
+
+        <form class="support-modal__payment-form" data-payment-form novalidate>
+          <div
+            class="support-modal__payment-shell"
+            data-payment-shell
+            data-state="idle"
+          >
+            <p class="support-modal__payment-label">Payment details</p>
+            <p class="support-modal__payment-loading" data-payment-loading>
+              Preparing secure payment form...
+            </p>
+            <div
+              class="support-modal__payment-element"
+              data-payment-element
+              hidden
+            >
+            </div>
+          </div>
+
+          <div class="support-modal__footer">
+            <p
+              class="support-modal__fineprint support-modal__fineprint--inline"
+            >
+              Payments are handled securely by Stripe.
+            </p>
+            <button class="button is-ink is-medium" type="submit" data-pay>
+              Pay {defaultTipLabel}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section
+        class="support-modal__stage support-modal__stage--success"
+        data-step-panel="success"
+        aria-labelledby="support-step-success-title"
+        hidden
+      >
+        <div class="support-modal__thankyou">
+          <div class="support-modal__thankyou-lockup">
+            <p class="support-modal__thankyou-amount" data-success-amount>
+              {defaultTipLabel}
+            </p>
+            <div class="support-modal__thankyou-icon" aria-hidden="true">
+              <Fragment set:html={thankYouIcon} />
+            </div>
+          </div>
+          <h3
+            class="support-modal__stage-title"
+            id="support-step-success-title"
+            data-success-title
+          >
+            Thank you
+          </h3>
+          <p class="support-modal__stage-body" data-success-message>
+            {defaultSuccessMessage}
+          </p>
+        </div>
+
+        <div class="support-modal__footer support-modal__footer--success">
+          <button
+            type="button"
+            data-support-modal-finish
+            class="button is-ink is-medium"
+          >
+            Back to the page
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  type StatusTone = "neutral" | "success" | "warning" | "error";
+  type StepName = "amount" | "payment" | "success";
+  type StripeAppearanceRules = Record<string, Record<string, string>>;
+  type StripeAppearance = {
+    theme?: string;
+    inputs?: "spaced" | "condensed";
+    labels?: "auto" | "above" | "floating";
+    disableAnimations?: boolean;
+    variables?: Record<string, string>;
+    rules?: StripeAppearanceRules;
+  };
+  type StripePaymentIntent = {
+    amount?: number | null;
+    status?: string;
+    last_payment_error?: {
+      message?: string | null;
+    } | null;
+  };
+  type StripeErrorResult = {
+    error?: {
+      message?: string;
+    };
+  };
+  type StripeConfirmPaymentOptions = {
+    elements: StripeElements;
+    confirmParams: {
+      return_url: string;
+    };
+    redirect?: "always" | "if_required";
+  };
+  type StripeElementsOptions = {
+    clientSecret: string;
+    appearance?: StripeAppearance;
+  };
+  type StripePaymentResult = StripeErrorResult & {
+    paymentIntent?: StripePaymentIntent;
+  };
+  type StripePaymentElement = {
+    destroy(): void;
+    mount(location: HTMLElement | string): void;
+  };
+  type StripeElements = {
+    create(
+      type: "payment",
+      options?: { layout?: { type?: string } },
+    ): StripePaymentElement;
+    submit(): Promise<StripeErrorResult>;
+  };
+  type StripeFactory = (publishableKey: string) => StripeModalClient;
+  type StripeModalClient = {
+    confirmPayment(
+      options: StripeConfirmPaymentOptions,
+    ): Promise<StripePaymentResult>;
+    elements(options: StripeElementsOptions): StripeElements;
+    retrievePaymentIntent(clientSecret: string): Promise<StripePaymentResult>;
+  };
+  type StripeWindow = Window & {
+    Stripe?: StripeFactory;
+  };
+
+  const modal = document.querySelector("[data-support-modal]");
+
+  if (modal instanceof HTMLDialogElement) {
+    const stepOrder: StepName[] = ["amount", "payment", "success"];
+    const publishableKey = modal.dataset.publishableKey ?? "";
+    const endpoint = modal.dataset.endpoint ?? "";
+    const defaultTipPence = Number(modal.dataset.defaultTipPence ?? "1500");
+    const form = modal.querySelector("[data-support-form]");
+    const paymentForm = modal.querySelector("[data-payment-form]");
+    const customWrap = modal.querySelector("[data-custom-wrap]");
+    const customField = modal.querySelector(".support-modal__custom-field");
+    const customInput = modal.querySelector("[data-custom-input]");
+    const launchButton = modal.querySelector("[data-launch]");
+    const payButton = modal.querySelector("[data-pay]");
+    const backButton = modal.querySelector("[data-back]");
+    const status = modal.querySelector("[data-status]");
+    const topbarEyebrow = modal.querySelector("[data-topbar-eyebrow]");
+    const paymentShell = modal.querySelector("[data-payment-shell]");
+    const paymentLoading = modal.querySelector("[data-payment-loading]");
+    const paymentElementMount = modal.querySelector("[data-payment-element]");
+    const frame = modal.querySelector(".support-modal__frame");
+    const stepPanels = modal.querySelectorAll("[data-step-panel]");
+    const stepIndicators = modal.querySelectorAll("[data-step-indicator]");
+    const selectedAmountOutputs = modal.querySelectorAll(
+      "[data-selected-amount]",
+    );
+    const successAmountOutputs = modal.querySelectorAll(
+      "[data-success-amount]",
+    );
+    const successTitle = modal.querySelector("[data-success-title]");
+    const successMessage = modal.querySelector("[data-success-message]");
+    const closeButtons = modal.querySelectorAll(
+      "[data-support-modal-close], [data-support-modal-finish]",
+    );
+    const openButtons = document.querySelectorAll("[data-support-modal-open]");
+
+    let stripeJsPromise: Promise<StripeFactory | null> | undefined;
+    let stripePromise: Promise<StripeModalClient | null> | undefined;
+    let paymentElement: StripePaymentElement | undefined;
+    let paymentElements: StripeElements | undefined;
+    let paymentIntentClientSecret: string | undefined;
+    let loadSequence = 0;
+    let lastTrigger: HTMLElement | null = null;
+    let frameResizeTimeoutId: number | undefined;
+    let frameResizeCleanup: ((event?: TransitionEvent) => void) | undefined;
+
+    const currencyFormatter = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    const wholePoundCurrencyFormatter = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const scrollLockState = {
+      scrollY: 0,
+      rootOverflow: "",
+      bodyOverflow: "",
+      bodyPosition: "",
+      bodyTop: "",
+      bodyLeft: "",
+      bodyRight: "",
+      bodyWidth: "",
+    };
+
+    const withAlpha = (color: string, alpha: number) => {
+      const normalized = color.trim();
+      const shortHex = normalized.match(/^#([0-9a-f]{3})$/i);
+
+      if (shortHex) {
+        const [red, green, blue] = shortHex[1]
+          .split("")
+          .map((value) => Number.parseInt(`${value}${value}`, 16));
+
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+
+      const longHex = normalized.match(/^#([0-9a-f]{6})$/i);
+
+      if (longHex) {
+        const hex = longHex[1];
+        const red = Number.parseInt(hex.slice(0, 2), 16);
+        const green = Number.parseInt(hex.slice(2, 4), 16);
+        const blue = Number.parseInt(hex.slice(4, 6), 16);
+
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+
+      const rgbMatch = normalized.match(/^rgba?\(([^)]+)\)$/i);
+
+      if (rgbMatch) {
+        const [red = "0", green = "0", blue = "0"] = rgbMatch[1]
+          .split(",")
+          .map((value) => value.trim());
+
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+
+      return normalized;
+    };
+
+    const parseColorChannels = (color: string) => {
+      const normalized = color.trim();
+      const shortHex = normalized.match(/^#([0-9a-f]{3})$/i);
+
+      if (shortHex) {
+        const [red, green, blue] = shortHex[1]
+          .split("")
+          .map((value) => Number.parseInt(`${value}${value}`, 16));
+
+        return { red, green, blue, alpha: 1 };
+      }
+
+      const longHex = normalized.match(/^#([0-9a-f]{6})$/i);
+
+      if (longHex) {
+        const hex = longHex[1];
+
+        return {
+          red: Number.parseInt(hex.slice(0, 2), 16),
+          green: Number.parseInt(hex.slice(2, 4), 16),
+          blue: Number.parseInt(hex.slice(4, 6), 16),
+          alpha: 1,
+        };
+      }
+
+      const rgbMatch = normalized.match(/^rgba?\(([^)]+)\)$/i);
+
+      if (rgbMatch) {
+        const [red = "0", green = "0", blue = "0", alpha = "1"] = rgbMatch[1]
+          .split(",")
+          .map((value) => value.trim());
+
+        return {
+          red: Number.parseFloat(red),
+          green: Number.parseFloat(green),
+          blue: Number.parseFloat(blue),
+          alpha: Number.parseFloat(alpha),
+        };
+      }
+
+      return null;
+    };
+
+    const mixColors = (
+      foreground: string,
+      background: string,
+      foregroundWeight: number,
+    ) => {
+      const foregroundChannels = parseColorChannels(foreground);
+      const backgroundChannels = parseColorChannels(background);
+
+      if (!foregroundChannels || !backgroundChannels) {
+        return background;
+      }
+
+      const weight = Math.min(1, Math.max(0, foregroundWeight));
+      const inverseWeight = 1 - weight;
+      const red = Math.round(
+        foregroundChannels.red * weight +
+          backgroundChannels.red * inverseWeight,
+      );
+      const green = Math.round(
+        foregroundChannels.green * weight +
+          backgroundChannels.green * inverseWeight,
+      );
+      const blue = Math.round(
+        foregroundChannels.blue * weight +
+          backgroundChannels.blue * inverseWeight,
+      );
+      const alpha =
+        foregroundChannels.alpha * weight +
+        backgroundChannels.alpha * inverseWeight;
+
+      if (alpha >= 0.999) {
+        return `rgb(${red}, ${green}, ${blue})`;
+      }
+
+      return `rgba(${red}, ${green}, ${blue}, ${alpha.toFixed(3)})`;
+    };
+
+    const lockPageScroll = () => {
+      const root = document.documentElement;
+      const body = document.body;
+
+      if (body.dataset.supportModalScrollLocked === "true") {
+        return;
+      }
+
+      scrollLockState.scrollY = window.scrollY;
+      scrollLockState.rootOverflow = root.style.overflow;
+      scrollLockState.bodyOverflow = body.style.overflow;
+      scrollLockState.bodyPosition = body.style.position;
+      scrollLockState.bodyTop = body.style.top;
+      scrollLockState.bodyLeft = body.style.left;
+      scrollLockState.bodyRight = body.style.right;
+      scrollLockState.bodyWidth = body.style.width;
+
+      root.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.top = `-${scrollLockState.scrollY}px`;
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
+      body.dataset.supportModalScrollLocked = "true";
+    };
+
+    const unlockPageScroll = () => {
+      const root = document.documentElement;
+      const body = document.body;
+
+      if (body.dataset.supportModalScrollLocked !== "true") {
+        return;
+      }
+
+      root.style.overflow = scrollLockState.rootOverflow;
+      body.style.overflow = scrollLockState.bodyOverflow;
+      body.style.position = scrollLockState.bodyPosition;
+      body.style.top = scrollLockState.bodyTop;
+      body.style.left = scrollLockState.bodyLeft;
+      body.style.right = scrollLockState.bodyRight;
+      body.style.width = scrollLockState.bodyWidth;
+      delete body.dataset.supportModalScrollLocked;
+
+      window.scrollTo(0, scrollLockState.scrollY);
+    };
+
+    const loadStripeJs = async () => {
+      const stripeWindow = window as StripeWindow;
+
+      if (typeof stripeWindow.Stripe === "function") {
+        return stripeWindow.Stripe;
+      }
+
+      stripeJsPromise ??= new Promise((resolve, reject) => {
+        const handleLoad = () => {
+          if (typeof stripeWindow.Stripe === "function") {
+            resolve(stripeWindow.Stripe);
+            return;
+          }
+
+          reject(
+            new Error("Stripe.js loaded without exposing the global client."),
+          );
+        };
+
+        const handleError = () => {
+          reject(
+            new Error(
+              "Stripe.js could not be loaded for the support checkout.",
+            ),
+          );
+        };
+
+        const existingScript = document.querySelector(
+          "script[data-support-stripe-js]",
+        );
+
+        if (existingScript instanceof HTMLScriptElement) {
+          existingScript.addEventListener("load", handleLoad, { once: true });
+          existingScript.addEventListener("error", handleError, { once: true });
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://js.stripe.com/v3/";
+        script.async = true;
+        script.dataset.supportStripeJs = "true";
+        script.addEventListener("load", handleLoad, { once: true });
+        script.addEventListener("error", handleError, { once: true });
+        document.head.append(script);
+      });
+
+      try {
+        return await stripeJsPromise;
+      } catch (error) {
+        stripeJsPromise = undefined;
+        throw error;
+      }
+    };
+
+    const getStripe = async () => {
+      if (!publishableKey) {
+        return null;
+      }
+
+      const stripeWindow = window as StripeWindow;
+
+      stripePromise ??=
+        typeof stripeWindow.Stripe === "function"
+          ? Promise.resolve(stripeWindow.Stripe(publishableKey))
+          : loadStripeJs().then((stripeFactory) => {
+              if (typeof stripeFactory !== "function") {
+                return null;
+              }
+
+              return stripeFactory(publishableKey);
+            });
+
+      return await stripePromise;
+    };
+
+    const getDisplayedAmountLabel = () => {
+      const firstAmount = selectedAmountOutputs[0];
+
+      if (
+        firstAmount instanceof HTMLElement &&
+        typeof firstAmount.textContent === "string" &&
+        firstAmount.textContent.trim()
+      ) {
+        return firstAmount.textContent.trim();
+      }
+
+      return formatSupportAmount(defaultTipPence);
+    };
+
+    const formatSupportAmount = (amountPence: number) => {
+      if (amountPence % 100 === 0) {
+        return wholePoundCurrencyFormatter.format(amountPence / 100);
+      }
+
+      return currencyFormatter.format(amountPence / 100);
+    };
+
+    const getTopbarEyebrow = (step: StepName) => {
+      switch (step) {
+        case "payment":
+          return "Secure payment";
+        case "success":
+          return "Support received";
+        case "amount":
+        default:
+          return "One-off tip";
+      }
+    };
+
+    const updateTopbarEyebrow = (step: StepName) => {
+      if (topbarEyebrow instanceof HTMLElement) {
+        topbarEyebrow.textContent = getTopbarEyebrow(step);
+      }
+    };
+
+    const setSuccessCopy = (
+      amountPence: number,
+      paymentStatus = "succeeded",
+    ) => {
+      const amountLabel = formatSupportAmount(amountPence);
+
+      if (successTitle instanceof HTMLElement) {
+        successTitle.textContent =
+          paymentStatus === "processing" ? "Payment processing" : "Thank you";
+      }
+
+      if (successMessage instanceof HTMLElement) {
+        successMessage.textContent =
+          paymentStatus === "processing"
+            ? `Your ${amountLabel} support is processing. Stripe and your bank may need a moment to finish confirmation.`
+            : `Thank you for your ${amountLabel} support. I really appreciate it. It helps me keep publishing new articles and building the course material I'm working on behind the scenes.`;
+      }
+    };
+
+    const clearFrameResize = () => {
+      if (!(frame instanceof HTMLElement)) {
+        return;
+      }
+
+      if (typeof frameResizeTimeoutId === "number") {
+        window.clearTimeout(frameResizeTimeoutId);
+        frameResizeTimeoutId = undefined;
+      }
+
+      if (frameResizeCleanup) {
+        frame.removeEventListener("transitionend", frameResizeCleanup);
+        frameResizeCleanup = undefined;
+      }
+
+      frame.style.height = "";
+      frame.style.overflow = "";
+      frame.style.transition = "";
+    };
+
+    const applyStepState = (step: StepName) => {
+      const currentIndex = stepOrder.indexOf(step);
+      modal.dataset.step = step;
+      updateTopbarEyebrow(step);
+
+      if (status instanceof HTMLElement && step !== "amount") {
+        status.hidden = true;
+        status.textContent = "";
+        status.dataset.tone = "neutral";
+      }
+
+      stepPanels.forEach((panel) => {
+        if (!(panel instanceof HTMLElement)) {
+          return;
+        }
+
+        panel.hidden = panel.dataset.stepPanel !== step;
+      });
+
+      stepIndicators.forEach((indicator) => {
+        if (!(indicator instanceof HTMLElement)) {
+          return;
+        }
+
+        const indicatorStep = indicator.dataset.stepIndicator as
+          | StepName
+          | undefined;
+        const indicatorIndex = indicatorStep
+          ? stepOrder.indexOf(indicatorStep)
+          : -1;
+
+        if (indicatorIndex < currentIndex) {
+          indicator.dataset.state = "complete";
+          indicator.removeAttribute("aria-current");
+          return;
+        }
+
+        if (indicatorIndex === currentIndex) {
+          indicator.dataset.state = "active";
+          indicator.setAttribute("aria-current", "step");
+          return;
+        }
+
+        indicator.dataset.state = "upcoming";
+        indicator.removeAttribute("aria-current");
+      });
+    };
+
+    const setStep = (step: StepName, options?: { animate?: boolean }) => {
+      const shouldAnimate =
+        options?.animate ?? (modal.open && !reducedMotion.matches);
+
+      if (!(frame instanceof HTMLElement) || !shouldAnimate) {
+        clearFrameResize();
+        applyStepState(step);
+        return;
+      }
+
+      clearFrameResize();
+
+      const startHeight = frame.getBoundingClientRect().height;
+
+      frame.style.height = `${startHeight}px`;
+      frame.style.overflow = "hidden";
+      frame.style.transition = "none";
+
+      applyStepState(step);
+
+      const endHeight = frame.scrollHeight;
+
+      if (Math.abs(endHeight - startHeight) < 1) {
+        clearFrameResize();
+        return;
+      }
+
+      frameResizeCleanup = (event?: TransitionEvent) => {
+        if (event && event.propertyName !== "height") {
+          return;
+        }
+
+        clearFrameResize();
+      };
+
+      frame.addEventListener("transitionend", frameResizeCleanup);
+      frameResizeTimeoutId = window.setTimeout(() => {
+        frameResizeCleanup?.();
+      }, 360);
+
+      requestAnimationFrame(() => {
+        frame.style.transition = "height 260ms cubic-bezier(0.22, 1, 0.36, 1)";
+        frame.style.height = `${endHeight}px`;
+      });
+    };
+
+    const setStatus = (message: string, tone: StatusTone = "neutral") => {
+      if (!(status instanceof HTMLElement)) {
+        return;
+      }
+
+      const activeStep = modal.dataset.step as StepName | undefined;
+
+      if (activeStep && activeStep !== "amount") {
+        status.hidden = true;
+        status.textContent = "";
+        status.dataset.tone = tone;
+        return;
+      }
+
+      if (!message) {
+        status.hidden = true;
+        status.textContent = "";
+        status.dataset.tone = tone;
+        return;
+      }
+
+      status.hidden = false;
+      status.textContent = message;
+      status.dataset.tone = tone;
+    };
+
+    const setLaunchLoading = (isLoading: boolean) => {
+      if (!(launchButton instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      launchButton.disabled = isLoading;
+      launchButton.textContent = isLoading
+        ? "Preparing payment..."
+        : "Continue to payment";
+    };
+
+    const setPayLoading = (isLoading: boolean) => {
+      if (!(payButton instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      payButton.disabled = isLoading;
+      payButton.textContent = isLoading
+        ? "Confirming..."
+        : `Pay ${getDisplayedAmountLabel()}`;
+    };
+
+    const setCustomInputState = (hasError: boolean) => {
+      if (customField instanceof HTMLElement) {
+        if (hasError) {
+          customField.dataset.invalid = "true";
+        } else {
+          delete customField.dataset.invalid;
+        }
+      }
+
+      if (customInput instanceof HTMLInputElement) {
+        if (hasError) {
+          customInput.setAttribute("aria-invalid", "true");
+        } else {
+          customInput.removeAttribute("aria-invalid");
+        }
+      }
+    };
+
+    const setPaymentInputState = () => {
+      if (!(paymentShell instanceof HTMLElement)) {
+        return;
+      }
+
+      delete paymentShell.dataset.invalid;
+    };
+
+    const setPaymentState = (state: "idle" | "loading" | "ready") => {
+      if (paymentShell instanceof HTMLElement) {
+        paymentShell.dataset.state = state;
+      }
+
+      if (state !== "ready") {
+        setPaymentInputState();
+      }
+
+      if (paymentLoading instanceof HTMLElement) {
+        paymentLoading.hidden = state === "ready";
+
+        if (state === "loading") {
+          paymentLoading.textContent = "Preparing secure payment form...";
+        }
+      }
+
+      if (paymentElementMount instanceof HTMLElement) {
+        paymentElementMount.hidden = state !== "ready";
+      }
+    };
+
+    const updateAmountText = (amountPence: number) => {
+      const label = formatSupportAmount(amountPence);
+
+      selectedAmountOutputs.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          element.textContent = label;
+        }
+      });
+
+      successAmountOutputs.forEach((element) => {
+        if (element instanceof HTMLElement) {
+          element.textContent = label;
+        }
+      });
+
+      setPayLoading(false);
+    };
+
+    const clearPaymentForm = () => {
+      if (paymentElement) {
+        paymentElement.destroy();
+        paymentElement = undefined;
+      }
+
+      paymentElements = undefined;
+      paymentIntentClientSecret = undefined;
+
+      if (paymentElementMount instanceof HTMLElement) {
+        paymentElementMount.innerHTML = "";
+      }
+
+      setPaymentState("idle");
+    };
+
+    const syncModalErrorTokens = () => {
+      const rootStyles = getComputedStyle(document.documentElement);
+      const isDarkTheme = document.documentElement.dataset.theme === "dark";
+      const accentPrimary =
+        rootStyles.getPropertyValue("--accent-primary").trim() || "#e8006a";
+      const colorDanger =
+        rootStyles.getPropertyValue("--color-danger").trim() || "#b91c1c";
+      const colorDangerBright =
+        rootStyles.getPropertyValue("--color-danger-bright").trim() ||
+        colorDanger;
+      const dangerColor = mixColors(
+        colorDangerBright,
+        accentPrimary,
+        isDarkTheme ? 0.84 : 0.74,
+      );
+      const invalidRing = withAlpha(dangerColor, isDarkTheme ? 0.3 : 0.16);
+
+      modal.style.setProperty("--support-modal-invalid-border", dangerColor);
+      modal.style.setProperty("--support-modal-invalid-ring", invalidRing);
+    };
+
+    const buildStripeAppearance = (): StripeAppearance => {
+      syncModalErrorTokens();
+
+      const rootStyles = getComputedStyle(document.documentElement);
+      const isDarkTheme = document.documentElement.dataset.theme === "dark";
+      const accentPrimary =
+        rootStyles.getPropertyValue("--accent-primary").trim() || "#e8006a";
+      const surfaceElevated =
+        rootStyles.getPropertyValue("--surface-elevated").trim() || "#ffffff";
+      const surfacePage =
+        rootStyles.getPropertyValue("--surface-page").trim() || surfaceElevated;
+      const textPrimary =
+        rootStyles.getPropertyValue("--text-primary").trim() || "#1f1f1f";
+      const textMuted =
+        rootStyles.getPropertyValue("--text-muted").trim() || "#666666";
+      const textOnStrong =
+        rootStyles.getPropertyValue("--text-on-strong").trim() || "#ffffff";
+      const borderSubtle =
+        rootStyles.getPropertyValue("--border-subtle").trim() ||
+        mixColors(textPrimary, surfaceElevated, isDarkTheme ? 0.22 : 0.12);
+      const colorDanger =
+        rootStyles.getPropertyValue("--color-danger").trim() || "#b91c1c";
+      const colorDangerBright =
+        rootStyles.getPropertyValue("--color-danger-bright").trim() ||
+        colorDanger;
+      const dangerColor = mixColors(
+        colorDangerBright,
+        accentPrimary,
+        isDarkTheme ? 0.84 : 0.74,
+      );
+      const placeholderColor = mixColors(
+        textMuted,
+        textPrimary,
+        isDarkTheme ? 0.88 : 0.76,
+      );
+      const sectionBackground = mixColors(
+        accentPrimary,
+        surfaceElevated,
+        isDarkTheme ? 0.08 : 0.03,
+      );
+      const selectedTabBackground = mixColors(
+        accentPrimary,
+        surfaceElevated,
+        isDarkTheme ? 0.16 : 0.08,
+      );
+      const fieldBorder = mixColors(
+        accentPrimary,
+        borderSubtle,
+        isDarkTheme ? 0.2 : 0.12,
+      );
+      const fieldHoverBorder = mixColors(
+        accentPrimary,
+        borderSubtle,
+        isDarkTheme ? 0.34 : 0.24,
+      );
+      const fieldRadius =
+        rootStyles.getPropertyValue("--radius-tight").trim() || "4px";
+      const panelRadius =
+        rootStyles.getPropertyValue("--radius-soft").trim() || "14px";
+      const fieldSurface = isDarkTheme
+        ? mixColors(surfaceElevated, "#000000", 0.94)
+        : textOnStrong;
+      const highlightRing = withAlpha(accentPrimary, isDarkTheme ? 0.24 : 0.14);
+      const invalidRing = withAlpha(dangerColor, isDarkTheme ? 0.3 : 0.16);
+      const insetHighlight = withAlpha(textOnStrong, isDarkTheme ? 0.04 : 0.48);
+      const blockShadow = `inset 0 1px 0 ${insetHighlight}`;
+      const inputShadow = `${blockShadow}, 0 1px 0 ${withAlpha(surfacePage, isDarkTheme ? 0.08 : 0.02)}`;
+
+      return {
+        theme: "flat",
+        inputs: "spaced",
+        labels: "above",
+        disableAnimations: reducedMotion.matches,
+        variables: {
+          colorPrimary: accentPrimary,
+          colorBackground: surfaceElevated,
+          colorText: textPrimary,
+          colorTextSecondary: placeholderColor,
+          colorDanger: dangerColor,
+          fontFamily: "Barlow, ui-sans-serif, system-ui, sans-serif",
+          fontSizeBase: "16px",
+          spacingUnit: "4px",
+          borderRadius: fieldRadius,
+        },
+        rules: {
+          ".Block": {
+            backgroundColor: sectionBackground,
+            border: `1px solid ${fieldBorder}`,
+            borderRadius: panelRadius,
+            boxShadow: blockShadow,
+          },
+          ".AccordionItem": {
+            backgroundColor: sectionBackground,
+            border: `1px solid ${fieldBorder}`,
+            borderRadius: panelRadius,
+            boxShadow: blockShadow,
+          },
+          ".Tab": {
+            backgroundColor: sectionBackground,
+            border: `1px solid ${fieldBorder}`,
+            borderRadius: panelRadius,
+            boxShadow: blockShadow,
+            color: textPrimary,
+          },
+          ".Tab:hover": {
+            border: `1px solid ${fieldHoverBorder}`,
+            borderRadius: panelRadius,
+            color: textPrimary,
+          },
+          ".Tab--selected": {
+            backgroundColor: selectedTabBackground,
+            border: `1px solid ${fieldHoverBorder}`,
+            borderRadius: panelRadius,
+            boxShadow: `${blockShadow}, 0 0 0 3px ${highlightRing}`,
+            color: textPrimary,
+          },
+          ".TabLabel": {
+            color: textPrimary,
+          },
+          ".TabLabel--selected": {
+            color: textPrimary,
+          },
+          ".TabIcon": {
+            color: accentPrimary,
+          },
+          ".Input": {
+            backgroundColor: fieldSurface,
+            border: `1px solid ${fieldBorder}`,
+            borderRadius: fieldRadius,
+            boxShadow: inputShadow,
+            color: textPrimary,
+          },
+          ".Input:hover": {
+            backgroundColor: fieldSurface,
+            border: `1px solid ${fieldHoverBorder}`,
+            borderRadius: fieldRadius,
+            boxShadow: inputShadow,
+            color: textPrimary,
+          },
+          ".Input:focus": {
+            backgroundColor: fieldSurface,
+            border: `1px solid ${fieldHoverBorder}`,
+            borderRadius: fieldRadius,
+            boxShadow: `${inputShadow}, 0 0 0 3px ${highlightRing}`,
+            color: textPrimary,
+          },
+          ".Input--invalid": {
+            backgroundColor: fieldSurface,
+            border: `1px solid ${dangerColor}`,
+            borderRadius: fieldRadius,
+            boxShadow: `${inputShadow}, 0 0 0 3px ${invalidRing}`,
+          },
+          ".Input::placeholder": {
+            color: placeholderColor,
+          },
+          ".Label": {
+            color: textPrimary,
+          },
+          ".Label--focused": {
+            color: accentPrimary,
+          },
+          ".Label--invalid": {
+            color: dangerColor,
+          },
+          ".Dropdown": {
+            backgroundColor: fieldSurface,
+            border: `1px solid ${fieldBorder}`,
+            borderRadius: fieldRadius,
+            boxShadow: inputShadow,
+            color: textPrimary,
+          },
+          ".Error": {
+            color: dangerColor,
+          },
+        },
+      };
+    };
+
+    const syncCustomField = () => {
+      if (
+        !(form instanceof HTMLFormElement) ||
+        !(customWrap instanceof HTMLElement)
+      ) {
+        return;
+      }
+
+      const selected = form.querySelector(
+        'input[name="support-tip-amount"]:checked',
+      );
+
+      const isCustom =
+        selected instanceof HTMLInputElement && selected.value === "custom";
+
+      customWrap.hidden = !isCustom;
+      setCustomInputState(false);
+
+      if (customInput instanceof HTMLInputElement) {
+        customInput.required = isCustom;
+      }
+    };
+
+    const resetAmountSelection = () => {
+      if (!(form instanceof HTMLFormElement)) {
+        return;
+      }
+
+      const defaultInput = form.querySelector(
+        `input[name="support-tip-amount"][value="${defaultTipPence}"]`,
+      );
+
+      if (defaultInput instanceof HTMLInputElement) {
+        defaultInput.checked = true;
+      }
+
+      if (customInput instanceof HTMLInputElement) {
+        customInput.value = "";
+      }
+
+      syncCustomField();
+      updateAmountText(defaultTipPence);
+    };
+
+    const resetSupportFlow = () => {
+      loadSequence += 1;
+      clearPaymentForm();
+      resetAmountSelection();
+      setSuccessCopy(defaultTipPence);
+      setStep("amount");
+      setLaunchLoading(false);
+      setPayLoading(false);
+      setStatus("", "neutral");
+    };
+
+    const openModal = (trigger?: HTMLElement | null) => {
+      if (trigger instanceof HTMLElement) {
+        lastTrigger = trigger;
+      }
+
+      syncModalErrorTokens();
+
+      if (!modal.open) {
+        lockPageScroll();
+
+        try {
+          modal.showModal();
+        } catch (error) {
+          unlockPageScroll();
+          throw error;
+        }
+      }
+
+      if (publishableKey) {
+        void getStripe();
+      }
+    };
+
+    const closeModal = () => {
+      if (modal.open) {
+        modal.close();
+      }
+    };
+
+    const showSuccess = (amountPence: number, paymentStatus = "succeeded") => {
+      clearPaymentForm();
+      updateAmountText(amountPence);
+      setSuccessCopy(amountPence, paymentStatus);
+      setLaunchLoading(false);
+      setPayLoading(false);
+      setStatus("", "neutral");
+      setStep("success");
+    };
+
+    const getPaymentFailureMessage = (paymentIntent: StripePaymentIntent) => {
+      const lastErrorMessage =
+        paymentIntent.last_payment_error?.message?.trim();
+
+      if (lastErrorMessage) {
+        return lastErrorMessage;
+      }
+
+      switch (paymentIntent.status) {
+        case "requires_payment_method":
+          return "That card was not accepted. Check the details and try again.";
+        case "requires_action":
+          return "Additional card authentication is required to finish that payment.";
+        case "requires_confirmation":
+          return "Stripe is still waiting to confirm that card payment. Please try again.";
+        case "canceled":
+          return "That payment was canceled. Choose the amount again to retry.";
+        default:
+          return "That payment was not completed. Check the details and try again.";
+      }
+    };
+
+    const getSelectedAmountPence = () => {
+      if (!(form instanceof HTMLFormElement)) {
+        return null;
+      }
+
+      const selected = form.querySelector(
+        'input[name="support-tip-amount"]:checked',
+      );
+
+      if (!(selected instanceof HTMLInputElement)) {
+        return null;
+      }
+
+      if (selected.value !== "custom") {
+        return Number.parseInt(selected.value, 10);
+      }
+
+      if (!(customInput instanceof HTMLInputElement)) {
+        return null;
+      }
+
+      const poundsValue = customInput.value.trim();
+      if (!/^\d+(\.\d{1,2})?$/.test(poundsValue)) {
+        return null;
+      }
+
+      const parsed = Math.round(Number.parseFloat(poundsValue) * 100);
+      if (!Number.isInteger(parsed)) {
+        return null;
+      }
+
+      return parsed;
+    };
+
+    const getReturnPath = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("payment_intent");
+      url.searchParams.delete("payment_intent_client_secret");
+      url.searchParams.delete("redirect_status");
+      return `${url.pathname}${url.search}${url.hash}`;
+    };
+
+    const buildReturnUrl = () => {
+      return new URL(getReturnPath(), window.location.origin).toString();
+    };
+
+    const createPaymentIntent = async (amountPence: number) => {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amountPence,
+          returnPath: getReturnPath(),
+          source: window.location.pathname,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || typeof data.clientSecret !== "string") {
+        throw new Error(
+          data.error ?? "Stripe could not create the payment intent.",
+        );
+      }
+
+      return data.clientSecret;
+    };
+
+    const mountPaymentForm = async (clientSecret: string) => {
+      const stripe = await getStripe();
+
+      if (!stripe) {
+        throw new Error(
+          "Stripe.js could not be loaded for the support checkout.",
+        );
+      }
+
+      clearPaymentForm();
+      paymentIntentClientSecret = clientSecret;
+      paymentElements = stripe.elements({
+        clientSecret,
+        appearance: buildStripeAppearance(),
+      });
+      paymentElement = paymentElements.create("payment", {
+        layout: { type: "tabs" },
+      });
+
+      if (paymentElementMount instanceof HTMLElement) {
+        paymentElementMount.innerHTML = "";
+        paymentElement.mount(paymentElementMount);
+      }
+
+      setPaymentState("ready");
+    };
+
+    const inspectReturnedPayment = async () => {
+      const url = new URL(window.location.href);
+      const clientSecret = url.searchParams.get("payment_intent_client_secret");
+
+      if (!clientSecret) {
+        return;
+      }
+
+      openModal();
+
+      try {
+        const stripe = await getStripe();
+
+        if (!stripe) {
+          throw new Error(
+            "Stripe.js could not be loaded for the support checkout.",
+          );
+        }
+
+        const result = await stripe.retrievePaymentIntent(clientSecret);
+
+        if (result.error) {
+          throw new Error(
+            result.error.message ?? "Could not inspect the payment.",
+          );
+        }
+
+        if (!result.paymentIntent) {
+          throw new Error("Stripe did not return the payment state.");
+        }
+
+        if (
+          result.paymentIntent.status === "succeeded" ||
+          result.paymentIntent.status === "processing"
+        ) {
+          showSuccess(
+            typeof result.paymentIntent.amount === "number"
+              ? result.paymentIntent.amount
+              : defaultTipPence,
+            result.paymentIntent.status,
+          );
+        } else {
+          resetSupportFlow();
+          setStatus(
+            "That payment was not completed. Choose an amount to try again.",
+            "warning",
+          );
+        }
+      } catch (error) {
+        resetSupportFlow();
+        setStatus(
+          error instanceof Error
+            ? error.message
+            : "Could not inspect the returned payment.",
+          "error",
+        );
+      } finally {
+        url.searchParams.delete("payment_intent");
+        url.searchParams.delete("payment_intent_client_secret");
+        url.searchParams.delete("redirect_status");
+        window.history.replaceState(
+          {},
+          "",
+          `${url.pathname}${url.search}${url.hash}`,
+        );
+      }
+    };
+
+    if (form instanceof HTMLFormElement) {
+      form.addEventListener("change", syncCustomField);
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!publishableKey) {
+          setStatus(
+            "Add PUBLIC_STRIPE_PUBLISHABLE_KEY before using the support checkout.",
+            "error",
+          );
+          return;
+        }
+
+        setCustomInputState(false);
+
+        const amountPence = getSelectedAmountPence();
+        if (amountPence === null || amountPence < 1) {
+          const selectedAmount = form.querySelector(
+            'input[name="support-tip-amount"]:checked',
+          );
+          const customAmountSelected =
+            selectedAmount instanceof HTMLInputElement &&
+            selectedAmount.value === "custom";
+
+          setCustomInputState(customAmountSelected);
+          setStatus("Enter a valid amount greater than £0.00.", "error");
+          return;
+        }
+
+        const requestId = ++loadSequence;
+
+        updateAmountText(amountPence);
+        clearPaymentForm();
+        setStep("payment");
+        setLaunchLoading(true);
+        setPaymentState("loading");
+
+        try {
+          const clientSecret = await createPaymentIntent(amountPence);
+
+          if (requestId !== loadSequence) {
+            return;
+          }
+
+          await mountPaymentForm(clientSecret);
+
+          if (requestId !== loadSequence) {
+            clearPaymentForm();
+            return;
+          }
+
+          setStatus("", "neutral");
+        } catch (error) {
+          if (requestId !== loadSequence) {
+            return;
+          }
+
+          clearPaymentForm();
+          setStep("amount");
+          setStatus(
+            error instanceof Error
+              ? error.message
+              : "Stripe could not load the payment form.",
+            "error",
+          );
+        } finally {
+          if (requestId === loadSequence) {
+            setLaunchLoading(false);
+          }
+        }
+      });
+    }
+
+    if (customInput instanceof HTMLInputElement) {
+      customInput.addEventListener("input", () => {
+        setCustomInputState(false);
+      });
+    }
+
+    if (paymentForm instanceof HTMLFormElement) {
+      paymentForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const stripe = await getStripe();
+
+        if (!stripe || !paymentElements || !paymentIntentClientSecret) {
+          setStatus(
+            "The payment form is not ready yet. Choose the amount again if needed.",
+            "error",
+          );
+          return;
+        }
+
+        setPayLoading(true);
+        setPaymentInputState();
+
+        try {
+          const submitResult = await paymentElements.submit();
+
+          if (submitResult.error) {
+            setPaymentInputState();
+            throw new Error(
+              submitResult.error.message ??
+                "Check your payment details and try again.",
+            );
+          }
+
+          const result = await stripe.confirmPayment({
+            elements: paymentElements,
+            confirmParams: { return_url: buildReturnUrl() },
+            redirect: "if_required",
+          });
+
+          if (result.error) {
+            setPaymentInputState();
+            throw new Error(
+              result.error.message ?? "Stripe could not confirm the payment.",
+            );
+          }
+
+          if (!result.paymentIntent) {
+            throw new Error("Stripe did not return the payment result.");
+          }
+
+          if (
+            result.paymentIntent.status === "succeeded" ||
+            result.paymentIntent.status === "processing"
+          ) {
+            showSuccess(
+              typeof result.paymentIntent.amount === "number"
+                ? result.paymentIntent.amount
+                : (getSelectedAmountPence() ?? defaultTipPence),
+              result.paymentIntent.status,
+            );
+            return;
+          }
+
+          setPaymentInputState();
+          setStatus(getPaymentFailureMessage(result.paymentIntent), "error");
+        } catch (error) {
+          setStatus(
+            error instanceof Error
+              ? error.message
+              : "Stripe could not confirm the payment.",
+            "error",
+          );
+        } finally {
+          setPayLoading(false);
+        }
+      });
+    }
+
+    if (backButton instanceof HTMLButtonElement) {
+      backButton.addEventListener("click", () => {
+        loadSequence += 1;
+        clearPaymentForm();
+        setStep("amount");
+        setStatus("", "neutral");
+        setLaunchLoading(false);
+        setPayLoading(false);
+      });
+    }
+
+    closeButtons.forEach((button) => {
+      if (button instanceof HTMLButtonElement) {
+        button.addEventListener("click", closeModal);
+      }
+    });
+
+    openButtons.forEach((button) => {
+      if (!(button instanceof HTMLElement)) {
+        return;
+      }
+
+      button.addEventListener("click", () => {
+        resetSupportFlow();
+        openModal(button);
+      });
+    });
+
+    modal.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeModal();
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    modal.addEventListener("close", () => {
+      unlockPageScroll();
+      resetSupportFlow();
+
+      if (lastTrigger instanceof HTMLElement) {
+        lastTrigger.focus();
+      }
+
+      lastTrigger = null;
+    });
+
+    syncModalErrorTokens();
+    resetSupportFlow();
+    inspectReturnedPayment();
+  }
+</script>
+
+<style lang="scss">
+  .support-modal {
+    --support-modal-error: color-mix(
+      in srgb,
+      var(--color-danger-bright) 74%,
+      var(--accent-primary) 26%
+    );
+    --support-modal-invalid-border: var(--support-modal-error);
+    --support-modal-invalid-ring: color-mix(
+      in srgb,
+      var(--support-modal-invalid-border) 16%,
+      transparent
+    );
+    width: min(60rem, calc(100vw - 1.5rem));
+    max-width: 60rem;
+    max-height: calc(100vh - 1.5rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-panel-large);
+    background: transparent;
+    color: inherit;
+    overscroll-behavior: contain;
+  }
+
+  .support-modal::backdrop {
+    background: rgba(var(--overlay-rgb), 0.78);
+    backdrop-filter: blur(10px);
+  }
+
+  .support-modal__panel {
+    display: grid;
+    gap: 0.9rem;
+    max-height: calc(100vh - 1.5rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: clamp(0.85rem, 2.5vw, 1.25rem);
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.16);
+    border-radius: var(--radius-panel-large);
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(var(--accent-primary-rgb), 0.12),
+        transparent 34%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(var(--text-on-strong-rgb), 0.99),
+        color-mix(in srgb, var(--text-on-strong) 97%, var(--accent-primary) 3%)
+      );
+    box-shadow: 0 24px 80px rgba(var(--overlay-rgb), 0.24);
+  }
+
+  :global([data-theme="dark"]) .support-modal__panel {
+    background:
+      radial-gradient(
+        circle at top right,
+        rgba(var(--accent-primary-rgb), 0.18),
+        transparent 36%
+      ),
+      linear-gradient(145deg, rgba(19, 19, 19, 0.98), rgba(29, 22, 26, 0.98));
+    border-color: rgba(var(--accent-primary-rgb), 0.28);
+  }
+
+  :global([data-theme="dark"]) .support-modal {
+    --support-modal-error: color-mix(
+      in srgb,
+      var(--color-danger-bright) 84%,
+      var(--accent-primary) 16%
+    );
+  }
+
+  .support-modal__topbar {
+    display: flex;
+    gap: 0.85rem;
+    justify-content: space-between;
+    align-items: start;
+  }
+
+  .support-modal__intro {
+    min-width: 0;
+  }
+
+  .support-modal__eyebrow {
+    margin: 0 0 0.5rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+
+  .support-modal__stage-copy {
+    min-width: 0;
+  }
+
+  .support-modal__stage-title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+    font-weight: 800;
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__stage-body {
+    margin: 0.45rem 0 0;
+    max-width: 62ch;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  .support-modal__amount-inline {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.55rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    background: rgba(var(--text-on-strong-rgb), 0.72);
+    appearance: none;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition:
+      border-color 0.18s ease,
+      background-color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .support-modal__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid rgba(var(--overlay-rgb), 0.25);
+    border-radius: var(--radius-tight);
+    background: transparent;
+    color: rgba(var(--overlay-rgb), 0.5);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease,
+      transform 0.15s ease;
+
+    :global(svg) {
+      display: block;
+    }
+  }
+
+  .support-modal__secondary:hover {
+    border-color: rgba(var(--accent-primary-rgb), 0.32);
+    background: color-mix(
+      in srgb,
+      var(--surface-elevated) 82%,
+      var(--accent-primary) 18%
+    );
+    transform: translateY(-1px);
+  }
+
+  .support-modal__close:hover {
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    border-color: rgba(var(--accent-primary-rgb), 0.5);
+    color: var(--accent-primary);
+    transform: translateY(-1px);
+  }
+
+  .support-modal__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .support-modal__step {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.12);
+    border-radius: var(--radius-compact);
+    background: rgba(var(--text-on-strong-rgb), 0.62);
+  }
+
+  .support-modal__step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba(var(--accent-primary-rgb), 0.08);
+    color: var(--accent-primary);
+    flex-shrink: 0;
+  }
+
+  .support-modal__step-label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__step[data-state="active"] {
+    border-color: rgba(var(--accent-primary-rgb), 0.36);
+    box-shadow: 0 16px 32px rgba(var(--accent-primary-rgb), 0.12);
+  }
+
+  .support-modal__step[data-state="complete"] .support-modal__step-number {
+    background: var(--accent-primary);
+    color: var(--text-on-strong);
+  }
+
+  .support-modal__step[data-state="upcoming"] {
+    opacity: 0.72;
+  }
+
+  .support-modal__status {
+    margin: 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-compact);
+    font-size: 0.88rem;
+    line-height: 1.5;
+
+    &[data-tone="neutral"] {
+      background: color-mix(
+        in srgb,
+        var(--surface-page) 72%,
+        var(--surface-elevated)
+      );
+      color: var(--text-primary);
+    }
+
+    &[data-tone="success"] {
+      background: color-mix(in srgb, var(--color-success) 12%, transparent);
+      color: var(--color-success);
+    }
+
+    &[data-tone="warning"] {
+      background: color-mix(in srgb, var(--color-warning) 14%, transparent);
+      color: color-mix(in srgb, var(--color-warning) 72%, var(--text-primary));
+    }
+
+    &[data-tone="error"] {
+      background: color-mix(
+        in srgb,
+        var(--support-modal-error) 12%,
+        transparent
+      );
+      color: var(--support-modal-error);
+    }
+  }
+
+  .support-modal__frame {
+    padding: clamp(0.8rem, 2vw, 1.1rem);
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.14);
+    border-radius: var(--radius-panel-large);
+    background: linear-gradient(
+      180deg,
+      rgba(var(--text-on-strong-rgb), 0.88),
+      rgba(var(--text-on-strong-rgb), 0.96)
+    );
+  }
+
+  :global([data-theme="dark"]) .support-modal__frame {
+    background: linear-gradient(
+      180deg,
+      rgba(25, 25, 25, 0.96),
+      rgba(20, 20, 20, 0.98)
+    );
+    border-color: rgba(var(--accent-primary-rgb), 0.2);
+  }
+
+  .support-modal__stage {
+    display: grid;
+    gap: 0.95rem;
+  }
+
+  .support-modal__stage[data-step-panel="payment"] {
+    @media (min-width: 900px) {
+      grid-template-columns: minmax(15rem, 17rem) minmax(0, 1fr);
+      grid-template-areas:
+        "header header"
+        "summary form";
+      align-items: start;
+    }
+  }
+
+  .support-modal__stage[hidden] {
+    display: none;
+  }
+
+  .support-modal__stage-header {
+    display: flex;
+    gap: 0.85rem;
+    align-items: start;
+    justify-content: space-between;
+  }
+
+  .support-modal__stage[data-step-panel="payment"]
+    .support-modal__stage-header {
+    @media (min-width: 900px) {
+      grid-area: header;
+    }
+  }
+
+  .support-modal__stage[data-step-panel="payment"] .support-modal__stage-body {
+    max-width: 42ch;
+  }
+
+  .support-modal__form,
+  .support-modal__payment-form {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .support-modal__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .support-modal__legend {
+    margin-bottom: 0.55rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__options {
+    display: grid;
+    gap: 0.7rem;
+
+    @media (min-width: 700px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .support-modal__option {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 0.65rem;
+    align-items: center;
+    padding: 0.85rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 10%, var(--border-subtle));
+    border-radius: var(--radius-panel);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 3%, var(--surface-elevated)) 0%,
+      var(--surface-elevated) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.55);
+    cursor: pointer;
+    transition:
+      border-color 0.18s ease,
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:has(input:checked) {
+      border-color: color-mix(
+        in srgb,
+        var(--accent-primary) 22%,
+        var(--border-subtle)
+      );
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--accent-primary) 5%, var(--surface-elevated)) 0%,
+        var(--surface-elevated) 100%
+      );
+      box-shadow:
+        inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.72),
+        0 14px 28px rgba(var(--shadow-rgb), 0.08);
+      transform: translateY(-1px);
+    }
+  }
+
+  .support-modal__option input {
+    margin: 0;
+    accent-color: var(--accent-primary);
+  }
+
+  .support-modal__option-chip {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.96rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__option-note {
+    grid-column: 2;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .support-modal__custom-wrap,
+  .support-modal__summary,
+  .support-modal__payment-shell,
+  .support-modal__payment-shell[data-state="ready"] {
+    padding: 0.85rem;
+    border-radius: var(--radius-panel);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 3%, var(--surface-elevated)) 0%,
+      var(--surface-elevated) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.55);
+  }
+
+  .support-modal__custom-wrap,
+  .support-modal__summary {
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 22%, var(--border-subtle));
+  }
+
+  .support-modal__payment-shell {
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 10%, var(--border-subtle));
+  }
+
+  .support-modal__payment-shell[data-state="ready"] {
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary) 22%,
+      var(--border-subtle)
+    );
+  }
+
+  .support-modal__custom-label,
+  .support-modal__summary-label,
+  .support-modal__payment-label {
+    display: block;
+    margin: 0 0 0.45rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__custom-field {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid
+      color-mix(in srgb, var(--text-primary) 18%, var(--border-subtle));
+    border-radius: var(--radius-tight);
+    background: var(--text-on-strong);
+    box-shadow: inset 0 1px 0 rgba(var(--overlay-rgb), 0.03);
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .support-modal__custom-field:focus-within {
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary) 28%,
+      var(--text-primary)
+    );
+    box-shadow: 0 0 0 3px rgba(var(--accent-primary-rgb), 0.12);
+  }
+
+  .support-modal__custom-field[data-invalid="true"],
+  .support-modal__custom-field[data-invalid="true"]:focus-within {
+    border-color: var(--support-modal-invalid-border);
+    box-shadow:
+      inset 0 1px 0 rgba(var(--overlay-rgb), 0.03),
+      0 0 0 3px var(--support-modal-invalid-ring);
+  }
+
+  .support-modal__currency {
+    padding: 0 0.9rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__custom-input {
+    width: 100%;
+    min-height: 2.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    padding: 0.6rem 0.9rem 0.6rem 0;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .support-modal__payment-loading {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  .support-modal__payment-element {
+    min-height: 12rem;
+    padding-top: 0.25rem;
+  }
+
+  .support-modal__payment-element[hidden] {
+    display: none;
+  }
+
+  .support-modal__fineprint {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .support-modal__fineprint--inline {
+    margin: 0;
+  }
+
+  .support-modal__footer {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .support-modal__footer--success {
+    justify-content: center;
+  }
+
+  .support-modal__summary {
+    display: grid;
+    gap: 0.3rem;
+
+    @media (min-width: 900px) {
+      grid-area: summary;
+      align-content: start;
+    }
+
+    @media (min-width: 700px) {
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      gap: 1rem;
+    }
+  }
+
+  .support-modal__summary-value,
+  .support-modal__thankyou-amount {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .support-modal__summary-value {
+    font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+    line-height: 0.96;
+  }
+
+  .support-modal__summary-note {
+    margin: 0;
+    max-width: 34ch;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .support-modal__stage[data-step-panel="payment"]
+    .support-modal__payment-form {
+    @media (min-width: 900px) {
+      grid-area: form;
+      align-content: start;
+    }
+  }
+
+  .support-modal__stage--success {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .support-modal__thankyou {
+    display: grid;
+    gap: 0.85rem;
+    max-width: 40rem;
+    justify-items: center;
+  }
+
+  .support-modal__thankyou-lockup {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.9rem 0.35rem 0;
+  }
+
+  .support-modal__thankyou-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.16);
+    border-radius: 50%;
+    background: linear-gradient(
+      180deg,
+      rgba(var(--accent-primary-rgb), 0.18),
+      rgba(var(--accent-primary-rgb), 0.08)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.5),
+      0 10px 20px rgba(var(--accent-primary-rgb), 0.14);
+    color: var(--accent-primary);
+    transform: translate(18%, -22%);
+    z-index: 1;
+
+    :global(svg) {
+      display: block;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .support-modal__thankyou-amount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.9rem;
+    min-width: 6.25rem;
+    padding: 0.7rem 1.7rem 0.7rem 1.25rem;
+    border-radius: var(--radius-pill);
+    background: rgba(var(--accent-primary-rgb), 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.4),
+      0 10px 24px rgba(var(--accent-primary-rgb), 0.1);
+    color: var(--accent-primary);
+    font-size: clamp(1.25rem, 2.4vw, 1.85rem);
+    line-height: 1;
+  }
+
+  :global([data-theme="dark"]) .support-modal__thankyou-icon {
+    border-color: rgba(var(--accent-primary-rgb), 0.24);
+    background: linear-gradient(
+      180deg,
+      rgba(var(--accent-primary-rgb), 0.28),
+      rgba(var(--accent-primary-rgb), 0.12)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.08),
+      0 10px 24px rgba(var(--overlay-rgb), 0.22);
+  }
+
+  .support-modal :global(.button.is-ink.is-medium) {
+    min-height: 2.6rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  :global([data-theme="dark"]) .support-modal__close {
+    border-color: rgba(var(--text-on-strong-rgb), 0.25);
+    color: rgba(var(--text-on-strong-rgb), 0.5);
+    background: transparent;
+  }
+
+  :global([data-theme="dark"]) .support-modal__secondary,
+  :global([data-theme="dark"]) .support-modal__step {
+    background: rgba(var(--text-on-strong-rgb), 0.04);
+  }
+
+  :global([data-theme="dark"]) .support-modal__option {
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary) 14%,
+      var(--border-subtle)
+    );
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 6%, var(--surface-elevated)) 0%,
+      color-mix(in srgb, var(--surface-elevated) 92%, black) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.04);
+  }
+
+  :global([data-theme="dark"]) .support-modal__custom-wrap,
+  :global([data-theme="dark"]) .support-modal__summary,
+  :global([data-theme="dark"]) .support-modal__payment-shell {
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary) 14%,
+      var(--border-subtle)
+    );
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 6%, var(--surface-elevated)) 0%,
+      color-mix(in srgb, var(--surface-elevated) 92%, black) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.04);
+  }
+
+  :global([data-theme="dark"]) .support-modal__custom-field {
+    border-color: color-mix(
+      in srgb,
+      var(--text-primary) 20%,
+      var(--border-subtle)
+    );
+    background: color-mix(in srgb, var(--surface-elevated) 94%, black);
+    box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.03);
+  }
+
+  @media (max-width: 767px) {
+    .support-modal {
+      width: calc(100vw - 1rem);
+      max-height: calc(100vh - 1rem);
+    }
+
+    .support-modal__panel {
+      max-height: calc(100vh - 1rem);
+      gap: 0.6rem;
+      padding: 0.65rem;
+    }
+
+    .support-modal__frame {
+      padding: 0.65rem;
+    }
+
+    .support-modal__topbar {
+      gap: 0.65rem;
+    }
+
+    .support-modal__stage {
+      gap: 0.75rem;
+    }
+
+    .support-modal__stage-header,
+    .support-modal__footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .support-modal__secondary {
+      width: 100%;
+    }
+
+    .support-modal__steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .support-modal__step {
+      flex-direction: column;
+      align-items: start;
+      padding: 0.45rem;
+    }
+
+    .support-modal__step-number {
+      width: 1.45rem;
+      height: 1.45rem;
+      font-size: 0.74rem;
+    }
+
+    .support-modal__step-label {
+      font-size: 0.66rem;
+      line-height: 1.2;
+    }
+
+    .support-modal__stage-title {
+      font-size: 1.15rem;
+    }
+
+    .support-modal__stage-body {
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .support-modal__status {
+      padding: 0.65rem 0.75rem;
+      font-size: 0.82rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"]
+      .support-modal__stage-header {
+      gap: 0.45rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"] .support-modal__secondary {
+      min-height: 2.2rem;
+      padding: 0.55rem 0.8rem;
+      font-size: 0.72rem;
+    }
+
+    .support-modal__summary {
+      gap: 0.2rem;
+      padding: 0.65rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"] .support-modal__summary {
+      grid-template-columns: 1fr;
+      padding: 0.55rem 0.65rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"]
+      .support-modal__summary
+      > div {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.55rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"]
+      .support-modal__summary-label {
+      margin: 0;
+    }
+
+    .support-modal__summary-value,
+    .support-modal__thankyou-amount {
+      font-size: 1.15rem;
+    }
+
+    .support-modal__thankyou-lockup {
+      padding: 0 0.7rem 0.25rem 0;
+    }
+
+    .support-modal__thankyou-icon {
+      width: 1.95rem;
+      height: 1.95rem;
+      transform: translate(14%, -18%);
+
+      :global(svg) {
+        width: 0.85rem;
+        height: 0.85rem;
+      }
+    }
+
+    .support-modal__thankyou-amount {
+      min-height: 2.55rem;
+      min-width: 5.45rem;
+      padding: 0.55rem 1.3rem 0.55rem 0.95rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"]
+      .support-modal__summary-value {
+      font-size: 1rem;
+    }
+
+    .support-modal__summary-note {
+      font-size: 0.8rem;
+    }
+
+    .support-modal__payment-shell {
+      padding: 0.65rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"] .support-modal__footer {
+      gap: 0.45rem;
+    }
+
+    .support-modal__stage[data-step-panel="payment"]
+      .support-modal__fineprint--inline {
+      display: none;
+    }
+
+    .support-modal__payment-element {
+      min-height: 10rem;
+    }
+  }
+</style>

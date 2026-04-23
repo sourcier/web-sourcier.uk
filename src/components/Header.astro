@@ -1,13 +1,17 @@
 ---
 import avatarImage from "../../assets/images/avatar.jpeg";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleXmark,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 import ThemeToggle from "./ThemeToggle.astro";
 
 const githubIcon = faIcon(faGithub, { size: 18 });
 const linkedinIcon = faIcon(faLinkedin, { size: 18 });
 const searchIcon = faIcon(faMagnifyingGlass, { size: 18 });
+const closeIcon = faIcon(faCircleXmark, { size: 18 });
 
 const currentPath = new URL(Astro.request.url).pathname;
 function isActive(href: string) {
@@ -147,9 +151,9 @@ function isActive(href: string) {
         aria-controls="search-results"
         aria-label="Search query"
       />
-      <button class="search-close" aria-label="Close search" data-search-close
-        >✕</button
-      >
+      <button class="search-close" aria-label="Close search" data-search-close>
+        <Fragment set:html={closeIcon} />
+      </button>
     </div>
     <ul id="search-results" role="listbox" aria-label="Search results"></ul>
   </div>

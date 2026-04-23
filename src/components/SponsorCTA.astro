@@ -1,51 +1,12 @@
 ---
-import {
-  faArrowUpRightFromSquare,
-  faCreditCard,
-  faMugHot,
-} from "@fortawesome/free-solid-svg-icons";
-import { faIcon } from "../utils/icons";
-
 interface Props {
   mode?: "article" | "support";
   placement?: "full" | "sidebar";
 }
 
-interface DonationLink {
-  href: string;
-  label: string;
-  shortLabel: string;
-  description: string;
-  icon: string;
-}
-
 const { mode = "article", placement = "full" } = Astro.props;
-
-const stripeDonateUrl = import.meta.env.PUBLIC_STRIPE_DONATE_URL?.trim();
-const koFiDonateUrl = import.meta.env.PUBLIC_KOFI_DONATE_URL?.trim();
-const donationArrowIcon = faIcon(faArrowUpRightFromSquare, { size: 14 });
-
-const donationLinks: DonationLink[] = [];
-
-if (stripeDonateUrl) {
-  donationLinks.push({
-    href: stripeDonateUrl,
-    label: "Leave a tip via Stripe",
-    shortLabel: "Stripe",
-    description: "Card, Apple Pay, or Link",
-    icon: faIcon(faCreditCard, { size: 18 }),
-  });
-}
-
-if (koFiDonateUrl) {
-  donationLinks.push({
-    href: koFiDonateUrl,
-    label: "Leave a tip on Ko-fi",
-    shortLabel: "Ko-fi",
-    description: "Quick one-off tip",
-    icon: faIcon(faMugHot, { size: 18 }),
-  });
-}
+const supportPublishableKey =
+  import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() ?? "";
 
 const isArticle = mode === "article";
 const isSidebar = placement === "sidebar";
@@ -70,8 +31,10 @@ const headingId = isSidebar
     ? "article-support-cta"
     : "site-support-cta";
 const showHighlights = isArticle && !isSidebar;
-const showWorkButton = !isSidebar || donationLinks.length === 0;
-const showDonationIntro = donationLinks.length > 0 && !isSidebar;
+const showSupportButton = Boolean(supportPublishableKey);
+const showWorkButton = !isSidebar || !showSupportButton;
+const showSupportIntro = showSupportButton && !isSidebar;
+const supportButtonLabel = isSidebar ? "Leave a tip" : "Support the writing";
 ---
 
 <section
@@ -106,50 +69,21 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
         }
 
         {
-          donationLinks.length > 0 && (
+          showSupportButton && (
             <>
-              {showDonationIntro && (
+              {showSupportIntro && (
                 <p class="support-cta__aside">
-                  If this has been useful, you can also back the writing with a
-                  tip.
+                  If this has been useful, you can back the writing with a
+                  one-off tip through a secure Stripe checkout.
                 </p>
               )}
-              <div
-                class="support-cta__donations"
-                role="list"
-                aria-label={isSidebar ? "Tip options" : "Tip options"}
+              <button
+                type="button"
+                class="support-cta__btn support-cta__btn--support"
+                data-support-modal-open
               >
-                {donationLinks.map((link) => (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="support-cta__donation"
-                    role="listitem"
-                  >
-                    <span
-                      class="support-cta__donation-icon"
-                      set:html={link.icon}
-                    />
-                    <span class="support-cta__donation-copy">
-                      <span class="support-cta__donation-label">
-                        {isSidebar ? link.shortLabel : link.label}
-                      </span>
-                      {!isSidebar && (
-                        <span class="support-cta__donation-meta">
-                          {link.description}
-                        </span>
-                      )}
-                    </span>
-                    {!isSidebar && (
-                      <span
-                        class="support-cta__donation-arrow"
-                        set:html={donationArrowIcon}
-                      />
-                    )}
-                  </a>
-                ))}
-              </div>
+                {supportButtonLabel}
+              </button>
             </>
           )
         }
@@ -378,13 +312,16 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
     align-items: center;
     min-height: 3rem;
     padding: 0.85rem 1.2rem;
+    border: 0;
     border-radius: var(--radius-pill);
+    appearance: none;
     font-family: "Barlow Condensed", sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     text-decoration: none;
+    cursor: pointer;
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease,
@@ -416,40 +353,14 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
     box-shadow: 0 16px 36px rgba(var(--accent-primary-rgb), 0.28);
   }
 
-  .support-cta__aside {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: var(--text-muted);
-  }
-
-  .support-cta__donations {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .support-cta__donation {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.85rem;
-    padding: 0.95rem 1rem;
+  .support-cta__btn--support {
     border: 1px solid rgba(var(--accent-primary-rgb), 0.16);
-    border-radius: var(--radius-panel);
     background: rgba(var(--text-on-strong-rgb), 0.82);
     color: var(--text-primary);
-    text-decoration: none;
     box-shadow: 0 10px 24px rgba(var(--shadow-rgb), 0.05);
-    transition:
-      transform 0.18s ease,
-      border-color 0.18s ease,
-      background-color 0.18s ease,
-      box-shadow 0.18s ease;
   }
 
-  .support-cta__donation:hover {
-    transform: translateY(-2px);
+  .support-cta__btn--support:hover {
     border-color: rgba(var(--accent-primary-rgb), 0.32);
     background: color-mix(
       in srgb,
@@ -459,101 +370,23 @@ const showDonationIntro = donationLinks.length > 0 && !isSidebar;
     box-shadow: 0 16px 32px rgba(var(--shadow-rgb), 0.08);
   }
 
-  .support-cta__donation:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 3px;
-  }
-
-  .support-cta__donation-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.6rem;
-    height: 2.6rem;
-    border-radius: var(--radius-soft);
-    flex-shrink: 0;
-    background: rgba(var(--accent-primary-rgb), 0.08);
-    color: var(--accent-primary);
-
-    :global(svg) {
-      display: block;
-    }
-  }
-
-  .support-cta__donation-copy {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    text-align: left;
-  }
-
-  .support-cta__donation-label {
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-primary);
-  }
-
-  .support-cta__donation-meta {
-    margin-top: 0.15rem;
-    font-size: 0.78rem;
-    line-height: 1.4;
-    color: var(--text-muted);
-  }
-
-  .support-cta__donation-arrow {
-    color: var(--text-muted);
-    transition:
-      transform 0.18s ease,
-      color 0.18s ease;
-
-    :global(svg) {
-      display: block;
-    }
-  }
-
-  .support-cta__donation:hover .support-cta__donation-arrow {
-    transform: translate(2px, -2px);
-  }
-
-  .support-cta--sidebar .support-cta__donation {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.65rem;
-    padding: 0.7rem 0.85rem;
-    border-radius: var(--radius-pill);
-    box-shadow: none;
-  }
-
-  .support-cta--sidebar .support-cta__donation-icon {
-    width: 2rem;
-    height: 2rem;
-    border-radius: var(--radius-pill);
-  }
-
-  .support-cta--sidebar .support-cta__donation-label {
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-  }
-
-  :global([data-theme="dark"]) .support-cta__donation {
+  :global([data-theme="dark"]) .support-cta__btn--support {
+    border-color: rgba(var(--accent-primary-rgb), 0.24);
     background: rgba(var(--text-on-strong-rgb), 0.04);
+    color: var(--text-on-strong);
     box-shadow: none;
   }
 
-  :global([data-theme="dark"]) .support-cta__donation:hover {
+  :global([data-theme="dark"]) .support-cta__btn--support:hover {
     border-color: rgba(var(--accent-primary-rgb), 0.34);
     background: rgba(var(--accent-primary-rgb), 0.08);
   }
 
-  :global([data-theme="dark"]) .support-cta__donation-icon {
-    background: rgba(var(--accent-primary-rgb), 0.14);
-    color: var(--accent-primary);
-  }
-
-  :global([data-theme="dark"]) .support-cta__donation-label {
-    color: var(--text-on-strong);
+  .support-cta__aside {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-muted);
   }
 
   .support-cta--support {
