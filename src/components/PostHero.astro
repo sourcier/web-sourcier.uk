@@ -227,13 +227,6 @@ const hasEngagement = Boolean(postId || hasShare);
       inset: 0;
       background:
         linear-gradient(
-          90deg,
-          var(--surface-elevated) 0%,
-          color-mix(in srgb, var(--surface-elevated) 96%, transparent) 24%,
-          color-mix(in srgb, var(--surface-page) 58%, transparent) 42%,
-          transparent 56%
-        ),
-        linear-gradient(
           135deg,
           rgba(var(--overlay-rgb), 0.02) 0%,
           rgba(var(--overlay-rgb), 0) 100%
@@ -268,6 +261,8 @@ const hasEngagement = Boolean(postId || hasShare);
     width: 76%;
     overflow: hidden;
     pointer-events: none;
+    mask-image: linear-gradient(to right, transparent 0%, black 38%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 38%);
   }
 
   .post-hero__cover {
