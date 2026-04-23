@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import avatarImage from "../../assets/images/avatar.jpeg";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -23,13 +24,14 @@ function isActive(href: string) {
   <div class="container">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <figure class="image">
-          <img
-            src={avatarImage.src}
-            alt="Roger Rajaratnam avatar"
-            class="is-rounded"
-          />
-        </figure>
+        <Image
+          src={avatarImage}
+          alt="Roger Rajaratnam avatar"
+          width={32}
+          height={32}
+          class="is-rounded"
+          loading="eager"
+        />
         <span class="navbar-brand-name">Sourcier</span>
       </a>
 
