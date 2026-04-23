@@ -24,19 +24,6 @@
 [functions."scheduled-build"]
   schedule = "45 7 * * *" # always before 09:00 UK time: 07:45 GMT in winter, 08:45 BST in summer
 
-# ── Security headers ───────────────────────────────────────────────────────────
-[[headers]]
-  for = "/*"
-  [headers.values]
-    # sha256 hash covers the synchronous inline theme-detection script in BaseLayout.astro.
-    # Recalculate with: node /tmp/compute-csp-hash.mjs  (or equivalent) if that script changes.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-APuAAsOc0BsU74ZsTZ66BgzFLHlcw+KZq3xKuNsnvIg=' https://eu.i.posthog.com https://eu-assets.i.posthog.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://eu.i.posthog.com https://eu-assets.i.posthog.com https://api.stripe.com https://r.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com https://m.stripe.network; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-
 # ── Comment approval system ────────────────────────────────────────────────────
 #
 # Required environment variables (Netlify → Site configuration → Environment variables):
