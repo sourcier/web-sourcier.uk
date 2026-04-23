@@ -1,5 +1,7 @@
 # sourcier.uk
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/11a14542-cc35-4fdf-94e4-a61350e0652b/deploy-status)](https://app.netlify.com/projects/sourcieruk/deploys)
+
 Personal tech blog and engineering consultancy website built with [Astro](https://astro.build/) and hosted on [Netlify](https://www.netlify.com/).
 
 Live at **[sourcier.uk](https://sourcier.uk)**
