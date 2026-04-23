@@ -7,6 +7,7 @@ import PageHistory from "../components/PageHistory.astro";
 import PageCredits from "../components/PageCredits.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import SupportCTA from "../components/SponsorCTA.astro";
+import SupportCheckoutModal from "../components/SupportCheckoutModal.astro";
 import { getPublicationStatus } from "../utils/drafts";
 
 import TagsSidebar from "../components/TagsSidebar.astro";
@@ -45,6 +46,8 @@ const pageTitle = `${frontmatter.title} — Sourcier`;
 const thumbSrc = frontmatter.cover?.thumbnail
   ? `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
   : null;
+const supportPublishableKey =
+  import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() ?? "";
 ---
 
 <BaseLayout
@@ -59,12 +62,18 @@ const thumbSrc = frontmatter.cover?.thumbnail
   pageMenuShareTitle={frontmatter.title}
   pageMenuShareUrl={Astro.url.href}
   pageMenuPostId={postId}
+  pageMenuSupportEnabled={Boolean(supportPublishableKey)}
 >
   <script
     is:inline
     defer
     src="https://cdn.jsdelivr.net/npm/mermaid@11.13.0/dist/mermaid.min.js"
     slot="head"></script>
+  {
+    supportPublishableKey && (
+      <SupportCheckoutModal publishableKey={supportPublishableKey} />
+    )
+  }
   <article class="post" data-pagefind-body>
     <span data-pagefind-meta="title" class="visually-hidden"
       >{frontmatter.title}</span

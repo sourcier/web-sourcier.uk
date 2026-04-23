@@ -1,7 +1,11 @@
 ---
 import SharePost from "./SharePost.astro";
 import Reactions from "./Reactions.astro";
-import { faPlus, faCircleUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faCircleUp,
+  faHandHoldingHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { faIcon } from "../utils/icons";
 
 interface Props {
@@ -9,15 +13,24 @@ interface Props {
   shareTitle?: string;
   shareUrl?: string;
   postId?: string;
+  supportEnabled?: boolean;
 }
 
-const { tocHeadings = [], shareTitle, shareUrl, postId } = Astro.props;
+const {
+  tocHeadings = [],
+  shareTitle,
+  shareUrl,
+  postId,
+  supportEnabled = false,
+} = Astro.props;
 const hasToc = tocHeadings.length > 1;
 const hasShare = Boolean(shareTitle && shareUrl);
 const hasReactions = Boolean(postId);
-const hasPanel = hasToc || hasShare || hasReactions;
+const hasSupport = supportEnabled;
+const hasPanel = hasToc || hasShare || hasReactions || hasSupport;
 const plusIcon = faIcon(faPlus, { size: 18 });
 const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
+const donateIcon = faIcon(faHandHoldingHeart, { size: 14 });
 ---
 
 <div
@@ -70,12 +83,27 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
               <SharePost title={shareTitle!} url={shareUrl!} variant="menu" />
             </section>
           )}
+          {hasSupport && (
+            <section class="page-menu__section page-menu__section--engagement">
+              <p class="page-menu__section-label">Support the writing</p>
+              <button
+                type="button"
+                class="page-menu__support-btn"
+                data-page-menu-support
+                data-support-modal-open
+                aria-label="Donate to support the writing"
+              >
+                <span class="page-menu__support-icon" set:html={donateIcon} />
+                Donate
+              </button>
+            </section>
+          )}
           <div
             class:list={[
               "page-menu__actions",
               {
                 "page-menu__actions--with-sections":
-                  hasToc || hasShare || hasReactions,
+                  hasToc || hasShare || hasReactions || hasSupport,
               },
             ]}
           >
@@ -147,6 +175,10 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
 
       panel.querySelectorAll(".page-menu__toc-link").forEach((link) => {
         link.addEventListener("click", close);
+      });
+
+      panel.querySelectorAll("[data-page-menu-support]").forEach((button) => {
+        button.addEventListener("click", close);
       });
 
       const topBtn = document.getElementById("page-menu-top-btn");
@@ -302,6 +334,46 @@ const arrowUpIcon = faIcon(faCircleUp, { size: 14 });
       margin-top: 0.75rem;
       padding-top: 0.5rem;
     }
+  }
+
+  .page-menu__support-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--accent-primary);
+    color: var(--text-on-strong);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(var(--accent-primary-rgb), 0.2);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--accent-primary);
+      outline-offset: 3px;
+    }
+  }
+
+  .page-menu__support-icon {
+    display: inline-flex;
+    align-items: center;
   }
 
   // Override TOC link padding for adequate touch targets inside the panel

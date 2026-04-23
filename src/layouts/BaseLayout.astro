@@ -17,6 +17,7 @@ interface Props {
   pageMenuShareTitle?: string;
   pageMenuShareUrl?: string;
   pageMenuPostId?: string;
+  pageMenuSupportEnabled?: boolean;
 }
 
 const {
@@ -32,6 +33,7 @@ const {
   pageMenuShareTitle,
   pageMenuShareUrl,
   pageMenuPostId,
+  pageMenuSupportEnabled = false,
 } = Astro.props;
 
 const siteName = "Sourcier";
@@ -132,6 +134,7 @@ const siteName = "Sourcier";
       shareTitle={pageMenuShareTitle}
       shareUrl={pageMenuShareUrl}
       postId={pageMenuPostId}
+      supportEnabled={pageMenuSupportEnabled}
     />
     <script>
       import "../scripts/menu.js";

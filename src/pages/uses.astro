@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import MailingListCTA from "../components/MailingListCTA.astro";
 import SupportCTA from "../components/SponsorCTA.astro";
+import SupportCheckoutModal from "../components/SupportCheckoutModal.astro";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faBolt,
@@ -118,12 +119,21 @@ const setupPrinciples = [
     icon: faIcon(faHeart, { size: 16 }),
   },
 ];
+
+const supportPublishableKey =
+  import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() ?? "";
 ---
 
 <BaseLayout
   pageTitle="Uses — Sourcier"
   description="The hardware and software Roger Rajaratnam reaches for every day — MacBook Pro M1, VS Code, iTerm2, Alfred, and more."
+  pageMenuSupportEnabled={Boolean(supportPublishableKey)}
 >
+  {
+    supportPublishableKey && (
+      <SupportCheckoutModal publishableKey={supportPublishableKey} />
+    )
+  }
   <PageHero
     kicker="My setup"
     title="Uses"
