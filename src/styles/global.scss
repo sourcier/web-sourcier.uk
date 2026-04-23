@@ -1768,6 +1768,10 @@ h6,
   padding: 0.5rem;
   max-height: 420px;
   overflow-y: auto;
+
+  &:empty {
+    padding: 0;
+  }
 }
 
 .search-no-results {
