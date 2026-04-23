@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import SharePost from "./SharePost.astro";
 import Reactions from "./Reactions.astro";
 import { tagSlug } from "../utils/tags";
@@ -11,7 +13,7 @@ interface Crumb {
 interface Props {
   title: string;
   subtitle?: string;
-  coverImage?: { src: string; alt?: string };
+  coverImage?: { image: ImageMetadata; alt?: string };
   tags?: string[];
   status?: string;
   dateLabel?: string;
@@ -42,7 +44,7 @@ const facts = [
   date ? { label: dateLabel, value: date } : null,
   readingTime ? { label: "Read time", value: readingTime } : null,
 ].filter(Boolean) as { label: string; value: string }[];
-const hasCover = Boolean(coverImage?.src);
+const hasCover = Boolean(coverImage?.image);
 const hasShare = Boolean(shareUrl);
 const hasTopBar = allCrumbs.length > 0;
 const hasEngagement = Boolean(postId || hasShare);
@@ -54,12 +56,15 @@ const hasEngagement = Boolean(postId || hasShare);
       {
         hasCover && (
           <div class="post-hero__cover-shell" aria-hidden="true">
-            <img
+            <Image
               class="post-hero__cover"
-              src={coverImage!.src}
+              src={coverImage!.image}
               alt=""
+              widths={[640, 1024, 1440, 1920]}
+              sizes="(max-width: 767px) 100vw, 76vw"
               loading="eager"
               decoding="async"
+              fetchpriority="high"
             />
           </div>
         )

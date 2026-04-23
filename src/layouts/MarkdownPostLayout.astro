@@ -95,7 +95,7 @@ const supportPublishableKey =
       title={frontmatter.title}
       subtitle={frontmatter.subTitle}
       coverImage={frontmatter.cover
-        ? { src: frontmatter.cover.image.src, alt: frontmatter.cover.alt }
+        ? { image: frontmatter.cover.image, alt: frontmatter.cover.alt }
         : undefined}
       tags={frontmatter.tags}
       status={statusValue}

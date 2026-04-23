@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { getPublicationStatus } from "../utils/drafts";
 
 const {
@@ -54,7 +55,14 @@ const formattedDate = pubDate
   {
     cover && (
       <div class="card__cover">
-        <img src={cover.image.src} alt={cover.image.alt} />
+        <Image
+          src={cover.image}
+          alt={cover.alt ?? ""}
+          widths={[400, 640, 960]}
+          sizes="(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) calc(50vw - 1.5rem), 370px"
+          loading="lazy"
+          decoding="async"
+        />
         <div class="card__cover-overlay" aria-hidden="true" />
       </div>
     )
