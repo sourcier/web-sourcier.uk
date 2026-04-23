@@ -5,7 +5,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
-import { tagSlug } from "../../../utils/tags";
+import { tagSlug, tagDescriptions } from "../../../utils/tags";
 
 export async function getStaticPaths() {
   const PAGE_SIZE = 9;
@@ -36,6 +36,7 @@ const PAGE_SIZE = 9;
 const { tag, page } = Astro.params;
 const { label } = Astro.props;
 const currentPage = Number(page);
+const description = tagDescriptions[tag];
 
 const allTagPosts = (await getCollection("posts"))
   .filter(
@@ -64,7 +65,7 @@ const postCountLabel =
   <PageHero
     kicker="Topic"
     title={label}
-    subtitle={`Every published post tagged ${label}.`}
+    subtitle={description ?? `Every published post tagged ${label}.`}
     crumbs={[
       { label: "Blog", href: "/blog" },
       { label: "Tags", href: "/tags" },
