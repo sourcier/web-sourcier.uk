@@ -1,4 +1,45 @@
-@import "bulma/css/bulma.min.css";
+// Bulma 1.x — selective SASS module imports.
+// Only include the modules this site actually uses. Skipped modules:
+//   components: breadcrumb, card, dropdown, menu, message, modal, pagination, panel, tabs
+//   elements:   block, box, delete, icon, image, loader, notification, progress, table, tag, title
+//   layout:     hero, level, media
+//   base:       animations, skeleton
+//   helpers:    aspect-ratio, border, color, float, gap, other, overflow, position, typography
+
+// Infrastructure: compile-time functions + CSS custom property declarations
+@use "bulma/sass/utilities";
+@use "bulma/sass/themes";
+
+// Reset + base element styles
+@use "bulma/sass/base/minireset";
+@use "bulma/sass/base/generic";
+
+// Layout primitives
+@use "bulma/sass/layout/container";
+@use "bulma/sass/layout/section";
+@use "bulma/sass/layout/footer";
+
+// Navigation
+@use "bulma/sass/components/navbar";
+
+// Elements
+@use "bulma/sass/elements/button";
+@use "bulma/sass/elements/content";
+
+// Forms
+@use "bulma/sass/form/shared";
+@use "bulma/sass/form/tools";
+@use "bulma/sass/form/input-textarea";
+@use "bulma/sass/form/select";
+@use "bulma/sass/form/checkbox-radio";
+
+// Grid
+@use "bulma/sass/grid/columns";
+@use "bulma/sass/grid/grid";
+
+// Helpers
+@use "bulma/sass/helpers/visibility";
+@use "bulma/sass/helpers/spacing";
 
 :root {
   // Brand accent tokens shared by the site theme and Bulma.
