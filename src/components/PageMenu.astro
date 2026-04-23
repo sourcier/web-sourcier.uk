@@ -37,6 +37,7 @@ const donateIcon = faIcon(faHandHoldingHeart, { size: 14 });
   class="page-menu"
   id="page-menu"
   aria-hidden="true"
+  inert
   data-has-toc={hasToc}
   data-has-panel={hasPanel}
 >
@@ -144,6 +145,11 @@ const donateIcon = faIcon(faHandHoldingHeart, { size: 14 });
 
     const showMenu = (visible: boolean) => {
       menuEl.setAttribute("aria-hidden", visible ? "false" : "true");
+      if (visible) {
+        menuEl.removeAttribute("inert");
+      } else {
+        menuEl.setAttribute("inert", "");
+      }
     };
 
     const hero = document.querySelector(".page-hero");
