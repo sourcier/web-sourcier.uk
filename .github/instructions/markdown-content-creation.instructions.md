@@ -18,6 +18,8 @@ applyTo: "**/*.md"
 - Use `-` for unordered lists, `1.` for ordered lists. Indent nested lists with two spaces.
 - `[link text](URL)` — descriptive link text, always valid URLs.
 - `![alt text](./image.webp)` — meaningful alt text on all images.
+- **No em dashes in prose.** Use a colon, comma, or plain sentence break instead. Em dashes belong only inside code block string literals where they represent actual site content.
+- **No parentheses for listing items.** Use a comma-separated list, a colon followed by a list, or a proper unordered list instead. Parentheses are acceptable for brief clarifications (e.g. units, abbreviations) but not for enumerating multiple items.
 
 ## Front Matter Checklist
 

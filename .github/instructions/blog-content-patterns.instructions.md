@@ -195,6 +195,23 @@ These are separate components rendered below the post body.
   description: "Short description of what was added or changed"
 ```
 
+## Post-Publication Additions
+
+When adding new content to an already-published post, use an `update-divider` to visually separate the original article from the new material. Place it immediately before the first new `##` section heading.
+
+```md
+<div class="update-divider"><span class="update-divider__label">Added 23 April 2026</span></div>
+
+## New section title
+```
+
+- Use **"Added"** when new content is appended (new sections, follow-up material).
+- Use **"Updated"** when existing content is corrected or revised in-place.
+- Include the full date: day, month, year (e.g. `23 April 2026`).
+- New sections added after the divider should be written in present tense, matching the rest of the article. Do not use past tense to describe the additions (e.g. "every tag renders" not "every tag rendered").
+- Always add a matching `history` entry in frontmatter.
+- The `update-divider` CSS is defined in `src/styles/global.scss` and requires no additional imports.
+
 ## Markdown Test Post
 
 `collections/posts/markdown-test/index.md` is the site's living Markdown reference page. When updating it:

@@ -128,6 +128,8 @@ draft: true
 - Use `<span class="date-chip">April</span>` for inline date labels in series posts
 - Show markdown source with double-fenced code blocks (more backticks wrapping fewer)
 - Source/rendered tables for inline features (emoji, emphasis)
+- **No em dashes in prose.** Use a colon, comma, or plain sentence break instead. Em dashes are only acceptable inside code block string literals where they represent actual site content.
+- **No parentheses for listing items.** Use a comma-separated list, a colon followed by a list, or a proper unordered list instead. Parentheses are acceptable for brief clarifications (e.g. units, abbreviations) but not for enumerating multiple items.
 
 ### Credits and History
 
@@ -138,6 +140,22 @@ draft: true
 - date: 2026-03-30T00:00:00
   description: "Short description of what was added or changed"
 ```
+
+### Post-Publication Additions
+
+When appending new content to an already-published post, use an `update-divider` to visually separate the original article from the new material:
+
+```md
+<div class="update-divider"><span class="update-divider__label">Added 23 April 2026</span></div>
+
+## New section title
+```
+
+- Use **"Added"** for new appended content; **"Updated"** for in-place corrections
+- Include the full date: day, month, year
+- New sections after the divider should be written in present tense, consistent with the rest of the article
+- Always add a matching `history` entry in frontmatter
+- The `update-divider` CSS lives in `src/styles/global.scss` — no imports needed
 
 ### Series Articles
 
