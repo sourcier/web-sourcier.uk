@@ -24,6 +24,8 @@ pnpm build            # Production build to dist/
 
 Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 
+- **Dev server:** Always use the dev server at `http://localhost:8888` for UI-related tasks. If it is not running, ask the user to start it with `pnpm dev` before proceeding.
+
 ## Git Workflow
 
 - Treat `web-sourcier.uk` and `collections/posts/` as separate repositories with separate status, staging, and commits
@@ -63,6 +65,7 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 - Inspect multiple pages or breakpoints serially or in separate tabs. Do not issue parallel navigations or screenshots against the same Playwright page context.
 - During visual QA, explicitly check supporting-label readability, hero-to-first-section spacing, footer divider spacing, and last-section-to-footer separation when relevant.
 - Delete temporary screenshots created during Playwright review before handing off, unless the user explicitly asks to keep them.
+- After finishing any Playwright MCP session, always close the browser by calling `mcp_playwright_browser_close` to avoid leaving it in a bad state.
 
 ## Coding Conventions
 
