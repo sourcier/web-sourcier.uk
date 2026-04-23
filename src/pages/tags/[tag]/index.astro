@@ -6,6 +6,7 @@ import PageHero from "../../../components/PageHero.astro";
 import BlogGrid from "../../../components/BlogGrid.astro";
 import MailingListCTA from "../../../components/MailingListCTA.astro";
 import { tagSlug, tagDescriptions } from "../../../utils/tags";
+import readingTime from "reading-time";
 
 export async function getStaticPaths() {
   const allPosts = (await getCollection("posts")).filter(isPublished);
@@ -25,7 +26,8 @@ export async function getStaticPaths() {
 
 const PAGE_SIZE = 9;
 const { tag } = Astro.params;
-const { label } = Astro.props;
+const rawLabel = Astro.props.label as string;
+const label = rawLabel.replace(/\b\w/g, (c) => c.toUpperCase());
 const description = tagDescriptions[tag];
 
 const allTagPosts = (await getCollection("posts"))
@@ -35,11 +37,46 @@ const allTagPosts = (await getCollection("posts"))
   )
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const totalPages = Math.ceil(allTagPosts.length / PAGE_SIZE);
-const posts = allTagPosts.slice(0, PAGE_SIZE);
+const featuredPost = allTagPosts[0];
+const remainingPosts = allTagPosts.slice(1);
+const totalPages = Math.ceil(remainingPosts.length / PAGE_SIZE);
+const posts = remainingPosts.slice(0, PAGE_SIZE);
 const nextUrl = totalPages > 1 ? `/tags/${tag}/2` : null;
 const postCountLabel =
   allTagPosts.length === 1 ? "1 post" : `${allTagPosts.length} posts`;
+
+const relatedTagCounts = new Map<string, number>();
+for (const post of allTagPosts) {
+  for (const t of post.data.tags) {
+    const s = tagSlug(t);
+    if (s !== tag) relatedTagCounts.set(s, (relatedTagCounts.get(s) ?? 0) + 1);
+  }
+}
+const relatedTags = [...relatedTagCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 5)
+  .map(([slug]) => ({
+    slug,
+    label:
+      allTagPosts
+        .flatMap((p) => p.data.tags)
+        .find((t) => tagSlug(t) === slug) ?? slug,
+  }));
+
+type CoverData = { image: { src: string }; alt: string };
+const featuredCoverAlt = featuredPost?.data.cover
+  ? (featuredPost.data.cover as unknown as CoverData).alt
+  : "";
+
+const totalWords = allTagPosts.reduce(
+  (acc, p) => acc + (p.body ? readingTime(p.body).words : 0),
+  0,
+);
+const totalReadMinutes = Math.ceil(totalWords / 200);
+const avgReadMinutes =
+  allTagPosts.length > 0
+    ? Math.round(totalReadMinutes / allTagPosts.length)
+    : 0;
 ---
 
 <BaseLayout
@@ -74,6 +111,20 @@ const postCountLabel =
                 "This archive keeps every article filed under this topic in one place, newest first, so you can stay with one theme without jumping around the rest of the site."
             }
           </p>
+          <dl class="topic-stats">
+            <div class="topic-stats__item">
+              <dt>Posts</dt>
+              <dd>{allTagPosts.length}</dd>
+            </div>
+            <div class="topic-stats__item">
+              <dt>Avg read</dt>
+              <dd>~{avgReadMinutes} min</dd>
+            </div>
+            <div class="topic-stats__item">
+              <dt>Total read</dt>
+              <dd>~{totalReadMinutes} min</dd>
+            </div>
+          </dl>
         </div>
         <div class="topic-overview__actions">
           <a href="/tags" class="topic-overview__link">All topics</a>
@@ -87,6 +138,79 @@ const postCountLabel =
       </div>
     </div>
   </section>
+
+  {
+    featuredPost && (
+      <section
+        class="featured-post flow-section flow-section--loose"
+        aria-labelledby="featured-post-heading"
+      >
+        <div class="container is-max-desktop">
+          <p class="featured-post__eyebrow">Latest in this topic</p>
+          <a href={`/blog/${featuredPost.id}/`} class="featured-post__card">
+            {featuredPost.data.cover && (
+              <div class="featured-post__cover">
+                <img
+                  src={featuredPost.data.cover.image.src}
+                  alt={featuredCoverAlt}
+                  loading="eager"
+                />
+                <div class="featured-post__cover-overlay" aria-hidden="true" />
+              </div>
+            )}
+            <div class="featured-post__body">
+              <p class="featured-post__meta">
+                {new Date(featuredPost.data.pubDate).toLocaleDateString(
+                  "en-GB",
+                  {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    timeZone: "Europe/London",
+                  },
+                )}
+                {featuredPost.body &&
+                  ` · ${readingTime(featuredPost.body).text}`}
+              </p>
+              <h2 class="featured-post__title" id="featured-post-heading">
+                {featuredPost.data.title}
+              </h2>
+              {featuredPost.data.subTitle && (
+                <p class="featured-post__subtitle">
+                  {featuredPost.data.subTitle}
+                </p>
+              )}
+              <p class="featured-post__description">
+                {featuredPost.data.description}
+              </p>
+              <span class="featured-post__cta">
+                Read post <span aria-hidden="true">&rarr;</span>
+              </span>
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    relatedTags.length > 0 && (
+      <section class="related-tags flow-section" aria-label="Related topics">
+        <div class="container is-max-desktop">
+          <p class="related-tags__label">Related topics</p>
+          <ul class="related-tags__list" role="list">
+            {relatedTags.map(({ slug, label: relLabel }) => (
+              <li>
+                <a href={`/tags/${slug}`} class="related-tags__pill">
+                  {relLabel}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <BlogGrid
     posts={posts}
@@ -159,6 +283,37 @@ const postCountLabel =
     color: var(--text-muted);
   }
 
+  .topic-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    dt {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    dd {
+      margin: 0;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+  }
+
   .topic-overview__actions {
     display: flex;
     flex-wrap: wrap;
@@ -203,5 +358,168 @@ const postCountLabel =
       var(--surface-elevated)
     );
     color: var(--accent-primary);
+  }
+
+  .featured-post {
+    padding: 0 1.5rem;
+  }
+
+  .featured-post__eyebrow {
+    margin: 0 0 0.9rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+
+  .featured-post__card {
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-elevated);
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1.1fr;
+    }
+
+    &:hover {
+      border-color: var(--accent-primary-alpha-32);
+      transform: translateY(-2px);
+    }
+  }
+
+  .featured-post__cover {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    @media (min-width: 768px) {
+      aspect-ratio: auto;
+      min-height: 260px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .featured-post__card:hover & img {
+      transform: scale(1.03);
+    }
+  }
+
+  .featured-post__cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-primary) 18%, transparent) 0%,
+      transparent 60%
+    );
+  }
+
+  .featured-post__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.75rem 2rem;
+  }
+
+  .featured-post__meta {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .featured-post__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .featured-post__subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .featured-post__description {
+    margin: 0.25rem 0 0;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .featured-post__cta {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+
+  .related-tags {
+    padding: 0 1.5rem;
+  }
+
+  .related-tags__label {
+    margin: 0 0 0.75rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .related-tags__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .related-tags__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    background: var(--surface-elevated);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      border-color: var(--accent-secondary-alpha-32);
+      color: var(--accent-secondary);
+      transform: translateY(-1px);
+    }
   }
 </style>
