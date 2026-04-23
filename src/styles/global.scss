@@ -857,6 +857,56 @@ h6,
   }
 }
 
+// — Update divider (marks content added after original publication)
+.update-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3.5rem 0 2.5rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+  }
+
+  &::before {
+    background: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in srgb, var(--accent-secondary) 35%, var(--border-subtle))
+    );
+  }
+
+  &::after {
+    background: linear-gradient(
+      to left,
+      transparent,
+      color-mix(in srgb, var(--accent-secondary) 35%, var(--border-subtle))
+    );
+  }
+
+  &__label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    color: var(--accent-secondary);
+    border: 1px solid
+      color-mix(in srgb, var(--accent-secondary) 30%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 0.28rem 0.8rem;
+    background: color-mix(
+      in srgb,
+      var(--accent-secondary) 6%,
+      var(--surface-page)
+    );
+  }
+}
+
 // — Inline date chip (used in content to indicate a future publish date)
 .date-chip {
   display: inline-block;
