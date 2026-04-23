@@ -107,8 +107,8 @@ pubDate: 2026-03-30T00:00:00
 description: "One-sentence description for meta tags and listings."
 author: "Roger Rajaratnam"
 cover:
-  image: "./cover-image.jpg"
-  alt: "Description — Photo credit if applicable"
+  image: "./cover-image.webp"
+  alt: "Description of the image"
 tags: ["tag1", "tag2"]
 draft: true
 ---
@@ -118,6 +118,7 @@ draft: true
 - `pubDate` uses ISO 8601. For same-day ordering, use time offsets (`T00:00:00`, `T00:05:00`). Lists sort descending
 - Tags: lowercase, hyphenated (e.g. `web-performance`, `learning-in-public`). Prefer broad tags. Avoid single-use tags
 - When renaming a tag, update every post that uses it in the same operation
+- Cover images are downloaded from Unsplash using `pnpm cover:download <slug> <unsplash-url-or-id>`. The script fetches photographer metadata automatically and prints ready-to-paste `cover:` and `credits:` frontmatter.
 
 ### Markdown Rules
 

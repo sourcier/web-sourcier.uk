@@ -18,14 +18,15 @@ description: "One-sentence description used in meta tags and listings."
 author: "Roger Rajaratnam"
 cover:
   image: "./my-post-cover.webp"
-  alt: "Description of image — Photo by Name on Unsplash"
+  alt: "Description of image"
   thumbnail: "./<slug>-thumbnail.webp"
 tags: ["tag1", "tag2"]
 draft: true
 credits:
-  - label: Cover image
-    text: Photographer Name on Unsplash
-    url: https://unsplash.com/@handle
+  - label: "Cover photo"
+    name: "Photographer Name"
+    url: "https://unsplash.com/@handle?utm_source=sourcier_uk&utm_medium=referral"
+    extra: 'via <a href="https://unsplash.com/photos/<id>?utm_source=sourcier_uk&utm_medium=referral">Unsplash</a>'
 ---
 ```
 
@@ -65,7 +66,11 @@ When renaming a post slug:
 When creating a new article:
 
 1. **Ask about the cover image** if the user hasn't specified one. Do not create the article without knowing what cover image to use.
-2. **Create the cover image** as `collections/posts/<slug>/<slug>-cover.webp`.
+2. **Download the cover image** using the script — pass the post slug and the Unsplash photo URL or bare photo ID:
+   ```sh
+   pnpm cover:download <slug> <unsplash-url-or-photo-id>
+   ```
+   The script fetches photographer metadata automatically, saves `<slug>-cover.webp` to `collections/posts/<slug>/`, and prints ready-to-paste `cover:` and `credits:` frontmatter. Use `--alt "text"` to override the alt text; use `--dry-run` to preview without writing.
 3. **Generate the thumbnail** by running `pnpm thumbnails:generate` — this produces `<slug>-thumbnail.webp` (96×96, center-cropped).
 4. Add `thumbnail: './<slug>-thumbnail.webp'` inside `cover:` in frontmatter.
 5. Create `collections/posts/<slug>/index.md` with `draft: true`.

@@ -22,6 +22,7 @@
     "post-images:copy": "node scripts/sync-public-assets.mjs post-images",
     "assets:sync": "pnpm thumbnails:copy && pnpm post-images:copy",
     "search:index": "pnpm assets:sync && SHOW_DRAFTS=true astro build && pagefind --site dist && rm -rf public/pagefind && cp -r dist/pagefind public/pagefind",
+    "cover:download": "node scripts/download-cover-image.mjs",
     "crosspost:prepare": "node scripts/prepare-crosspost.js",
     "crosspost:devto": "node scripts/crosspost-devto.js",
     "template:pptx": "node scripts/create-powerpoint-template.mjs",
