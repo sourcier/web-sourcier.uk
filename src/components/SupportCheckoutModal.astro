@@ -249,9 +249,24 @@ const tipOptions: TipOption[] = [
             data-state="idle"
           >
             <p class="support-modal__payment-label">Payment details</p>
-            <p class="support-modal__payment-loading" data-payment-loading>
-              Preparing secure payment form...
-            </p>
+            <div
+              class="support-modal__payment-loading"
+              data-payment-loading
+              aria-live="polite"
+            >
+              <p class="support-modal__payment-loading-kicker">
+                <span
+                  class="support-modal__payment-loading-pulse"
+                  aria-hidden="true"></span>
+                Secure connection
+              </p>
+              <p class="support-modal__payment-loading-title">
+                Preparing secure payment form...
+              </p>
+              <p class="support-modal__payment-loading-copy">
+                Loading Stripe&apos;s payment fields for your selected amount.
+              </p>
+            </div>
             <div
               class="support-modal__payment-element"
               data-payment-element
@@ -442,6 +457,7 @@ const tipOptions: TipOption[] = [
       bodyRight: "",
       bodyWidth: "",
     };
+    const invalidAmountMessage = "Enter a valid amount greater than £0.00.";
 
     const withAlpha = (color: string, alpha: number) => {
       const normalized = color.trim();
@@ -903,6 +919,8 @@ const tipOptions: TipOption[] = [
     };
 
     const setCustomInputState = (hasError: boolean) => {
+      syncModalErrorTokens();
+
       if (customField instanceof HTMLElement) {
         if (hasError) {
           customField.dataset.invalid = "true";
@@ -939,10 +957,6 @@ const tipOptions: TipOption[] = [
 
       if (paymentLoading instanceof HTMLElement) {
         paymentLoading.hidden = state === "ready";
-
-        if (state === "loading") {
-          paymentLoading.textContent = "Preparing secure payment form...";
-        }
       }
 
       if (paymentElementMount instanceof HTMLElement) {
@@ -1333,6 +1347,22 @@ const tipOptions: TipOption[] = [
       return parsed;
     };
 
+    const clearResolvedAmountStatus = () => {
+      if (!(status instanceof HTMLElement)) {
+        return;
+      }
+
+      if (status.textContent?.trim() !== invalidAmountMessage) {
+        return;
+      }
+
+      const amountPence = getSelectedAmountPence();
+
+      if (amountPence !== null && amountPence >= 1) {
+        setStatus("", "neutral");
+      }
+    };
+
     const getReturnPath = () => {
       const url = new URL(window.location.href);
       url.searchParams.delete("payment_intent");
@@ -1463,7 +1493,10 @@ const tipOptions: TipOption[] = [
     };
 
     if (form instanceof HTMLFormElement) {
-      form.addEventListener("change", syncCustomField);
+      form.addEventListener("change", () => {
+        syncCustomField();
+        clearResolvedAmountStatus();
+      });
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -1488,7 +1521,7 @@ const tipOptions: TipOption[] = [
             selectedAmount.value === "custom";
 
           setCustomInputState(customAmountSelected);
-          setStatus("Enter a valid amount greater than £0.00.", "error");
+          setStatus(invalidAmountMessage, "error");
           return;
         }
 
@@ -1539,6 +1572,7 @@ const tipOptions: TipOption[] = [
     if (customInput instanceof HTMLInputElement) {
       customInput.addEventListener("input", () => {
         setCustomInputState(false);
+        clearResolvedAmountStatus();
       });
     }
 
@@ -2204,8 +2238,59 @@ const tipOptions: TipOption[] = [
   }
 
   .support-modal__payment-loading {
+    display: grid;
+    gap: 0.45rem;
     margin: 0;
-    font-size: 0.86rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 14%, var(--border-subtle));
+    border-radius: calc(var(--radius-tight) + 2px);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 6%, var(--surface-elevated)) 0%,
+      color-mix(in srgb, var(--surface-elevated) 96%, white) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.45),
+      0 10px 24px rgba(var(--accent-primary-rgb), 0.07);
+  }
+
+  .support-modal__payment-loading-kicker,
+  .support-modal__payment-loading-title,
+  .support-modal__payment-loading-copy {
+    margin: 0;
+  }
+
+  .support-modal__payment-loading-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+
+  .support-modal__payment-loading-pulse {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 0 rgba(var(--accent-primary-rgb), 0.3);
+    animation: support-modal-pulse 1.5s ease-out infinite;
+  }
+
+  .support-modal__payment-loading-title {
+    font-size: 0.95rem;
+    line-height: 1.35;
+    color: var(--text-primary);
+  }
+
+  .support-modal__payment-loading-copy {
+    max-width: 34ch;
+    font-size: 0.83rem;
     line-height: 1.5;
     color: var(--text-muted);
   }
@@ -2217,6 +2302,26 @@ const tipOptions: TipOption[] = [
 
   .support-modal__payment-element[hidden] {
     display: none;
+  }
+
+  @keyframes support-modal-pulse {
+    0% {
+      transform: scale(0.92);
+      box-shadow: 0 0 0 0 rgba(var(--accent-primary-rgb), 0.28);
+      opacity: 0.88;
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0.55rem rgba(var(--accent-primary-rgb), 0);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(0.92);
+      box-shadow: 0 0 0 0 rgba(var(--accent-primary-rgb), 0);
+      opacity: 0.88;
+    }
   }
 
   .support-modal__fineprint {
@@ -2424,6 +2529,16 @@ const tipOptions: TipOption[] = [
     box-shadow: inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.03);
   }
 
+  :global([data-theme="dark"])
+    .support-modal__custom-field[data-invalid="true"],
+  :global([data-theme="dark"])
+    .support-modal__custom-field[data-invalid="true"]:focus-within {
+    border-color: var(--support-modal-invalid-border);
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.03),
+      0 0 0 3px var(--support-modal-invalid-ring);
+  }
+
   @media (max-width: 767px) {
     .support-modal {
       width: calc(100vw - 1rem);
@@ -2566,6 +2681,18 @@ const tipOptions: TipOption[] = [
 
     .support-modal__payment-shell {
       padding: 0.65rem;
+    }
+
+    .support-modal__payment-loading {
+      padding: 0.65rem 0.7rem;
+    }
+
+    .support-modal__payment-loading-title {
+      font-size: 0.9rem;
+    }
+
+    .support-modal__payment-loading-copy {
+      font-size: 0.8rem;
     }
 
     .support-modal__stage[data-step-panel="payment"] .support-modal__footer {
