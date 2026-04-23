@@ -321,9 +321,8 @@ h6,
   .navbar-item img {
     width: 2rem;
     height: 2rem;
-    box-sizing: content-box;
     border-radius: 50%;
-    border: 2px solid var(--accent-primary);
+    outline: 2px solid var(--accent-primary);
     flex-shrink: 0;
   }
 

@@ -89,10 +89,10 @@ const testimonials = [
       aria-label="Testimonials"
     >
       <div class="testimonials__track-wrapper">
-        <ul class="testimonials__track">
+        <div class="testimonials__track">
           {
             testimonials.map((t, i) => (
-              <li
+              <div
                 class="testimonials__item"
                 role="group"
                 aria-roledescription="slide"
@@ -148,10 +148,10 @@ const testimonials = [
                     )}
                   </div>
                 </footer>
-              </li>
+              </div>
             ))
           }
-        </ul>
+        </div>
       </div>
 
       <div

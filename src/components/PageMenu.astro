@@ -230,19 +230,23 @@ const donateIcon = faIcon(faHandHoldingHeart, { size: 14 });
     &[aria-hidden="true"] {
       pointer-events: none;
       opacity: 0;
+      visibility: hidden;
       transform: translateY(4px);
       transition:
         opacity 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        visibility 0s linear 0.2s;
     }
 
     &[aria-hidden="false"] {
       pointer-events: auto;
       opacity: 1;
+      visibility: visible;
       transform: translateY(0);
       transition:
         opacity 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        visibility 0s linear 0s;
     }
   }
 
