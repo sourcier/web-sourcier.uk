@@ -256,35 +256,6 @@ const tipOptions: TipOption[] = [
             >
             </p>
             <div class="support-modal__payment-stage">
-              <div
-                class="support-modal__payment-loading"
-                data-payment-loading
-                aria-hidden="true"
-              >
-                <div class="support-modal__payment-skeleton">
-                  <div
-                    class="support-modal__payment-skeleton-row support-modal__payment-skeleton-row--header"
-                  >
-                    <span class="support-modal__payment-skeleton-pill"></span>
-                    <span
-                      class="support-modal__payment-skeleton-pill support-modal__payment-skeleton-pill--chip"
-                    ></span>
-                  </div>
-                  <span
-                    class="support-modal__payment-skeleton-field support-modal__payment-skeleton-field--wide"
-                  ></span>
-                  <div class="support-modal__payment-skeleton-row">
-                    <span class="support-modal__payment-skeleton-field"></span>
-                    <span
-                      class="support-modal__payment-skeleton-field support-modal__payment-skeleton-field--narrow"
-                    ></span>
-                  </div>
-                  <span class="support-modal__payment-skeleton-note"></span>
-                </div>
-                <p class="support-modal__payment-loading-label">
-                  Loading secure fields
-                </p>
-              </div>
               <div class="support-modal__payment-element" data-payment-element>
               </div>
             </div>
@@ -455,8 +426,8 @@ const tipOptions: TipOption[] = [
     let loadSequence = 0;
     let lastTrigger: HTMLElement | null = null;
     let frameResizeTimeoutId: number | undefined;
-    let frameResizeCleanup: ((event?: TransitionEvent) => void) | undefined;
     let paymentMountObserver: MutationObserver | undefined;
+    let frameResizeCleanup: ((event?: TransitionEvent) => void) | undefined;
 
     const currencyFormatter = new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -1498,6 +1469,7 @@ const tipOptions: TipOption[] = [
       paymentElement = nextPaymentElement;
 
       nextPaymentElement.on?.("ready", () => {
+        clearPaymentMountObserver();
         revealMountedPayment(requestId, nextPaymentElement);
       });
 
@@ -2282,8 +2254,26 @@ const tipOptions: TipOption[] = [
   }
 
   .support-modal__payment-stage {
-    position: relative;
     min-height: 12rem;
+    padding: 0.75rem 0.8rem;
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 18%, var(--border-subtle));
+    border-radius: calc(var(--radius-tight) + 2px);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary) 6%, var(--surface-elevated)) 0%,
+      color-mix(in srgb, var(--surface-page) 82%, var(--surface-elevated)) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.45),
+      0 10px 24px rgba(var(--accent-primary-rgb), 0.03);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .support-modal__payment-shell[data-state="ready"]
+    .support-modal__payment-stage {
+    opacity: 1;
   }
 
   .support-modal__custom-field {
@@ -2341,137 +2331,9 @@ const tipOptions: TipOption[] = [
     }
   }
 
-  .support-modal__payment-loading {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: grid;
-    align-content: space-between;
-    gap: 0.8rem;
-    margin: 0;
-    padding: 0.7rem 0.8rem;
-    border: 1px solid
-      color-mix(in srgb, var(--accent-primary) 14%, var(--border-subtle));
-    border-radius: calc(var(--radius-tight) + 2px);
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--accent-primary) 6%, var(--surface-elevated)) 0%,
-      color-mix(in srgb, var(--surface-page) 82%, var(--surface-elevated)) 100%
-    );
-    box-shadow:
-      inset 0 1px 0 rgba(var(--text-on-strong-rgb), 0.45),
-      0 10px 24px rgba(var(--accent-primary-rgb), 0.07);
-    pointer-events: none;
-    transition:
-      opacity 0.18s ease,
-      visibility 0.18s ease;
-  }
-
-  .support-modal__payment-shell[data-state="ready"]
-    .support-modal__payment-loading {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .support-modal__payment-skeleton {
-    display: grid;
-    gap: 0.65rem;
-  }
-
-  .support-modal__payment-skeleton-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(6.5rem, 8rem);
-    gap: 0.55rem;
-  }
-
-  .support-modal__payment-skeleton-row--header {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-  }
-
-  .support-modal__payment-skeleton-pill,
-  .support-modal__payment-skeleton-field,
-  .support-modal__payment-skeleton-note {
-    display: block;
-    border-radius: calc(var(--radius-tight) + 2px);
-    background: linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--accent-primary) 10%, var(--border-subtle)) 12%,
-      color-mix(in srgb, var(--surface-elevated) 90%, var(--text-on-strong)) 48%,
-      color-mix(in srgb, var(--accent-primary) 10%, var(--border-subtle)) 88%
-    );
-    background-size: 220% 100%;
-    animation: support-modal-skeleton-shimmer 1.45s ease-in-out infinite;
-  }
-
-  .support-modal__payment-skeleton-pill {
-    width: 5.2rem;
-    height: 0.72rem;
-    border-radius: var(--radius-pill);
-  }
-
-  .support-modal__payment-skeleton-pill--chip {
-    width: 4rem;
-    justify-self: end;
-  }
-
-  .support-modal__payment-skeleton-field {
-    height: 3rem;
-  }
-
-  .support-modal__payment-skeleton-field--wide {
-    height: 4.15rem;
-  }
-
-  .support-modal__payment-skeleton-field--narrow {
-    max-width: 8rem;
-    justify-self: end;
-  }
-
-  .support-modal__payment-skeleton-note {
-    width: 44%;
-    height: 0.72rem;
-    border-radius: var(--radius-pill);
-  }
-
-  .support-modal__payment-loading-label {
-    margin: 0;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--accent-primary) 76%, var(--text-primary));
-  }
-
   .support-modal__payment-element {
-    position: relative;
-    z-index: 0;
     min-height: 12rem;
-    padding-top: 0.25rem;
-    opacity: 0;
-    transform: translateY(0.35rem);
-    pointer-events: none;
-    transition:
-      opacity 0.18s ease,
-      transform 0.18s ease;
-  }
-
-  .support-modal__payment-shell[data-state="ready"]
-    .support-modal__payment-element {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  @keyframes support-modal-skeleton-shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-
-    100% {
-      background-position: -20% 0;
-    }
+    padding-top: 0.15rem;
   }
 
   .support-modal__fineprint {
@@ -2838,24 +2700,8 @@ const tipOptions: TipOption[] = [
       min-height: 10rem;
     }
 
-    .support-modal__payment-loading {
+    .support-modal__payment-stage {
       padding: 0.65rem 0.7rem;
-    }
-
-    .support-modal__payment-skeleton {
-      gap: 0.55rem;
-    }
-
-    .support-modal__payment-skeleton-field {
-      height: 2.75rem;
-    }
-
-    .support-modal__payment-skeleton-field--wide {
-      height: 3.55rem;
-    }
-
-    .support-modal__payment-loading-label {
-      font-size: 0.68rem;
     }
 
     .support-modal__stage[data-step-panel="payment"] .support-modal__footer {
