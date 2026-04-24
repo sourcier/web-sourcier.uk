@@ -49,6 +49,7 @@ pnpm post-images:copy     # Mirror SVG files to public/post-images/<slug>/ and g
 - Scoped `<style lang="scss">` in each component for component-specific styles
 - Global / utility styles go in `src/styles/global.scss` (e.g. `.visually-hidden`, search modal styles)
 - **Scoped Astro styles do not apply to elements injected via `innerHTML`** — put those styles in `global.scss`
+- **Conditional wrapper elements:** When a component needs a prop to toggle a wrapping element (e.g. `noContainer`), write **two full JSX branches** — one with the wrapper and one without. Do not try to conditionally render only the opening or closing tag (e.g. `{noContainer ? null : </div>}`) — this is invalid Astro/JSX syntax and will produce a broken template.
 
 ## Content Collections
 
@@ -118,6 +119,43 @@ Pagefind search results display a thumbnail per post. The pipeline:
 2. `<slug>-thumbnail.webp` (96×96, center-cropped WebP) is pre-generated via `pnpm thumbnails:generate`
 
 - `pnpm thumbnails:copy` mirrors thumbnails to `public/search-thumbnails/<slug>/<slug>-thumbnail.webp`
+
+## Testing
+
+The project uses Vitest with Astro's experimental Container API to snapshot-test reusable `.astro` components.
+
+### Setup
+
+- `vitest.config.ts` uses `getViteConfig` from `astro/config` so `.astro` files are processed correctly
+- Add `/// <reference types="vitest/config" />` at the top of `vitest.config.ts` — this is the directive that augments Vite's `UserConfig` type with the `test` property (`/// <reference types="vitest" />` does **not** work for this)
+- Test files live in `src/components/__tests__/` and follow the pattern `<ComponentName>.test.ts`
+- A shared normalizer lives in `src/test/helpers.ts` — call `normalizeHtml()` on all rendered output before snapshotting, so that Astro's scoped-style `data-astro-cid-*` hashes don't cause spurious snapshot failures
+
+### Container API usage
+
+```ts
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+
+// Correct type annotation — constructor is private so InstanceType<> fails
+let container: Awaited<ReturnType<typeof AstroContainer.create>>;
+
+beforeAll(async () => {
+  container = await AstroContainer.create();
+});
+
+it("renders snapshot", async () => {
+  const html = await container.renderToString(MyComponent, { props: { ... } });
+  expect(normalizeHtml(html)).toMatchSnapshot();
+});
+```
+
+- Do NOT use `InstanceType<typeof AstroContainer>` — the constructor is private and TypeScript will error
+
+### Scripts
+
+- `pnpm test` — run all tests once
+- `pnpm test:watch` — watch mode
+- `pnpm test:update` — regenerate snapshots after intentional component changes
 
 4. The layout references the stable path `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
 5. `public/search-thumbnails/` is gitignored — regenerated on every build
