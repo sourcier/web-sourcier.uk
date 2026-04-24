@@ -63,7 +63,7 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6
       "@netlify/plugin-lighthouse":
-        specifier: ^6.0.4
+        specifier: 6.0.4
         version: 6.0.4(typescript@6.0.2)
       "@typescript-eslint/parser":
         specifier: ^8.58.2
