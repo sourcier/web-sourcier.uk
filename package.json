@@ -26,6 +26,9 @@
     "crosspost:devto": "node scripts/crosspost-devto.js",
     "template:pptx": "node scripts/create-powerpoint-template.mjs",
     "talk:playwright": "node scripts/create-playwright-e2e-talk.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:update": "vitest run --update",
     "prepare": "husky"
   },
   "dependencies": {
@@ -61,6 +64,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "remark-emoji": "^5.0.2",
-    "typescript-eslint": "^8.58.2"
+    "typescript-eslint": "^8.58.2",
+    "vitest": "^4.1.5"
   }
 }
