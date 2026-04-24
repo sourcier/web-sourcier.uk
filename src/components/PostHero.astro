@@ -308,6 +308,52 @@ const hasEngagement = Boolean(postId || hasShare);
     letter-spacing: -0.03em;
     color: var(--text-primary);
     text-wrap: balance;
+    position: relative;
+    z-index: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -0.5rem -3rem -0.5rem -0.85rem;
+      background:
+        radial-gradient(
+          circle at 18% 50%,
+          color-mix(
+              in srgb,
+              var(--surface-elevated) 94%,
+              rgba(var(--overlay-rgb), 0.02)
+            )
+            0%,
+          color-mix(
+              in srgb,
+              var(--surface-page) 82%,
+              rgba(var(--overlay-rgb), 0.03)
+            )
+            38%,
+          color-mix(in srgb, var(--surface-page) 42%, transparent) 68%,
+          transparent 100%
+        ),
+        linear-gradient(
+          92deg,
+          color-mix(
+              in srgb,
+              var(--surface-elevated) 88%,
+              rgba(var(--overlay-rgb), 0.03)
+            )
+            0%,
+          color-mix(
+              in srgb,
+              var(--surface-page) 74%,
+              rgba(var(--overlay-rgb), 0.04)
+            )
+            48%,
+          color-mix(in srgb, var(--surface-page) 26%, transparent) 76%,
+          transparent 100%
+        );
+      filter: blur(12px);
+      pointer-events: none;
+      z-index: -1;
+    }
   }
 
   .post-hero__subtitle {
