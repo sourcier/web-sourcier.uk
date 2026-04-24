@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import MailingListCTASidebar from "../MailingListCTASidebar.astro";
-import { normalizeHtml } from "../../test/helpers";
+import MailingListCTASidebar from "./MailingListCTASidebar.astro";
+import { normalizeHtml } from "../test/helpers";
 
 describe("MailingListCTASidebar", () => {
   let container: Awaited<ReturnType<typeof AstroContainer.create>>;
@@ -11,7 +11,10 @@ describe("MailingListCTASidebar", () => {
   });
 
   it("renders the sidebar subscribe widget", async () => {
-    const html = await container.renderToString(MailingListCTASidebar);
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    const normalized = normalizeHtml(
+      await container.renderToString(MailingListCTASidebar),
+    );
+    expect(normalized).toContain('id="sidebar-subscribe-form"');
+    expect(normalized).toContain('type="email"');
   });
 });

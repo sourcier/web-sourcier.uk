@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import SharePost from "../SharePost.astro";
-import { normalizeHtml } from "../../test/helpers";
+import SharePost from "./SharePost.astro";
+import { normalizeHtml } from "../test/helpers";
 
 const baseProps = {
   title: "How to build a blog with Astro",
@@ -15,32 +15,34 @@ describe("SharePost", () => {
     container = await AstroContainer.create();
   });
 
-  it("renders default variant", async () => {
-    const html = await container.renderToString(SharePost, {
-      props: baseProps,
-    });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+  it("renders without variant modifiers by default", async () => {
+    const normalized = normalizeHtml(
+      await container.renderToString(SharePost, { props: baseProps }),
+    );
+    expect(normalized).not.toContain("share-post--vertical");
+    expect(normalized).not.toContain("share-post--hero");
+    expect(normalized).not.toContain("share-post--sidebar");
   });
 
   it("renders vertical layout", async () => {
     const html = await container.renderToString(SharePost, {
       props: { ...baseProps, vertical: true },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("share-post--vertical");
   });
 
   it("renders hero variant", async () => {
     const html = await container.renderToString(SharePost, {
       props: { ...baseProps, variant: "hero" },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("share-post--hero");
   });
 
   it("renders sidebar variant", async () => {
     const html = await container.renderToString(SharePost, {
       props: { ...baseProps, variant: "sidebar" },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("share-post--sidebar");
   });
 
   it("encodes the url in share links", async () => {

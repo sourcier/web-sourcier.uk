@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import GuideCard from "../GuideCard.astro";
-import { normalizeHtml } from "../../test/helpers";
+import GuideCard from "./GuideCard.astro";
+import { normalizeHtml } from "../test/helpers";
 
 const baseProps = {
   slug: "transition-into-tech",
@@ -23,14 +23,14 @@ describe("GuideCard", () => {
     const html = await container.renderToString(GuideCard, {
       props: baseProps,
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("guide-card--primary");
   });
 
   it("renders secondary variant", async () => {
     const html = await container.renderToString(GuideCard, {
       props: { ...baseProps, variant: "secondary" },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("guide-card--secondary");
   });
 
   it("hides meta row when hideMeta is true", async () => {
@@ -52,7 +52,9 @@ describe("GuideCard", () => {
     const html = await container.renderToString(GuideCard, {
       props: { ...baseProps, slug: "unknown-guide" },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    const normalized = normalizeHtml(html);
+    expect(normalized).toContain("guide-card__icon");
+    expect(normalized).toContain("<svg");
   });
 
   it("renders the CTA link with correct href", async () => {

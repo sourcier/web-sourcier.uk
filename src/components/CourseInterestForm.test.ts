@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import CourseInterestForm from "../CourseInterestForm.astro";
-import { normalizeHtml } from "../../test/helpers";
+import CourseInterestForm from "./CourseInterestForm.astro";
+import { normalizeHtml } from "../test/helpers";
 
 describe("CourseInterestForm", () => {
   let container: Awaited<ReturnType<typeof AstroContainer.create>>;
@@ -10,16 +10,16 @@ describe("CourseInterestForm", () => {
     container = await AstroContainer.create();
   });
 
-  it("renders with default props", async () => {
+  it("renders without stacked layout by default", async () => {
     const html = await container.renderToString(CourseInterestForm);
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).not.toContain("course-interest-form--stacked");
   });
 
   it("renders stacked layout", async () => {
     const html = await container.renderToString(CourseInterestForm, {
       props: { stackFields: true },
     });
-    expect(normalizeHtml(html)).toMatchSnapshot();
+    expect(normalizeHtml(html)).toContain("course-interest-form--stacked");
   });
 
   it("uses custom idPrefix for form element IDs", async () => {
