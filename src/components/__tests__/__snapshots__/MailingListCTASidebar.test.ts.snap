@@ -8,5 +8,5 @@ Useful if you are transitioning into tech, trying to grow as an engineer, or
     working on stronger engineering practice across your team.
 </p> <form id="sidebar-subscribe-form" novalidate aria-label="Newsletter sign up"> <p class="sidebar-subscribe__honeypot" aria-hidden="true"> <label for="sidebar-subscribe-website">Leave this blank</label> <input id="sidebar-subscribe-website" name="website" type="text" tabindex="-1" autocomplete="off"> </p> <label for="sidebar-subscribe-email" class="is-sr-only">Email address</label> <input id="sidebar-subscribe-email" name="email" type="email" class="sidebar-subscribe__input" placeholder="your@email.com" autocomplete="email" required> <button type="submit" class="sidebar-subscribe__btn">
 Join the list
-</button> <p class="sidebar-subscribe__feedback" id="sidebar-subscribe-feedback" aria-live="polite" hidden></p> </form> </div> <script type="module" src="/Users/rrajaratnam/SynologyDrive/Code/workspace/web-sourcier.uk/src/components/MailingListCTASidebar.astro?astro&type=script&index=0&lang.ts"></script>"
+</button> <p class="sidebar-subscribe__feedback" id="sidebar-subscribe-feedback" aria-live="polite" hidden></p> </form> </div>"
 `;
