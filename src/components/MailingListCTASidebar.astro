@@ -48,64 +48,16 @@
 </div>
 
 <script>
-  const form = document.getElementById(
-    "sidebar-subscribe-form",
-  ) as HTMLFormElement | null;
-  const feedback = document.getElementById(
-    "sidebar-subscribe-feedback",
-  ) as HTMLElement | null;
-  const input = document.getElementById(
-    "sidebar-subscribe-email",
-  ) as HTMLInputElement | null;
+  import { bindSubscribeForm } from "../utils/subscribeForm";
 
-  form?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!input || !feedback) return;
-
-    const email = input.value.trim();
-    if (!email) return;
-
-    const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
-    btn.disabled = true;
-    btn.textContent = "Subscribing…";
-    feedback.hidden = true;
-    feedback.className = "sidebar-subscribe__feedback";
-
-    try {
-      const res = await fetch("/.netlify/functions/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          website:
-            (form.elements.namedItem("website") as HTMLInputElement)?.value ??
-            "",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        feedback.textContent =
-          "You're subscribed! Check your inbox for a confirmation.";
-        feedback.classList.add("sidebar-subscribe__feedback--success");
-        form.reset();
-        btn.textContent = "You're in";
-        btn.disabled = true;
-      } else {
-        feedback.textContent = data.error ?? "Something went wrong.";
-        feedback.classList.add("sidebar-subscribe__feedback--error");
-        btn.disabled = false;
-        btn.textContent = "Join the list";
-      }
-    } catch {
-      feedback.textContent = "Something went wrong.";
-      feedback.classList.add("sidebar-subscribe__feedback--error");
-      btn.disabled = false;
-      btn.textContent = "Join the list";
-    } finally {
-      feedback.hidden = false;
-    }
+  bindSubscribeForm({
+    formId: "sidebar-subscribe-form",
+    emailId: "sidebar-subscribe-email",
+    feedbackClass: "sidebar-subscribe__feedback",
+    feedbackSuccessClass: "sidebar-subscribe__feedback--success",
+    feedbackErrorClass: "sidebar-subscribe__feedback--error",
+    successLabel: "You're subscribed! Check your inbox for a confirmation.",
+    defaultButtonLabel: "Join the list",
   });
 </script>
 

@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BlogPost from "./BlogPost.astro";
+import BlogCardPlaceholder from "./BlogCardPlaceholder.astro";
 import readingTime from "reading-time";
 
 interface Props {
@@ -78,48 +79,21 @@ function pageUrl(n: number) {
       {
         Array.from({ length: sharedGhostCount }).map(() => (
           <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--tablet-up">
-            <div
-              class="card card__blog card__blog--placeholder"
-              aria-hidden="true"
-            >
-              <div class="card__blog--placeholder-inner">
-                <span class="card__blog--placeholder-label">
-                  More posts coming soon
-                </span>
-              </div>
-            </div>
+            <BlogCardPlaceholder />
           </div>
         ))
       }
       {
         Array.from({ length: tabletOnlyGhostCount }).map(() => (
           <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--tablet-only">
-            <div
-              class="card card__blog card__blog--placeholder"
-              aria-hidden="true"
-            >
-              <div class="card__blog--placeholder-inner">
-                <span class="card__blog--placeholder-label">
-                  More posts coming soon
-                </span>
-              </div>
-            </div>
+            <BlogCardPlaceholder />
           </div>
         ))
       }
       {
         Array.from({ length: desktopOnlyGhostCount }).map(() => (
           <div class="blog-grid__cell blog-grid__ghost-cell blog-grid__ghost-cell--desktop-only">
-            <div
-              class="card card__blog card__blog--placeholder"
-              aria-hidden="true"
-            >
-              <div class="card__blog--placeholder-inner">
-                <span class="card__blog--placeholder-label">
-                  More posts coming soon
-                </span>
-              </div>
-            </div>
+            <BlogCardPlaceholder />
           </div>
         ))
       }

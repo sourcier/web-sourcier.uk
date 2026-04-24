@@ -7,35 +7,71 @@ interface Crumb {
 interface Props {
   crumbs: Crumb[];
   inverted?: boolean;
+  noContainer?: boolean;
 }
 
-const { crumbs, inverted = false } = Astro.props;
+const { crumbs, inverted = false, noContainer = false } = Astro.props;
 const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
+
+const items = allCrumbs.map((crumb, index) => ({
+  ...crumb,
+  isLast: index === allCrumbs.length - 1,
+  position: index + 1,
+}));
 ---
 
 <nav
   aria-label="Breadcrumb"
   class:list={["breadcrumb-nav", { "breadcrumb-nav--inverted": inverted }]}
 >
-  <div class="container is-max-desktop">
-    <ol
-      class="breadcrumb__list"
-      itemscope
-      itemtype="https://schema.org/BreadcrumbList"
-    >
-      {
-        allCrumbs.map((crumb, index) => {
-          const isLast = index === allCrumbs.length - 1;
-          return (
+  {
+    noContainer ? (
+      <ol
+        class="breadcrumb__list"
+        itemscope
+        itemtype="https://schema.org/BreadcrumbList"
+      >
+        {items.map(({ label, href, isLast, position }) => (
+          <li
+            class="breadcrumb__item"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            {!isLast && href ? (
+              <a href={href} class="breadcrumb__link" itemprop="item">
+                <span itemprop="name">{label}</span>
+              </a>
+            ) : (
+              <span
+                class="breadcrumb__current"
+                aria-current="page"
+                itemprop="name"
+              >
+                {label}
+              </span>
+            )}
+            <meta itemprop="position" content={String(position)} />
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <div class="container is-max-desktop">
+        <ol
+          class="breadcrumb__list"
+          itemscope
+          itemtype="https://schema.org/BreadcrumbList"
+        >
+          {items.map(({ label, href, isLast, position }) => (
             <li
               class="breadcrumb__item"
               itemprop="itemListElement"
               itemscope
               itemtype="https://schema.org/ListItem"
             >
-              {!isLast && crumb.href ? (
-                <a href={crumb.href} class="breadcrumb__link" itemprop="item">
-                  <span itemprop="name">{crumb.label}</span>
+              {!isLast && href ? (
+                <a href={href} class="breadcrumb__link" itemprop="item">
+                  <span itemprop="name">{label}</span>
                 </a>
               ) : (
                 <span
@@ -43,16 +79,16 @@ const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
                   aria-current="page"
                   itemprop="name"
                 >
-                  {crumb.label}
+                  {label}
                 </span>
               )}
-              <meta itemprop="position" content={String(index + 1)} />
+              <meta itemprop="position" content={String(position)} />
             </li>
-          );
-        })
-      }
-    </ol>
-  </div>
+          ))}
+        </ol>
+      </div>
+    )
+  }
 </nav>
 
 <style lang="scss">

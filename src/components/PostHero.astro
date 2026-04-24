@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import SharePost from "./SharePost.astro";
 import Reactions from "./Reactions.astro";
+import Breadcrumb from "./Breadcrumb.astro";
 import { tagSlug } from "../utils/tags";
 
 interface Crumb {
@@ -78,49 +79,7 @@ const hasEngagement = Boolean(postId || hasShare);
         {
           hasTopBar && (
             <div class="post-hero__topbar">
-              {allCrumbs.length > 0 && (
-                <nav aria-label="Breadcrumb" class="post-hero__breadcrumbs">
-                  <ol
-                    class="post-hero__breadcrumb-list"
-                    itemscope
-                    itemtype="https://schema.org/BreadcrumbList"
-                  >
-                    {allCrumbs.map((crumb, index) => {
-                      const isLast = index === allCrumbs.length - 1;
-                      return (
-                        <li
-                          class="post-hero__breadcrumb-item"
-                          itemprop="itemListElement"
-                          itemscope
-                          itemtype="https://schema.org/ListItem"
-                        >
-                          {!isLast && crumb.href ? (
-                            <a
-                              href={crumb.href}
-                              class="post-hero__breadcrumb-link"
-                              itemprop="item"
-                            >
-                              <span itemprop="name">{crumb.label}</span>
-                            </a>
-                          ) : (
-                            <span
-                              class="post-hero__breadcrumb-current"
-                              aria-current="page"
-                              itemprop="name"
-                            >
-                              {crumb.label}
-                            </span>
-                          )}
-                          <meta
-                            itemprop="position"
-                            content={String(index + 1)}
-                          />
-                        </li>
-                      );
-                    })}
-                  </ol>
-                </nav>
-              )}
+              <Breadcrumb crumbs={crumbs} noContainer />
             </div>
           )
         }
@@ -300,47 +259,34 @@ const hasEngagement = Boolean(postId || hasShare);
     z-index: 1;
   }
 
-  .post-hero__breadcrumbs {
+  .post-hero__topbar :global(.breadcrumb-nav) {
     flex: 1 1 18rem;
     min-width: 0;
     margin-bottom: 0;
+    padding: 0;
+    background: transparent;
+    border-bottom: none;
 
     @media (min-width: 1024px) {
       max-width: calc(100% - var(--hero-utility-space, 0px));
     }
   }
 
-  .post-hero__breadcrumb-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0;
-    font-family: "Barlow Condensed", sans-serif;
+  .post-hero__topbar :global(.breadcrumb__list) {
     font-size: 0.8rem;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.08em;
   }
 
-  .post-hero__breadcrumb-item {
-    display: flex;
-    align-items: center;
-
-    &:not(:last-child)::after {
-      content: "/";
-      margin: 0 0.5rem;
-      color: color-mix(in srgb, var(--text-primary) 28%, transparent);
-      font-weight: 400;
-    }
+  .post-hero__topbar :global(.breadcrumb__item:not(:last-child)::after) {
+    content: "/";
+    margin: 0 0.5rem;
+    color: color-mix(in srgb, var(--text-primary) 28%, transparent);
+    font-weight: 400;
   }
 
-  .post-hero__breadcrumb-link {
+  .post-hero__topbar :global(.breadcrumb__link) {
     color: color-mix(in srgb, var(--text-primary) 74%, transparent);
-    text-decoration: none;
-    transition: color 0.15s ease;
 
     &:hover,
     &:focus-visible {
@@ -348,7 +294,7 @@ const hasEngagement = Boolean(postId || hasShare);
     }
   }
 
-  .post-hero__breadcrumb-current {
+  .post-hero__topbar :global(.breadcrumb__current) {
     color: var(--text-primary);
   }
 
@@ -593,7 +539,7 @@ const hasEngagement = Boolean(postId || hasShare);
       margin-bottom: 0.9rem;
     }
 
-    .post-hero__breadcrumbs {
+    .post-hero__topbar :global(.breadcrumb-nav) {
       flex-basis: auto;
       width: 100%;
     }

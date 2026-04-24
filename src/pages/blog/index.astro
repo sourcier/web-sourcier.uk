@@ -7,7 +7,7 @@ import MailingListCTA from "../../components/MailingListCTA.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
 import BlogTagCloud from "../../components/BlogTagCloud.astro";
 import { audienceGuides } from "../../data/audienceGuides";
-import { getGuideIcon } from "../../utils/contentIcons";
+import GuideCard from "../../components/GuideCard.astro";
 
 const PAGE_SIZE = 9;
 
@@ -72,26 +72,15 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
       <div class="blog-paths__grid">
         {
           audienceGuides.map((guide) => (
-            <article class="blog-path-card">
-              <div class="blog-path-card__header">
-                <span
-                  class="blog-path-card__icon"
-                  aria-hidden="true"
-                  set:html={getGuideIcon(guide.slug, 18)}
-                />
-                <div class="blog-path-card__heading-group">
-                  <h3 class="blog-path-card__title">{guide.title}</h3>
-                </div>
-              </div>
-              <p class="blog-path-card__body">{guide.summary}</p>
-              <div class="blog-path-card__meta" aria-label="Guide coverage">
-                <span>{guide.currentPostIds.length} published now</span>
-                <span>{guide.plannedArticles.length} planned next</span>
-              </div>
-              <a class="blog-path-card__cta" href={guide.href}>
-                Open the guide
-              </a>
-            </article>
+            <GuideCard
+              slug={guide.slug}
+              title={guide.title}
+              summary={guide.summary}
+              href={guide.href}
+              publishedCount={guide.currentPostIds.length}
+              plannedCount={guide.plannedArticles.length}
+              variant="secondary"
+            />
           ))
         }
       </div>
@@ -166,117 +155,6 @@ const totalTags = new Set(allPosts.flatMap((post) => post.data.tags)).size;
     @media (min-width: 768px) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-  }
-
-  .blog-path-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    min-height: 100%;
-    padding: 1.5rem;
-    border: 1px solid var(--border-subtle);
-    border-top: 3px solid var(--accent-secondary);
-    border-radius: var(--radius-panel);
-    background:
-      radial-gradient(
-        circle at top right,
-        color-mix(in srgb, var(--accent-secondary) 12%, transparent) 0%,
-        transparent 32%
-      ),
-      linear-gradient(
-        155deg,
-        color-mix(in srgb, var(--accent-primary) 4%, var(--surface-elevated)) 0%,
-        var(--surface-elevated) 58%
-      ),
-      var(--surface-elevated);
-    box-shadow: var(--shadow-panel);
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease,
-      border-color 0.18s ease;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lift);
-      border-color: var(--accent-secondary-alpha-24);
-    }
-  }
-
-  .blog-path-card__header {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-  }
-
-  .blog-path-card__heading-group {
-    display: grid;
-  }
-
-  .blog-path-card__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.4rem;
-    height: 2.4rem;
-    border-radius: var(--radius-pill);
-    background: color-mix(
-      in srgb,
-      var(--surface-page) 82%,
-      var(--accent-secondary) 18%
-    );
-    color: var(--accent-secondary);
-    flex-shrink: 0;
-
-    :global(svg) {
-      display: block;
-    }
-  }
-
-  .blog-path-card__title {
-    margin: 0;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 1.15rem;
-    line-height: 1.1;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
-  .blog-path-card__body {
-    margin: 0;
-    color: var(--text-muted);
-    line-height: 1.65;
-  }
-
-  .blog-path-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-
-    span {
-      padding: 0.3rem 0.55rem;
-      border-radius: var(--radius-pill);
-      background: color-mix(in srgb, var(--accent-secondary) 8%, transparent);
-    }
-  }
-
-  .blog-path-card__cta {
-    margin-top: auto;
-    display: inline-flex;
-    align-items: center;
-    padding-block: 0.75rem;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent-secondary);
-    text-decoration: none;
   }
 
   .blog-intro__quote {

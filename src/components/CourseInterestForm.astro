@@ -33,7 +33,16 @@ const formClassName = [
   .join(" ");
 ---
 
-<form class={formClassName} id={formId} novalidate aria-label={ariaLabel}>
+<form
+  class={formClassName}
+  id={formId}
+  novalidate
+  aria-label={ariaLabel}
+  data-email-id={emailId}
+  data-source={source}
+  data-success={successMessage}
+  data-button-label={buttonLabel}
+>
   <p class="course-interest-form__fineprint">{fineprint}</p>
   <p class="course-interest-form__honeypot" aria-hidden="true">
     <label for={websiteId}>Leave this blank</label>
@@ -72,72 +81,25 @@ const formClassName = [
   </p>
 </form>
 
-<script
-  define:vars={{
-    formId,
-    feedbackId,
-    emailId,
-    source,
-    successMessage,
-    buttonLabel,
-  }}
->
-  const form = document.getElementById(formId);
-  const feedback = document.getElementById(feedbackId);
-  const input = document.getElementById(emailId);
+<script>
+  import { bindSubscribeForm } from "../utils/subscribeForm";
 
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!(input instanceof HTMLInputElement) || !feedback) return;
-
-    const email = input.value.trim();
-    if (!email) return;
-
-    const button = form.querySelector("button[type=submit]");
-    if (!(button instanceof HTMLButtonElement)) return;
-
-    button.disabled = true;
-    button.textContent = "Registering...";
-    feedback.hidden = true;
-    feedback.className = "course-interest-form__feedback";
-
-    try {
-      const response = await fetch("/.netlify/functions/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          website:
-            (form.elements.namedItem("website") instanceof HTMLInputElement
-              ? form.elements.namedItem("website").value
-              : "") ?? "",
-          source,
-        }),
+  document
+    .querySelectorAll<HTMLFormElement>("form[data-email-id]")
+    .forEach((form) => {
+      if (form.dataset.bound) return;
+      form.dataset.bound = "true";
+      bindSubscribeForm({
+        formId: form.id,
+        emailId: form.dataset.emailId!,
+        feedbackClass: "course-interest-form__feedback",
+        feedbackSuccessClass: "course-interest-form__feedback--success",
+        feedbackErrorClass: "course-interest-form__feedback--error",
+        successLabel: form.dataset.success!,
+        defaultButtonLabel: form.dataset.buttonLabel!,
+        source: form.dataset.source,
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        feedback.textContent = successMessage;
-        feedback.classList.add("course-interest-form__feedback--success");
-        form.reset();
-        button.textContent = "Registered";
-      } else {
-        feedback.textContent =
-          data.error ?? "Something went wrong. Please try again.";
-        feedback.classList.add("course-interest-form__feedback--error");
-        button.disabled = false;
-        button.textContent = buttonLabel;
-      }
-    } catch {
-      feedback.textContent = "Something went wrong. Please try again.";
-      feedback.classList.add("course-interest-form__feedback--error");
-      button.disabled = false;
-      button.textContent = buttonLabel;
-    } finally {
-      feedback.hidden = false;
-    }
-  });
+    });
 </script>
 
 <style lang="scss">
