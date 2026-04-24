@@ -28,6 +28,9 @@ collections/posts/
 # Playwright MCP test artefacts
 .playwright-mcp/
 
+# Lighthouse reports (generated locally and by Netlify plugin)
+reports/
+
 # macOS-specific files
 .DS_Store
 

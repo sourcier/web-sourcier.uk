@@ -66,3 +66,10 @@
 #   Forms → blog-comments → Form notifications → Add notification
 #   → Outgoing webhook → URL: https://{your-site}/.netlify/functions/comment-handler
 # ──────────────────────────────────────────────────────────────────────────────
+
+# ── Lighthouse audits ─────────────────────────────────────────────────────────
+# Netlify only allows one instance of this plugin — mobile (default) runs on deploy.
+# Run desktop locally with: pnpm lighthouse:desktop
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+# ──────────────────────────────────────────────────────────────────────────────
