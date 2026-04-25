@@ -96,14 +96,24 @@ jobs:
 
       - name: Deploy to Netlify (production)
         if: github.ref == 'refs/heads/main'
-        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build --message "${{ github.event.head_commit.message }}"
+        run: |
+          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build --message "\
+          ${{ github.event_name == 'schedule' && '[scheduled] publish' ||
+              github.event_name == 'repository_dispatch' && github.event.client_payload.commit_message ||
+              github.event_name == 'pull_request' && github.event.pull_request.title ||
+              github.event.head_commit.message }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Deploy to Netlify (preview)
         if: github.ref == 'refs/heads/preview'
-        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --no-build --message "${{ github.event.head_commit.message }}"
+        run: |
+          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --no-build --message "\
+          ${{ github.event_name == 'schedule' && '[scheduled] publish' ||
+              github.event_name == 'repository_dispatch' && github.event.client_payload.commit_message ||
+              github.event_name == 'pull_request' && github.event.pull_request.title ||
+              github.event.head_commit.message }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
