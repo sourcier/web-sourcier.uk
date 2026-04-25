@@ -5,6 +5,8 @@ on:
     branches: [preview, main]
   pull_request:
     branches: [preview, main]
+  repository_dispatch:
+    types: [content-updated]
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -76,12 +78,21 @@ jobs:
       - run: pnpm assets:sync
 
       - run: pnpm build
+        env:
+          SHOW_DRAFTS: ${{ github.ref == 'refs/heads/preview' && 'true' || 'false' }}
 
       - run: pnpm build:search
 
-      - name: Deploy to Netlify
+      - name: Deploy to Netlify (production)
         if: github.ref == 'refs/heads/main'
         run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build --message "${{ github.event.head_commit.message }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Deploy to Netlify (preview)
+        if: github.ref == 'refs/heads/preview'
+        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --no-build --message "${{ github.event.head_commit.message }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
