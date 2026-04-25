@@ -7,6 +7,18 @@
 [build]
   publish = "dist"
 
+# HTML pages: allow CDN to cache but always revalidate on deploy.
+# Hashed assets (_astro/*): immutable — filenames change when content changes.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
