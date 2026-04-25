@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [preview, main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   quality:
     name: Format & Lint
@@ -78,7 +81,7 @@ jobs:
 
       - name: Deploy to Netlify
         if: github.ref == 'refs/heads/main'
-        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build
+        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build --message "${{ github.event.head_commit.message }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
