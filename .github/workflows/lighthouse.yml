@@ -1,0 +1,9 @@
+name: Lighthouse
+run-name: "[lighthouse] on-demand"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    uses: ./.github/workflows/lighthouse-job.yml

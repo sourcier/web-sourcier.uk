@@ -14,6 +14,7 @@ on:
     types: [content-updated]
   schedule:
     - cron: "45 7 * * *"
+  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -119,41 +120,6 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
   lighthouse:
-    name: Lighthouse (${{ matrix.form_factor }})
-    runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
-    strategy:
-      matrix:
-        include:
-          - form_factor: mobile
-          - form_factor: desktop
-            configPath: .github/lighthouse/desktop.json
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: treosh/lighthouse-ci-action@v12
-        id: lighthouse
-        with:
-          urls: |
-            https://sourcier.uk/
-            https://sourcier.uk/blog/
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: ${{ matrix.configPath }}
-
-      - name: Print Lighthouse scores
-        run: |
-          find .lighthouseci -name 'lhr-*.json' | while read f; do
-            url=$(jq -r '.finalUrl' "$f")
-            perf=$(jq '.categories.performance.score * 100 | round' "$f")
-            a11y=$(jq '.categories.accessibility.score * 100 | round' "$f")
-            bp=$(jq '.categories["best-practices"].score * 100 | round' "$f")
-            seo=$(jq '.categories.seo.score * 100 | round' "$f")
-            echo "--- $url ---"
-            echo "  Performance:    $perf"
-            echo "  Accessibility:  $a11y"
-            echo "  Best Practices: $bp"
-            echo "  SEO:            $seo"
-          done
-        shell: bash
+    uses: ./.github/workflows/lighthouse-job.yml
