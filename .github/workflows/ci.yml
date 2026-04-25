@@ -78,7 +78,7 @@ jobs:
 
       - name: Deploy to Netlify
         if: github.ref == 'refs/heads/main'
-        run: pnpm dlx netlify-cli deploy --dir=dist --prod
+        run: pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
