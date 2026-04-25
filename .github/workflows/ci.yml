@@ -1,4 +1,8 @@
 name: CI
+run-name: >-
+  ${{ github.event_name == 'repository_dispatch' && format('[content] {0}', github.event.client_payload.commit_message) ||
+      github.event_name == 'pull_request' && format('PR: {0}', github.event.pull_request.title) ||
+      github.event.head_commit.message }}
 
 on:
   push:
@@ -10,6 +14,10 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
