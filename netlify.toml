@@ -4,38 +4,16 @@
   targetPort = 4321
   autoLaunch = false
 
-# Draft preview: push to the `preview` branch to get a Netlify deploy that
-# includes draft posts. Share the resulting URL (e.g. preview--sourcier.netlify.app)
-# before a post goes live. Never merged into main.
-[context."branch-deploy"]
-  [context."branch-deploy".environment]
-    SHOW_DRAFTS = "true"
-
 [build]
-  command = "pnpm build:netlify"
   publish = "dist"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Rebuild the site daily at 07:00 UTC so future-dated posts go live automatically.
-# Requires BUILD_HOOK_ID environment variable — see netlify/functions/scheduled-build.mjs.
-[functions."scheduled-build"]
-  schedule = "45 7 * * *" # always before 09:00 UK time: 07:45 GMT in winter, 08:45 BST in summer
-
 # ── Comment approval system ────────────────────────────────────────────────────
 #
 # Required environment variables (Netlify → Site configuration → Environment variables):
-#
-#   GITHUB_PAT                GitHub personal access token (fine-grained) with
-#                             read-only Contents access to sourcier/web-sourcier.uk-content.
-#                             Used to fetch the private blog content submodule at build time.
-#                             https://github.com/settings/tokens?type=beta
-#
-#   BUILD_HOOK_ID             Build hook ID for scheduled deploys.
-#                             Netlify → Site configuration → Build & deploy → Build hooks
-#                             Create a hook named "Scheduled publish", copy the ID from the URL.
 #
 #   NETLIFY_ACCESS_TOKEN      Personal access token
 #                             https://app.netlify.com/user/applications
@@ -49,12 +27,6 @@
 #
 #   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
 #
-#   PREVIEW_PASSCODE          Passcode that gates access to the `preview` branch deploy.
-#                             Set this in the Netlify dashboard scoped to branch deploys only:
-#                             Site configuration → Environment variables → Add variable
-#                             → Scope: Branch deploys. Changing the value invalidates all
-#                             existing sessions. Generate with: openssl rand -base64 12
-#
 #   RESEND_API_KEY            API key from https://resend.com
 #                             (free tier: 3 000 emails/month)
 #
@@ -65,11 +37,4 @@
 # One-time Netlify dashboard setup:
 #   Forms → blog-comments → Form notifications → Add notification
 #   → Outgoing webhook → URL: https://{your-site}/.netlify/functions/comment-handler
-# ──────────────────────────────────────────────────────────────────────────────
-
-# ── Lighthouse audits ─────────────────────────────────────────────────────────
-# Netlify only allows one instance of this plugin — mobile (default) runs on deploy.
-# Run desktop locally with: pnpm lighthouse:desktop
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
 # ──────────────────────────────────────────────────────────────────────────────

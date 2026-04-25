@@ -2,7 +2,7 @@ name: CI
 run-name: >-
   ${{ github.event_name == 'schedule' && '[scheduled] publish' ||
       github.event_name == 'repository_dispatch' && format('[content] {0}', github.event.client_payload.commit_message) ||
-      github.event_name == 'pull_request' && format('PR: {0}', github.event.pull_request.title) ||
+      github.event_name == 'pull_request' && format('[pr] {0}', github.event.pull_request.title) ||
       github.event.head_commit.message }}
 
 on:
