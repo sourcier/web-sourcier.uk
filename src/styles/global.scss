@@ -1726,6 +1726,17 @@ h6,
   }
 }
 
+// — Expressive Code: spacing between consecutive collapsible blocks
+.expressive-code:has(.ec-collapsible) + .expressive-code:has(.ec-collapsible) {
+  margin-top: 0.75rem;
+}
+
+// — Expressive Code: rounded corners when collapsed
+.expressive-code .ec-collapsible.is-collapsed {
+  border-radius: var(--radius-compact);
+  overflow: hidden;
+}
+
 // — Expressive Code: copy button with matching hover
 .expressive-code .copy button {
   border-radius: var(--radius-tight) !important;

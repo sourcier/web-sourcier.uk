@@ -6,13 +6,14 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { rehypeZoomableImages } from "./src/plugins/rehype-zoomable-images.js";
 import { expressiveCodeCopyIcon } from "./src/utils/expressive-code-copy-icon.js";
+import { pluginCollapsibleCodeBlocks } from "./src/plugins/expressive-code-collapsible.js";
 
 export default defineConfig({
   site: "https://sourcier.uk",
   integrations: [
     expressiveCode({
       themes: ["one-light", "one-dark-pro"],
-      plugins: [pluginLineNumbers()],
+      plugins: [pluginLineNumbers(), pluginCollapsibleCodeBlocks()],
       defaultProps: {
         showLineNumbers: true,
         wrap: true,
