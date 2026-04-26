@@ -131,6 +131,8 @@ jobs:
           - form_factor: desktop
             configPath: .github/lighthouse/desktop.json
     steps:
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/lighthouse
         with:
           form_factor: ${{ matrix.form_factor }}

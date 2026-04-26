@@ -12,8 +12,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-
     - uses: treosh/lighthouse-ci-action@v12
       with:
         urls: |
