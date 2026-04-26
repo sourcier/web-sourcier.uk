@@ -3,25 +3,67 @@ import { test, expect } from "@playwright/test";
 // Pages that exercise Bulma layout, components, forms, grid, and typography.
 // Run `pnpm test:visual:update` to regenerate baselines after intentional changes.
 
+// dynamicSelectors: elements that change when new content is published.
+// These are masked in screenshots (replaced with a solid box) so layout is
+// still validated while the changing content is ignored.
 const routes = [
-  { name: "home", path: "/" },
-  { name: "blog-index", path: "/blog" },
-  { name: "blog-post", path: "/blog/how-this-blog-was-built" },
+  {
+    name: "home",
+    path: "/",
+    dynamicSelectors: ['section[aria-label="Recent Posts"]'],
+  },
+  {
+    name: "blog-index",
+    path: "/blog",
+    dynamicSelectors: [".blog-intro__stats", ".blog-grid-section"],
+  },
+  {
+    name: "blog-post",
+    path: "/blog/how-this-blog-was-built",
+    // Clip to just before the footer so height is deterministic (sub-pixel jitter ~0.9px
+    // between runs is absorbed by the floor(y/16) quantisation).
+    // maxDiffPixelRatio 0.05: Chromium font anti-aliasing produces ~2% differing pixels
+    // across the text-heavy article body between launches; 5% still catches real regressions.
+    clipToContent: true,
+    maxDiffPixelRatio: 0.05,
+  },
   { name: "about", path: "/about" },
   { name: "contact", path: "/contact" },
   { name: "courses", path: "/courses" },
-  { name: "guides-index", path: "/guides" },
-  { name: "guide-detail", path: "/guides/engineering-career-growth" },
+  {
+    name: "guides-index",
+    path: "/guides",
+    dynamicSelectors: [".guide-card__meta"],
+  },
+  {
+    name: "guide-detail",
+    path: "/guides/engineering-career-growth",
+    dynamicSelectors: [".guide-current", ".guide-planned"],
+  },
   { name: "charity-support", path: "/charity-support" },
-  { name: "tags", path: "/tags" },
-  { name: "tag-detail", path: "/tags/astro" },
+  {
+    name: "tags",
+    path: "/tags",
+    dynamicSelectors: [".tag-summary__stats", ".cloud-section"],
+  },
+  {
+    name: "tag-detail",
+    path: "/tags/astro",
+    dynamicSelectors: [".blog-grid-section"],
+  },
   { name: "404", path: "/does-not-exist" },
 ];
 
 // Pages with external embeds or persistent network activity that prevent networkidle
 const NO_NETWORK_IDLE = new Set(["contact"]);
 
-for (const { name, path } of routes) {
+for (const {
+  name,
+  path,
+  dynamicSelectors,
+  maxDiffPixelRatio,
+  clipToContent,
+} of routes) {
   test(`visual: ${name}`, async ({ page }) => {
     await page.goto(path);
 
@@ -40,18 +82,38 @@ for (const { name, path } of routes) {
       );
     });
 
-    // Hide dynamic content that changes between runs (e.g. reaction counts)
+    // Remove async-loaded sections from layout to prevent height variability between runs
     await page.addStyleTag({
       content: `
-        .reactions__count,
-        .comments__count { visibility: hidden !important; }
+        .reactions,
+        .comments { display: none !important; }
       `,
     });
 
+    let clip:
+      | { x: number; y: number; width: number; height: number }
+      | undefined;
+    if (clipToContent) {
+      const footerBox = await page.locator(".footer").boundingBox();
+      if (footerBox) {
+        // Quantise to the nearest 16px below the footer top so sub-pixel jitter
+        // (~0.9px between runs) never crosses a quantisation boundary and the
+        // clip dimensions are stable without needing a baseline regeneration.
+        clip = {
+          x: 0,
+          y: 0,
+          width: footerBox.width,
+          height: Math.floor(footerBox.y / 16) * 16,
+        };
+      }
+    }
+
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
-      maxDiffPixelRatio: 0.01,
+      maxDiffPixelRatio: maxDiffPixelRatio ?? 0.01,
       timeout: 15000,
+      mask: (dynamicSelectors ?? []).map((sel: string) => page.locator(sel)),
+      ...(clip && { clip }),
     });
   });
 }

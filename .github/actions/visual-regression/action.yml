@@ -28,8 +28,8 @@ runs:
         if [ "${{ inputs.update_snapshots }}" = "true" ]; then
           pnpm test:visual:update
         else
-          # Skip comparison if no baselines exist yet (first-time setup)
-          BASELINE_COUNT=$(find src/e2e/__snapshots__ -name "*.png" 2>/dev/null | wc -l | tr -d ' ')
+          # Skip comparison if no linux baselines exist yet
+          BASELINE_COUNT=$(find src/e2e/__snapshots__ -name "*-linux.png" 2>/dev/null | wc -l | tr -d ' ')
           if [ "$BASELINE_COUNT" = "0" ]; then
             echo "No baselines found — run the Visual Regression workflow with update_snapshots=true to generate them."
             exit 0
@@ -43,12 +43,4 @@ runs:
       with:
         name: visual-regression-report
         path: playwright-report/
-        retention-days: 7
-
-    - name: Upload updated snapshots
-      if: inputs.update_snapshots == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: updated-snapshots
-        path: src/e2e/__snapshots__/
         retention-days: 7
