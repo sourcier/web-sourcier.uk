@@ -160,6 +160,30 @@ it("renders snapshot", async () => {
 - `pnpm test:watch` — watch mode
 - `pnpm test:update` — regenerate snapshots after intentional component changes
 
+## Visual Regression
+
+Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
+
+- Config: `playwright.config.ts` — all Chromium, desktop (1280×900), tablet (Galaxy Tab S9), mobile (Pixel 7)
+- Spec: `src/e2e/visual.spec.ts`
+- Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/` — named `{route}-{project}-{platform}.png`
+  — `-darwin.png` files are committed locally; `-linux.png` files are committed by CI
+- `pnpm test:visual` — compare against baselines (dev server must be running on port 8888)
+- `pnpm test:visual:update` — regenerate baselines
+
+### Stability patterns
+
+- Dynamic sections (recent posts, stats, tag cloud, guide meta) are masked with `dynamicSelectors`
+- `.reactions` and `.comments` are hidden via injected CSS to prevent height variability
+- `blog-post` clips height to `Math.floor(footerY / 16) * 16` to absorb sub-pixel font jitter, and uses `maxDiffPixelRatio: 0.05`
+- All other routes use `maxDiffPixelRatio: 0.01`
+
+### CI
+
+`.github/workflows/visual-regression.yml` — `workflow_dispatch` with `update_snapshots` boolean.
+Update mode regenerates baselines and commits `-linux.png` files back to main.
+The job requires `permissions: contents: write` to push.
+
 4. The layout references the stable path `/search-thumbnails/${postId}/${postId}-thumbnail.webp`
 5. `public/search-thumbnails/` is gitignored — regenerated on every build
 
