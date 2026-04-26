@@ -7,3 +7,34 @@
     <span class="card__blog--placeholder-label">More posts coming soon</span>
   </div>
 </div>
+
+<style lang="scss">
+  .card.card__blog--placeholder {
+    pointer-events: none;
+    border: 2px dashed var(--accent-secondary-alpha-22);
+    border-top-color: var(--accent-secondary-alpha-32);
+    background: color-mix(
+      in srgb,
+      var(--accent-secondary) 4%,
+      var(--surface-elevated)
+    );
+    box-shadow: none;
+  }
+
+  .card__blog--placeholder-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem 1.5rem;
+  }
+
+  .card__blog--placeholder-label {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: color-mix(in srgb, var(--text-muted) 45%, transparent);
+  }
+</style>
