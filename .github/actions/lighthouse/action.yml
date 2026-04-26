@@ -1,0 +1,40 @@
+name: Run Lighthouse
+description: Run Lighthouse CI for mobile and desktop
+
+inputs:
+  form_factor:
+    description: Form factor (mobile or desktop)
+    required: true
+  configPath:
+    description: Path to a Lighthouse config file
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: treosh/lighthouse-ci-action@v12
+      with:
+        urls: |
+          https://sourcier.uk/
+          https://sourcier.uk/blog/
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+        configPath: ${{ inputs.configPath }}
+
+    - name: Print Lighthouse scores
+      shell: bash
+      run: |
+        find .lighthouseci -name 'lhr-*.json' | while read f; do
+          url=$(jq -r '.finalUrl' "$f")
+          perf=$(jq '.categories.performance.score * 100 | round' "$f")
+          a11y=$(jq '.categories.accessibility.score * 100 | round' "$f")
+          bp=$(jq '.categories["best-practices"].score * 100 | round' "$f")
+          seo=$(jq '.categories.seo.score * 100 | round' "$f")
+          echo "--- $url ---"
+          echo "  Performance:    $perf"
+          echo "  Accessibility:  $a11y"
+          echo "  Best Practices: $bp"
+          echo "  SEO:            $seo"
+        done

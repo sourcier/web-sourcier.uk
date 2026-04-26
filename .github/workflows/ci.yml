@@ -120,6 +120,18 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
   lighthouse:
+    name: Lighthouse (${{ matrix.form_factor }})
     needs: build
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/lighthouse-job.yml
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - form_factor: mobile
+          - form_factor: desktop
+            configPath: .github/lighthouse/desktop.json
+    steps:
+      - uses: ./.github/actions/lighthouse
+        with:
+          form_factor: ${{ matrix.form_factor }}
+          configPath: ${{ matrix.configPath }}

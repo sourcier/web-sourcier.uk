@@ -4,6 +4,21 @@ run-name: "[lighthouse] on-demand"
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   lighthouse:
-    uses: ./.github/workflows/lighthouse-job.yml
+    name: Lighthouse (${{ matrix.form_factor }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - form_factor: mobile
+          - form_factor: desktop
+            configPath: .github/lighthouse/desktop.json
+    steps:
+      - uses: ./.github/actions/lighthouse
+        with:
+          form_factor: ${{ matrix.form_factor }}
+          configPath: ${{ matrix.configPath }}
