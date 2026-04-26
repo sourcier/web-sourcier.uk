@@ -76,7 +76,9 @@
   },
   "pnpm": {
     "overrides": {
-      "vite": ">=7.3.2"
+      "vite": ">=7.3.2",
+      "defu": ">=6.1.5",
+      "lodash-es": ">=4.18.0"
     },
     "patchedDependencies": {
       "expressive-code-color-chips": "patches/expressive-code-color-chips.patch"

@@ -6,6 +6,8 @@ settings:
 
 overrides:
   vite: ">=7.3.2"
+  defu: ">=6.1.5"
+  lodash-es: ">=4.18.0"
 
 patchedDependencies:
   expressive-code-color-chips:
@@ -3767,10 +3769,10 @@ packages:
       }
     engines: { node: ">=8" }
 
-  defu@6.1.4:
+  defu@6.1.7:
     resolution:
       {
-        integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==,
+        integrity: sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==,
       }
 
   degenerator@5.0.1:
@@ -5083,10 +5085,10 @@ packages:
       }
     engines: { node: ">=10" }
 
-  lodash-es@4.17.23:
+  lodash-es@4.18.1:
     resolution:
       {
-        integrity: sha512-kVI48u3PZr38HdYz98UmfPnXl2DXrpdctLrFLCd3kOx1xUkOmpFPx7gCWWM5MPkL/fD8zb+Ph0QzjGFs4+hHWg==,
+        integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==,
       }
 
   log-update@6.1.0:
@@ -7604,12 +7606,12 @@ snapshots:
     dependencies:
       "@chevrotain/gast": 11.1.2
       "@chevrotain/types": 11.1.2
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
 
   "@chevrotain/gast@11.1.2":
     dependencies:
       "@chevrotain/types": 11.1.2
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
 
   "@chevrotain/regexp-to-ast@11.1.2": {}
 
@@ -9440,7 +9442,7 @@ snapshots:
   chevrotain-allstar@0.3.1(chevrotain@11.1.2):
     dependencies:
       chevrotain: 11.1.2
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
 
   chevrotain@11.1.2:
     dependencies:
@@ -9449,7 +9451,7 @@ snapshots:
       "@chevrotain/regexp-to-ast": 11.1.2
       "@chevrotain/types": 11.1.2
       "@chevrotain/utils": 11.1.2
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
 
   chokidar@4.0.3:
     dependencies:
@@ -9765,7 +9767,7 @@ snapshots:
   dagre-d3-es@7.0.14:
     dependencies:
       d3: 7.9.0
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
 
   data-uri-to-buffer@6.0.2: {}
 
@@ -9789,7 +9791,7 @@ snapshots:
 
   define-lazy-prop@2.0.0: {}
 
-  defu@6.1.4: {}
+  defu@6.1.7: {}
 
   degenerator@5.0.1:
     dependencies:
@@ -10188,7 +10190,7 @@ snapshots:
     dependencies:
       cookie-es: 1.2.2
       crossws: 0.3.5
-      defu: 6.1.4
+      defu: 6.1.7
       destr: 2.0.5
       iron-webcrypto: 1.2.1
       node-mock-http: 1.0.4
@@ -10523,7 +10525,7 @@ snapshots:
       js-library-detector: 6.7.0
       lighthouse-logger: 2.0.2
       lighthouse-stack-packs: 1.12.3
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
       lookup-closest-locale: 6.2.0
       open: 8.4.2
       puppeteer-core: 24.42.0
@@ -10614,7 +10616,7 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash-es@4.17.23: {}
+  lodash-es@4.18.1: {}
 
   log-update@6.1.0:
     dependencies:
@@ -10791,7 +10793,7 @@ snapshots:
       dompurify: 3.3.3
       katex: 0.16.43
       khroma: 2.1.0
-      lodash-es: 4.17.23
+      lodash-es: 4.18.1
       marked: 16.4.2
       roughjs: 4.6.6
       stylis: 4.3.6
