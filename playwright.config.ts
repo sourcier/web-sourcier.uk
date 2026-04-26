@@ -17,9 +17,10 @@ export default defineConfig({
     launchOptions: {
       args: [
         "--force-prefers-reduced-motion",
-        // Normalise text rendering so Chromium produces identical pixels on macOS and Linux
+        // Normalise text rendering so Chromium produces identical pixels across environments
         "--disable-lcd-text",
         "--disable-font-subpixel-positioning",
+        "--font-render-hinting=none",
       ],
     },
   },
