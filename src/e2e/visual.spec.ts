@@ -18,12 +18,27 @@ const routes = [
   { name: "404", path: "/does-not-exist" },
 ];
 
+// Pages with external embeds or persistent network activity that prevent networkidle
+const NO_NETWORK_IDLE = new Set(["contact"]);
+
 for (const { name, path } of routes) {
   test(`visual: ${name}`, async ({ page }) => {
     await page.goto(path);
 
-    // Dismiss any cookie banners / wait for fonts / animations to settle
-    await page.waitForLoadState("networkidle");
+    if (NO_NETWORK_IDLE.has(name)) {
+      await page.waitForLoadState("load");
+    } else {
+      await page.waitForLoadState("networkidle");
+    }
+
+    // Ensure all images are decoded so the page is visually stable
+    await page.evaluate(async () => {
+      await Promise.all(
+        Array.from(document.images)
+          .filter((img) => img.src && img.complete && img.naturalWidth > 0)
+          .map((img) => img.decode().catch(() => {})),
+      );
+    });
 
     // Hide dynamic content that changes between runs (e.g. reaction counts)
     await page.addStyleTag({
@@ -36,6 +51,7 @@ for (const { name, path } of routes) {
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
       maxDiffPixelRatio: 0.01,
+      timeout: 15000,
     });
   });
 }

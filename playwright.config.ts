@@ -8,15 +8,19 @@ export default defineConfig({
   snapshotPathTemplate:
     "{snapshotDir}/{testFileName}-snapshots/{arg}-{projectName}{ext}",
   retries: 0,
-  workers: 1,
+  workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI
     ? [["list"], ["html", { outputFolder: "playwright-report", open: "never" }]]
     : "list",
   use: {
     baseURL: "http://localhost:8888",
-    // Disable animations and transitions so screenshots are deterministic
     launchOptions: {
-      args: ["--force-prefers-reduced-motion"],
+      args: [
+        "--force-prefers-reduced-motion",
+        // Normalise text rendering so Chromium produces identical pixels on macOS and Linux
+        "--disable-lcd-text",
+        "--disable-font-subpixel-positioning",
+      ],
     },
   },
   projects: [
@@ -29,11 +33,13 @@ export default defineConfig({
     },
     {
       name: "tablet",
-      use: { ...devices["iPad (gen 11)"] },
+      // Galaxy Tab S9 — Chromium with touch emulation, avoids WebKit cross-OS rendering differences
+      use: { ...devices["Galaxy Tab S9"] },
     },
     {
       name: "mobile",
-      use: { ...devices["iPhone 15"] },
+      // Pixel 7 is a Chromium-based device — consistent rendering on macOS and Linux
+      use: { ...devices["Pixel 7"] },
     },
   ],
 });
