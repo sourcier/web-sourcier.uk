@@ -1,2 +1,4 @@
 onlyBuiltDependencies:
   - "@parcel/watcher"
+patchedDependencies:
+  expressive-code-color-chips: patches/expressive-code-color-chips.patch

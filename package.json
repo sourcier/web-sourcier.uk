@@ -43,9 +43,11 @@
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@netlify/blobs": "^10.7.4",
+    "@xt0rted/expressive-code-file-icons": "^1.0.0",
     "astro": "^6.1.1",
     "astro-expressive-code": "^0.41.7",
     "bulma": "^1.0.4",
+    "expressive-code-color-chips": "^0.1.4",
     "mermaid": "^11.13.0",
     "reading-time": "^1.5.0",
     "sass": "^1.98.0",
@@ -71,5 +73,10 @@
     "remark-emoji": "^5.0.2",
     "typescript-eslint": "^8.58.2",
     "vitest": "^4.1.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "expressive-code-color-chips": "patches/expressive-code-color-chips.patch"
+    }
   }
 }

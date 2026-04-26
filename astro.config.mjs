@@ -3,6 +3,8 @@ import { defineConfig } from "astro/config";
 import emoji from "remark-emoji";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { pluginColorChips } from "expressive-code-color-chips";
+import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { rehypeZoomableImages } from "./src/plugins/rehype-zoomable-images.js";
 import { expressiveCodeCopyIcon } from "./src/utils/expressive-code-copy-icon.js";
@@ -13,7 +15,12 @@ export default defineConfig({
   integrations: [
     expressiveCode({
       themes: ["one-light", "one-dark-pro"],
-      plugins: [pluginLineNumbers(), pluginCollapsibleCodeBlocks()],
+      plugins: [
+        pluginLineNumbers(),
+        pluginCollapsibleCodeBlocks(),
+        pluginColorChips(),
+        pluginFileIcons(),
+      ],
       defaultProps: {
         showLineNumbers: true,
         wrap: true,
