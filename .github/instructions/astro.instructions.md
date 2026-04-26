@@ -49,6 +49,9 @@ pnpm post-images:copy     # Mirror SVG files to public/post-images/<slug>/ and g
 - Scoped `<style lang="scss">` in each component for component-specific styles
 - Global / utility styles go in `src/styles/global.scss` (e.g. `.visually-hidden`, search modal styles)
 - **Scoped Astro styles do not apply to elements injected via `innerHTML`** — put those styles in `global.scss`
+- **BEM `&-` nesting in scoped styles creates class concatenation, not descendant selectors.** `&-inner` inside `.card__blog--placeholder` compiles to `.card__blog--placeholder-inner[cid]`, targeting elements with that exact class — not children of the parent. Use explicit descendant selectors: `.card__blog--placeholder { .card__blog--placeholder-inner { … } }`
+- **Components with no `<style>` block get no `data-astro-cid` attributes** on their elements, so scoped rules from parent components cannot match them. Always add a `<style>` block (even if minimal) to components that need to be styled by a parent.
+- **To override a global rule from a scoped component style**, use a double-class selector (e.g. `.card.card__blog--placeholder`) to match global specificity — the CID attribute then acts as a tiebreaker. Avoid `:global()` or `!important` unless strictly necessary.
 - **Conditional wrapper elements:** When a component needs a prop to toggle a wrapping element (e.g. `noContainer`), write **two full JSX branches** — one with the wrapper and one without. Do not try to conditionally render only the opening or closing tag (e.g. `{noContainer ? null : </div>}`) — this is invalid Astro/JSX syntax and will produce a broken template.
 
 ## Content Collections
@@ -325,3 +328,18 @@ const blog = defineCollection({
 - **View Transitions**: Enable SPA-like navigation with `<ClientRouter />`
 - **Type Safety**: Leverage auto-generated types from Content Collections
 - **Performance**: Optimize with built-in image optimization and minimal client bundles
+
+## GitHub Actions and CI
+
+The site uses GitHub Actions for the full CI/CD pipeline — build, deploy, Lighthouse, and scheduled publishing. Netlify only receives a pre-built `dist/` folder via the CLI.
+
+### Composite Actions (`.github/actions/`)
+
+- **Caller must checkout before using a local composite action.** `uses: ./.github/actions/foo` resolves the action path on the runner filesystem. The repo must already be checked out before this step — the caller job must run `actions/checkout@v4` first. A checkout inside the composite action itself runs too late to help.
+- **Prefer composite actions over reusable workflows** when the only goal is code reuse. Reusable workflows (`on: workflow_call`) appear as separate entries in the GitHub Actions sidebar; composite actions do not.
+
+### Workflow Conventions
+
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` at the workflow `env:` level suppresses Node 16/20 deprecation warnings from third-party actions (e.g. `treosh/lighthouse-ci-action@v12`)
+- Lighthouse runs as a matrix job (mobile + desktop) after the build, `main` branch only
+- The `lighthouse.yml` `on: workflow_dispatch` workflow allows manual on-demand Lighthouse runs without a push

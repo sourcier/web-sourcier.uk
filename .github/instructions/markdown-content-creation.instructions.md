@@ -14,6 +14,8 @@ applyTo: "**/*.md"
 ## Formatting
 
 - Fenced code blocks with language specified: ` ```typescript `, ` ```sh `, etc.
+- **Use only Shiki-bundled languages** for code fences — `gitignore` is not bundled and will fall back to `txt` with a build warning. Use `text` instead.
+- **Shell blocks with a `title` attribute** trigger the file-icons plugin icon lookup, which has no `sh` icon. Add `no-icon` to suppress it: ` ```sh title=".husky/pre-commit" no-icon `
 - Line length limit: 400 characters.
 - Use `-` for unordered lists, `1.` for ordered lists. Indent nested lists with two spaces.
 - `[link text](URL)` — descriptive link text, always valid URLs.
