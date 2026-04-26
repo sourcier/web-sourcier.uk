@@ -10,7 +10,11 @@ export default defineConfig({
   retries: 0,
   workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI
-    ? [["dot"], ["html", { outputFolder: "playwright-report", open: "never" }]]
+    ? [
+        ["dot"],
+        ["html", { outputFolder: "playwright-report", open: "never" }],
+        ["json", { outputFile: "test-results.json" }],
+      ]
     : "list",
   use: {
     baseURL: "http://localhost:8888",

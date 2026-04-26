@@ -37,6 +37,42 @@ runs:
           pnpm test:visual
         fi
 
+    - name: Write job summary
+      if: always()
+      shell: bash
+      run: |
+        echo "## Visual Regression" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+
+        if [ ! -f test-results.json ]; then
+          echo "⏭️ No baselines found — tests skipped." >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+
+        passed=$(jq '.stats.expected' test-results.json)
+        failed=$(jq '.stats.unexpected' test-results.json)
+        skipped=$(jq '.stats.skipped' test-results.json)
+        flaky=$(jq '.stats.flaky' test-results.json)
+        total=$((passed + failed + skipped + flaky))
+
+        if [ "$failed" -eq 0 ]; then
+          echo "🟢 All tests passed" >> "$GITHUB_STEP_SUMMARY"
+        else
+          echo "🔴 $failed test(s) failed" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        echo "| ✅ Passed | ❌ Failed | ⏭️ Skipped | 🔄 Flaky | Total |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| --- | --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| $passed | $failed | $skipped | $flaky | $total |" >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$failed" -gt 0 ]; then
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Failed Tests" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '[.. | objects | select(has("specs")) | .specs[] | . as $spec | .tests[] | select(.status == "unexpected") | "- **\(.projectName)** — \($spec.title)"] | unique[]' test-results.json >> "$GITHUB_STEP_SUMMARY"
+        fi
+
     - name: Upload diff report
       if: failure()
       uses: actions/upload-artifact@v4

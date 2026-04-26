@@ -24,12 +24,23 @@ runs:
     - name: Print Lighthouse scores
       shell: bash
       run: |
+        badge() { local s=$1; if [ "$s" -ge 90 ]; then echo "🟢 $s"; elif [ "$s" -ge 50 ]; then echo "🟡 $s"; else echo "🔴 $s"; fi; }
+
+        form_factor="${{ inputs.form_factor }}"
+        echo "## Lighthouse — ${form_factor^}" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        echo "| URL | Performance | Accessibility | Best Practices | SEO |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| --- | --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+
         find .lighthouseci -name 'lhr-*.json' | while read f; do
           url=$(jq -r '.finalUrl' "$f")
           perf=$(jq '.categories.performance.score * 100 | round' "$f")
           a11y=$(jq '.categories.accessibility.score * 100 | round' "$f")
           bp=$(jq '.categories["best-practices"].score * 100 | round' "$f")
           seo=$(jq '.categories.seo.score * 100 | round' "$f")
+
+          echo "| $url | $(badge $perf) | $(badge $a11y) | $(badge $bp) | $(badge $seo) |" >> "$GITHUB_STEP_SUMMARY"
+
           echo "--- $url ---"
           echo "  Performance:    $perf"
           echo "  Accessibility:  $a11y"
