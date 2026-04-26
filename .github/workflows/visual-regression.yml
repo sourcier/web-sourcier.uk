@@ -1,0 +1,47 @@
+name: Visual Regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: Regenerate baselines instead of comparing
+        type: boolean
+        default: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  visual:
+    name: Visual Regression (${{ inputs.update_snapshots && 'update' || 'compare' }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/krypton
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fetch content
+        run: pnpm build:content:fetch
+        env:
+          GITHUB_PAT: ${{ secrets.GH_PAT }}
+
+      - run: pnpm assets:sync
+
+      - run: pnpm build
+        env:
+          SHOW_DRAFTS: "false"
+
+      - run: pnpm build:search
+
+      - uses: ./.github/actions/visual-regression
+        with:
+          update_snapshots: ${{ inputs.update_snapshots && 'true' || 'false' }}
