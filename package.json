@@ -1,5 +1,5 @@
 {
-  "name": "web-sourcier-uk",
+  "name": "sourcier-uk",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -7,7 +7,7 @@
     "dev": "pnpm assets:sync && SHOW_DRAFTS=true netlify dev",
     "dev:no-drafts": "pnpm assets:sync && netlify dev",
     "build": "astro build",
-    "build:content:fetch": "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/web-sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git",
+    "build:content:fetch": "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git",
     "build:prepare": "pnpm lint && pnpm format:check && pnpm assets:sync",
     "build:search": "pagefind --site dist",
     "build:netlify": "pnpm build:content:fetch && pnpm build:prepare && pnpm build && pnpm build:search",
