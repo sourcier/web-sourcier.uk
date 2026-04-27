@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
+import { select } from "@inquirer/prompts";
 
 import { rasterizePostImages } from "./rasterize-post-images.mjs";
 
@@ -22,14 +23,15 @@ const syncJobs = {
   },
 };
 
-const mode = process.argv[2];
-const syncJob = syncJobs[mode];
+let mode = process.argv[2];
+let syncJob = syncJobs[mode];
 
 if (!syncJob) {
-  console.error(
-    "Usage: node scripts/sync-public-assets.mjs <thumbnails|post-images>",
-  );
-  process.exit(1);
+  mode = await select({
+    message: "What would you like to sync?",
+    choices: Object.keys(syncJobs).map((key) => ({ value: key })),
+  }).catch(() => process.exit(0));
+  syncJob = syncJobs[mode];
 }
 
 if (!existsSync(postsDir)) {

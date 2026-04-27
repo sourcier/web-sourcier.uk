@@ -12,7 +12,7 @@
 //   DEVTO_API_KEY  — API key from https://dev.to/settings/extensions → DEV Community API Keys
 //   SITE_URL       — public URL of the site, e.g. https://sourcier.uk
 
-import { createInterface } from "readline";
+import { select, confirm } from "@inquirer/prompts";
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { join, resolve } from "path";
 
@@ -376,16 +376,6 @@ function listPostIds() {
     .map((p) => p.id);
 }
 
-function prompt(question) {
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close();
-      resolve(answer.trim());
-    });
-  });
-}
-
 function normaliseUrl(value) {
   return String(value || "").replace(/\/$/, "");
 }
@@ -448,24 +438,10 @@ if (postIds.length === 0) {
   process.exit(0);
 }
 
-console.log("\nPublished posts (newest first):");
-postIds.forEach((id, i) =>
-  console.log(`  ${String(i + 1).padStart(2)}. ${id}`),
-);
-console.log();
-
-const input = await prompt("Enter post slug or number: ");
-if (!input) {
-  console.error("Aborted.");
-  process.exit(1);
-}
-
-const slug = /^\d+$/.test(input) ? postIds[parseInt(input, 10) - 1] : input;
-
-if (!slug || !postIds.includes(slug)) {
-  console.error(`Post not found: ${input}`);
-  process.exit(1);
-}
+const slug = await select({
+  message: "Select a post to cross-post:",
+  choices: postIds.map((id) => ({ value: id })),
+}).catch(() => process.exit(0));
 
 let post;
 try {
@@ -500,28 +476,29 @@ console.log("  Original link: prepended");
 console.log(`  Body length  : ${post.body.length} chars`);
 console.log("─────────────────────────────────────────\n");
 
-const confirm = await prompt("Cross-post to Dev.to? [y/N] ");
-if (confirm.toLowerCase() !== "y" && confirm.toLowerCase() !== "yes") {
-  console.log("Aborted.");
-  process.exit(0);
-}
-
-// ── CREATE or UPDATE via Dev.to API ──────────────────────────────────────────
+// ── Detect existing Dev.to article ───────────────────────────────────────────
 
 let existingArticle = null;
 
 if (explicitArticleId !== null) {
   existingArticle = { id: explicitArticleId };
   console.log(
-    `\n--update ${explicitArticleId} provided — forcing update mode.`,
+    `--update ${explicitArticleId} provided — forcing update mode.\n`,
   );
 } else {
-  console.log("\nChecking for existing Dev.to article by canonical URL…");
+  console.log("Checking for existing Dev.to article by canonical URL…");
   try {
     existingArticle = await findExistingArticleByCanonical(post.canonicalUrl);
   } catch (err) {
     console.error(`Error: ${err.message}`);
     process.exit(1);
+  }
+  if (existingArticle) {
+    console.log(
+      `Found existing article: https://dev.to/articles/${existingArticle.id}\n`,
+    );
+  } else {
+    console.log("No existing article found — will create a new one.\n");
   }
 }
 
@@ -529,18 +506,58 @@ const isUpdate = Boolean(existingArticle?.id);
 
 if (updateOnly && !isUpdate) {
   console.error(
-    "\nError: --update was set, but no existing Dev.to article was found for this canonical URL.",
+    "Error: --update was set, but no existing Dev.to article was found for this canonical URL.",
   );
   console.error("Re-run without --update to create a new article instead.");
   process.exit(1);
 }
 
-const endpoint = isUpdate
+// ── Confirm action ────────────────────────────────────────────────────────────
+
+let proceed;
+
+if (explicitArticleId !== null || updateOnly) {
+  const ok = await confirm({
+    message: `Update Dev.to article ${existingArticle.id}?`,
+    default: false,
+  }).catch(() => process.exit(0));
+  if (!ok) {
+    console.log("Aborted.");
+    process.exit(0);
+  }
+  proceed = "update";
+} else if (isUpdate) {
+  proceed = await select({
+    message: `An existing article was found. What would you like to do?`,
+    choices: [
+      { name: "Update the existing article", value: "update" },
+      { name: "Create a new article", value: "create" },
+      { name: "Cancel", value: "cancel" },
+    ],
+  }).catch(() => process.exit(0));
+} else {
+  const ok = await confirm({
+    message: "Cross-post to Dev.to?",
+    default: false,
+  }).catch(() => process.exit(0));
+  proceed = ok ? "create" : "cancel";
+}
+
+if (proceed === "cancel") {
+  console.log("Aborted.");
+  process.exit(0);
+}
+
+const doUpdate = proceed === "update";
+
+// ── CREATE or UPDATE via Dev.to API ──────────────────────────────────────────
+
+const endpoint = doUpdate
   ? `https://dev.to/api/articles/${existingArticle.id}`
   : "https://dev.to/api/articles";
-const method = isUpdate ? "PUT" : "POST";
+const method = doUpdate ? "PUT" : "POST";
 
-console.log(`\n${isUpdate ? "Updating" : "Posting"} on Dev.to…`);
+console.log(`\n${doUpdate ? "Updating" : "Posting"} on Dev.to…`);
 
 const res = await fetch(endpoint, {
   method,
@@ -561,7 +578,7 @@ if (!res.ok) {
   process.exit(1);
 }
 
-console.log(`\n✓ ${isUpdate ? "Updated" : "Published"}! View at: ${data.url}`);
+console.log(`\n✓ ${doUpdate ? "Updated" : "Published"}! View at: ${data.url}`);
 console.log("  Dev.to article ID:", data.id);
 console.log(
   "\nNote: Mermaid and expressive code fences were normalised for Dev.to compatibility.",

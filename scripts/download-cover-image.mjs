@@ -16,8 +16,9 @@
  *   node scripts/download-cover-image.mjs <slug> <photo-url-or-id> --dry-run
  */
 
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { input, select } from "@inquirer/prompts";
 
 const POSTS_DIR = "./collections/posts";
 const UTM = "utm_source=sourcier_uk&utm_medium=referral";
@@ -38,13 +39,25 @@ args.forEach((arg, i) => {
   }
 });
 const positional = args.filter((_, i) => !skipIndices.has(i));
-const [slug, photoInput] = positional;
+let [slug, photoInput] = positional;
 
-if (!slug || !photoInput) {
-  console.error(
-    'Usage: node scripts/download-cover-image.mjs <slug> <photo-url-or-id> [--alt "text"] [--force] [--dry-run]',
-  );
-  process.exit(1);
+if (!slug) {
+  const postDirs = readdirSync(POSTS_DIR, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .sort();
+
+  slug = await select({
+    message: "Select a post:",
+    choices: postDirs.map((d) => ({ value: d })),
+  }).catch(() => process.exit(0));
+}
+
+if (!photoInput) {
+  photoInput = await input({
+    message: "Unsplash photo URL or ID:",
+    validate: (v) => v.trim() !== "" || "A photo URL or ID is required.",
+  }).catch(() => process.exit(0));
 }
 
 function extractPhotoId(input) {

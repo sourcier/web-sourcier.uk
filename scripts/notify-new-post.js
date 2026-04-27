@@ -10,7 +10,7 @@
 // the project root (if present). Environment variables set in the shell take
 // precedence over the .env file.
 
-import { createInterface } from "readline";
+import { select, confirm } from "@inquirer/prompts";
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { join, resolve } from "path";
 
@@ -118,16 +118,6 @@ function listPostIds() {
 
 // ── Prompt helper ─────────────────────────────────────────────────────────────
 
-function prompt(question) {
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close();
-      resolve(answer.trim());
-    });
-  });
-}
-
 // ── Ask for post ID ───────────────────────────────────────────────────────────
 
 const postIds = listPostIds();
@@ -135,15 +125,10 @@ if (postIds.length === 0) {
   console.log("\nNo published posts found in the past week.");
   process.exit(0);
 }
-console.log("\nPosts published in the past week:");
-postIds.forEach((id) => console.log(`  • ${id}`));
-console.log();
-
-const postId = await prompt("Enter post ID: ");
-if (!postId) {
-  console.error("Aborted — no post ID entered.");
-  process.exit(1);
-}
+const postId = await select({
+  message: "Select a post to notify subscribers about:",
+  choices: postIds.map((id) => ({ value: id })),
+}).catch(() => process.exit(0));
 
 let post;
 try {
@@ -157,8 +142,10 @@ if (post.draft) {
   console.warn(
     "\n⚠  Warning: this post is marked draft: true in its frontmatter.",
   );
-  const confirm = await prompt("Send anyway? [y/N] ");
-  if (confirm.toLowerCase() !== "y" && confirm.toLowerCase() !== "yes") {
+  const ok = await confirm({ message: "Send anyway?", default: false }).catch(
+    () => process.exit(0),
+  );
+  if (!ok) {
     console.log("Aborted.");
     process.exit(0);
   }
@@ -268,9 +255,12 @@ async function sendBroadcast() {
 
 printPreview();
 
-const answer = await prompt("Send this to all subscribers? [y/N] ");
+const shouldSend = await confirm({
+  message: "Send this to all subscribers?",
+  default: false,
+}).catch(() => process.exit(0));
 
-if (answer.toLowerCase() !== "y" && answer.toLowerCase() !== "yes") {
+if (!shouldSend) {
   console.log("Aborted — nothing was sent.");
   process.exit(0);
 }
