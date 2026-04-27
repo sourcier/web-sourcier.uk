@@ -23,28 +23,38 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# ── Comment approval system ────────────────────────────────────────────────────
+# ── Environment variables ──────────────────────────────────────────────────────
 #
-# Required environment variables (Netlify → Site configuration → Environment variables):
+# Set these in Netlify → Site configuration → Environment variables.
 #
+# Shared
+#   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
 #   NETLIFY_ACCESS_TOKEN      Personal access token
 #                             https://app.netlify.com/user/applications
+#   RESEND_API_KEY            API key from https://resend.com
+#                             (free tier: 3 000 emails/month)
+#   NOTIFY_FROM_EMAIL         Verified Resend sender address, e.g. noreply@sourcier.uk
 #
+# Comment approval system (comment-handler, approve-comment, get-comments)
 #   APPROVED_COMMENTS_FORM_ID Form ID for the "approved-comments" form.
 #                             Visible in the Netlify Forms dashboard URL after
 #                             the first comment is approved.
-#
 #   APPROVAL_SECRET           Random secret for HMAC-signing approve/delete links.
 #                             Generate with: openssl rand -hex 32
-#
-#   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
-#
-#   RESEND_API_KEY            API key from https://resend.com
-#                             (free tier: 3 000 emails/month)
-#
-#   NOTIFY_FROM_EMAIL         Verified Resend sender address, e.g. comments@sourcier.uk
-#
 #   NOTIFY_EMAIL              Address to receive comment notifications
+#
+# Reactions (reactions)
+#   NETLIFY_SITE_ID           Site ID from Netlify → Site configuration → General
+#
+# Mailing list (subscribe)
+#   RESEND_SEGMENT_ID         Audience segment ID from the Resend dashboard
+#   RESEND_WELCOME_TEMPLATE_ID Resend broadcast template ID for the welcome email
+#
+# Support / one-time payments (support-checkout-session)
+#   STRIPE_SECRET_KEY         Stripe secret key (sk_live_… or sk_test_…)
+#
+# Preview authentication (preview-auth edge function)
+#   PREVIEW_PASSCODE          Passcode protecting draft/scheduled post previews
 #
 # One-time Netlify dashboard setup:
 #   Forms → blog-comments → Form notifications → Add notification
