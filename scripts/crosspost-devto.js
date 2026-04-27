@@ -157,6 +157,16 @@ function makeImagesAbsolute(markdown, slug) {
     );
 }
 
+function stripHtmlTags(str) {
+  let result = str;
+  let prev;
+  do {
+    prev = result;
+    result = result.replace(/<[^>]*>?/g, "");
+  } while (result !== prev);
+  return result;
+}
+
 function normaliseSeriesCallout(line) {
   const match = line.match(
     /^<div class="series-callout"><span class="series-callout__label">([^<]+)<\/span><span class="series-callout__text">([\s\S]*?)<\/span><\/div>$/,
@@ -165,12 +175,13 @@ function normaliseSeriesCallout(line) {
   if (!match) return null;
 
   const label = match[1].trim();
-  const text = match[2]
-    .replace(/<a href="([^"]+)">([\s\S]*?)<\/a>/g, (_, href, linkText) => {
-      const cleanLinkText = linkText.replace(/<[^>]*>?/g, "");
-      return `[${escapeMarkdownLinkText(cleanLinkText)}](${makeUrlAbsolute(href)})`;
-    })
-    .replace(/<[^>]*>?/g, "")
+  const text = stripHtmlTags(
+    match[2].replace(
+      /<a href="([^"]+)">([\s\S]*?)<\/a>/g,
+      (_, href, linkText) =>
+        `[${escapeMarkdownLinkText(stripHtmlTags(linkText))}](${makeUrlAbsolute(href)})`,
+    ),
+  )
     .replace(/\s+/g, " ")
     .trim();
 
