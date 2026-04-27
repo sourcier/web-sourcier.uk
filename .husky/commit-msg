@@ -1,0 +1,37 @@
+#!/bin/sh
+# Enforce Conventional Commits with a blank-line-separated body.
+# Valid: "feat(scope): summary\n\n- detail"
+# Invalid: missing type, missing colon, no blank line before body
+
+commit_msg_file="$1"
+commit_msg=$(cat "$commit_msg_file")
+
+# Skip merge, fixup, and squash commits
+first_line=$(head -1 "$commit_msg_file")
+case "$first_line" in
+  Merge*|Revert*|fixup\!*|squash\!*) exit 0 ;;
+esac
+
+# Subject line must match Conventional Commits format
+if ! echo "$first_line" | grep -qE '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?(!)?: .+'; then
+  echo ""
+  echo "  ✗ Invalid commit message subject line."
+  echo ""
+  echo "  Expected: <type>(<scope>): <summary>"
+  echo "  Example:  feat(content): add RSS feed article"
+  echo ""
+  echo "  Valid types: build chore ci docs feat fix perf refactor revert style test"
+  echo ""
+  exit 1
+fi
+
+# If there is a body, the second line must be blank
+body_start=$(sed -n '2p' "$commit_msg_file")
+if [ -n "$body_start" ]; then
+  echo ""
+  echo "  ✗ Commit body must be separated from the subject by a blank line."
+  echo ""
+  echo "  Got on line 2: \"$body_start\""
+  echo ""
+  exit 1
+fi
