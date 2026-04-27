@@ -183,6 +183,22 @@ example-syntax (renders as literal)
 
 Do **not** remove these sections — they serve as reference for future plugin evaluation.
 
+## Full Code Listings
+
+When an article builds up a file incrementally with focused snippets, add a `## Full code listing` section at the end with the complete file in a collapsible, line-numbered block:
+
+````md
+## Full code listing
+
+```js title="src/pages/example.js" collapsible showLineNumbers
+// complete file contents
+```
+````
+
+- Use `collapsible showLineNumbers` — never use `<details class="post-appendix-accordion">` (removed).
+- The `title=` attribute labels the block with the file path; omit it only if the context is already unambiguous.
+- Use one collapsible block per file. For articles with multiple files, add one block each.
+
 ## Series Articles
 
 When updating an article that is part of a series, also update the series kicker article (e.g. `how-this-blog-was-built`) to reflect any changes — such as correcting the description, adjusting the date chip, or marking the item as live.
