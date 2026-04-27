@@ -169,7 +169,7 @@ function normaliseSeriesCallout(line) {
     .replace(/<a href="([^"]+)">([\s\S]*?)<\/a>/g, (_, href, linkText) => {
       return `[${escapeMarkdownLinkText(linkText)}](${makeUrlAbsolute(href)})`;
     })
-    .replace(/<[^>]+>/g, "")
+    .replace(/<[^>]*>?/g, "")
     .replace(/\s+/g, " ")
     .trim();
 

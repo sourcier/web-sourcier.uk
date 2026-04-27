@@ -11,6 +11,8 @@ jobs:
   lighthouse:
     name: Lighthouse (${{ matrix.form_factor }})
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         include:
