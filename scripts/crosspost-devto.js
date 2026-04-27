@@ -167,7 +167,8 @@ function normaliseSeriesCallout(line) {
   const label = match[1].trim();
   const text = match[2]
     .replace(/<a href="([^"]+)">([\s\S]*?)<\/a>/g, (_, href, linkText) => {
-      return `[${escapeMarkdownLinkText(linkText)}](${makeUrlAbsolute(href)})`;
+      const cleanLinkText = linkText.replace(/<[^>]*>?/g, "");
+      return `[${escapeMarkdownLinkText(cleanLinkText)}](${makeUrlAbsolute(href)})`;
     })
     .replace(/<[^>]*>?/g, "")
     .replace(/\s+/g, " ")
