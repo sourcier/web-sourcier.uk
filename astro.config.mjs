@@ -7,6 +7,7 @@ import { pluginColorChips } from "expressive-code-color-chips";
 import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { rehypeZoomableImages } from "./src/plugins/rehype-zoomable-images.js";
+import { rehypeWrapTables } from "./src/plugins/rehype-wrap-tables.js";
 import { expressiveCodeCopyIcon } from "./src/utils/expressive-code-copy-icon.js";
 import { pluginCollapsibleCodeBlocks } from "./src/plugins/expressive-code-collapsible.js";
 
@@ -19,6 +20,7 @@ export default defineConfig({
         pluginLineNumbers(),
         pluginCollapsibleCodeBlocks(),
         pluginColorChips(),
+        // @ts-expect-error — plugin built against @expressive-code/core@0.40.2, types are compatible at runtime
         pluginFileIcons(),
       ],
       defaultProps: {
@@ -52,7 +54,7 @@ export default defineConfig({
       remarkMermaid,
       [emoji, { emoticon: true, accessible: true }],
     ],
-    rehypePlugins: [rehypeZoomableImages],
+    rehypePlugins: [rehypeZoomableImages, rehypeWrapTables],
     syntaxHighlight: false,
   },
 });

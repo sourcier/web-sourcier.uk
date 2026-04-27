@@ -12,6 +12,7 @@
     "build:search": "pagefind --site dist",
     "build:netlify": "pnpm build:content:fetch && pnpm build:prepare && pnpm build && pnpm build:search",
     "preview": "astro preview",
+    "serve:dist": "npx serve dist --listen 4321 --no-clipboard",
     "lint": "eslint \"**/*.{js,mjs,cjs,ts,mts,cts,astro}\"",
     "lint:fix": "pnpm lint --fix",
     "format": "prettier . --write",
@@ -34,6 +35,7 @@
     "test:watch": "vitest",
     "test:update": "vitest run --update",
     "test:visual": "playwright test",
+    "pretest:visual:update": "npx serve dist --listen 8888 --no-clipboard &",
     "test:visual:update": "playwright test --update-snapshots",
     "prepare": "husky"
   },
@@ -80,6 +82,7 @@
   },
   "pnpm": {
     "overrides": {
+      "@expressive-code/core": "0.41.7",
       "vite": ">=7.3.2",
       "defu": ">=6.1.5",
       "lodash-es": ">=4.18.0",

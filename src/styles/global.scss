@@ -871,7 +871,7 @@ h6,
   border-radius: var(--radius-compact);
   padding: 0.875rem 1.25rem;
   margin-bottom: 2rem;
-  background: rgba(var(--accent-primary-rgb), 0.04);
+  background: rgba(var(--accent-primary-rgb), 0.07);
 
   &__label {
     font-family: "Barlow Condensed", sans-serif;
@@ -886,7 +886,7 @@ h6,
 
   &__text {
     font-size: 0.9rem;
-    color: var(--color-text-secondary);
+    color: var(--text-primary);
     line-height: 1.5;
 
     a {
@@ -1573,35 +1573,63 @@ h6,
     }
   }
 
-  table {
-    display: block;
+  .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-compact);
+    box-shadow: 0 0 0 1px var(--border-subtle);
+    margin: 2rem 0;
+  }
+
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin: 2rem 0;
     font-size: 0.9375rem;
 
     th {
-      background-color: var(--surface-elevated);
+      background: linear-gradient(
+        180deg,
+        var(--surface-elevated) 0%,
+        color-mix(in srgb, var(--surface-elevated) 85%, var(--surface-page) 15%)
+          100%
+      );
       font-family: "Barlow Condensed", sans-serif;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       font-size: 0.8125rem;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem 1.125rem;
       text-align: left;
       border-bottom: 2px solid var(--accent-primary);
+      color: var(--text-primary);
     }
 
     td {
-      padding: 0.75rem 1rem;
+      padding: 0.8rem 1.125rem;
       border-bottom: 1px solid var(--border-subtle);
-      vertical-align: top;
+      vertical-align: middle;
+      background-color: var(--surface-elevated);
+    }
+
+    tbody tr:nth-child(even) td {
+      background-color: color-mix(
+        in srgb,
+        var(--surface-elevated) 60%,
+        var(--surface-page) 40%
+      );
     }
 
     tr:last-child td {
       border-bottom: none;
+    }
+
+    tbody tr:hover td {
+      background-color: color-mix(
+        in srgb,
+        var(--accent-primary) 10%,
+        var(--surface-elevated) 90%
+      );
+      transition: background-color 0.1s ease;
     }
   }
 
@@ -1644,86 +1672,13 @@ h6,
       font-style: italic;
     }
   }
+}
 
-  details.post-appendix-accordion {
-    margin: 1.75rem 0;
-
-    > summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.85rem 1rem;
-      cursor: pointer;
-      list-style: none;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      background: linear-gradient(
-        180deg,
-        rgba(var(--surface-panel-tint-rgb), 0.02) 0%,
-        rgba(var(--surface-panel-tint-rgb), 0.05) 100%
-      );
-      line-height: 1.3;
-      transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease,
-        background-color 0.15s ease;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      &:hover {
-        border-color: rgba(var(--accent-primary-rgb), 0.35);
-        box-shadow: 0 8px 20px rgba(var(--accent-primary-rgb), 0.08);
-      }
-
-      &::after {
-        content: "+";
-        flex-shrink: 0;
-        color: var(--accent-primary);
-        font-family: "Barlow Condensed", sans-serif;
-        font-size: 1rem;
-        font-weight: 700;
-        line-height: 1;
-      }
-
-      code {
-        padding: 0;
-        border: 0;
-        background: transparent;
-        color: var(--text-primary);
-        font-family:
-          SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-          "Courier New", monospace;
-        font-size: 0.92rem;
-      }
-    }
-
-    &[open] > summary {
-      border-bottom-color: transparent;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      box-shadow: 0 10px 24px rgba(var(--accent-primary-rgb), 0.08);
-
-      &::after {
-        content: "-";
-      }
-    }
-
-    > .expressive-code {
-      margin: -1px 0 0 !important;
-    }
-
-    > .expressive-code .frame {
-      border-top-left-radius: 0 !important;
-      border-top-right-radius: 0 !important;
-    }
-
-    > .expressive-code .frame.has-title > .header {
-      display: none;
-    }
-  }
+// — Expressive Code: 1px border outline on all code block frames
+.expressive-code .frame {
+  box-shadow: 0 0 0 1px var(--border-subtle) !important;
+  border-radius: var(--radius-compact);
+  overflow: hidden;
 }
 
 // — Expressive Code: spacing between consecutive collapsible blocks
