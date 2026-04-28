@@ -45,8 +45,9 @@
 #
 # Shared
 #   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
-#   NETLIFY_ACCESS_TOKEN      Personal access token
-#                             https://app.netlify.com/user/applications
+#   NETLIFY_PAT               Personal access token — https://app.netlify.com/user/applications
+#                             NOTE: do NOT use NETLIFY_ACCESS_TOKEN — Netlify auto-injects that name
+#                             at runtime with a limited site-scoped machine token, overwriting yours
 #   RESEND_API_KEY            API key from https://resend.com
 #                             (free tier: 3 000 emails/month)
 #   NOTIFY_FROM_EMAIL         Verified Resend sender address, e.g. noreply@sourcier.uk

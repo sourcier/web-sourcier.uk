@@ -1,6 +1,8 @@
 // Fetches approved comment submissions from Netlify Forms API.
 // Requires two environment variables set in Netlify site settings:
-//   NETLIFY_ACCESS_TOKEN      — personal access token from https://app.netlify.com/user/applications
+//   NETLIFY_PAT               — personal access token from https://app.netlify.com/user/applications
+//                               NOTE: do NOT use NETLIFY_ACCESS_TOKEN — that name is reserved by Netlify
+//                               and auto-overwritten with a limited site-scoped machine token at runtime
 //   APPROVED_COMMENTS_FORM_ID — form ID for the "approved-comments" form in the Netlify Forms dashboard
 //                               (visible in the URL after the first approved comment is posted)
 
@@ -12,6 +14,7 @@ interface NetlifySubmission {
   created_at: string;
 }
 
+// MD5 is intentional — Gravatar's API requires it.
 function gravatarHash(email: string): string {
   return crypto
     .createHash("md5")
@@ -38,12 +41,14 @@ export const handler = async (event: HandlerEvent) => {
     };
   }
 
-  const token = process.env.NETLIFY_ACCESS_TOKEN;
+  const token = process.env.NETLIFY_PAT;
   const formId = process.env.APPROVED_COMMENTS_FORM_ID;
 
   if (!token || !formId) {
+    // Comments are opt-in — returning an empty list rather than an error allows
+    // forks and staging deploys to work without the Netlify credentials set up.
     console.warn(
-      "NETLIFY_ACCESS_TOKEN or APPROVED_COMMENTS_FORM_ID not configured — returning empty comments",
+      "NETLIFY_PAT or APPROVED_COMMENTS_FORM_ID not configured — returning empty comments",
     );
     return {
       statusCode: 200,
@@ -73,6 +78,8 @@ export const handler = async (event: HandlerEvent) => {
     };
   }
 
+  // Netlify Forms API has no server-side field filter, so we fetch all
+  // approved submissions and filter by postSlug here.
   const submissions = (await response.json()) as NetlifySubmission[];
 
   const comments = submissions

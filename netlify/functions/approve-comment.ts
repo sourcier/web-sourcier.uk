@@ -58,7 +58,7 @@ export const handler = async (event: HandlerEvent) => {
   }
 
   const secret = process.env.APPROVAL_SECRET;
-  const accessToken = process.env.NETLIFY_ACCESS_TOKEN;
+  const accessToken = process.env.NETLIFY_PAT;
   const siteUrl = process.env.SITE_URL?.replace(/\/$/, "");
 
   if (!secret || !accessToken || !siteUrl) {

@@ -4,7 +4,7 @@
 // POST /.netlify/functions/reactions?post=<slug>  body: { reaction: "heart" }  → updated counts
 //
 // Local dev: requires NETLIFY_SITE_ID plus either NETLIFY_AUTH_TOKEN or
-// NETLIFY_ACCESS_TOKEN in .env
+// NETLIFY_PAT in .env
 // Production: works automatically with no extra config
 
 import type { HandlerEvent } from "@netlify/functions";
@@ -29,8 +29,7 @@ function getReactionsStore(event: HandlerEvent & { blobs?: string }) {
   }
 
   const siteID = process.env.NETLIFY_SITE_ID;
-  const token =
-    process.env.NETLIFY_AUTH_TOKEN ?? process.env.NETLIFY_ACCESS_TOKEN;
+  const token = process.env.NETLIFY_AUTH_TOKEN ?? process.env.NETLIFY_PAT;
 
   if (siteID && token) {
     return getStore("reactions", { siteID, token });

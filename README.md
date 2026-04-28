@@ -103,15 +103,15 @@ These are baked into the HTML by `astro build`. In CI they are passed via GitHub
 
 These are read by Netlify functions at request time and never embedded in the HTML. Set them in the Netlify dashboard (Site configuration → Environment variables).
 
-| Variable               | Purpose                                     |
-| :--------------------- | :------------------------------------------ |
-| `NETLIFY_ACCESS_TOKEN` | Netlify API access                          |
-| `APPROVAL_SECRET`      | HMAC signing for comment moderation links   |
-| `RESEND_API_KEY`       | Email sending via Resend                    |
-| `NOTIFY_EMAIL`         | Admin notification recipient                |
-| `SITE_URL`             | Public site URL                             |
-| `STRIPE_SECRET_KEY`    | Stripe secret key for the checkout function |
-| `PREVIEW_PASSCODE`     | Passcode for the `preview` branch deploy    |
+| Variable            | Purpose                                                                                                                  |
+| :------------------ | :----------------------------------------------------------------------------------------------------------------------- |
+| `NETLIFY_PAT`       | Netlify personal access token — **do not** use `NETLIFY_ACCESS_TOKEN` (reserved by Netlify, auto-overwritten at runtime) |
+| `APPROVAL_SECRET`   | HMAC signing for comment moderation links                                                                                |
+| `RESEND_API_KEY`    | Email sending via Resend                                                                                                 |
+| `NOTIFY_EMAIL`      | Admin notification recipient                                                                                             |
+| `SITE_URL`          | Public site URL                                                                                                          |
+| `STRIPE_SECRET_KEY` | Stripe secret key for the checkout function                                                                              |
+| `PREVIEW_PASSCODE`  | Passcode for the `preview` branch deploy                                                                                 |
 
 ## License
 

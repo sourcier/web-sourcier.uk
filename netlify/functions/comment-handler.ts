@@ -3,7 +3,8 @@
 // text and HMAC-signed approve / delete links.
 //
 // Required environment variables (Netlify → Site configuration → Env vars):
-//   NETLIFY_ACCESS_TOKEN  — personal access token (already used by get-comments)
+//   NETLIFY_PAT           — personal access token (already used by get-comments)
+//                           NOTE: do NOT name it NETLIFY_ACCESS_TOKEN — Netlify auto-overwrites that
 //   APPROVAL_SECRET       — random secret used to sign approve/delete tokens
 //   SITE_URL              — public URL of the site, e.g. https://sourcier.uk
 //   RESEND_API_KEY        — API key from https://resend.com (free tier is ample)
