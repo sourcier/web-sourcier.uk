@@ -85,19 +85,33 @@ commit.
 
 ## Environment Variables
 
-See [.env.example](.env.example) for the full list. Key variables:
+See [.env.example](.env.example) for the full list. Variables fall into two categories:
 
-| Variable               | Purpose                                                               |
-| :--------------------- | :-------------------------------------------------------------------- |
-| `GITHUB_PAT`           | Fine-grained token to clone the private content repo at build time    |
-| `NETLIFY_ACCESS_TOKEN` | Netlify API access                                                    |
-| `APPROVAL_SECRET`      | HMAC signing for comment moderation links                             |
-| `RESEND_API_KEY`       | Email sending via Resend                                              |
-| `NOTIFY_EMAIL`         | Admin notification recipient                                          |
-| `SITE_URL`             | Public site URL                                                       |
-| `PREVIEW_PASSCODE`     | Passcode for the `preview` branch deploy (scope: branch deploys only) |
+### Build-time (GitHub Actions secrets)
 
-All secrets should be configured in Netlify's environment variables dashboard for production.
+These are baked into the HTML by `astro build`. In CI they are passed via GitHub Actions secrets (GitHub → Settings → Secrets and variables → Actions). In local dev, set them in `.env`.
+
+| Variable                        | Purpose                                                             |
+| :------------------------------ | :------------------------------------------------------------------ |
+| `PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key — controls whether the tip button renders    |
+| `PUBLIC_POSTHOG_KEY`            | PostHog project API key                                             |
+| `PUBLIC_POSTHOG_HOST`           | PostHog ingest host, e.g. `https://eu.i.posthog.com`                |
+| `GITHUB_PAT`                    | Fine-grained token to clone the private content repo at build time  |
+| `SHOW_DRAFTS`                   | Set to `"true"` to include draft posts (CI sets this automatically) |
+
+### Runtime (Netlify environment variables)
+
+These are read by Netlify functions at request time and never embedded in the HTML. Set them in the Netlify dashboard (Site configuration → Environment variables).
+
+| Variable               | Purpose                                     |
+| :--------------------- | :------------------------------------------ |
+| `NETLIFY_ACCESS_TOKEN` | Netlify API access                          |
+| `APPROVAL_SECRET`      | HMAC signing for comment moderation links   |
+| `RESEND_API_KEY`       | Email sending via Resend                    |
+| `NOTIFY_EMAIL`         | Admin notification recipient                |
+| `SITE_URL`             | Public site URL                             |
+| `STRIPE_SECRET_KEY`    | Stripe secret key for the checkout function |
+| `PREVIEW_PASSCODE`     | Passcode for the `preview` branch deploy    |
 
 ## License
 

@@ -97,6 +97,9 @@ jobs:
       - run: pnpm build
         env:
           SHOW_DRAFTS: ${{ github.ref == 'refs/heads/preview' && 'true' || 'false' }}
+          PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
       - run: pnpm build:search
 

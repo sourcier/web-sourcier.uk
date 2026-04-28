@@ -25,7 +25,23 @@
 
 # ── Environment variables ──────────────────────────────────────────────────────
 #
-# Set these in Netlify → Site configuration → Environment variables.
+# BUILD-TIME (GitHub Actions secrets — GitHub → Settings → Secrets and variables → Actions)
+#
+#   These are baked into the HTML by `astro build` and must be present during
+#   the CI build job. Add them as repository secrets, then the ci.yml `build`
+#   step passes them via `env:`.
+#
+#   PUBLIC_STRIPE_PUBLISHABLE_KEY  Stripe publishable key (pk_live_… or pk_test_…)
+#                                  Controls whether the tip/support button renders
+#   PUBLIC_POSTHOG_KEY             PostHog project API key
+#   PUBLIC_POSTHOG_HOST            PostHog ingest host, e.g. https://eu.i.posthog.com
+#
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# RUNTIME (Netlify → Site configuration → Environment variables)
+#
+#   These are read by Netlify functions at request time and never embedded in
+#   the built HTML. Keep them in the Netlify dashboard only.
 #
 # Shared
 #   SITE_URL                  Public URL of the site, e.g. https://sourcier.uk
