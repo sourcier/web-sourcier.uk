@@ -251,12 +251,25 @@ function isActive(href: string) {
         .join("");
     }
 
+    let debounceTimer;
+    let currentQuery = "";
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      if (input.value.trim().length < 3) {
+        currentQuery = "";
+        resultsList.innerHTML = "";
+        return;
+      }
+      debounceTimer = setTimeout(handleInput, 300);
+    });
+
     async function handleInput() {
       const query = input.value.trim();
       if (!query || query.length < 3) {
         resultsList.innerHTML = "";
         return;
       }
+      currentQuery = query;
       renderLoading();
       const pf = await initPagefind();
       if (!pf) {
@@ -268,18 +281,9 @@ function isActive(href: string) {
       const data = await Promise.all(
         search.results.slice(0, 6).map((r) => r.data()),
       );
-      renderResults(data);
+      // Discard results if a newer query has since been issued
+      if (query === currentQuery) renderResults(data);
     }
-
-    let debounceTimer;
-    input.addEventListener("input", () => {
-      clearTimeout(debounceTimer);
-      if (input.value.trim().length < 3) {
-        resultsList.innerHTML = "";
-        return;
-      }
-      debounceTimer = setTimeout(handleInput, 300);
-    });
 
     input.addEventListener("keydown", (e) => {
       const items = resultsList.querySelectorAll(".search-result");
