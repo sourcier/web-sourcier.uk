@@ -117,8 +117,11 @@ jobs:
       needs.build.result == 'success' &&
       (needs['visual-regression'].result == 'success' || needs['visual-regression'].result == 'skipped') &&
       github.event_name != 'pull_request'
-    permissions: {}
+    permissions:
+      contents: read
     steps:
+      - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
         with:
           version: latest
@@ -132,7 +135,7 @@ jobs:
       - name: Deploy to Netlify (production)
         if: github.ref == 'refs/heads/main'
         run: |
-          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --prod --no-build --message "\
+          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions netlify/functions --prod --no-build --message "\
           ${{ github.event_name == 'schedule' && '[scheduled] publish' ||
               github.event_name == 'repository_dispatch' && github.event.client_payload.commit_message ||
               github.event_name == 'pull_request' && github.event.pull_request.title ||
@@ -144,7 +147,7 @@ jobs:
       - name: Deploy to Netlify (preview)
         if: github.ref == 'refs/heads/preview'
         run: |
-          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --no-build --message "\
+          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions netlify/functions --no-build --message "\
           ${{ github.event_name == 'schedule' && '[scheduled] publish' ||
               github.event_name == 'repository_dispatch' && github.event.client_payload.commit_message ||
               github.event_name == 'pull_request' && github.event.pull_request.title ||
