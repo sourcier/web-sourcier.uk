@@ -4,8 +4,8 @@ import { test, expect } from "@playwright/test";
 // Run `pnpm test:visual:update` to regenerate baselines after intentional changes.
 
 // dynamicSelectors: elements that change when new content is published.
-// These are masked in screenshots (replaced with a solid box) so layout is
-// still validated while the changing content is ignored.
+// Hidden via CSS visibility:hidden (not Playwright mask) so they stay in the
+// layout — preserving heights and preventing position-shift ripple on sections below.
 const routes = [
   {
     name: "home",
@@ -15,7 +15,11 @@ const routes = [
   {
     name: "blog-index",
     path: "/blog",
-    dynamicSelectors: [".blog-intro__stats", ".blog-grid-section"],
+    dynamicSelectors: [
+      ".blog-intro__stats",
+      ".blog-grid-section",
+      ".tag-cloud",
+    ],
   },
   {
     name: "blog-post",
@@ -49,7 +53,7 @@ const routes = [
   {
     name: "tag-detail",
     path: "/tags/astro",
-    dynamicSelectors: [".blog-grid-section"],
+    dynamicSelectors: [".featured-post", ".topic-stats", ".blog-grid-section"],
   },
   { name: "404", path: "/does-not-exist" },
 ];
@@ -108,11 +112,18 @@ for (const {
       }
     }
 
+    if (dynamicSelectors?.length) {
+      await page.addStyleTag({
+        content: dynamicSelectors
+          .map((sel: string) => `${sel} { visibility: hidden !important; }`)
+          .join("\n"),
+      });
+    }
+
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
       maxDiffPixelRatio: maxDiffPixelRatio ?? 0.01,
       timeout: 15000,
-      mask: (dynamicSelectors ?? []).map((sel: string) => page.locator(sel)),
       ...(clip && { clip }),
     });
   });

@@ -1198,7 +1198,7 @@ function addDemoSlide(pptx) {
     title: "localhost demo",
     lines: [
       "Use the playwright-explore-website skill",
-      "on http://localhost:8888/.",
+      "on http://localhost:9000/.",
       "Explore the home page, one blog post,",
       "and the search flow.",
       "Document likely stable locators,",
@@ -1218,7 +1218,7 @@ function addDemoSlide(pptx) {
     line: COLORS.pink,
   });
   slide.addText(
-    "Runs against http://localhost:8888/ with Playwright MCP controlling a real browser session.",
+    "Runs against http://localhost:9000/ with Playwright MCP controlling a real browser session.",
     {
       x: 1.15,
       y: 5.58,

@@ -16,11 +16,11 @@ runs:
 
     - name: Serve site
       shell: bash
-      run: pnpm --package=serve dlx serve dist -p 8888 &
+      run: pnpm --package=serve dlx serve dist -p 9000 &
 
     - name: Wait for server
       shell: bash
-      run: until curl -sf http://localhost:8888 > /dev/null; do sleep 1; done
+      run: until curl -sf http://localhost:9000 > /dev/null; do sleep 1; done
 
     - name: Run visual regression tests
       shell: bash

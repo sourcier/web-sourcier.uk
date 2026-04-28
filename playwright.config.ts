@@ -12,12 +12,15 @@ export default defineConfig({
   reporter: process.env.CI
     ? [
         ["dot"],
-        ["html", { outputFolder: "playwright-report", open: "never" }],
+        ["html", { outputFolder: "reports/playwright", open: "never" }],
         ["json", { outputFile: "test-results.json" }],
       ]
-    : "list",
+    : [
+        ["list"],
+        ["html", { outputFolder: "reports/playwright", open: "never" }],
+      ],
   use: {
-    baseURL: "http://localhost:8888",
+    baseURL: "http://localhost:9000",
     contextOptions: { reducedMotion: "reduce" },
     launchOptions: {
       args: ["--force-prefers-reduced-motion"],
