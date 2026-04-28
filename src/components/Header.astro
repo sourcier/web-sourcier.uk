@@ -253,7 +253,7 @@ function isActive(href: string) {
 
     async function handleInput() {
       const query = input.value.trim();
-      if (!query) {
+      if (!query || query.length < 3) {
         resultsList.innerHTML = "";
         return;
       }
@@ -271,7 +271,15 @@ function isActive(href: string) {
       renderResults(data);
     }
 
-    input.addEventListener("input", handleInput);
+    let debounceTimer;
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      if (input.value.trim().length < 3) {
+        resultsList.innerHTML = "";
+        return;
+      }
+      debounceTimer = setTimeout(handleInput, 300);
+    });
 
     input.addEventListener("keydown", (e) => {
       const items = resultsList.querySelectorAll(".search-result");
