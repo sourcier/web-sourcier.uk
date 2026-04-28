@@ -7,9 +7,10 @@
 // NETLIFY_ACCESS_TOKEN in .env
 // Production: works automatically with no extra config
 
+import type { HandlerEvent } from "@netlify/functions";
 import { connectLambda, getStore } from "@netlify/blobs";
 
-const REACTIONS = ["heart", "fire", "bulb", "clap"];
+const REACTIONS = ["heart", "fire", "bulb", "clap"] as const;
 // Matches slugs like "deploying-astro-netlify" — prevents path traversal
 const SLUG_RE = /^[a-z0-9-]+$/;
 
@@ -20,9 +21,10 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-function getReactionsStore(event) {
+function getReactionsStore(event: HandlerEvent & { blobs?: string }) {
   if (event.blobs && event.headers?.["x-nf-site-id"]) {
-    connectLambda(event);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    connectLambda(event as any);
     return getStore("reactions");
   }
 
@@ -37,7 +39,7 @@ function getReactionsStore(event) {
   return getStore("reactions");
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent & { blobs?: string }) => {
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: CORS, body: "" };
   }
@@ -63,7 +65,7 @@ export const handler = async (event) => {
   }
 
   if (event.httpMethod === "POST") {
-    let body;
+    let body: { reaction?: unknown };
     try {
       body = JSON.parse(event.body ?? "{}");
     } catch {
@@ -75,7 +77,7 @@ export const handler = async (event) => {
     }
 
     const reaction = body.reaction;
-    if (!REACTIONS.includes(reaction)) {
+    if (!REACTIONS.includes(reaction as (typeof REACTIONS)[number])) {
       return {
         statusCode: 400,
         headers: CORS,
@@ -83,8 +85,9 @@ export const handler = async (event) => {
       };
     }
 
-    const data = (await store.get(postId, { type: "json" })) ?? {};
-    data[reaction] = (data[reaction] ?? 0) + 1;
+    const data: Record<string, number> =
+      (await store.get(postId, { type: "json" })) ?? {};
+    data[reaction as string] = (data[reaction as string] ?? 0) + 1;
     await store.set(postId, JSON.stringify(data));
 
     return {

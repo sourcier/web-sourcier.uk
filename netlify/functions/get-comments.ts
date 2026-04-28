@@ -4,16 +4,22 @@
 //   APPROVED_COMMENTS_FORM_ID — form ID for the "approved-comments" form in the Netlify Forms dashboard
 //                               (visible in the URL after the first approved comment is posted)
 
+import type { HandlerEvent } from "@netlify/functions";
 import crypto from "node:crypto";
 
-function gravatarHash(email) {
+interface NetlifySubmission {
+  data: Record<string, string>;
+  created_at: string;
+}
+
+function gravatarHash(email: string): string {
   return crypto
     .createHash("md5")
     .update(email.trim().toLowerCase())
     .digest("hex");
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent) => {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -67,7 +73,7 @@ export const handler = async (event) => {
     };
   }
 
-  const submissions = await response.json();
+  const submissions = (await response.json()) as NetlifySubmission[];
 
   const comments = submissions
     .filter((s) => s.data?.postSlug === slug)
@@ -79,7 +85,7 @@ export const handler = async (event) => {
       date: s.data.originalDate || s.created_at,
       emailHash: s.data.email ? gravatarHash(s.data.email) : null,
     }))
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return {
     statusCode: 200,

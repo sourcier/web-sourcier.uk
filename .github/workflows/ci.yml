@@ -55,6 +55,8 @@ jobs:
 
       - run: pnpm lint
 
+      - run: pnpm typecheck:functions
+
       - run: pnpm test
 
   build:
@@ -99,7 +101,7 @@ jobs:
       - run: pnpm build:search
 
       - name: Bundle Netlify functions
-        run: pnpm exec esbuild netlify/functions/*.js --bundle --platform=node --format=esm --outdir=.netlify/functions-built
+        run: pnpm build:functions
 
       - name: Upload built site
         uses: actions/upload-artifact@v4
@@ -149,7 +151,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           msg=$(echo "$DEPLOY_MSG" | head -1)
-          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions .netlify/functions-built --prod --no-build --message "$msg"
+          OUTPUT=$(pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions .netlify/functions-built --prod --no-build --message "$msg" --json)
+          echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -163,7 +166,8 @@ jobs:
         if: github.ref == 'refs/heads/preview'
         run: |
           msg=$(echo "$DEPLOY_MSG" | head -1)
-          pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions .netlify/functions-built --no-build --message "$msg"
+          OUTPUT=$(pnpm --package=netlify-cli dlx netlify deploy --dir=dist --functions .netlify/functions-built --no-build --message "$msg" --json)
+          echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -172,6 +176,29 @@ jobs:
             github.event_name == 'repository_dispatch' && github.event.client_payload.commit_message ||
             github.event_name == 'pull_request' && github.event.pull_request.title ||
             github.event.head_commit.message }}
+
+      - name: Smoke test functions
+        run: |
+          BASE="$DEPLOY_URL/.netlify/functions"
+          fail=0
+
+          check() {
+            local name="$1" url="$2" method="${3:-GET}"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X "$method" "$url")
+            if [ "$STATUS" = "502" ] || [ "$STATUS" = "000" ]; then
+              echo "FAIL [$name] HTTP $STATUS — $url"
+              fail=1
+            else
+              echo "OK   [$name] HTTP $STATUS"
+            fi
+          }
+
+          check "reactions"                "$BASE/reactions?post=smoke-test"
+          check "get-comments"             "$BASE/get-comments?post=smoke-test"
+          check "support-checkout-session" "$BASE/support-checkout-session" "OPTIONS"
+          check "subscribe (preflight)"    "$BASE/subscribe" "OPTIONS"
+
+          exit $fail
 
   lighthouse:
     name: Lighthouse (${{ matrix.form_factor }})

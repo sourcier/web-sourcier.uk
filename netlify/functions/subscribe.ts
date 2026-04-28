@@ -9,13 +9,15 @@
 //   RESEND_WELCOME_TEMPLATE_ID  — (optional) published Resend template ID for the welcome email.
 //                                 Run scripts/create-welcome-template.js once to create + publish it.
 
+import type { HandlerEvent } from "@netlify/functions";
+
 const ALLOWED_ORIGIN = process.env.SITE_URL?.replace(/\/$/, "") ?? "";
 
-function isValidEmail(email) {
+function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent) => {
   const corsHeaders = {
     "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -49,7 +51,7 @@ export const handler = async (event) => {
     };
   }
 
-  let body;
+  let body: { email?: unknown; website?: unknown };
   try {
     body = JSON.parse(event.body ?? "{}");
   } catch {
@@ -60,7 +62,9 @@ export const handler = async (event) => {
     };
   }
 
-  const email = (body.email ?? "").trim().toLowerCase();
+  const email = (typeof body.email === "string" ? body.email : "")
+    .trim()
+    .toLowerCase();
   const honeypot = body.website ?? "";
 
   if (honeypot) {

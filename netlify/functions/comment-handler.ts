@@ -14,16 +14,28 @@
 //   Forms → blog-comments → Form notifications → Add notification
 //   → Outgoing webhook → URL: https://{your-site}/.netlify/functions/comment-handler
 
+import type { HandlerEvent } from "@netlify/functions";
 import crypto from "node:crypto";
 
-function hmac(submissionId, action, secret) {
+interface WebhookPayload {
+  id?: string;
+  created_at?: string;
+  data?: {
+    name?: string;
+    email?: string;
+    comment?: string;
+    postSlug?: string;
+  };
+}
+
+function hmac(submissionId: string, action: string, secret: string): string {
   return crypto
     .createHmac("sha256", secret)
     .update(`${submissionId}:${action}`)
     .digest("hex");
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method not allowed" };
   }
@@ -41,9 +53,9 @@ export const handler = async (event) => {
     return { statusCode: 200, body: "OK" };
   }
 
-  let payload;
+  let payload: WebhookPayload;
   try {
-    payload = JSON.parse(event.body);
+    payload = JSON.parse(event.body ?? "{}");
   } catch {
     return { statusCode: 400, body: "Invalid payload" };
   }
@@ -53,21 +65,13 @@ export const handler = async (event) => {
     return { statusCode: 400, body: "Missing submission id or data" };
   }
 
-  if (data.name && typeof data.name === "string" && data.name.length > 100) {
+  if (data.name && data.name.length > 100) {
     return { statusCode: 400, body: "Name too long" };
   }
-  if (
-    data.comment &&
-    typeof data.comment === "string" &&
-    data.comment.length > 5000
-  ) {
+  if (data.comment && data.comment.length > 5000) {
     return { statusCode: 400, body: "Comment too long" };
   }
-  if (
-    data.postSlug &&
-    typeof data.postSlug === "string" &&
-    data.postSlug.length > 200
-  ) {
+  if (data.postSlug && data.postSlug.length > 200) {
     return { statusCode: 400, body: "Post slug too long" };
   }
 
@@ -120,7 +124,7 @@ at ${submittedAt}:</p>
   return { statusCode: 200, body: "OK" };
 };
 
-function escapeHtml(str) {
+function escapeHtml(str: string): string {
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

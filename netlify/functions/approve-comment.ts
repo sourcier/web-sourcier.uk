@@ -16,16 +16,27 @@
 //   1. Verify the HMAC token
 //   2. Delete the pending submission from the queue
 
+import type { HandlerEvent } from "@netlify/functions";
 import crypto from "node:crypto";
 
-function hmac(submissionId, action, secret) {
+interface NetlifySubmission {
+  data: Record<string, string>;
+  created_at: string;
+}
+
+function hmac(submissionId: string, action: string, secret: string): string {
   return crypto
     .createHmac("sha256", secret)
     .update(`${submissionId}:${action}`)
     .digest("hex");
 }
 
-function verifyToken(submissionId, action, token, secret) {
+function verifyToken(
+  submissionId: string,
+  action: string,
+  token: string,
+  secret: string,
+): boolean {
   const expected = hmac(submissionId, action, secret);
   if (token.length !== expected.length) return false;
   // Constant-time comparison to prevent timing attacks
@@ -35,7 +46,7 @@ function verifyToken(submissionId, action, token, secret) {
   );
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent) => {
   const { action, id, token } = event.queryStringParameters ?? {};
 
   if (!action || !id || !token) {
@@ -116,7 +127,7 @@ export const handler = async (event) => {
     );
   }
 
-  const submission = await submissionRes.json();
+  const submission = (await submissionRes.json()) as NetlifySubmission;
   const { data, created_at } = submission;
 
   const formPayload = new URLSearchParams({
@@ -160,7 +171,7 @@ export const handler = async (event) => {
   );
 };
 
-function htmlPage(statusCode, heading, message) {
+function htmlPage(statusCode: number, heading: string, message: string) {
   const color = statusCode === 200 ? "#257942" : "#e8006a";
   return {
     statusCode,
@@ -185,7 +196,7 @@ function htmlPage(statusCode, heading, message) {
   };
 }
 
-function escapeHtml(str) {
+function escapeHtml(str: string): string {
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

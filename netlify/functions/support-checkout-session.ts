@@ -1,8 +1,16 @@
+import type { HandlerEvent } from "@netlify/functions";
 import Stripe from "stripe";
 
 const TIP_CURRENCY = "gbp";
 
-function getOrigin(event) {
+interface RequestBody {
+  amountPence?: unknown;
+  returnPath?: unknown;
+  receiptEmail?: unknown;
+  source?: unknown;
+}
+
+function getOrigin(event: HandlerEvent): string {
   const headerOrigin = event.headers?.origin?.replace(/\/$/, "");
   if (headerOrigin) {
     return headerOrigin;
@@ -19,7 +27,7 @@ function getOrigin(event) {
   return process.env.SITE_URL?.replace(/\/$/, "") ?? "";
 }
 
-function getCorsHeaders(event) {
+function getCorsHeaders(event: HandlerEvent): Record<string, string> {
   const origin = getOrigin(event);
 
   return {
@@ -29,7 +37,7 @@ function getCorsHeaders(event) {
   };
 }
 
-function getReturnUrl(origin, returnPath) {
+function getReturnUrl(origin: string, returnPath: unknown): string | null {
   if (typeof returnPath !== "string") {
     return null;
   }
@@ -51,19 +59,19 @@ function getReturnUrl(origin, returnPath) {
   }
 }
 
-function parseAmountPence(value) {
+function parseAmountPence(value: unknown): number | null {
   if (!Number.isInteger(value)) {
     return null;
   }
 
-  if (value < 1) {
+  if ((value as number) < 1) {
     return null;
   }
 
-  return value;
+  return value as number;
 }
 
-function parseReceiptEmail(value) {
+function parseReceiptEmail(value: unknown): string | null {
   if (typeof value !== "string") {
     return null;
   }
@@ -80,7 +88,7 @@ function parseReceiptEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null;
 }
 
-function createStripeClient() {
+function createStripeClient(): Stripe | null {
   const secretKey = process.env.STRIPE_SECRET_KEY;
 
   if (!secretKey) {
@@ -90,7 +98,7 @@ function createStripeClient() {
   return new Stripe(secretKey);
 }
 
-export const handler = async (event) => {
+export const handler = async (event: HandlerEvent) => {
   const corsHeaders = getCorsHeaders(event);
 
   if (event.httpMethod === "OPTIONS") {
@@ -107,7 +115,7 @@ export const handler = async (event) => {
   }
 
   if (event.httpMethod === "POST") {
-    let body;
+    let body: RequestBody;
 
     try {
       body = JSON.parse(event.body ?? "{}");
@@ -165,7 +173,8 @@ export const handler = async (event) => {
             typeof body.source === "string"
               ? body.source
               : "support-modal-custom",
-          return_path: body.returnPath,
+          return_path:
+            typeof body.returnPath === "string" ? body.returnPath : "",
         },
       });
 
