@@ -4,9 +4,6 @@ run-name: "[lighthouse] on-demand"
 on:
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   lighthouse:
     name: Lighthouse (${{ matrix.form_factor }})
@@ -20,7 +17,7 @@ jobs:
           - form_factor: desktop
             configPath: .github/lighthouse/desktop.json
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/lighthouse
         with:
