@@ -65,6 +65,7 @@
     "@netlify/edge-functions": "^3.0.6",
     "@playwright/test": "^1.59.1",
     "@typescript-eslint/parser": "^8.58.2",
+    "esbuild": "0.27.4",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
