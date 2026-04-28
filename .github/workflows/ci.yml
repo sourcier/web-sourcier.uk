@@ -181,22 +181,33 @@ jobs:
         run: |
           BASE="$DEPLOY_URL/.netlify/functions"
           fail=0
+          rows=""
 
           check() {
             local name="$1" url="$2" method="${3:-GET}"
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X "$method" "$url")
             if [ "$STATUS" = "502" ] || [ "$STATUS" = "000" ]; then
               echo "FAIL [$name] HTTP $STATUS — $url"
+              rows="$rows| ❌ | \`$name\` | $STATUS |\n"
               fail=1
             else
               echo "OK   [$name] HTTP $STATUS"
+              rows="$rows| ✅ | \`$name\` | $STATUS |\n"
             fi
           }
 
           check "reactions"                "$BASE/reactions?post=smoke-test"
-          check "get-comments"             "$BASE/get-comments?post=smoke-test"
+          check "get-comments"             "$BASE/get-comments?slug=smoke-test"
           check "support-checkout-session" "$BASE/support-checkout-session" "OPTIONS"
-          check "subscribe (preflight)"    "$BASE/subscribe" "OPTIONS"
+          check "subscribe"                "$BASE/subscribe" "OPTIONS"
+
+          {
+            echo "## Function Smoke Tests"
+            echo ""
+            echo "| | Function | HTTP |"
+            echo "| --- | --- | --- |"
+            printf "$rows"
+          } >> "$GITHUB_STEP_SUMMARY"
 
           exit $fail
 
