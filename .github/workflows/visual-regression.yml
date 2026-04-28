@@ -56,7 +56,21 @@ jobs:
           git add src/e2e/__snapshots__/
           if git diff --cached --quiet; then
             echo "No snapshot changes to commit."
+            echo "## Snapshot Update" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "✅ All baselines are up to date — no changes." >> "$GITHUB_STEP_SUMMARY"
           else
+            added=$(git diff --cached --name-only --diff-filter=A | wc -l | tr -d ' ')
+            modified=$(git diff --cached --name-only --diff-filter=M | wc -l | tr -d ' ')
+            deleted=$(git diff --cached --name-only --diff-filter=D | wc -l | tr -d ' ')
+            total=$((added + modified + deleted))
             git commit -m "chore(visual): update snapshots [skip ci]"
             git push
+            echo "## Snapshot Update" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "📸 **$total snapshot(s) updated** and committed." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "| ➕ Added | ✏️ Modified | 🗑️ Deleted | Total |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| $added | $modified | $deleted | $total |" >> "$GITHUB_STEP_SUMMARY"
           fi
