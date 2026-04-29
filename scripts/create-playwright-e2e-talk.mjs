@@ -963,7 +963,7 @@ function addSkillDefinitionSlide(pptx) {
     x: 0.9,
     y: 3.14,
     w: 5.02,
-    h: 1.88,
+    h: 2.02,
     title: "playwright-explore-website/SKILL.md",
     lines: [
       "~/.copilot/skills/",
@@ -990,14 +990,13 @@ function addSkillDefinitionSlide(pptx) {
     "Think of it as a reusable prompt with guardrails, not a test file and not a browser script.",
     {
       x: 1.15,
-      y: 5.57,
+      y: 5.5,
       w: 4.55,
-      h: 0.22,
+      h: 0.5,
       fontFace: FONT.body,
       color: COLORS.ink,
       fontSize: 12.8,
       align: "center",
-      fit: "shrink",
     },
   );
 
@@ -1021,14 +1020,14 @@ function addSkillDefinitionSlide(pptx) {
       "What to capture: flows, likely locators, and expected outcomes.",
       "What to return: concise findings, candidate tests, and cleaned-up artifacts.",
     ],
-    { x: 7.18, y: 3.18, w: 5.0, h: 2.95 },
+    { x: 7.18, y: 3.18, w: 5.0, h: 2.15 },
   );
 
   addCard(slide, {
     x: 7.18,
-    y: 5.28,
+    y: 5.62,
     w: 5.02,
-    h: 0.9,
+    h: 0.65,
     fill: COLORS.pinkSoft,
     line: COLORS.pink,
   });
@@ -1036,14 +1035,13 @@ function addSkillDefinitionSlide(pptx) {
     "The file has four jobs: discovery, setup, execution rules, and output requirements.",
     {
       x: 7.42,
-      y: 5.57,
+      y: 5.72,
       w: 4.54,
-      h: 0.2,
+      h: 0.42,
       fontFace: FONT.body,
       color: COLORS.ink,
       fontSize: 13,
       align: "center",
-      fit: "shrink",
     },
   );
 
@@ -1221,14 +1219,13 @@ function addDemoSlide(pptx) {
     "Runs against http://localhost:9000/ with Playwright MCP controlling a real browser session.",
     {
       x: 1.15,
-      y: 5.58,
+      y: 5.49,
       w: 4.55,
-      h: 0.28,
+      h: 0.5,
       fontFace: FONT.body,
       color: COLORS.ink,
       fontSize: 13,
       align: "center",
-      fit: "shrink",
     },
   );
 
@@ -1296,24 +1293,23 @@ function addDemoSlide(pptx) {
 
   addCard(slide, {
     x: 7.18,
-    y: 5.92,
+    y: 5.9,
     w: 5.02,
-    h: 0.82,
+    h: 0.72,
     fill: COLORS.soft,
     line: COLORS.borderWarm,
   });
   slide.addText(
-    "Key message: AI helps with discovery. Playwright still handles the real automation and verification.",
+    "AI handles discovery. Playwright handles the automation and verification.",
     {
       x: 7.42,
-      y: 6.17,
+      y: 6.04,
       w: 4.54,
-      h: 0.22,
+      h: 0.42,
       fontFace: FONT.body,
       color: COLORS.ink,
-      fontSize: 12.5,
+      fontSize: 13,
       align: "center",
-      fit: "shrink",
     },
   );
 
@@ -1339,7 +1335,7 @@ function addWhyPlaywrightSlide(pptx) {
       "Auto-waiting removes most timing hacks and sleep calls.",
       "TypeScript-first APIs with a clean test runner.",
       "Playwright MCP gives Copilot a real browser to inspect instead of guessing.",
-      "Codegen gives you a fast starting point for real flows.",
+      "Codegen captures raw actions fast. --ui steps through tests live with a DOM inspector.",
       "Trace Viewer makes CI failures debuggable instead of mysterious.",
     ],
     { x: 0.75, y: 2.45, w: 6.15, h: 3.7 },
@@ -1349,13 +1345,14 @@ function addWhyPlaywrightSlide(pptx) {
     x: 7.25,
     y: 2.35,
     w: 5.1,
-    h: 2.05,
+    h: 2.18,
     title: "getting started",
     lines: [
       "pnpm create playwright@latest",
-      "pnpm playwright codegen https://your-app.example",
-      "pnpm playwright test",
-      "pnpm playwright show-trace trace.zip",
+      "pnpm exec playwright codegen https://your-app.example",
+      "pnpm exec playwright test",
+      "pnpm exec playwright test --ui",
+      "pnpm exec playwright show-trace trace.zip",
     ],
   });
 
@@ -1465,13 +1462,13 @@ function addFirstTestSlide(pptx) {
     x: 7.05,
     y: 5.15,
     w: 5.15,
-    h: 1.1,
+    h: 1.3,
     title: "quick scaffold",
     lines: [
       "pnpm create playwright@latest",
-      "pnpm playwright codegen https://your-app.example",
+      "pnpm exec playwright codegen https://your-app.example",
     ],
-    fontSize: 10.5,
+    fontSize: 9.5,
     lineGap: 0.26,
     lineHeight: 0.19,
   });
@@ -1542,7 +1539,7 @@ function addReliabilitySlide(pptx) {
     [
       "waitForTimeout and arbitrary sleeps.",
       "Selectors tied to styling classes.",
-      "Shared test data and leaked state.",
+      "Shared test data and leaked state — tests run in parallel.",
     ],
     { x: 0.9, y: 3.0, w: 5.0, h: 1.0 },
   );
@@ -1590,6 +1587,70 @@ function addReliabilitySlide(pptx) {
   addFooter(slide, "sourcier.uk / Reliability beats raw test count");
 }
 
+function addWaitForResponseSlide(pptx) {
+  const slide = pptx.addSlide();
+
+  addHeader(
+    slide,
+    "Wait for the right signal",
+    "Coordinate clicks and network responses so the test waits for real confirmation.",
+  );
+
+  addCodePanel(slide, {
+    x: 0.55,
+    y: 2.25,
+    w: 7.8,
+    h: 4.2,
+    title: "e2e/checkout.spec.ts",
+    lines: [
+      "await Promise.all([",
+      "  page.waitForResponse(",
+      "    (response) =>",
+      '      response.url().includes("/api/orders") && response.ok(),',
+      "  ),",
+      '  page.getByRole("button", { name: "Place order" }).click(),',
+      "]);",
+      "",
+      'await expect(page.getByText("Order confirmed")).toBeVisible();',
+    ],
+    fontSize: 13,
+    lineGap: 0.3,
+    lineHeight: 0.22,
+  });
+
+  addCard(slide, {
+    x: 8.65,
+    y: 2.25,
+    w: 4.42,
+    h: 4.2,
+    fill: COLORS.elevated,
+    line: COLORS.borderWarm,
+  });
+
+  slide.addText("Why this works", {
+    x: 8.95,
+    y: 2.6,
+    w: 3.8,
+    h: 0.25,
+    fontFace: FONT.heading,
+    bold: true,
+    color: COLORS.ink,
+    fontSize: 22,
+  });
+
+  addBulletList(
+    slide,
+    [
+      "Promise.all fires the click and waits for the response simultaneously — no race condition.",
+      "Filtering by URL and ok() means you wait for the right request, not just any network activity.",
+      "The expect after confirms the UI reflects the response — two assertions for the price of one wait.",
+    ],
+    { x: 8.95, y: 3.05, w: 3.8, h: 3.2 },
+  );
+
+  addFooter(slide, "sourcier.uk / Wait for what the user actually sees");
+}
+
 function addMaintainabilitySlide(pptx) {
   const slide = pptx.addSlide();
 
@@ -1605,7 +1666,8 @@ function addMaintainabilitySlide(pptx) {
       "Use accessible locators first: role, label, text.",
       "Add `data-testid` only when the UI has no good semantic handle.",
       "Extract repeated actions into page objects once two or three tests share them.",
-      "The goal is readable tests and one place to change selectors.",
+      "Move shared setup into fixtures — they compose cleanly and tear down automatically.",
+      "Use storageState to save authenticated browser state and avoid re-logging in across tests.",
     ],
     { x: 0.75, y: 2.45, w: 5.75, h: 3.7 },
   );
@@ -1631,7 +1693,7 @@ function addMaintainabilitySlide(pptx) {
     ],
   });
 
-  addFooter(slide, "sourcier.uk / Maintainability is part of test quality");
+  addFooter(slide, "sourcier.uk / Page objects, fixtures, and storageState");
 }
 
 function addTraceSlide(pptx) {
@@ -1707,12 +1769,130 @@ function addTraceSlide(pptx) {
     h: 1.55,
     title: "debugging commands",
     lines: [
-      "pnpm playwright test --trace=on-first-retry",
-      "pnpm playwright show-trace trace.zip",
+      "pnpm exec playwright test --trace=on-first-retry",
+      "pnpm exec playwright show-trace trace.zip",
     ],
   });
 
   addFooter(slide, "sourcier.uk / CI failures should be inspectable");
+}
+
+function addBeyondTestingSlide(pptx) {
+  const slide = pptx.addSlide();
+
+  addHeader(
+    slide,
+    "Beyond Testing",
+    "Playwright is a browser automation tool, not just a test runner.",
+  );
+
+  const cards = [
+    {
+      title: "Screenshots",
+      body: "Screenshots for visual docs, design reviews, and release notes.",
+      code: ['await page.screenshot({ path: "cover.png", fullPage: true });'],
+    },
+    {
+      title: "API Mocking",
+      body: "Intercept any request and return a fixture — test edge cases without a real backend.",
+      code: [
+        'await page.route("**/api/orders", (route) =>',
+        '  route.fulfill({ json: { status: "confirmed" } })',
+        ");",
+      ],
+    },
+    {
+      title: "PDF Generation",
+      body: "Render any page to PDF with print CSS — invoices, reports, print layouts.",
+      code: ['await page.pdf({ path: "invoice.pdf", format: "A4" });'],
+    },
+    {
+      title: "File Downloads",
+      body: "Intercept and save downloads to verify export flows.",
+      code: [
+        "const [dl] = await Promise.all([",
+        '  page.waitForEvent("download"), exportBtn.click()',
+        "]);",
+        'await dl.saveAs("export.csv");',
+      ],
+    },
+  ];
+
+  const cols = [0.55, 6.9];
+  const rows = [2.1, 4.65];
+  const cardW = 5.95;
+  const cardH = 2.4;
+  const codeFontSize = 10;
+  const codeLineGap = 0.2;
+  const codeLineH = 0.18;
+  const codeInternalPad = 0.18;
+
+  cards.forEach((card, i) => {
+    const x = cols[i % 2];
+    const y = rows[Math.floor(i / 2)];
+    const n = card.code.length;
+    const codePanelH =
+      codeInternalPad + (n - 1) * codeLineGap + codeLineH + 0.18;
+
+    addCard(slide, {
+      x,
+      y,
+      w: cardW,
+      h: cardH,
+      fill: COLORS.elevated,
+      line: COLORS.borderWarm,
+    });
+
+    slide.addText(card.title, {
+      x: x + 0.25,
+      y: y + 0.18,
+      w: cardW - 0.5,
+      h: 0.26,
+      fontFace: FONT.heading,
+      bold: true,
+      color: COLORS.ink,
+      fontSize: 20,
+    });
+
+    slide.addText(card.body, {
+      x: x + 0.25,
+      y: y + 0.52,
+      w: cardW - 0.5,
+      h: 0.44,
+      fontFace: FONT.body,
+      color: COLORS.muted,
+      fontSize: 12,
+      fit: "shrink",
+    });
+
+    const codeY = y + 1.05;
+
+    slide.addShape("roundRect", {
+      x: x + 0.25,
+      y: codeY,
+      w: cardW - 0.5,
+      h: codePanelH,
+      rectRadius: 0.08,
+      fill: { color: COLORS.codeBg },
+      line: { color: "1F1F1F", pt: 1 },
+    });
+
+    card.code.forEach((line, index) => {
+      slide.addText(highlightCodeLine(line), {
+        x: x + 0.5,
+        y: codeY + codeInternalPad + index * codeLineGap,
+        w: cardW - 1.0,
+        h: codeLineH,
+        fontFace: FONT.code,
+        color: CODE_COLORS.base,
+        fontSize: codeFontSize,
+        fit: "shrink",
+        margin: 0,
+      });
+    });
+  });
+
+  addFooter(slide, "sourcier.uk / Any task that needs a real browser");
 }
 
 function addClosingSlide(pptx) {
@@ -1943,8 +2123,10 @@ async function createTalkDeck() {
   addWhyPlaywrightSlide(pptx);
   addFirstTestSlide(pptx);
   addReliabilitySlide(pptx);
+  addWaitForResponseSlide(pptx);
   addMaintainabilitySlide(pptx);
   addTraceSlide(pptx);
+  addBeyondTestingSlide(pptx);
   addClosingSlide(pptx);
 
   await pptx.writeFile({ fileName: talkFile });
