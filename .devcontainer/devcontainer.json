@@ -8,6 +8,13 @@
 
   "postCreateCommand": "corepack enable && corepack prepare pnpm@10.33.2 --activate && pnpm install && pnpm exec playwright install --with-deps chromium && npm install -g netlify-cli",
 
+  // Explicit mounts for agent safety — only the project workspace is writable.
+  // SSH keys are read-only so git push works but the agent can't modify them.
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly"
+  ],
+
   "forwardPorts": [4321, 8888],
   "portsAttributes": {
     "4321": {
