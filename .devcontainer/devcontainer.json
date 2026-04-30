@@ -14,7 +14,7 @@
   // Note: these mounts are local Docker only — Codespaces ignores runArgs and
   // handles SSH/git auth natively, so missing host paths would cause startup failure.
   // Guard with initializeCommand or accept that Codespaces users need SSH set up separately.
-  "initializeCommand": "mkdir -p ~/.ssh && touch ~/.gitconfig",
+  "initializeCommand": "mkdir -p ~/.ssh && touch ~/.gitconfig && test -f .env || touch .env",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly"
