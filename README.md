@@ -113,6 +113,63 @@ These are read by Netlify functions at request time and never embedded in the HT
 | `STRIPE_SECRET_KEY` | Stripe secret key for the checkout function                                                                              |
 | `PREVIEW_PASSCODE`  | Passcode for the `preview` branch deploy                                                                                 |
 
+## Dev Container
+
+The repo ships with a `.devcontainer` configuration for use with [VS Code Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) or [GitHub Codespaces](https://github.com/features/codespaces). Running inside the container sandboxes the environment — your host filesystem, SSH keys, and credentials are not accessible unless explicitly mounted.
+
+### What's included
+
+- Node.js 24 (`lts/krypton`)
+- pnpm 10.33.2 (via corepack)
+- Netlify CLI
+- Playwright (Chromium + system dependencies)
+- GitHub Copilot (VS Code extensions pre-installed)
+- VS Code extensions: Astro, ESLint, Prettier, Playwright
+
+### Required secret
+
+Create a **fine-grained GitHub PAT** at [github.com/settings/tokens](https://github.com/settings/personal-access-tokens/new) with:
+
+- **Repository access:** `sourcier/sourcier.uk-content` (read-only Contents)
+- **Account permissions:** Copilot Requests (read-only)
+
+Add it as a secret named `GH_PAT` in:
+
+- **Codespaces:** [github.com/settings/codespaces](https://github.com/settings/codespaces)
+- **Dev Containers (local):** VS Code user secrets via the Dev Containers extension
+
+### Opening in a container
+
+**VS Code:** `Cmd+Shift+P` → **Dev Containers: Reopen in Container**
+
+**Codespaces:** Click **Code → Codespaces → Create codespace** on GitHub
+
+> If you update the `GH_PAT` secret, use **Dev Containers: Rebuild Container** (not Restart) to inject the new value.
+
+### Using GitHub Copilot
+
+The `GitHub.copilot` and `GitHub.copilot-chat` extensions are pre-installed. Copilot authenticates automatically via the `GH_PAT` secret — no separate sign-in required.
+
+Open the Copilot Chat panel with `Ctrl+Shift+I` (or `Cmd+Shift+I` on Mac) and use agent mode (`@workspace`) for codebase-aware assistance.
+
+### Connecting from your host terminal
+
+The container is a standard Docker container. You can attach a shell directly from your Mac without opening VS Code:
+
+```sh
+# Find the container name
+docker ps --format "table {{.Names}}\t{{.Image}}" | grep sourcier
+
+# Open a shell at the workspace root
+docker exec -it <container-name> zsh -c "cd /workspaces/sourcier.uk && zsh"
+```
+
+Add this alias to your host `.aliases` for quick access:
+
+```zsh
+alias sourcier='docker exec -it $(docker ps --filter name=sourcier --format "{{.Names}}" | head -1) zsh -c "cd /workspaces/sourcier.uk && zsh"'
+```
+
 ## License
 
 [MIT](LICENSE)

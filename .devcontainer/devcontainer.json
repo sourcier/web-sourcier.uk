@@ -43,7 +43,7 @@
 
   "secrets": {
     "GH_PAT": {
-      "description": "GitHub PAT with read access to sourcier/sourcier.uk-content. Required for pnpm build:content:fetch.",
+      "description": "Fine-grained GitHub PAT with read access to sourcier/sourcier.uk-content and the 'Copilot Requests' permission. Used for content fetching and Copilot CLI authentication.",
       "documentationUrl": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
     },
     "NETLIFY_AUTH_TOKEN": {
@@ -58,7 +58,9 @@
         "astro-build.astro-vscode",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "ms-playwright.playwright"
+        "ms-playwright.playwright",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
       ],
       "settings": {
         "editor.formatOnSave": true,
