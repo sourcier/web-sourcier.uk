@@ -12,6 +12,9 @@ RUN PW_VERSION=$(node -e "console.log(require('/tmp/package.json').devDependenci
 # Enable corepack and install pnpm
 RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
+# Set zsh as the default shell for the node user
+RUN chsh -s /bin/zsh node
+
 # Configure pnpm store outside the workspace so Vite doesn't watch it.
 # Without this, the store inside the project burns through all inotify
 # watchers and Vite crashes with ENOSPC.
