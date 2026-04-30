@@ -7,7 +7,12 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  "postCreateCommand": "sh .devcontainer/post-create.sh",
+  // onCreateCommand runs once at prebuild time — baked into the Codespaces snapshot.
+  // pnpm install must precede playwright install so the binary resolves correctly.
+  "onCreateCommand": "pnpm install && pnpm exec playwright install chromium",
+  // updateContentCommand re-runs on every new codespace (picks up lockfile changes).
+  // Chromium is already present from the prebuild snapshot so no reinstall needed.
+  "updateContentCommand": "pnpm install",
 
   // Explicit mounts for agent safety — only the project workspace is writable.
   // SSH keys are read-only so git push works but the agent can't modify them.
