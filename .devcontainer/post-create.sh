@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-# Move the pnpm store outside the workspace so Vite doesn't watch it.
-# Without this, the store inside the project burns through all inotify
-# watchers and Vite crashes with ENOSPC.
-pnpm config set store-dir /home/node/.pnpm-store --global
+pnpm install
+
+# Install the Chromium binary that matches the installed @playwright/test version.
+# The browser is cached in a named Docker volume (playwright-cache) so it
+# survives container rebuilds and is only re-downloaded when the version changes.
+pnpm exec playwright install chromium

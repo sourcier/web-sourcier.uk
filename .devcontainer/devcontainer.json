@@ -1,6 +1,6 @@
 {
   "name": "sourcier.uk",
-  "build": { "dockerfile": "Dockerfile" },
+  "build": { "dockerfile": "Dockerfile", "context": ".." },
   "runArgs": ["--env-file", ".env"],
 
   "features": {
@@ -17,7 +17,8 @@
   "initializeCommand": "mkdir -p ~/.ssh && touch ~/.gitconfig && test -f .env || touch .env",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly"
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly",
+    "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume"
   ],
 
   "forwardPorts": [8888, 4321],
