@@ -32,8 +32,7 @@
   },
 
   "remoteEnv": {
-    "SHOW_DRAFTS": "true",
-    "GITHUB_PAT": "${localEnv:GH_PAT}"
+    "SHOW_DRAFTS": "true"
   },
 
   "secrets": {
