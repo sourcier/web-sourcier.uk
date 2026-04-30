@@ -1,30 +1,34 @@
 {
   "name": "sourcier.uk",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "build": { "dockerfile": "Dockerfile" },
+  "runArgs": ["--env-file", ".env"],
 
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  "postCreateCommand": "corepack enable && corepack prepare pnpm@10.33.2 --activate && pnpm install && pnpm exec playwright install --with-deps chromium && npm install -g netlify-cli",
+  "postCreateCommand": "sh .devcontainer/post-create.sh",
 
   // Explicit mounts for agent safety — only the project workspace is writable.
   // SSH keys are read-only so git push works but the agent can't modify them.
+  // Note: these mounts are local Docker only — Codespaces ignores runArgs and
+  // handles SSH/git auth natively, so missing host paths would cause startup failure.
+  // Guard with initializeCommand or accept that Codespaces users need SSH set up separately.
+  "initializeCommand": "mkdir -p ~/.ssh && touch ~/.gitconfig",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly"
   ],
 
-  "forwardPorts": [4321, 8888],
+  "forwardPorts": [8888, 4321],
   "portsAttributes": {
-    "4321": {
-      "label": "Astro Dev Server",
-      "onAutoForward": "notify"
-    },
     "8888": {
       "label": "Netlify Dev",
-      "onAutoForward": "openBrowser"
+      "onAutoForward": "notify"
     }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "notify"
   },
 
   "remoteEnv": {
@@ -36,6 +40,10 @@
     "GH_PAT": {
       "description": "GitHub PAT with read access to sourcier/sourcier.uk-content. Required for pnpm build:content:fetch.",
       "documentationUrl": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
+    },
+    "NETLIFY_AUTH_TOKEN": {
+      "description": "Netlify personal access token. Required for netlify dev and netlify CLI commands.",
+      "documentationUrl": "https://app.netlify.com/user/applications"
     }
   },
 
@@ -53,7 +61,8 @@
         "[astro]": {
           "editor.defaultFormatter": "astro-build.astro-vscode"
         },
-        "terminal.integrated.defaultProfile.linux": "zsh"
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "remote.autoForwardPortsSource": "output"
       }
     }
   }
