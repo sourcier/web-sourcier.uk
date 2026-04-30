@@ -15,6 +15,10 @@ RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 # Set zsh as the default shell for the node user
 RUN chsh -s /bin/zsh node
 
+# Symlink /Users/node → /home/node so macOS-style absolute paths in dotfiles
+# (e.g. /Users/node/.oh-my-zsh) resolve correctly inside the Linux container.
+RUN mkdir -p /Users && ln -s /home/node /Users/node
+
 # Configure pnpm store outside the workspace so Vite doesn't watch it.
 # Without this, the store inside the project burns through all inotify
 # watchers and Vite crashes with ENOSPC.

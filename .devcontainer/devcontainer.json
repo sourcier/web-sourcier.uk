@@ -14,10 +14,15 @@
   // Note: these mounts are local Docker only — Codespaces ignores runArgs and
   // handles SSH/git auth natively, so missing host paths would cause startup failure.
   // Guard with initializeCommand or accept that Codespaces users need SSH set up separately.
-  "initializeCommand": "mkdir -p ~/.ssh && touch ~/.gitconfig && test -f .env || touch .env",
+  "initializeCommand": "mkdir -p ~/.ssh ~/.oh-my-zsh/custom && touch ~/.gitconfig ~/.zshrc ~/.zsh ~/.aliases ~/.p10k.zsh && test -f .env || touch .env",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
     "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.zshrc,target=/home/node/.zshrc,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.zsh,target=/home/node/.zsh,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.aliases,target=/home/node/.aliases,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.p10k.zsh,target=/home/node/.p10k.zsh,type=bind,consistency=cached,readonly",
+    "source=${localEnv:HOME}/.oh-my-zsh/custom,target=/home/node/.oh-my-zsh/custom,type=bind,consistency=cached,readonly",
     "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume"
   ],
 
