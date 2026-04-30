@@ -8,8 +8,32 @@
   },
 
   // onCreateCommand runs once at prebuild time — baked into the Codespaces snapshot.
+  //
+  // Deno setup — why it's done this way:
+  //   Netlify CLI uses @netlify/edge-bundler to run edge functions, which requires Deno.
+  //   edge-bundler downloads Deno itself into ~/.config/netlify/deno-cli/ and checks a
+  //   version.txt file in that directory before deciding whether to re-download.
+  //   If version.txt is missing or doesn't satisfy DENO_VERSION_RANGE, it downloads fresh —
+  //   and that download is always x86-64, which crashes on arm64 (Apple Silicon) with:
+  //     "rosetta error: failed to open elf at /lib64/ld-linux-x86-64.so.2"
+  //
+  //   The fix: install Deno via the official installer (which detects arch correctly),
+  //   copy the binary to the edge-bundler cache path, and write version.txt so
+  //   getCachedBinary() in bridge.js accepts it and skips the download entirely.
+  //
+  //   Deno is installed here (not in the Dockerfile) so the installer runs inside the
+  //   live container and detects the correct architecture (arm64 vs x86-64).
+  //   Installing in the Dockerfile runs under emulation and always produces an x86-64 binary.
+  //
+  //   The version (2.4.2) is the floor of DENO_VERSION_RANGE = '^2.4.2' defined in:
+  //     node_modules/@netlify/edge-bundler/dist/node/bridge.js
+  //   If Netlify CLI upgrades this range, bump the version here and in version.txt to match.
+  //
+  //   The -y flag suppresses the "Edit shell configs to add deno to the PATH?" prompt
+  //   (added in github.com/denoland/deno/issues/25931). --no-modify-path skips PATH edits.
+  //
   // pnpm install must precede playwright install so the binary resolves correctly.
-  "onCreateCommand": "pnpm install && pnpm exec playwright install chromium",
+  "onCreateCommand": "curl -fsSL https://deno.land/install.sh | sh -s -- v2.4.2 -y --no-modify-path && mkdir -p /home/node/.config/netlify/deno-cli && cp /home/node/.deno/bin/deno /home/node/.config/netlify/deno-cli/deno && echo '2.4.2' > /home/node/.config/netlify/deno-cli/version.txt && pnpm install && pnpm exec playwright install chromium",
   // updateContentCommand re-runs on every new codespace (picks up lockfile changes).
   // Chromium is already present from the prebuild snapshot so no reinstall needed.
   "updateContentCommand": "pnpm install",
@@ -35,11 +59,11 @@
   "portsAttributes": {
     "8888": {
       "label": "Netlify Dev",
-      "onAutoForward": "notify"
+      "onAutoForward": "silent"
     }
   },
   "otherPortsAttributes": {
-    "onAutoForward": "notify"
+    "onAutoForward": "silent"
   },
 
   "remoteEnv": {
