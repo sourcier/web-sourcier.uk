@@ -29,11 +29,14 @@
   //     node_modules/@netlify/edge-bundler/dist/node/bridge.js
   //   If Netlify CLI upgrades this range, bump the version here and in version.txt to match.
   //
+  //   The install is guarded by a version check so rebuilds skip the download when the
+  //   correct version is already present. The Netlify cache copy always runs (fast file op).
+  //
   //   The -y flag suppresses the "Edit shell configs to add deno to the PATH?" prompt
   //   (added in github.com/denoland/deno/issues/25931). --no-modify-path skips PATH edits.
   //
   // pnpm install must precede playwright install so the binary resolves correctly.
-  "onCreateCommand": "curl -fsSL https://deno.land/install.sh | sh -s -- v2.4.2 -y --no-modify-path && mkdir -p /home/node/.config/netlify/deno-cli && cp /home/node/.deno/bin/deno /home/node/.config/netlify/deno-cli/deno && echo '2.4.2' > /home/node/.config/netlify/deno-cli/version.txt && pnpm install && pnpm exec playwright install chromium",
+  "onCreateCommand": "DENO_TARGET_VERSION=v2.4.2 && DENO_BIN=/home/node/.deno/bin/deno && CURRENT=$(\"$DENO_BIN\" --version 2>/dev/null | awk 'NR==1{print $2}') && if [ \"$CURRENT\" != \"2.4.2\" ]; then curl -fsSL https://deno.land/install.sh | sh -s -- $DENO_TARGET_VERSION -y --no-modify-path; fi && mkdir -p /home/node/.config/netlify/deno-cli && cp \"$DENO_BIN\" /home/node/.config/netlify/deno-cli/deno && echo '2.4.2' > /home/node/.config/netlify/deno-cli/version.txt && pnpm install && pnpm exec playwright install chromium",
   // updateContentCommand re-runs on every new codespace (picks up lockfile changes).
   // Chromium is already present from the prebuild snapshot so no reinstall needed.
   "updateContentCommand": "pnpm install",
@@ -54,7 +57,8 @@
     "source=${localEnv:HOME}/.oh-my-zsh/custom,target=/home/node/.oh-my-zsh/custom,type=bind,consistency=cached,readonly",
     "source=${localEnv:HOME}/.zsh_history,target=/home/node/.zsh_history,type=bind,consistency=cached",
     "source=${localEnv:HOME}/workspace/dotfiles,target=/workspaces/dotfiles,type=bind,consistency=cached",
-    "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume"
+    "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume",
+    "source=deno-cache,target=/home/node/.deno,type=volume"
   ],
 
   "forwardPorts": [8888, 4321],

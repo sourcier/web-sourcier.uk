@@ -34,9 +34,9 @@ RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions /home/n
 USER node
 RUN pnpm config set store-dir /home/node/.pnpm-store --global
 
-# Pre-create the Playwright cache directory as the node user so the named
-# Docker volume (playwright-cache) is initialised with the right ownership.
-# Without this the volume is created root-owned and post-create fails
-# with EACCES when trying to install the Chromium binary.
-RUN mkdir -p /home/node/.cache/ms-playwright
+# Pre-create the Playwright and Deno cache directories as the node user so the
+# named Docker volumes (playwright-cache, deno-cache) are initialised with the
+# right ownership. Without this the volumes are created root-owned and
+# onCreateCommand fails with EACCES.
+RUN mkdir -p /home/node/.cache/ms-playwright /home/node/.deno/bin
 USER root
