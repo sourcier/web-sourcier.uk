@@ -89,14 +89,9 @@
   "pnpm": {
     "overrides": {
       "@expressive-code/core": "0.41.7",
-      "vite": ">=7.3.2",
-      "defu": ">=6.1.5",
       "lodash-es": ">=4.18.0",
       "yaml": ">=2.8.3",
-      "dompurify": ">=3.4.0",
-      "fast-xml-parser": ">=5.7.0",
-      "uuid": ">=14.0.0",
-      "postcss": ">=8.5.10"
+      "uuid": ">=14.0.0"
     },
     "patchedDependencies": {
       "expressive-code-color-chips": "patches/expressive-code-color-chips.patch"
