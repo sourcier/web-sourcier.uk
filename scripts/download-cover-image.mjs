@@ -62,12 +62,21 @@ if (!photoInput) {
 
 function extractPhotoId(input) {
   // Handle slug-style URLs: /photos/description-words-PHOTOID
-  // The ID is the last hyphen-separated segment (alphanumeric, mixed case)
+  // The ID is the trailing run of hyphen-separated segments that contain uppercase letters.
+  // Slug words are all lowercase; the ID starts where uppercase chars appear.
   const path = input.replace(/^https?:\/\/unsplash\.com\/photos\//, "");
   const segments = path.split("-");
-  // The last segment is always the ID if it looks like a short alphanumeric code
-  const last = segments[segments.length - 1];
-  return last && /^[a-zA-Z0-9_]{6,}$/.test(last) ? last : path;
+
+  let idStartIndex = segments.length - 1;
+  for (let i = segments.length - 1; i >= 0; i--) {
+    if (/[A-Z]/.test(segments[i])) {
+      idStartIndex = i;
+    } else {
+      break;
+    }
+  }
+
+  return segments.slice(idStartIndex).join("-");
 }
 
 async function fetchPhotoMeta(photoId) {
@@ -166,9 +175,8 @@ async function main() {
     `  alt: "${resolvedAlt}"`,
     `credits:`,
     `  - label: "Cover photo"`,
-    `    name: "${resolvedName}"`,
+    `    text: "${resolvedName} on Unsplash"`,
     `    url: "${photographerUrl}"`,
-    `    extra: 'via <a href="${unsplashPhotoUrl}">Unsplash</a>'`,
   ].join("\n");
 
   console.log("\n─────────────────────────────────────────────────");

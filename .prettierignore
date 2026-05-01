@@ -3,7 +3,6 @@
 .tmp
 collections/posts
 deno.lock
-.devcontainer/devcontainer-lock.json
 dist
 node_modules
 public/pagefind

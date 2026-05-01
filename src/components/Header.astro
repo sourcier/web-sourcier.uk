@@ -197,6 +197,16 @@ function isActive(href: string) {
       activeIndex = -1;
     }
 
+    function resultBreadcrumb(url) {
+      const segments = url
+        .split("/")
+        .filter((s) => s && s !== "page" && !/^\d+$/.test(s))
+        .map((s) =>
+          s.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+        );
+      return segments.join(" › ");
+    }
+
     function renderResults(results) {
       activeIndex = -1;
       if (!results.length) {
@@ -211,6 +221,7 @@ function isActive(href: string) {
           <a href="${r.url}" class="search-result__link" tabindex="-1">
             ${r.meta?.image ? `<img src="${r.meta.image}" alt="" class="search-result__thumb" aria-hidden="true" />` : '<div class="search-result__thumb search-result__thumb--placeholder"></div>'}
             <div class="search-result__body">
+              <span class="search-result__breadcrumb">${resultBreadcrumb(r.url)}</span>
               <span class="search-result__title">${r.meta?.title ?? "Untitled"}</span>
               ${r.excerpt ? `<span class="search-result__excerpt">${r.excerpt}</span>` : ""}
             </div>

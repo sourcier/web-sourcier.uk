@@ -1904,6 +1904,16 @@ h6,
   min-width: 0;
 }
 
+.search-result__breadcrumb {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .search-result__title {
   display: block;
   font-family: "Barlow Condensed", sans-serif;
