@@ -186,6 +186,12 @@ Add this alias to your host `.aliases` for quick access:
 alias sourcier='docker exec -it $(docker ps --filter name=sourcier --format "{{.Names}}" | head -1) zsh -c "cd /workspaces/sourcier.uk && zsh"'
 ```
 
+### Dotfiles in the workspace (local only)
+
+The workspace file (`sourcier.code-workspace`) includes a dotfiles folder entry pointing to `/workspaces/dotfiles`. The dotfiles repo (`~/workspace/dotfiles` on the host) is bind-mounted into the container at that path so the folder appears and is editable in VS Code inside the container.
+
+VS Code will show the warning **"workspace contains an absolute folder path"** when opening in a container. This is expected and harmless — the mount ensures the path exists inside the container at the same absolute location. In Codespaces, `initializeCommand` creates an empty stub at that path so the mount does not cause a startup failure.
+
 ## License
 
 [MIT](LICENSE)
