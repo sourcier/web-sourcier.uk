@@ -146,6 +146,22 @@ Add it as a secret named `GH_PAT` in:
 
 > If you update the `GH_PAT` secret, use **Dev Containers: Rebuild Container** (not Restart) to inject the new value.
 
+#### Faster builds with BuildKit
+
+The Dev Containers extension uses BuildKit for faster, layer-cached image builds if `docker buildx` is available.
+
+**Docker Desktop** includes `buildx` out of the box — no extra steps needed.
+
+**Podman Desktop** doesn't bundle it by default. Install it manually:
+
+```sh
+brew install docker-buildx
+mkdir -p ~/.docker/cli-plugins
+ln -sf $(brew --prefix)/opt/docker-buildx/bin/docker-buildx ~/.docker/cli-plugins/docker-buildx
+```
+
+This is optional — builds work without it.
+
 ### Using GitHub Copilot
 
 The `GitHub.copilot` and `GitHub.copilot-chat` extensions are pre-installed. Copilot authenticates automatically via the `GH_PAT` secret — no separate sign-in required.
