@@ -25,6 +25,9 @@ if (existsSync(envFile)) {
   }
 }
 
+const args = process.argv.slice(2);
+const isDebug = args.includes("--debug");
+
 const apiKey = process.env.RESEND_API_KEY;
 const segmentId = process.env.RESEND_SEGMENT_ID;
 const topicId = process.env.RESEND_TOPIC_ID;
@@ -214,28 +217,45 @@ function printPreview() {
 }
 
 async function sendBroadcast() {
+  const payload = {
+    name: title,
+    from: FROM,
+    subject: SUBJECT,
+    html: buildHtml(),
+    text: buildText(),
+    segment_id: segmentId,
+    ...(topicId ? { topic_id: topicId } : {}),
+  };
+
+  if (isDebug) {
+    console.log("\n[debug] POST /broadcasts payload:");
+    console.log(JSON.stringify({ ...payload, html: "<omitted>" }, null, 2));
+  }
+
   const createRes = await fetch(`${RESEND_API}/broadcasts`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      name: title,
-      from: FROM,
-      subject: SUBJECT,
-      html: buildHtml(),
-      text: buildText(),
-      segment_id: segmentId,
-      ...(topicId ? { topic_id: topicId } : {}),
-    }),
+    body: JSON.stringify(payload),
   });
 
-  const created = await createRes.json().catch(() => ({}));
+  const rawBody = await createRes.text();
+  if (isDebug) {
+    console.log(`\n[debug] POST /broadcasts → ${createRes.status}`);
+    console.log(rawBody);
+  }
+
+  let created;
+  try {
+    created = JSON.parse(rawBody);
+  } catch {
+    created = {};
+  }
+
   if (!createRes.ok) {
-    throw new Error(
-      `Resend API error (${createRes.status}): ${JSON.stringify(created)}`,
-    );
+    throw new Error(`Resend API error (${createRes.status}): ${rawBody}`);
   }
 
   const sendRes = await fetch(`${RESEND_API}/broadcasts/${created.id}/send`, {
@@ -243,11 +263,16 @@ async function sendBroadcast() {
     headers: { Authorization: `Bearer ${apiKey}` },
   });
 
-  const sent = await sendRes.json().catch(() => ({}));
-  if (!sendRes.ok) {
-    throw new Error(
-      `Resend send error (${sendRes.status}): ${JSON.stringify(sent)}`,
+  const rawSendBody = await sendRes.text();
+  if (isDebug) {
+    console.log(
+      `\n[debug] POST /broadcasts/${created.id}/send → ${sendRes.status}`,
     );
+    console.log(rawSendBody);
+  }
+
+  if (!sendRes.ok) {
+    throw new Error(`Resend send error (${sendRes.status}): ${rawSendBody}`);
   }
 
   return created;
