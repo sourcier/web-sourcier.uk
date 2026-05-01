@@ -13,6 +13,7 @@ import { pluginCollapsibleCodeBlocks } from "./src/plugins/expressive-code-colla
 
 export default defineConfig({
   site: "https://sourcier.uk",
+  server: { host: true },
   integrations: [
     expressiveCode({
       themes: ["one-light", "one-dark-pro"],
@@ -20,7 +21,6 @@ export default defineConfig({
         pluginLineNumbers(),
         pluginCollapsibleCodeBlocks(),
         pluginColorChips(),
-        // @ts-expect-error — plugin built against @expressive-code/core@0.40.2, types are compatible at runtime
         pluginFileIcons(),
       ],
       defaultProps: {

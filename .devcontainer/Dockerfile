@@ -1,11 +1,15 @@
 FROM mcr.microsoft.com/devcontainers/javascript-node:24
 
+ARG DOTFILES_REPO=https://github.com/sourcier/dotfiles.git
+ARG DOTFILES_REF=main
+
 # Copy package.json so we can read the Playwright version dynamically
 COPY package.json /tmp/package.json
 
-# Install Playwright system dependencies (apt packages only — browser binary installed in post-create.sh)
+# Install Playwright system dependencies and rsync (used by bootstrap.sh).
 # Version is read from package.json so it stays in sync automatically when @playwright/test is upgraded
-RUN PW_VERSION=$(node -e "console.log(require('/tmp/package.json').devDependencies['@playwright/test'].replace(/[\\^~]/, ''))") \
+RUN apt-get update && apt-get install -y --no-install-recommends rsync \
+ && PW_VERSION=$(node -e "console.log(require('/tmp/package.json').devDependencies['@playwright/test'].replace(/[\\^~]/, ''))") \
  && npx -y "playwright@${PW_VERSION}" install-deps chromium \
  && rm -rf /var/lib/apt/lists/* /tmp/package.json
 
@@ -20,9 +24,9 @@ RUN chsh -s /bin/zsh node
 RUN mkdir -p /Users && ln -s /home/node /Users/node
 
 # Install Oh My Zsh plugins and Powerlevel10k theme into the image.
-# In local containers these are overlaid by the ~/.oh-my-zsh/custom bind mount.
-# In Codespaces (no bind mounts) these are the live copies, ensuring the
-# terminal works before the dotfiles repo has been cloned.
+# These are subsequently overlaid by the dotfiles bootstrap below, which rsyncs
+# the repo's .oh-my-zsh/custom into place. They're cloned here first so they
+# exist as a fallback and to avoid re-downloading on every bootstrap run.
 RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions /home/node/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
  && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting /home/node/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting \
  && git clone --depth=1 https://github.com/romkatv/powerlevel10k /home/node/.oh-my-zsh/custom/themes/powerlevel10k \
@@ -33,6 +37,16 @@ RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions /home/n
 # watchers and Vite crashes with ENOSPC.
 USER node
 RUN pnpm config set store-dir /home/node/.pnpm-store --global
+
+# Clone the dotfiles repo and run bootstrap.sh to rsync all dotfiles into $HOME.
+# SKIP_VERIFY=1 skips the verify_shell_startup step (runs zsh -lic which is slow
+# and pointless in a headless Docker build context).
+# The git config override fixes the macOS-absolute excludesFile path baked into .gitconfig.
+RUN TMP=$(mktemp -d) \
+ && git clone --depth=1 --branch "${DOTFILES_REF}" "${DOTFILES_REPO}" "${TMP}" \
+ && cd "${TMP}" && SKIP_VERIFY=1 ./bootstrap.sh \
+ && git config --global core.excludesFile ~/.gitignore \
+ && rm -rf "${TMP}"
 
 # Pre-create the Playwright and Deno cache directories as the node user so the
 # named Docker volumes (playwright-cache, deno-cache) are initialised with the

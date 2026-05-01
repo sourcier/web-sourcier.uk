@@ -41,20 +41,13 @@
   // Chromium is already present from the prebuild snapshot so no reinstall needed.
   "updateContentCommand": "pnpm install",
 
-  // Explicit mounts for agent safety — only the project workspace is writable.
-  // SSH keys are read-only so git push works but the agent can't modify them.
-  // Note: these mounts are local Docker only — Codespaces ignores runArgs and
-  // handles SSH/git auth natively, so missing host paths would cause startup failure.
-  // Guard with initializeCommand or accept that Codespaces users need SSH set up separately.
-  "initializeCommand": "test -n \"$CODESPACES\" || (mkdir -p ~/.ssh ~/.oh-my-zsh/custom && touch ~/.gitconfig ~/.zshrc ~/.zsh ~/.aliases ~/.p10k.zsh ~/.zsh_history); test -z \"$CODESPACES\" || mkdir -p ~/workspace/dotfiles; test -f .env || touch .env",
+  // Most shell and git dotfiles are baked into the image during Docker build.
+  // The remaining mounts are SSH (so push works locally), shell history (so it
+  // persists across rebuilds), the editable dotfiles workspace checkout, and
+  // cache volumes that should survive rebuilds.
+  "initializeCommand": "test -n \"$CODESPACES\" || (mkdir -p ~/.ssh && touch ~/.zsh_history); test -f .env || touch .env",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.zshrc,target=/home/node/.zshrc,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.zsh,target=/home/node/.zsh,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.aliases,target=/home/node/.aliases,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.p10k.zsh,target=/home/node/.p10k.zsh,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.oh-my-zsh/custom,target=/home/node/.oh-my-zsh/custom,type=bind,consistency=cached,readonly",
     "source=${localEnv:HOME}/.zsh_history,target=/home/node/.zsh_history,type=bind,consistency=cached",
     "source=${localEnv:HOME}/workspace/dotfiles,target=/workspaces/dotfiles,type=bind,consistency=cached",
     "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume",
