@@ -4,8 +4,8 @@ import { test, expect } from "@playwright/test";
 // Run `pnpm test:visual:update` to regenerate baselines after intentional changes.
 
 // dynamicSelectors: elements that change when new content is published.
-// Hidden via CSS visibility:hidden (not Playwright mask) so they stay in the
-// layout — preserving heights and preventing position-shift ripple on sections below.
+// Hidden via CSS display:none so their height is always zero — prevents page-height
+// drift when new content causes a hidden section to grow taller between runs.
 const routes = [
   {
     name: "home",
@@ -23,13 +23,16 @@ const routes = [
   },
   {
     name: "blog-post",
-    path: "/blog/how-this-blog-was-built",
+    path: "/blog/markdown-test",
+    // Stable syntax-reference article — no series callout, no living content.
     // Clip to just before the footer so height is deterministic (sub-pixel jitter ~0.9px
     // between runs is absorbed by the floor(y/16) quantisation).
     // maxDiffPixelRatio 0.05: Chromium font anti-aliasing produces ~2% differing pixels
     // across the text-heavy article body between launches; 5% still catches real regressions.
     clipToContent: true,
     maxDiffPixelRatio: 0.05,
+    // TagsSidebar queries the live collection and shows per-tag post counts.
+    dynamicSelectors: [".tags-sidebar"],
   },
   { name: "about", path: "/about" },
   { name: "contact", path: "/contact" },
@@ -53,7 +56,13 @@ const routes = [
   {
     name: "tag-detail",
     path: "/tags/astro",
-    dynamicSelectors: [".featured-post", ".topic-stats", ".blog-grid-section"],
+    dynamicSelectors: [
+      ".topic-overview__title", // "X posts about Astro" — changes with every new post
+      ".featured-post",
+      ".topic-stats",
+      ".related-tags", // tag co-occurrence list — changes when tag combinations change
+      ".blog-grid-section",
+    ],
   },
   { name: "404", path: "/does-not-exist" },
 ];
@@ -115,7 +124,7 @@ for (const {
     if (dynamicSelectors?.length) {
       await page.addStyleTag({
         content: dynamicSelectors
-          .map((sel: string) => `${sel} { visibility: hidden !important; }`)
+          .map((sel: string) => `${sel} { display: none !important; }`)
           .join("\n"),
       });
     }
