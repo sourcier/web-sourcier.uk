@@ -12,6 +12,11 @@ jobs:
   visual:
     name: Visual Regression (${{ inputs.update_snapshots && 'update' || 'compare' }})
     runs-on: ubuntu-latest
+    # Pin to the same Playwright Docker image locally and in CI so font rendering is identical.
+    # Image version must match the @playwright/test version in pnpm-lock.yaml.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
     permissions:
       contents: write
     steps:
@@ -21,9 +26,10 @@ jobs:
         with:
           version: latest
 
+      # Node.js is provided by the Playwright container; setup-node is only used for pnpm caching.
       - uses: actions/setup-node@v6
         with:
-          node-version: lts/krypton
+          node-version-file: .nvmrc
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
