@@ -34,7 +34,8 @@ runs:
           pnpm test:visual:update || true
         else
           # Skip comparison if no linux baselines exist yet
-          BASELINE_COUNT=$(find src/e2e/__snapshots__ -name "*-linux.png" 2>/dev/null | wc -l | tr -d ' ')
+          ARCH_FOLDER=$(node -e "process.stdout.write(process.platform + '-' + process.arch)")
+          BASELINE_COUNT=$(find src/e2e/__snapshots__ -path "*/${ARCH_FOLDER}/*.png" 2>/dev/null | wc -l | tr -d ' ')
           if [ "$BASELINE_COUNT" = "0" ]; then
             echo "No baselines found — run the Visual Regression workflow with update_snapshots=true to generate them."
             exit 0

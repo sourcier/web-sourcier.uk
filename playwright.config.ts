@@ -4,9 +4,8 @@ export default defineConfig({
   testDir: "./src/e2e",
   outputDir: "./test-results",
   snapshotDir: "./src/e2e/__snapshots__",
-  // Include {platform} so macOS (darwin) and Linux each compare against their own baselines
-  snapshotPathTemplate:
-    "{snapshotDir}/{testFileName}-snapshots/{arg}-{projectName}-{platform}{ext}",
+  // Folder per platform+arch so baselines are grouped rather than suffixed
+  snapshotPathTemplate: `{snapshotDir}/{testFileName}-snapshots/{platform}-${process.arch}/{arg}-{projectName}{ext}`,
   retries: 0,
   workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI
