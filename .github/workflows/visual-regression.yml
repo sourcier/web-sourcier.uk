@@ -8,10 +8,15 @@ on:
         type: boolean
         default: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   visual:
     name: Visual Regression (${{ inputs.update_snapshots && 'update' || 'compare' }})
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Pin to the same Playwright Docker image locally and in CI so font rendering is identical.
     # Image version must match the @playwright/test version in pnpm-lock.yaml.
     container:

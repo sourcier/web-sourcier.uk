@@ -12,7 +12,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: treosh/lighthouse-ci-action@v12
+    - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
       with:
         urls: |
           https://sourcier.uk/
