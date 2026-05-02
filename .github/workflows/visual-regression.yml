@@ -39,6 +39,10 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
 
+      # rsync is not included in the Playwright Docker image
+      - run: apt-get update && apt-get install -y rsync
+        shell: bash
+
       - run: pnpm assets:sync
 
       - run: pnpm build
