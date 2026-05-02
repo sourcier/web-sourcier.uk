@@ -59,7 +59,7 @@ jobs:
           update_snapshots: ${{ inputs.update_snapshots && 'true' || 'false' }}
 
       - name: Commit updated snapshots
-        if: inputs.update_snapshots
+        if: always() && inputs.update_snapshots
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
