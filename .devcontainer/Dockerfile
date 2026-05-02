@@ -8,13 +8,10 @@ COPY package.json /tmp/package.json
 
 # Install Playwright system dependencies and rsync (used by bootstrap.sh).
 # Version is read from package.json so it stays in sync automatically when @playwright/test is upgraded
-RUN apt-get update && apt-get install -y --no-install-recommends rsync \
+RUN apt-get update && apt-get install -y --no-install-recommends rsync chromium \
  && PW_VERSION=$(node -e "console.log(require('/tmp/package.json').devDependencies['@playwright/test'].replace(/[\\^~]/, ''))") \
  && npx -y "playwright@${PW_VERSION}" install-deps chromium \
  && rm -rf /var/lib/apt/lists/* /tmp/package.json
-
-# Enable corepack and install pnpm
-RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 # Set zsh as the default shell for the node user
 RUN chsh -s /bin/zsh node
@@ -32,6 +29,10 @@ RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions /home/n
  && git clone --depth=1 https://github.com/romkatv/powerlevel10k /home/node/.oh-my-zsh/custom/themes/powerlevel10k \
  && chown -R node:node /home/node/.oh-my-zsh/custom
 
+# Enable corepack and install pnpm (placed after git clones so a pnpm-only bump
+# doesn't invalidate the clone cache layers above)
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
+
 # Configure pnpm store outside the workspace so Vite doesn't watch it.
 # Without this, the store inside the project burns through all inotify
 # watchers and Vite crashes with ENOSPC.
@@ -48,9 +49,8 @@ RUN TMP=$(mktemp -d) \
  && git config --global core.excludesFile ~/.gitignore \
  && rm -rf "${TMP}"
 
-# Pre-create the Playwright and Deno cache directories as the node user so the
-# named Docker volumes (playwright-cache, deno-cache) are initialised with the
-# right ownership. Without this the volumes are created root-owned and
-# onCreateCommand fails with EACCES.
-RUN mkdir -p /home/node/.cache/ms-playwright /home/node/.deno/bin
+# Pre-create the Playwright, Deno, and pnpm-store directories as the node user
+# so the named Docker volumes are initialised with the right ownership. Without
+# this the volumes are created root-owned and onCreateCommand fails with EACCES.
+RUN mkdir -p /home/node/.cache/ms-playwright /home/node/.deno/bin /home/node/.pnpm-store
 USER root

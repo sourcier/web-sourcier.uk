@@ -51,7 +51,8 @@
     "source=${localEnv:HOME}/.zsh_history,target=/home/node/.zsh_history,type=bind,consistency=cached",
     "source=${localEnv:HOME}/workspace/dotfiles,target=/workspaces/dotfiles,type=bind,consistency=cached",
     "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume",
-    "source=deno-cache,target=/home/node/.deno,type=volume"
+    "source=deno-cache,target=/home/node/.deno,type=volume",
+    "source=pnpm-store,target=/home/node/.pnpm-store,type=volume"
   ],
 
   "forwardPorts": [8888, 4321],
