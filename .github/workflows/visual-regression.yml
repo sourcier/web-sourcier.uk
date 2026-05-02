@@ -39,6 +39,12 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
 
+      # rsync is not included in the Playwright Docker image but is required by assets:sync
+      - uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: rsync
+          version: 1.0
+
       - run: pnpm assets:sync
 
       - run: pnpm build
