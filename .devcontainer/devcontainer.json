@@ -48,6 +48,7 @@
   "initializeCommand": "test -n \"$CODESPACES\" || (mkdir -p ~/.ssh && touch ~/.zsh_history); test -f .env || touch .env",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
+    // "source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.zsh_history,target=/home/node/.zsh_history,type=bind,consistency=cached",
     "source=${localEnv:HOME}/workspace/dotfiles,target=/workspaces/dotfiles,type=bind,consistency=cached",
     "source=playwright-cache,target=/home/node/.cache/ms-playwright,type=volume",
@@ -67,7 +68,9 @@
   },
 
   "remoteEnv": {
-    "SHOW_DRAFTS": "true"
+    "SHOW_DRAFTS": "true",
+    "GH_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}",
+    "NETLIFY_AUTH_TOKEN": "${localEnv:NETLIFY_AUTH_TOKEN}"
   },
 
   "secrets": {
