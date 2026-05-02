@@ -1,5 +1,5 @@
 name: Run Visual Regression
-description: Install Playwright, serve the built site, and run visual regression tests
+description: Install Playwright browsers and run visual regression tests
 
 inputs:
   update_snapshots:
@@ -24,14 +24,6 @@ runs:
       if: ${{ env.PLAYWRIGHT_BROWSERS_PATH != '/ms-playwright' && steps.pw-cache.outputs.cache-hit != 'true' }}
       shell: bash
       run: pnpm exec playwright install chromium webkit --with-deps
-
-    - name: Serve site
-      shell: bash
-      run: pnpm --package=serve dlx serve dist -p 9000 &
-
-    - name: Wait for server
-      shell: bash
-      run: until curl -sf http://localhost:9000 > /dev/null; do sleep 1; done
 
     - name: Run visual regression tests
       shell: bash

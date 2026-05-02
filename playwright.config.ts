@@ -19,6 +19,13 @@ export default defineConfig({
         ["list"],
         ["html", { outputFolder: "reports/playwright", open: "never" }],
       ],
+  webServer: {
+    // Playwright owns the server lifecycle — no background process juggling needed.
+    command: "pnpm serve:dist",
+    port: 9000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 30_000,
+  },
   use: {
     baseURL: "http://localhost:9000",
     contextOptions: { reducedMotion: "reduce" },
