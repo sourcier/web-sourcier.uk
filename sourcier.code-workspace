@@ -13,7 +13,5 @@
       "path": "/workspaces/dotfiles",
     },
   ],
-  "settings": {
-    "terminal.integrated.cwd": "${workspaceFolder:sourcier.uk (site)}",
-  },
+  "settings": {},
 }
