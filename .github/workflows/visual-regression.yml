@@ -28,8 +28,6 @@ jobs:
       - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v5
-        with:
-          version: latest
 
       # Node.js is provided by the Playwright container; setup-node is only used for pnpm caching.
       - uses: actions/setup-node@v6
