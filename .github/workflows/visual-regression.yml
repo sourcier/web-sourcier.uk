@@ -40,7 +40,7 @@ jobs:
       - name: Fetch content
         run: pnpm build:content:fetch
         env:
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
 
       # rsync and jq are not included in the Playwright Docker image
       - run: apt-get update && apt-get install -y rsync jq

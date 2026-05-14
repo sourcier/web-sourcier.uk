@@ -8,7 +8,7 @@
     "dev": "pnpm assets:sync && SHOW_DRAFTS=true netlify dev",
     "dev:no-drafts": "pnpm assets:sync && netlify dev",
     "build": "astro build",
-    "build:content:fetch": "git clone --depth 1 https://${GITHUB_PAT}@github.com/sourcier/sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git",
+    "build:content:fetch": "git clone --depth 1 https://${GH_PAT}@github.com/sourcier/sourcier.uk-content.git collections/posts && rm -rf collections/posts/.git",
     "build:prepare": "pnpm lint && pnpm format:check && pnpm assets:sync",
     "build:functions": "esbuild netlify/functions/*.ts --bundle --platform=node --format=esm --outdir=.netlify/functions-built",
     "build:search": "pagefind --site dist --exclude-selectors \".expressive-code\"",

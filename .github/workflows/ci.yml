@@ -58,7 +58,7 @@ jobs:
       - name: Fetch content
         run: pnpm build:content:fetch
         env:
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
 
       - run: pnpm assets:sync
 

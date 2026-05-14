@@ -96,7 +96,7 @@ These are baked into the HTML by `astro build`. In CI they are passed via GitHub
 | `PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key — controls whether the tip button renders    |
 | `PUBLIC_POSTHOG_KEY`            | PostHog project API key                                             |
 | `PUBLIC_POSTHOG_HOST`           | PostHog ingest host, e.g. `https://eu.i.posthog.com`                |
-| `GITHUB_PAT`                    | Fine-grained token to clone the private content repo at build time  |
+| `GH_PAT`                        | Fine-grained token to clone the private content repo at build time  |
 | `SHOW_DRAFTS`                   | Set to `"true"` to include draft posts (CI sets this automatically) |
 
 ### Runtime (Netlify environment variables)
