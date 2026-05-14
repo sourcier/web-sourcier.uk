@@ -104,6 +104,9 @@
           "editor.defaultFormatter": "astro-build.astro-vscode"
         },
         "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.env.linux": {
+          "VSCODE_USER_TERMINAL": "1"
+        },
         "remote.autoForwardPortsSource": "output"
       }
     }
