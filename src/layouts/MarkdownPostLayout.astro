@@ -806,6 +806,26 @@ const supportPublishableKey =
     definitions.forEach(({ btn }, container) => {
       container.removeAttribute("data-loading");
       container.appendChild(btn);
+
+      const svgEl = container.querySelector("svg");
+      if (svgEl) {
+        const titleText = container.dataset.title;
+        if (titleText) {
+          const titleId = `mermaid-title-${Math.random().toString(36).slice(2, 8)}`;
+          const titleEl = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "title",
+          );
+          titleEl.id = titleId;
+          titleEl.textContent = titleText;
+          svgEl.prepend(titleEl);
+          svgEl.setAttribute("role", "img");
+          svgEl.setAttribute("aria-labelledby", titleId);
+        } else {
+          svgEl.setAttribute("role", "img");
+          svgEl.setAttribute("aria-label", "Diagram");
+        }
+      }
     });
   }
 

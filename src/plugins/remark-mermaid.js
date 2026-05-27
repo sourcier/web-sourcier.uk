@@ -31,9 +31,14 @@ export function remarkMermaid() {
   return (tree) => {
     function walk(node, parent, index) {
       if (node.type === "code" && node.lang === "mermaid" && parent) {
+        const titleMatch = node.meta?.match(/title="([^"]+)"/);
+        const title = titleMatch?.[1] ?? null;
         parent.children[index] = {
           type: "html",
-          value: `<div class="mermaid-diagram" data-loading data-mermaid="${escapeAttr(node.value)}">${SKELETON}</div>`,
+          value:
+            `<div class="mermaid-diagram" data-loading data-mermaid="${escapeAttr(node.value)}"` +
+            (title ? ` data-title="${escapeAttr(title)}"` : "") +
+            `>${SKELETON}</div>`,
         };
         return;
       }
