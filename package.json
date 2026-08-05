@@ -43,15 +43,14 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.2.1",
     "@astrojs/rss": "^4.0.19",
     "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "@netlify/blobs": "^10.7.4",
-    "@xt0rted/expressive-code-file-icons": "^1.0.0",
+    "@netlify/blobs": "^10.7.12",
     "astro": "^7.1.1",
     "astro-expressive-code": "^0.41.7",
     "bulma": "^1.0.4",
@@ -79,7 +78,7 @@
     "husky": "^9.1.7",
     "lighthouse": "^13.2.0",
     "lint-staged": "^16.4.0",
-    "netlify-cli": "^26.0.1",
+    "netlify-cli": "^27.1.0",
     "open-cli": "^9.0.0",
     "pagefind": "^1.4.0",
     "pptxgenjs": "^3.12.0",
@@ -89,16 +88,5 @@
     "serve": "^14.2.4",
     "typescript-eslint": "^8.58.2",
     "vitest": "^3.2.6"
-  },
-  "pnpm": {
-    "overrides": {
-      "@expressive-code/core": "0.41.7",
-      "lodash-es": ">=4.18.0",
-      "yaml": ">=2.8.3",
-      "uuid": ">=14.0.0"
-    },
-    "patchedDependencies": {
-      "expressive-code-color-chips": "patches/expressive-code-color-chips.patch"
-    }
   }
 }

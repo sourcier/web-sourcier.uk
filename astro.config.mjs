@@ -4,7 +4,6 @@ import emoji from "remark-emoji";
 import expressiveCode from "astro-expressive-code";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { pluginColorChips } from "expressive-code-color-chips";
-import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { rehypeZoomableImages } from "./src/plugins/rehype-zoomable-images.js";
 import { rehypeWrapTables } from "./src/plugins/rehype-wrap-tables.js";
@@ -21,7 +20,6 @@ export default defineConfig({
         pluginLineNumbers(),
         pluginCollapsibleCodeBlocks(),
         pluginColorChips(),
-        pluginFileIcons(),
       ],
       defaultProps: {
         showLineNumbers: true,
