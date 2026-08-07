@@ -10,7 +10,7 @@
     },
     {
       "name": "dotfiles",
-      "path": "/workspaces/dotfiles",
+      "path": "../dotfiles",
     },
   ],
   "settings": {},
