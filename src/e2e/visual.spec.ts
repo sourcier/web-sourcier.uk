@@ -95,6 +95,13 @@ for (const {
       );
     });
 
+    // Wait for webfonts to finish loading and reflowing before measuring layout.
+    // toHaveScreenshot() waits for fonts internally before capturing pixels, but
+    // clipToContent measures the footer position beforehand — without this wait,
+    // a slow font load can reflow the page between the footer measurement and the
+    // actual screenshot, producing a stale clip height and a false-positive diff.
+    await page.evaluate(() => document.fonts.ready);
+
     // Remove async-loaded sections from layout to prevent height variability between runs
     await page.addStyleTag({
       content: `
