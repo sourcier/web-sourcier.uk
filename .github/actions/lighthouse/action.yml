@@ -8,18 +8,50 @@ inputs:
   configPath:
     description: Path to a Lighthouse config file
     required: false
+  base_url:
+    description: Base URL to audit — home page and /blog/ are checked
+    required: true
+  preview_passcode:
+    description: Passcode for the preview deploy's auth wall; when set, a matching cookie bypasses it
+    required: false
+    default: ""
 
 runs:
   using: composite
   steps:
+    # Passcode-gated preview needs a valid preview_auth cookie or Lighthouse just audits the login wall.
+    - name: Compute preview auth cookie
+      id: preview_auth
+      if: ${{ inputs.preview_passcode != '' }}
+      shell: bash
+      run: |
+        TOKEN=$(node -e "process.stdout.write(require('crypto').createHmac('sha256', process.env.PASSCODE).update('preview_authenticated').digest('base64'))")
+        echo "cookie=preview_auth=$TOKEN" >> "$GITHUB_OUTPUT"
+      env:
+        PASSCODE: ${{ inputs.preview_passcode }}
+
+    # Only build a merged config when a cookie is needed — keeps the production
+    # lighthouse run byte-identical to before (still uses configPath directly).
+    - name: Build Lighthouse config with auth cookie
+      id: config
+      if: ${{ inputs.preview_passcode != '' }}
+      shell: bash
+      run: |
+        BASE='{"ci":{"collect":{"settings":{}}}}'
+        if [ -n "${{ inputs.configPath }}" ]; then
+          BASE=$(cat "${{ inputs.configPath }}")
+        fi
+        echo "$BASE" | jq --arg cookie "${{ steps.preview_auth.outputs.cookie }}" '.ci.collect.settings.extraHeaders = {"Cookie": $cookie}' > /tmp/lighthouserc.json
+        echo "path=/tmp/lighthouserc.json" >> "$GITHUB_OUTPUT"
+
     - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
       with:
         urls: |
-          https://sourcier.uk/
-          https://sourcier.uk/blog/
+          ${{ inputs.base_url }}/
+          ${{ inputs.base_url }}/blog/
         uploadArtifacts: true
         temporaryPublicStorage: true
-        configPath: ${{ inputs.configPath }}
+        configPath: ${{ inputs.preview_passcode != '' && steps.config.outputs.path || inputs.configPath }}
 
     - name: Print Lighthouse scores
       shell: bash

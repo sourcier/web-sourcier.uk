@@ -8,9 +8,9 @@ run-name: >-
 
 on:
   push:
-    branches: [preview, main]
+    branches: [main]
   pull_request:
-    branches: [preview, main]
+    branches: [main]
   repository_dispatch:
     types: [content-updated]
   schedule:
@@ -46,7 +46,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: [quality]
-    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') }}
+    # Production build only — PRs are covered by build-preview instead, avoiding
+    # a redundant full build (content fetch, assets, functions) on every PR push.
+    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') && github.event_name != 'pull_request' }}
     timeout-minutes: 30
     permissions:
       contents: read
@@ -64,7 +66,7 @@ jobs:
 
       - run: pnpm build
         env:
-          SHOW_DRAFTS: ${{ github.ref == 'refs/heads/preview' && 'true' || 'false' }}
+          SHOW_DRAFTS: "false"
           PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
@@ -85,6 +87,56 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: functions
+          path: .netlify/functions-built
+          retention-days: 1
+
+  build-preview:
+    name: Build (preview)
+    runs-on: ubuntu-latest
+    needs: [quality]
+    # Refreshes the stable preview alias: on every PR push (to verify changes before
+    # merging) and on every main push (so preview reflects the latest main once merged).
+    if: |
+      !contains(github.event.head_commit.message, '#skip-ci') &&
+      (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup
+
+      - name: Fetch content
+        run: pnpm build:content:fetch
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - run: pnpm assets:sync
+
+      - run: pnpm build
+        env:
+          SHOW_DRAFTS: "true"
+          PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
+
+      - run: pnpm build:search
+
+      - name: Bundle Netlify functions
+        run: pnpm build:functions
+
+      - name: Upload built site
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-preview
+          path: dist
+          retention-days: 1
+
+      - name: Upload bundled functions
+        uses: actions/upload-artifact@v7
+        with:
+          name: functions-preview
           path: .netlify/functions-built
           retention-days: 1
 
@@ -135,15 +187,6 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Deploy to Netlify (preview)
-        if: github.ref == 'refs/heads/preview'
-        run: |
-          OUTPUT=$(pnpm netlify deploy --dir=dist --functions .netlify/functions-built --no-build --message "$DEPLOY_MSG" --json)
-          echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
       - name: Smoke test functions
         run: |
           BASE="$DEPLOY_URL/.netlify/functions"
@@ -178,6 +221,65 @@ jobs:
 
           exit $fail
 
+  deploy-preview:
+    name: Deploy (preview)
+    runs-on: ubuntu-latest
+    needs: [build-preview, visual-regression]
+    if: |
+      always() &&
+      needs.build-preview.result == 'success' &&
+      (needs['visual-regression'].result == 'success' || needs['visual-regression'].result == 'skipped')
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup
+
+      - name: Download built site
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-preview
+          path: dist
+
+      - name: Download bundled functions
+        uses: actions/download-artifact@v8
+        with:
+          name: functions-preview
+          path: .netlify/functions-built
+
+      - name: Resolve deploy message
+        env:
+          RAW_MSG: >-
+            ${{ github.event_name == 'pull_request' && github.event.pull_request.title ||
+                github.event.head_commit.message }}
+        run: echo "DEPLOY_MSG=$(echo "$RAW_MSG" | head -1)" >> "$GITHUB_ENV"
+
+      # Alias keeps the URL stable (preview--sourcieruk.netlify.app) across every deploy,
+      # whether it's refreshing to match main or verifying an in-flight PR branch.
+      # Note: --context only affects build-time env resolution, irrelevant here since
+      # we deploy a pre-built dist with --no-build. Functions-scope vars (e.g.
+      # PREVIEW_PASSCODE) must be scoped in the Netlify dashboard to cover this deploy.
+      - name: Deploy to Netlify (preview alias)
+        run: |
+          OUTPUT=$(pnpm netlify deploy --dir=dist --functions .netlify/functions-built --alias=preview --no-build --message "$DEPLOY_MSG" --json)
+          echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Comment preview link on PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --edit-last --create-if-none \
+            --body "🔍 Preview: $DEPLOY_URL"
+
   lighthouse:
     name: Lighthouse (${{ matrix.form_factor }})
     needs: deploy
@@ -199,12 +301,43 @@ jobs:
         with:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
+          base_url: https://sourcier.uk
+
+  lighthouse-preview:
+    name: Lighthouse Preview (${{ matrix.form_factor }})
+    needs: deploy-preview
+    if: always() && needs.deploy-preview.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - form_factor: mobile
+          - form_factor: desktop
+            configPath: .github/lighthouse/desktop.json
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/lighthouse
+        with:
+          form_factor: ${{ matrix.form_factor }}
+          configPath: ${{ matrix.configPath }}
+          base_url: https://preview--sourcieruk.netlify.app
+          preview_passcode: ${{ secrets.PREVIEW_PASSCODE }}
 
   visual-regression:
     name: Visual Regression
     runs-on: ubuntu-latest
-    needs: build
-    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') && (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+    needs: [build, build-preview]
+    # Gates both the prod deploy and the preview deploy. Runs against whichever
+    # build succeeded — build (prod) takes precedence when both ran (main push).
+    if: |
+      always() &&
+      !contains(github.event.head_commit.message, '#skip-ci') &&
+      (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
+      (needs.build.result == 'success' || needs['build-preview'].result == 'success')
     # Pin to the same Playwright Docker image used in visual-regression.yml so
     # font rendering is identical to the stored baselines.
     container:
@@ -223,10 +356,18 @@ jobs:
       # Node.js is provided by the Playwright container; setup is only used for pnpm caching.
       - uses: ./.github/actions/setup
 
-      - name: Download built site
+      - name: Download built site (prod)
+        if: needs.build.result == 'success'
         uses: actions/download-artifact@v8
         with:
           name: dist
+          path: dist
+
+      - name: Download built site (preview)
+        if: needs.build.result != 'success' && needs['build-preview'].result == 'success'
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-preview
           path: dist
 
       - uses: ./.github/actions/visual-regression
