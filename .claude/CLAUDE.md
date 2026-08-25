@@ -29,7 +29,8 @@ Requires Node.js (see .nvmrc), pnpm, and Netlify CLI.
 ## Git Workflow
 
 - Treat `web-sourcier.uk` and `collections/posts/` as separate repositories with separate status, staging, and commits
-- The site repo uses the `preview` branch for code changes; do not commit site changes on `main`
+- The site repo is trunk-based: `main` is the only long-lived branch. Make site changes on short-lived feature branches and open a PR against `main` — never commit directly to `main`
+- Every PR gets a real preview via the stable `preview` alias deploy (`preview--sourcieruk.netlify.app`, passcode-protected), refreshed on each PR push and on every push to `main`
 - The content repo in `collections/posts/` stays on `main` unless the user asks for a different branch
 - If a task spans both repos, inspect and commit them separately
 
