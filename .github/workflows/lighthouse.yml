@@ -1,8 +1,14 @@
 name: Lighthouse
-run-name: "[lighthouse] on-demand"
+run-name: "[lighthouse] on-demand (${{ inputs.environment }})"
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to audit
+        type: choice
+        options: [prod, preview]
+        default: prod
 
 jobs:
   lighthouse:
@@ -23,3 +29,5 @@ jobs:
         with:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
+          base_url: ${{ inputs.environment == 'preview' && 'https://preview--sourcieruk.netlify.app' || 'https://sourcier.uk' }}
+          preview_passcode: ${{ inputs.environment == 'preview' && secrets.PREVIEW_PASSCODE || '' }}
