@@ -238,11 +238,11 @@ jobs:
   deploy-preview:
     name: Deploy (preview)
     runs-on: ubuntu-latest
-    needs: [build-preview, visual-regression]
+    needs: [build-preview, visual-regression-preview]
     if: |
       always() &&
       needs.build-preview.result == 'success' &&
-      (needs['visual-regression'].result == 'success' || needs['visual-regression'].result == 'skipped')
+      (needs['visual-regression-preview'].result == 'success' || needs['visual-regression-preview'].result == 'skipped')
     timeout-minutes: 15
     permissions:
       contents: read
@@ -348,14 +348,13 @@ jobs:
   visual-regression:
     name: Visual Regression
     runs-on: ubuntu-latest
-    needs: [build, build-preview]
-    # Gates both the prod deploy and the preview deploy. Runs against whichever
-    # build succeeded — build (prod) takes precedence when both ran (main push).
+    needs: build
+    # Gates the prod deploy against the exact prod build (SHOW_DRAFTS=false).
     if: |
       always() &&
       !contains(github.event.head_commit.message, '#skip-ci') &&
       (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
-      (needs.build.result == 'success' || needs['build-preview'].result == 'success')
+      needs.build.result == 'success'
     # Pin to the same Playwright Docker image used in visual-regression.yml so
     # font rendering is identical to the stored baselines.
     container:
@@ -374,15 +373,43 @@ jobs:
       # Node.js is provided by the Playwright container; setup is only used for pnpm caching.
       - uses: ./.github/actions/setup
 
-      - name: Download built site (prod)
-        if: needs.build.result == 'success'
+      - name: Download built site
         uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
 
-      - name: Download built site (preview)
-        if: needs.build.result != 'success' && needs['build-preview'].result == 'success'
+      - uses: ./.github/actions/visual-regression
+
+  visual-regression-preview:
+    name: Visual Regression (preview)
+    runs-on: ubuntu-latest
+    needs: build-preview
+    # Gates the preview deploy against the exact preview build (SHOW_DRAFTS=true).
+    if: |
+      always() &&
+      !contains(github.event.head_commit.message, '#skip-ci') &&
+      (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
+      needs['build-preview'].result == 'success'
+    # Pin to the same Playwright Docker image used in visual-regression.yml so
+    # font rendering is identical to the stored baselines.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      # jq is not included in the Playwright Docker image
+      - run: apt-get update && apt-get install -y jq
+        shell: bash
+
+      # Node.js is provided by the Playwright container; setup is only used for pnpm caching.
+      - uses: ./.github/actions/setup
+
+      - name: Download built site
         uses: actions/download-artifact@v8
         with:
           name: dist-preview
