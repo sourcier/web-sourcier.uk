@@ -1,0 +1,71 @@
+---
+import { getImage } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import MailingListCTA from "../components/MailingListCTA.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projects } from "../data/projects";
+import projectsHeroSource from "../../assets/images/projects-hero.webp";
+
+const projectsHero = await getImage({ src: projectsHeroSource, width: 2400 });
+---
+
+<BaseLayout
+  pageTitle="Projects — Sourcier"
+  description="Side projects and tools built by Roger Rajaratnam, starting with the Nioh Save Editor."
+>
+  <PageHero
+    kicker="What I've built"
+    title="Projects"
+    tone="neutral"
+    subtitle="Tools and side projects I've built outside of work, shared on GitHub."
+    coverImage={{
+      src: projectsHero.src,
+      alt: "The word Projects written in white on a pink and orange gradient background",
+    }}
+  />
+
+  <section
+    class="section projects-grid flow-section flow-section--loose"
+    aria-labelledby="projects-grid-heading"
+  >
+    <div class="container is-max-desktop">
+      <p class="section-label" id="projects-grid-heading">Projects</p>
+      <div class="projects-grid__cards">
+        {
+          projects.map((project) => (
+            <ProjectCard
+              slug={project.slug}
+              name={project.name}
+              tagline={project.tagline}
+              summary={project.summary}
+              status={project.status}
+              techStack={project.techStack}
+              repoUrl={project.repoUrl}
+              homepageUrl={project.homepageUrl}
+              previewCards={project.previewCards}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <MailingListCTA />
+</BaseLayout>
+
+<style lang="scss">
+  .projects-grid {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .projects-grid__cards {
+    display: grid;
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
+    }
+  }
+</style>
