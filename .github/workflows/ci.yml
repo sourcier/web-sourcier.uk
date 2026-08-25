@@ -75,6 +75,11 @@ jobs:
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
+      # Serves the deployed commit at /version, so a live site can be checked
+      # against what's expected without digging through CI/deploy logs.
+      - name: Write version file
+        run: echo "$GITHUB_SHA" > dist/version
+
       - run: pnpm build:search
 
       - name: Bundle Netlify functions
@@ -124,6 +129,11 @@ jobs:
           PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
+
+      # Serves the deployed commit at /version, so a live site can be checked
+      # against what's expected without digging through CI/deploy logs.
+      - name: Write version file
+        run: echo "$GITHUB_SHA" > dist/version
 
       - run: pnpm build:search
 
@@ -270,6 +280,10 @@ jobs:
         run: |
           OUTPUT=$(pnpm netlify deploy --dir=dist --functions .netlify/functions-built --alias=preview --no-build --message "$DEPLOY_MSG" --json)
           echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
+          DEPLOY_ID=$(echo "$OUTPUT" | jq -r '.deploy_id')
+          # Branch-deploy context deploys aren't auto-published like production —
+          # without this, the alias keeps serving whatever was last explicitly published.
+          pnpm netlify api restoreSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$DEPLOY_ID\"}" > /dev/null
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
