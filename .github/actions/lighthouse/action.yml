@@ -8,18 +8,40 @@ inputs:
   configPath:
     description: Path to a Lighthouse config file
     required: false
+  urls:
+    description: Newline-separated list of URLs to audit
+    required: false
+    default: |
+      https://sourcier.uk/
+      https://sourcier.uk/blog/
+  cookie:
+    description: Optional Cookie header value, e.g. to bypass passcode protection on preview deploys
+    required: false
+    default: ""
 
 runs:
   using: composite
   steps:
+    # Only build a merged config when a cookie is needed — keeps the production
+    # lighthouse run byte-identical to before (still uses configPath directly).
+    - name: Build Lighthouse config with auth cookie
+      id: config
+      if: ${{ inputs.cookie != '' }}
+      shell: bash
+      run: |
+        BASE='{"ci":{"collect":{"settings":{}}}}'
+        if [ -n "${{ inputs.configPath }}" ]; then
+          BASE=$(cat "${{ inputs.configPath }}")
+        fi
+        echo "$BASE" | jq --arg cookie "${{ inputs.cookie }}" '.ci.collect.settings.extraHeaders = {"Cookie": $cookie}' > /tmp/lighthouserc.json
+        echo "path=/tmp/lighthouserc.json" >> "$GITHUB_OUTPUT"
+
     - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
       with:
-        urls: |
-          https://sourcier.uk/
-          https://sourcier.uk/blog/
+        urls: ${{ inputs.urls }}
         uploadArtifacts: true
         temporaryPublicStorage: true
-        configPath: ${{ inputs.configPath }}
+        configPath: ${{ inputs.cookie != '' && steps.config.outputs.path || inputs.configPath }}
 
     - name: Print Lighthouse scores
       shell: bash

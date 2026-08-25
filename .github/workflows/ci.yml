@@ -46,7 +46,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: [quality]
-    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') }}
+    # Production build only — PRs are covered by build-preview instead, avoiding
+    # a redundant full build (content fetch, assets, functions) on every PR push.
+    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') && github.event_name != 'pull_request' }}
     timeout-minutes: 30
     permissions:
       contents: read
@@ -222,8 +224,11 @@ jobs:
   deploy-preview:
     name: Deploy (preview)
     runs-on: ubuntu-latest
-    needs: [build-preview]
-    if: always() && needs.build-preview.result == 'success'
+    needs: [build-preview, visual-regression]
+    if: |
+      always() &&
+      needs.build-preview.result == 'success' &&
+      (needs['visual-regression'].result == 'success' || needs['visual-regression'].result == 'skipped')
     timeout-minutes: 15
     permissions:
       contents: read
@@ -297,11 +302,52 @@ jobs:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
 
+  lighthouse-preview:
+    name: Lighthouse Preview (${{ matrix.form_factor }})
+    needs: deploy-preview
+    if: always() && needs.deploy-preview.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - form_factor: mobile
+          - form_factor: desktop
+            configPath: .github/lighthouse/desktop.json
+    steps:
+      - uses: actions/checkout@v6
+
+      # Passcode-gated preview needs a valid preview_auth cookie or Lighthouse just audits the login wall.
+      - name: Compute preview auth cookie
+        id: preview_auth
+        run: |
+          TOKEN=$(node -e "process.stdout.write(require('crypto').createHmac('sha256', process.env.PASSCODE).update('preview_authenticated').digest('base64'))")
+          echo "cookie=preview_auth=$TOKEN" >> "$GITHUB_OUTPUT"
+        env:
+          PASSCODE: ${{ secrets.PREVIEW_PASSCODE }}
+
+      - uses: ./.github/actions/lighthouse
+        with:
+          form_factor: ${{ matrix.form_factor }}
+          configPath: ${{ matrix.configPath }}
+          urls: |
+            https://preview--sourcier.netlify.app/
+            https://preview--sourcier.netlify.app/blog/
+          cookie: ${{ steps.preview_auth.outputs.cookie }}
+
   visual-regression:
     name: Visual Regression
     runs-on: ubuntu-latest
-    needs: build
-    if: ${{ !contains(github.event.head_commit.message, '#skip-ci') && (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') }}
+    needs: [build, build-preview]
+    # Gates both the prod deploy and the preview deploy. Runs against whichever
+    # build succeeded — build (prod) takes precedence when both ran (main push).
+    if: |
+      always() &&
+      !contains(github.event.head_commit.message, '#skip-ci') &&
+      (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
+      (needs.build.result == 'success' || needs['build-preview'].result == 'success')
     # Pin to the same Playwright Docker image used in visual-regression.yml so
     # font rendering is identical to the stored baselines.
     container:
@@ -320,10 +366,18 @@ jobs:
       # Node.js is provided by the Playwright container; setup is only used for pnpm caching.
       - uses: ./.github/actions/setup
 
-      - name: Download built site
+      - name: Download built site (prod)
+        if: needs.build.result == 'success'
         uses: actions/download-artifact@v8
         with:
           name: dist
+          path: dist
+
+      - name: Download built site (preview)
+        if: needs.build.result != 'success' && needs['build-preview'].result == 'success'
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-preview
           path: dist
 
       - uses: ./.github/actions/visual-regression
