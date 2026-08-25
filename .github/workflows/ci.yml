@@ -18,7 +18,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # All PRs share one group so opening/pushing to any PR cancels other PRs'
+  # in-flight runs — they'd otherwise race to deploy the same preview alias.
+  # Push/schedule/dispatch events keep their own ref-scoped group as before.
+  group: >-
+    ${{ github.workflow }}-${{ github.event_name == 'pull_request' && 'pull_request' || github.ref }}
   cancel-in-progress: true
 
 jobs:
