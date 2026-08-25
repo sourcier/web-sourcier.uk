@@ -301,6 +301,7 @@ jobs:
         with:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
+          base_url: https://sourcier.uk
 
   lighthouse-preview:
     name: Lighthouse Preview (${{ matrix.form_factor }})
@@ -319,23 +320,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      # Passcode-gated preview needs a valid preview_auth cookie or Lighthouse just audits the login wall.
-      - name: Compute preview auth cookie
-        id: preview_auth
-        run: |
-          TOKEN=$(node -e "process.stdout.write(require('crypto').createHmac('sha256', process.env.PASSCODE).update('preview_authenticated').digest('base64'))")
-          echo "cookie=preview_auth=$TOKEN" >> "$GITHUB_OUTPUT"
-        env:
-          PASSCODE: ${{ secrets.PREVIEW_PASSCODE }}
-
       - uses: ./.github/actions/lighthouse
         with:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
-          urls: |
-            https://preview--sourcier.netlify.app/
-            https://preview--sourcier.netlify.app/blog/
-          cookie: ${{ steps.preview_auth.outputs.cookie }}
+          base_url: https://preview--sourcier.netlify.app
+          preview_passcode: ${{ secrets.PREVIEW_PASSCODE }}
 
   visual-regression:
     name: Visual Regression
