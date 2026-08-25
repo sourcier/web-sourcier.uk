@@ -79,8 +79,10 @@ commit.
 - **Comment system** using Netlify Forms with email-based moderation (approve/delete)
 - **Newsletter** subscriptions via Resend with welcome email templates
 - **Scheduled builds** (daily at 07:45 UTC) to auto-publish future-dated posts
-- **Draft previews** via the `preview` branch deploy on Netlify — access at
-  `https://preview--sourcier.netlify.app` (passcode-protected via edge function)
+- **Draft previews** via the stable `preview` alias deploy on Netlify — access at
+  `https://preview--sourcier.netlify.app` (passcode-protected via edge function).
+  Refreshed on every PR build (to verify changes before merging) and on every
+  push to `main`
 - **RSS feed** at `/rss.xml`
 
 ## Environment Variables
@@ -111,7 +113,7 @@ These are read by Netlify functions at request time and never embedded in the HT
 | `NOTIFY_EMAIL`      | Admin notification recipient                                                                                             |
 | `SITE_URL`          | Public site URL                                                                                                          |
 | `STRIPE_SECRET_KEY` | Stripe secret key for the checkout function                                                                              |
-| `PREVIEW_PASSCODE`  | Passcode for the `preview` branch deploy                                                                                 |
+| `PREVIEW_PASSCODE`  | Passcode for the `preview` alias deploy                                                                                  |
 
 ## Dev Container
 
