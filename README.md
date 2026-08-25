@@ -80,7 +80,7 @@ commit.
 - **Newsletter** subscriptions via Resend with welcome email templates
 - **Scheduled builds** (daily at 07:45 UTC) to auto-publish future-dated posts
 - **Draft previews** via the stable `preview` alias deploy on Netlify — access at
-  `https://preview--sourcier.netlify.app` (passcode-protected via edge function).
+  `https://preview--sourcieruk.netlify.app` (passcode-protected via edge function).
   Refreshed on every PR build (to verify changes before merging) and on every
   push to `main`
 - **RSS feed** at `/rss.xml`

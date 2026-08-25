@@ -257,7 +257,7 @@ jobs:
                 github.event.head_commit.message }}
         run: echo "DEPLOY_MSG=$(echo "$RAW_MSG" | head -1)" >> "$GITHUB_ENV"
 
-      # Alias keeps the URL stable (preview--sourcier.netlify.app) across every deploy,
+      # Alias keeps the URL stable (preview--sourcieruk.netlify.app) across every deploy,
       # whether it's refreshing to match main or verifying an in-flight PR branch.
       # Note: --context only affects build-time env resolution, irrelevant here since
       # we deploy a pre-built dist with --no-build. Functions-scope vars (e.g.
@@ -324,7 +324,7 @@ jobs:
         with:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
-          base_url: https://preview--sourcier.netlify.app
+          base_url: https://preview--sourcieruk.netlify.app
           preview_passcode: ${{ secrets.PREVIEW_PASSCODE }}
 
   visual-regression:
