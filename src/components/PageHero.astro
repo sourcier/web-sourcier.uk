@@ -99,21 +99,6 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
   </div>
 </header>
 
-<script>
-  const hero = document.querySelector<HTMLElement>(
-    ".page-hero[data-has-cover='true']",
-  );
-  if (hero) {
-    const update = () => {
-      const offset = window.scrollY;
-      // Move the background at 40% of scroll speed for a subtle parallax
-      hero.style.backgroundPositionY = `calc(50% + ${offset * 0.4}px)`;
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-  }
-</script>
-
 <style lang="scss">
   .page-hero {
     --page-hero-accent: var(--accent-primary);
@@ -205,6 +190,7 @@ const resolvedCrumbs: Crumb[] = crumbs ?? autoCrumbs(Astro.url.pathname);
       --page-hero-ink: var(--text-on-strong);
       --page-hero-muted: rgba(var(--text-on-strong-rgb), 0.8);
       --page-hero-soft: rgba(var(--text-on-strong-rgb), 0.56);
+      --page-hero-kicker-ink: var(--text-on-strong);
       --page-hero-kicker-bg: rgba(var(--text-on-strong-rgb), 0.06);
       --page-hero-kicker-border: rgba(var(--text-on-strong-rgb), 0.16);
       --page-hero-tag-bg: rgba(var(--text-on-strong-rgb), 0.08);

@@ -20,6 +20,7 @@
       <nav class="footer__links" aria-label="Footer links">
         <a class="footer__link" href="/guides">Guides</a>
         <a class="footer__link" href="/courses">Courses</a>
+        <a class="footer__link" href="/projects">Projects</a>
         <a class="footer__link" href="/blog">Blog</a>
         <a class="footer__link" href="/about">About</a>
         <a class="footer__link" href="/charity-support">Charity support</a>
@@ -51,7 +52,9 @@
         var(--surface-footer-bottom) 100%
       );
     color: rgba(var(--text-on-strong-rgb), 0.64);
-    padding: 3rem 1.5rem 2.75rem;
+    // Extra bottom clearance keeps the fixed page-menu button (bottom-right,
+    // ~84px tall footprint on desktop) from overlapping the footer links.
+    padding: 3rem 1.5rem 6.5rem;
 
     &::before {
       content: "";
@@ -196,7 +199,7 @@
   @media (max-width: 767px) {
     .footer {
       padding-top: 2.65rem;
-      padding-bottom: 2.6rem;
+      padding-bottom: 6rem;
     }
 
     .footer__inner {

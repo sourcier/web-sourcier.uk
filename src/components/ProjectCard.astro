@@ -1,0 +1,518 @@
+---
+import { Image } from "astro:assets";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { getProjectIcon } from "../utils/contentIcons";
+import { faIcon } from "../utils/icons";
+import niohLogo from "../../assets/images/nioh-logo.webp";
+
+interface PreviewCard {
+  label: string;
+  sublabel: string;
+  accentColor: string;
+}
+
+interface Props {
+  slug: string;
+  name: string;
+  tagline?: string;
+  summary: string;
+  status: "Active" | "In development" | "Archived";
+  techStack: string[];
+  repoUrl: string;
+  homepageUrl?: string;
+  previewCards?: PreviewCard[];
+}
+
+const {
+  slug,
+  name,
+  tagline,
+  summary,
+  status,
+  techStack,
+  repoUrl,
+  homepageUrl,
+  previewCards,
+} = Astro.props;
+
+const githubIcon = faIcon(faGithub, { size: 16 });
+
+const statusVariant: Record<string, string> = {
+  Active: "project-card__status--active",
+  "In development": "project-card__status--wip",
+  Archived: "project-card__status--archived",
+};
+---
+
+<article
+  class:list={[
+    "project-card",
+    { "project-card--with-preview": previewCards?.length },
+  ]}
+>
+  <div class="project-card__content">
+    <div class="project-card__header">
+      <span
+        class="project-card__icon"
+        aria-hidden="true"
+        set:html={getProjectIcon(slug, 20)}
+      />
+      <div class="project-card__heading-group">
+        <div class="project-card__title-row">
+          <h3 class="project-card__title">{name}</h3>
+          <span class:list={["project-card__status", statusVariant[status]]}
+            >{status}</span
+          >
+        </div>
+        {tagline && <p class="project-card__tagline">{tagline}</p>}
+      </div>
+    </div>
+    <p class="project-card__body">{summary}</p>
+    <ul class="project-card__tags" role="list">
+      {techStack.map((tech) => <li>{tech}</li>)}
+    </ul>
+    <div class="project-card__links">
+      <a
+        class="project-card__cta"
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Fragment set:html={githubIcon} />
+        <span>View on GitHub</span>
+      </a>
+      {
+        homepageUrl && (
+          <a
+            class="project-card__cta project-card__cta--secondary"
+            href={homepageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Visit site</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    previewCards && previewCards.length > 0 && (
+      <div class="project-card__preview" aria-hidden="true">
+        <div class="project-card__window">
+          <div class="project-card__window-chrome">
+            <span class="project-card__dot project-card__dot--close" />
+            <span class="project-card__dot project-card__dot--min" />
+            <span class="project-card__dot project-card__dot--max" />
+            <span class="project-card__window-title">{name}</span>
+          </div>
+          {slug === "nioh2-save-editor" && (
+            <div class="project-card__window-brand">
+              <Image src={niohLogo} alt="" width={220} loading="lazy" />
+            </div>
+          )}
+          <div class="project-card__window-body">
+            {previewCards.map((card) => (
+              <div
+                class="project-card__game-card"
+                style={`background: linear-gradient(145deg, ${card.accentColor} 0%, ${card.accentColor}88 100%);`}
+              >
+                <span class="project-card__game-title">{card.label}</span>
+                <span class="project-card__game-sub">{card.sublabel}</span>
+                <span class="project-card__game-cta">Select →</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+</article>
+
+<style lang="scss">
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-panel);
+    border: 1px solid
+      color-mix(in srgb, var(--accent-primary) 12%, var(--border-subtle));
+    background:
+      radial-gradient(
+        ellipse 70% 60% at 0% 0%,
+        color-mix(in srgb, var(--accent-primary) 9%, transparent) 0%,
+        transparent 55%
+      ),
+      var(--surface-elevated);
+    box-shadow: var(--shadow-panel);
+    transition:
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+
+    // Vertical accent stripe along the left edge
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        var(--accent-primary) 0%,
+        color-mix(in srgb, var(--accent-secondary) 60%, transparent) 65%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+
+    &--with-preview {
+      @media (min-width: 768px) {
+        grid-template-columns: 1fr 320px;
+      }
+    }
+
+    &:hover {
+      box-shadow:
+        0 22px 50px rgba(var(--accent-primary-rgb), 0.1),
+        var(--shadow-lift);
+      border-color: rgba(var(--accent-primary-rgb), 0.28);
+    }
+  }
+
+  // Separate so reduced-motion users get the colour/shadow effect but no translate
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card {
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  .project-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.75rem 1.5rem 1.75rem 2rem;
+  }
+
+  .project-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .project-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-tight);
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.18);
+    background: color-mix(
+      in srgb,
+      var(--surface-page) 75%,
+      var(--accent-primary) 25%
+    );
+    color: var(--accent-primary);
+  }
+
+  .project-card__heading-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .project-card__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .project-card__title {
+    margin: 0;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--text-primary);
+  }
+
+  .project-card__tagline {
+    margin: 0;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+  }
+
+  .project-card__status {
+    flex-shrink: 0;
+    padding: 0.22rem 0.6rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid currentColor;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    &--active {
+      color: var(--accent-secondary);
+      background: color-mix(in srgb, var(--accent-secondary) 10%, transparent);
+    }
+
+    &--wip {
+      color: var(--accent-primary);
+      background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+    }
+
+    &--archived {
+      color: var(--text-muted);
+      background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+    }
+  }
+
+  .project-card__body {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+  }
+
+  .project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: color-mix(in srgb, var(--surface-page) 50%, transparent);
+      color: var(--text-muted);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+  }
+
+  .project-card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: auto;
+  }
+
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.15rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    background: var(--accent-primary);
+    color: var(--text-on-strong);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background 0.15s ease,
+      box-shadow 0.15s ease;
+
+    &:hover {
+      background: var(--accent-primary-deep);
+      box-shadow: 0 4px 16px rgba(var(--accent-primary-rgb), 0.4);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--accent-primary);
+      outline-offset: 3px;
+    }
+
+    &--secondary {
+      background: transparent;
+      border-color: var(--border-subtle);
+      color: var(--text-muted);
+
+      &:hover {
+        background: transparent;
+        border-color: rgba(var(--accent-primary-rgb), 0.3);
+        color: var(--accent-primary);
+        box-shadow: none;
+      }
+    }
+  }
+
+  /* ── Mini app-window preview (decorative, aria-hidden) ── */
+  .project-card__preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem;
+    background:
+      radial-gradient(
+        ellipse 120% 100% at 50% 0%,
+        color-mix(in srgb, var(--accent-primary) 6%, transparent) 0%,
+        transparent 70%
+      ),
+      color-mix(in srgb, var(--surface-page) 55%, transparent);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 1.5rem;
+      bottom: 1.5rem;
+      left: 0;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--border-subtle) 15%,
+        var(--border-subtle) 85%,
+        transparent 100%
+      );
+    }
+
+    @media (max-width: 767px) {
+      padding: 0 1.75rem 1.75rem;
+      justify-content: flex-start;
+      background: none;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+
+  // Fixed dark palette — intentionally theme-invariant to simulate a real desktop window.
+  .project-card__window {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  }
+
+  .project-card__window-chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: #222222;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .project-card__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--close {
+      background: #ff5f57;
+    }
+
+    &--min {
+      background: #febc2e;
+    }
+
+    &--max {
+      background: #28c840;
+    }
+  }
+
+  // Backlit ambience behind the licensed logo mark, echoing the real app's title screen
+  .project-card__window-brand {
+    display: flex;
+    justify-content: center;
+    padding: 14px 16px 4px;
+    background: radial-gradient(
+      ellipse 70% 100% at 50% 0%,
+      rgba(180, 40, 30, 0.35) 0%,
+      transparent 70%
+    );
+
+    img {
+      width: 100%;
+      max-width: 190px;
+      height: auto;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+  }
+
+  .project-card__window-title {
+    margin-left: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
+  }
+
+  .project-card__window-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .project-card__game-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3px;
+    min-height: 108px;
+    padding: 14px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .project-card__game-title {
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .project-card__game-sub {
+    font-size: 0.6rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .project-card__game-cta {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+</style>

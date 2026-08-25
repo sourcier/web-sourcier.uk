@@ -4,6 +4,7 @@ import {
   faArrowTrendUp,
   faBriefcase,
   faCloudArrowUp,
+  faGamepad,
   faLayerGroup,
   faRectangleList,
   faUserGraduate,
@@ -23,10 +24,18 @@ const courseIcons: Record<string, IconDefinition> = {
   "devops-delivery": faCloudArrowUp,
 };
 
+const projectIcons: Record<string, IconDefinition> = {
+  "nioh2-save-editor": faGamepad,
+};
+
 export function getGuideIcon(slug: string, size = 18): string {
   return faIcon(guideIcons[slug] ?? faRectangleList, { size });
 }
 
 export function getCourseIcon(slug: string, size = 18): string {
   return faIcon(courseIcons[slug] ?? faRectangleList, { size });
+}
+
+export function getProjectIcon(slug: string, size = 18): string {
+  return faIcon(projectIcons[slug] ?? faRectangleList, { size });
 }
