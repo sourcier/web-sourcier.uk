@@ -26,10 +26,10 @@ runs:
         ARCH_FOLDER=$(node -e "process.stdout.write(process.platform + '-' + process.arch)")
         BASELINE_COUNT=$(find src/e2e/__snapshots__ -path "*/${ARCH_FOLDER}/*.png" 2>/dev/null | wc -l | tr -d ' ')
         if [ "$BASELINE_COUNT" = "0" ]; then
-          echo "No baselines found — run 'pnpm test:visual:update:docker' locally to generate them."
+          echo "No baselines found — run 'pnpm test:visual:update' locally to generate them."
           exit 0
         fi
-        pnpm test:visual
+        pnpm exec playwright test
 
     - name: Write job summary
       if: always()

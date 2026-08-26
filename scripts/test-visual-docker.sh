@@ -7,6 +7,9 @@ set -euo pipefail
 # ubuntu-24.04-arm for the same reason: both sides run the image natively on
 # arm64, with no QEMU emulation on Apple Silicon.
 #
+# This is the only supported way to run the visual suite — a bare host run has no
+# matching baseline folder and can't produce a result comparable to CI.
+#
 # Usage:
 #   scripts/test-visual-docker.sh          # compare against existing linux-arm64 baselines
 #   scripts/test-visual-docker.sh update   # regenerate linux-arm64 baselines
@@ -16,8 +19,8 @@ PLAYWRIGHT_IMAGE="mcr.microsoft.com/playwright:v1.59.1-noble"
 MODE="${1:-compare}"
 
 case "$MODE" in
-  compare) TEST_CMD="pnpm test:visual" ;;
-  update) TEST_CMD="pnpm test:visual:update" ;;
+  compare) TEST_CMD="pnpm exec playwright test" ;;
+  update) TEST_CMD="pnpm exec playwright test --update-snapshots" ;;
   *)
     echo "Usage: $0 [compare|update]" >&2
     exit 1

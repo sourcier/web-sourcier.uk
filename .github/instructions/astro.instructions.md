@@ -84,8 +84,7 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 - Config: `playwright.config.ts` — all Chromium, desktop (1280×900), tablet (Galaxy Tab S9), mobile (Pixel 7)
 - Spec: `src/e2e/visual.spec.ts`
 - Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/{testFile}-snapshots/{platform}-{arch}/`, per `snapshotPathTemplate` in `playwright.config.ts`. Both CI and local runs always execute inside the pinned Playwright Docker image on arm64, so the only folder that exists is `linux-arm64`
-- `pnpm test:visual` / `pnpm test:visual:update` — compare/regenerate baselines for whatever platform+arch the suite is currently running on (only meaningful inside the Docker image; a bare macOS host run targets a throwaway folder that CI never reads)
-- `pnpm test:visual:docker` / `pnpm test:visual:update:docker` — run the suite inside the exact Playwright Docker image CI uses (`scripts/test-visual-docker.sh`, forced to `--platform linux/arm64`, native on Apple Silicon), to compare or regenerate the `linux-arm64` baselines locally. Requires Docker Desktop
+- `pnpm test:visual` / `pnpm test:visual:update` — the only supported way to run the suite: inside the exact Playwright Docker image CI uses (`scripts/test-visual-docker.sh`, forced to `--platform linux/arm64`, native on Apple Silicon), to compare or regenerate the `linux-arm64` baselines locally. Requires Docker Desktop. A bare `playwright test` on the host has no matching baseline folder and isn't supported
 
 ### Stability patterns
 
@@ -98,5 +97,5 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 
 The `visual-regression` / `visual-regression-preview` jobs in `.github/workflows/ci.yml` run on
 `ubuntu-24.04-arm` and only ever compare against baselines — they never write snapshots back to
-the repo. Regenerate baselines locally with `pnpm test:visual:update:docker` (see above) and
+the repo. Regenerate baselines locally with `pnpm test:visual:update` (see above) and
 commit the updated `linux-arm64` PNGs yourself.
