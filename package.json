@@ -40,6 +40,8 @@
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "test:visual:report": "playwright show-report reports/playwright",
+    "test:visual:docker": "scripts/test-visual-docker.sh compare",
+    "test:visual:update:docker": "scripts/test-visual-docker.sh update",
     "prepare": "husky"
   },
   "dependencies": {

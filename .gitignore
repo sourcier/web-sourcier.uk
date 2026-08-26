@@ -5,6 +5,7 @@ dist/
 
 # dependencies
 node_modules/
+.pnpm-store/
 
 # logs
 npm-debug.log*
@@ -28,6 +29,7 @@ collections/posts/
 # Playwright test artefacts
 .playwright-mcp/
 test-results/
+test-results.json
 playwright-report/
 
 # Lighthouse reports (generated locally and by Netlify plugin)
