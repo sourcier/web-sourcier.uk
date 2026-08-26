@@ -290,6 +290,9 @@ jobs:
       # PREVIEW_PASSCODE) must be scoped in the Netlify dashboard to cover this deploy.
       # Do NOT call the restoreSiteDeploy API here — it makes the given deploy the
       # site's live production deploy, not just the alias, which would clobber prod.
+      # If the alias ever stops updating, it's likely https://github.com/netlify/cli/issues/1984
+      # (a prior real "preview" git branch deploy left a stale pointer) — delete that
+      # old branch-deploy via `netlify api deleteSiteDeploy`, don't restore this one.
       - name: Deploy to Netlify (preview alias)
         run: |
           OUTPUT=$(pnpm netlify deploy --dir=dist --functions .netlify/functions-built --alias=preview --no-build --message "$DEPLOY_MSG" --json)
