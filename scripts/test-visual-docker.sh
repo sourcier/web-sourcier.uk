@@ -2,15 +2,16 @@
 set -euo pipefail
 
 # Runs the visual regression suite inside the same Playwright Docker image CI uses,
-# forced to linux/amd64 so the generated baselines land in the same
-# `src/e2e/__snapshots__/**/linux-x64/` folder CI compares against — regardless of
-# host OS/arch (Apple Silicon included, via QEMU emulation).
+# forced to linux/arm64 so the generated baselines land in the same
+# `src/e2e/__snapshots__/**/linux-arm64/` folder CI compares against. CI runs on
+# ubuntu-24.04-arm for the same reason: both sides run the image natively on
+# arm64, with no QEMU emulation on Apple Silicon.
 #
 # Usage:
-#   scripts/test-visual-docker.sh          # compare against existing linux-x64 baselines
-#   scripts/test-visual-docker.sh update   # regenerate linux-x64 baselines
+#   scripts/test-visual-docker.sh          # compare against existing linux-arm64 baselines
+#   scripts/test-visual-docker.sh update   # regenerate linux-arm64 baselines
 
-# Keep in sync with the image tag pinned in .github/workflows/visual-regression.yml
+# Keep in sync with the image tag pinned in .github/workflows/ci.yml
 PLAYWRIGHT_IMAGE="mcr.microsoft.com/playwright:v1.59.1-noble"
 MODE="${1:-compare}"
 
@@ -24,9 +25,9 @@ case "$MODE" in
 esac
 
 # Named volumes (not bind mounts) for node_modules/pnpm store so the container's
-# linux/amd64 native bindings never overwrite the host's macOS node_modules.
+# linux/arm64 native bindings never overwrite the host's macOS node_modules.
 docker run --rm \
-  --platform linux/amd64 \
+  --platform linux/arm64 \
   --ipc host \
   -v "$PWD:/work" \
   -v visual-regression-node-modules:/work/node_modules \

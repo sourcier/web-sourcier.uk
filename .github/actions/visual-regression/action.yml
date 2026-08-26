@@ -1,12 +1,6 @@
 name: Run Visual Regression
 description: Install Playwright browsers and run visual regression tests
 
-inputs:
-  update_snapshots:
-    description: Regenerate baselines instead of comparing
-    required: false
-    default: "false"
-
 runs:
   using: composite
   steps:
@@ -28,20 +22,14 @@ runs:
     - name: Run visual regression tests
       shell: bash
       run: |
-        if [ "${{ inputs.update_snapshots }}" = "true" ]; then
-          # Playwright exits with code 1 when snapshots are written/updated (by design).
-          # We treat that as success here; the commit step reviews the actual diff.
-          pnpm test:visual:update || true
-        else
-          # Skip comparison if no linux baselines exist yet
-          ARCH_FOLDER=$(node -e "process.stdout.write(process.platform + '-' + process.arch)")
-          BASELINE_COUNT=$(find src/e2e/__snapshots__ -path "*/${ARCH_FOLDER}/*.png" 2>/dev/null | wc -l | tr -d ' ')
-          if [ "$BASELINE_COUNT" = "0" ]; then
-            echo "No baselines found — run the Visual Regression workflow with update_snapshots=true to generate them."
-            exit 0
-          fi
-          pnpm test:visual
+        # Skip comparison if no baselines exist yet for this platform/arch
+        ARCH_FOLDER=$(node -e "process.stdout.write(process.platform + '-' + process.arch)")
+        BASELINE_COUNT=$(find src/e2e/__snapshots__ -path "*/${ARCH_FOLDER}/*.png" 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$BASELINE_COUNT" = "0" ]; then
+          echo "No baselines found — run 'pnpm test:visual:update:docker' locally to generate them."
+          exit 0
         fi
+        pnpm test:visual
 
     - name: Write job summary
       if: always()

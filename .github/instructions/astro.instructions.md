@@ -83,11 +83,9 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 
 - Config: `playwright.config.ts` — all Chromium, desktop (1280×900), tablet (Galaxy Tab S9), mobile (Pixel 7)
 - Spec: `src/e2e/visual.spec.ts`
-- Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/{testFile}-snapshots/{platform}-{arch}/` — one folder per OS+arch (e.g. `darwin-arm64`, `linux-x64`), per `snapshotPathTemplate` in `playwright.config.ts`
-- `pnpm test:visual` — compare against the local platform's baselines (starts its own server via Playwright's `webServer`)
-- `pnpm test:visual:update` — regenerate the local platform's baselines
-- CI only ever compares against `linux-x64` — a native macOS run can't update those baselines
-- `pnpm test:visual:docker` / `pnpm test:visual:update:docker` — run the suite inside the exact Playwright Docker image CI uses (`scripts/test-visual-docker.sh`, forced to `--platform linux/amd64`), so the `linux-x64` baselines can be compared or regenerated locally instead of relying on the CI auto-commit step. Requires Docker Desktop.
+- Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/{testFile}-snapshots/{platform}-{arch}/`, per `snapshotPathTemplate` in `playwright.config.ts`. Both CI and local runs always execute inside the pinned Playwright Docker image on arm64, so the only folder that exists is `linux-arm64`
+- `pnpm test:visual` / `pnpm test:visual:update` — compare/regenerate baselines for whatever platform+arch the suite is currently running on (only meaningful inside the Docker image; a bare macOS host run targets a throwaway folder that CI never reads)
+- `pnpm test:visual:docker` / `pnpm test:visual:update:docker` — run the suite inside the exact Playwright Docker image CI uses (`scripts/test-visual-docker.sh`, forced to `--platform linux/arm64`, native on Apple Silicon), to compare or regenerate the `linux-arm64` baselines locally. Requires Docker Desktop
 
 ### Stability patterns
 
@@ -98,9 +96,7 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 
 ### CI
 
-`.github/workflows/visual-regression.yml` — `workflow_dispatch` with `update_snapshots` boolean.
-Update mode regenerates `linux-x64` baselines and tries to commit them back to `main` as
-`github-actions[bot]`. That commit step can fail with `GH013: Repository rule violations` —
-the bot isn't in the `main` branch ruleset's `bypass_actors` list, so it can't push past the
-required-status-checks rule. Prefer `pnpm test:visual:update:docker` locally (see above) and
-commit the updated `linux-x64` baselines yourself instead of relying on the CI auto-commit.
+The `visual-regression` / `visual-regression-preview` jobs in `.github/workflows/ci.yml` run on
+`ubuntu-24.04-arm` and only ever compare against baselines — they never write snapshots back to
+the repo. Regenerate baselines locally with `pnpm test:visual:update:docker` (see above) and
+commit the updated `linux-arm64` PNGs yourself.

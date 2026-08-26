@@ -360,7 +360,9 @@ jobs:
 
   visual-regression:
     name: Visual Regression
-    runs-on: ubuntu-latest
+    # arm64 so this matches scripts/test-visual-docker.sh running natively on
+    # Apple Silicon — no QEMU emulation on either side.
+    runs-on: ubuntu-24.04-arm
     needs: build
     # Gates the prod deploy against the exact prod build (SHOW_DRAFTS=false).
     if: |
@@ -368,7 +370,7 @@ jobs:
       !contains(github.event.head_commit.message, '#skip-ci') &&
       (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
       needs.build.result == 'success'
-    # Pin to the same Playwright Docker image used in visual-regression.yml so
+    # Pin to the same Playwright Docker image used in scripts/test-visual-docker.sh so
     # font rendering is identical to the stored baselines.
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
@@ -396,7 +398,9 @@ jobs:
 
   visual-regression-preview:
     name: Visual Regression (preview)
-    runs-on: ubuntu-latest
+    # arm64 so this matches scripts/test-visual-docker.sh running natively on
+    # Apple Silicon — no QEMU emulation on either side.
+    runs-on: ubuntu-24.04-arm
     needs: build-preview
     # Gates the preview deploy against the exact preview build (SHOW_DRAFTS=true).
     if: |
@@ -404,7 +408,7 @@ jobs:
       !contains(github.event.head_commit.message, '#skip-ci') &&
       (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
       needs['build-preview'].result == 'success'
-    # Pin to the same Playwright Docker image used in visual-regression.yml so
+    # Pin to the same Playwright Docker image used in scripts/test-visual-docker.sh so
     # font rendering is identical to the stored baselines.
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
