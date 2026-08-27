@@ -15,6 +15,9 @@ inputs:
     description: Passcode for the preview deploy's auth wall; when set, a matching cookie bypasses it
     required: false
     default: ""
+  environment:
+    description: Label distinguishing this run (e.g. prod, preview) — keeps uploaded artifact names unique per workflow run
+    required: true
 
 runs:
   using: composite
@@ -50,6 +53,7 @@ runs:
           ${{ inputs.base_url }}/
           ${{ inputs.base_url }}/blog/
         uploadArtifacts: true
+        artifactName: lighthouse-results-${{ inputs.environment }}-${{ inputs.form_factor }}
         temporaryPublicStorage: true
         configPath: ${{ inputs.preview_passcode != '' && steps.config.outputs.path || inputs.configPath }}
 

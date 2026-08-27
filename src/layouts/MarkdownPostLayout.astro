@@ -354,7 +354,9 @@ const supportPublishableKey =
   }
 
   :global(.mermaid-diagram[data-loading]) {
-    min-height: 180px;
+    /* Approximates a typical small flowchart (2-6 nodes) so the swap from
+       skeleton to rendered SVG causes minimal layout shift for real visitors. */
+    min-height: 220px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
