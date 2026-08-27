@@ -136,8 +136,7 @@ for (const {
     }
 
     let clip:
-      | { x: number; y: number; width: number; height: number }
-      | undefined;
+      { x: number; y: number; width: number; height: number } | undefined;
     if (clipToContent) {
       const footerBox = await page.locator(".footer").boundingBox();
       if (footerBox) {
