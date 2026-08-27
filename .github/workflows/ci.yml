@@ -320,9 +320,9 @@ jobs:
       # until the old one is gone.
       - name: Clear stale preview branch-deploy pointer
         run: |
-          STALE_ID=$(netlify api listSiteDeployedBranches --data "{\"site_id\":\"$NETLIFY_SITE_ID\"}" | jq -r '.[] | select(.name == "preview") | .deploy_id')
+          STALE_ID=$(pnpm netlify api listSiteDeployedBranches --data "{\"site_id\":\"$NETLIFY_SITE_ID\"}" | jq -r '.[] | select(.name == "preview") | .deploy_id')
           if [ -n "$STALE_ID" ]; then
-            netlify api deleteSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$STALE_ID\"}"
+            pnpm netlify api deleteSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$STALE_ID\"}"
           fi
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
