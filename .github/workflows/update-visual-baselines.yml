@@ -1,0 +1,66 @@
+name: Update Visual Baselines
+run-name: Update linux-x64 visual regression baselines
+
+# Manual only — regenerating baselines should be a deliberate, reviewed action,
+# not something that runs automatically on every failure.
+on:
+  workflow_dispatch:
+
+jobs:
+  update-baselines:
+    name: Update Baselines
+    runs-on: ubuntu-latest
+    # Same image the visual-regression CI job checks against, so the baselines
+    # this workflow produces are valid for that comparison.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup
+
+      - name: Fetch content
+        run: pnpm build:content:fetch
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - run: pnpm assets:sync
+
+      - run: pnpm build
+        env:
+          SHOW_DRAFTS: "false"
+          PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
+
+      - run: pnpm build:search
+
+      - name: Regenerate baselines
+        run: pnpm exec playwright test --update-snapshots
+
+      - name: Open PR with updated baselines
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- src/e2e/__snapshots__; then
+            echo "No baseline changes — nothing to do."
+            exit 0
+          fi
+
+          BRANCH="update-visual-baselines-$(date +%s)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add src/e2e/__snapshots__
+          git commit -m "chore(e2e): update linux-x64 visual regression baselines"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "chore(e2e): update linux-x64 visual regression baselines" \
+            --body "Automated baseline refresh from the Update Visual Baselines workflow. Review the image diffs before merging." \
+            --base main \
+            --head "$BRANCH"

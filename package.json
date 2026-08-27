@@ -38,8 +38,8 @@
     "test:update": "vitest run --update",
     "typecheck:functions": "tsc --project netlify/functions/tsconfig.json",
     "test:visual:report": "playwright show-report reports/playwright",
-    "test:visual": "scripts/test-visual-docker.sh compare",
-    "test:visual:update": "scripts/test-visual-docker.sh update",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
     "prepare": "husky"
   },
   "dependencies": {

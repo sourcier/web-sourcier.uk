@@ -83,8 +83,8 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 
 - Config: `playwright.config.ts` — all Chromium, desktop (1280×900), tablet (Galaxy Tab S9), mobile (Pixel 7)
 - Spec: `src/e2e/visual.spec.ts`
-- Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/{testFile}-snapshots/{platform}-{arch}/`, per `snapshotPathTemplate` in `playwright.config.ts`. Both CI and local runs always execute inside the pinned Playwright Docker image on arm64, so the only folder that exists is `linux-arm64`
-- `pnpm test:visual` / `pnpm test:visual:update` — the only supported way to run the suite: inside the exact Playwright Docker image CI uses (`scripts/test-visual-docker.sh`, forced to `--platform linux/arm64`, native on Apple Silicon), to compare or regenerate the `linux-arm64` baselines locally. Requires Docker Desktop. A bare `playwright test` on the host has no matching baseline folder and isn't supported
+- Snapshots: `src/e2e/__snapshots__/visual.spec.ts-snapshots/{testFile}-snapshots/{platform}-{arch}/`, per `snapshotPathTemplate` in `playwright.config.ts`. Two folders are committed: `darwin-arm64` (generated natively on macOS, for local dev sanity checks) and `linux-x64` (the folder CI actually compares against, maintained only by the "Update Visual Baselines" workflow below)
+- `pnpm test:visual` / `pnpm test:visual:update` — runs Playwright directly on the host (no Docker). Locally on macOS this produces/compares `darwin-arm64` baselines. These are for your own dev-loop only; they are never compared in CI
 
 ### Stability patterns
 
@@ -96,6 +96,12 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 ### CI
 
 The `visual-regression` / `visual-regression-preview` jobs in `.github/workflows/ci.yml` run on
-`ubuntu-24.04-arm` and only ever compare against baselines — they never write snapshots back to
-the repo. Regenerate baselines locally with `pnpm test:visual:update` (see above) and
-commit the updated `linux-arm64` PNGs yourself.
+`ubuntu-latest` inside the pinned Playwright Docker image, and only ever compare against the
+committed `linux-x64` baselines — they never write snapshots back to the repo. If no `linux-x64`
+baselines exist yet for a route/viewport, that check is skipped rather than failed.
+
+To (re)generate the `linux-x64` baselines, manually dispatch the **Update Visual Baselines**
+workflow (`.github/workflows/update-visual-baselines.yml`) from the Actions tab. It builds the
+site and runs Playwright with `--update-snapshots` on the same `ubuntu-latest` + Docker image the
+CI check uses, then opens a PR with the resulting PNGs for review — baselines are always generated
+and compared on the same machine type, so there's no cross-platform/cross-arch drift to chase.
