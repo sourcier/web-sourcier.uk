@@ -793,6 +793,12 @@ const supportPublishableKey =
         }
       }, 10);
     });
+
+    // Mermaid measures text synchronously during run() — if Barlow/Barlow Condensed
+    // haven't finished loading yet, it falls back to system font metrics and bakes
+    // slightly different (and permanent) node dimensions into the rendered SVG.
+    await document.fonts.ready;
+
     const isDark = document.documentElement.dataset.theme === "dark";
     mermaid.initialize(getMermaidConfig(isDark));
 

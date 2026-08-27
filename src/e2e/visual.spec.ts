@@ -95,9 +95,9 @@ for (const {
       );
     });
 
-    // Mermaid renders client-side from an external CDN script — its skeleton
-    // placeholder height differs from the final SVG, so screenshotting mid-swap
-    // produces a flaky page height depending on CDN latency for that run.
+    // Mermaid renders client-side from an external CDN script — wait for the
+    // skeleton placeholder to be replaced with the final SVG before measuring
+    // layout, in case a slow CDN fetch is still in flight.
     await page
       .locator(".mermaid-diagram[data-loading]")
       .first()
@@ -119,6 +119,19 @@ for (const {
       `,
     });
 
+    // Hide dynamic sections before measuring the footer so their draft-count-dependent
+    // height never leaks into the clip calculation below — on mobile, .tags-sidebar
+    // stacks below the article and directly shifts the footer position depending on
+    // how many tags are included (SHOW_DRAFTS changes the count), even though it's
+    // invisible in the final screenshot.
+    if (dynamicSelectors?.length) {
+      await page.addStyleTag({
+        content: dynamicSelectors
+          .map((sel: string) => `${sel} { display: none !important; }`)
+          .join("\n"),
+      });
+    }
+
     let clip:
       | { x: number; y: number; width: number; height: number }
       | undefined;
@@ -135,14 +148,6 @@ for (const {
           height: Math.floor(footerBox.y / 16) * 16,
         };
       }
-    }
-
-    if (dynamicSelectors?.length) {
-      await page.addStyleTag({
-        content: dynamicSelectors
-          .map((sel: string) => `${sel} { display: none !important; }`)
-          .join("\n"),
-      });
     }
 
     await expect(page).toHaveScreenshot(`${name}.png`, {
