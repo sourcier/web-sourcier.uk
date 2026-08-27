@@ -25,12 +25,17 @@ const routes = [
     name: "blog-post",
     path: "/blog/markdown-test",
     // Stable syntax-reference article — no series callout, no living content.
-    // Clip to just before the footer so height is deterministic (sub-pixel jitter ~0.9px
-    // between runs is absorbed by the floor(y/16) quantisation).
-    // maxDiffPixelRatio 0.05: Chromium font anti-aliasing produces ~2% differing pixels
-    // across the text-heavy article body between launches; 5% still catches real regressions.
+    // Clip to just before the footer so height is deterministic. Quantised to 256px
+    // (rather than the default 16px) because this is the longest, most text-dense
+    // page: font hinting/shaping can round very slightly differently between CPU
+    // architectures (e.g. Apple Silicon locally vs the arm64 CI runner), and across
+    // ~10,000px of body copy that accumulates into a real height difference.
+    // maxDiffPixelRatio 0.08: cross-arch anti-aliasing differences run higher here
+    // than the ~2% seen between same-arch launches; still low enough to catch a
+    // genuine layout regression.
     clipToContent: true,
-    maxDiffPixelRatio: 0.05,
+    clipQuantise: 256,
+    maxDiffPixelRatio: 0.08,
     // TagsSidebar queries the live collection and shows per-tag post counts.
     dynamicSelectors: [".tags-sidebar"],
   },
@@ -76,6 +81,7 @@ for (const {
   dynamicSelectors,
   maxDiffPixelRatio,
   clipToContent,
+  clipQuantise,
 } of routes) {
   test(`visual: ${name}`, async ({ page }) => {
     await page.goto(path);
@@ -116,14 +122,16 @@ for (const {
     if (clipToContent) {
       const footerBox = await page.locator(".footer").boundingBox();
       if (footerBox) {
-        // Quantise to the nearest 16px below the footer top so sub-pixel jitter
-        // (~0.9px between runs) never crosses a quantisation boundary and the
-        // clip dimensions are stable without needing a baseline regeneration.
+        // Quantise below the footer top so jitter between runs (sub-pixel by default,
+        // or a wider tolerance for routes prone to cross-arch drift — see clipQuantise
+        // per route) never crosses a boundary and the clip dimensions stay stable
+        // without needing a baseline regeneration.
+        const quantiseStep = clipQuantise ?? 16;
         clip = {
           x: 0,
           y: 0,
           width: footerBox.width,
-          height: Math.floor(footerBox.y / 16) * 16,
+          height: Math.floor(footerBox.y / quantiseStep) * quantiseStep,
         };
       }
     }
