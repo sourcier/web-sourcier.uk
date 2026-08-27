@@ -95,6 +95,15 @@ for (const {
       );
     });
 
+    // Mermaid renders client-side from an external CDN script — its skeleton
+    // placeholder height differs from the final SVG, so screenshotting mid-swap
+    // produces a flaky page height depending on CDN latency for that run.
+    await page
+      .locator(".mermaid-diagram[data-loading]")
+      .first()
+      .waitFor({ state: "detached", timeout: 15000 })
+      .catch(() => {});
+
     // Wait for webfonts to finish loading and reflowing before measuring layout.
     // toHaveScreenshot() waits for fonts internally before capturing pixels, but
     // clipToContent measures the footer position beforehand — without this wait,

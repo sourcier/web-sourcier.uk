@@ -55,13 +55,23 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [quality]
+    needs: [quality, build-preview, visual-regression-preview]
     # Production build only — PRs are covered by build-preview instead, avoiding
     # a redundant full build (content fetch, assets, functions) on every PR push.
+    # Waits on the preview build+visual-regression chain first: no point spending
+    # prod build minutes if the same commit already failed for preview. Preview
+    # doesn't run at all on schedule/workflow_dispatch(prod), where both report
+    # 'skipped' rather than 'success' — checking both explicitly (rather than
+    # just the last job in the chain) so a real build-preview failure, which
+    # also leaves visual-regression-preview 'skipped', still blocks prod.
     if: |
+      always() &&
       !contains(github.event.head_commit.message, '#skip-ci') &&
       github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || inputs.environment == 'prod')
+      (github.event_name != 'workflow_dispatch' || inputs.environment == 'prod') &&
+      needs.quality.result == 'success' &&
+      (needs['build-preview'].result == 'success' || needs['build-preview'].result == 'skipped') &&
+      (needs['visual-regression-preview'].result == 'success' || needs['visual-regression-preview'].result == 'skipped')
     timeout-minutes: 30
     permissions:
       contents: read
@@ -333,6 +343,7 @@ jobs:
           form_factor: ${{ matrix.form_factor }}
           configPath: ${{ matrix.configPath }}
           base_url: https://sourcier.uk
+          environment: prod
 
   lighthouse-preview:
     name: Lighthouse Preview (${{ matrix.form_factor }})
@@ -357,6 +368,7 @@ jobs:
           configPath: ${{ matrix.configPath }}
           base_url: https://preview--sourcieruk.netlify.app
           preview_passcode: ${{ secrets.PREVIEW_PASSCODE }}
+          environment: preview
 
   visual-regression:
     name: Visual Regression
