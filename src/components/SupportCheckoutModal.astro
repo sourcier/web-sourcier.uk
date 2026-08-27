@@ -803,8 +803,7 @@ const tipOptions: TipOption[] = [
         }
 
         const indicatorStep = indicator.dataset.stepIndicator as
-          | StepName
-          | undefined;
+          StepName | undefined;
         const indicatorIndex = indicatorStep
           ? stepOrder.indexOf(indicatorStep)
           : -1;
