@@ -51,6 +51,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # actions/checkout only registers safe.directory under a temporary
+          # $HOME used during its own step — it doesn't persist to later steps
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
           if git diff --quiet -- src/e2e/__snapshots__; then
             echo "No baseline changes — nothing to do."
             exit 0
