@@ -92,6 +92,9 @@ Full-page screenshot tests using Playwright, covering 12 routes × 3 viewports.
 - `.reactions` and `.comments` are hidden via injected CSS to prevent height variability
 - `blog-post` clips height to `Math.floor(footerY / 16) * 16` to absorb sub-pixel font jitter, and uses `maxDiffPixelRatio: 0.05`
 - All other routes use `maxDiffPixelRatio: 0.01`
+- **Always hide `dynamicSelectors` before computing `clipToContent`, never after.** `clipToContent` measures `.footer`'s position to derive the clip height; if a dynamic section is hidden only afterwards (right before the screenshot), its height still leaks into that measurement even though it's invisible in the final image. On mobile this bit us via `.tags-sidebar`, which stacks below the article and grows/shrinks with `SHOW_DRAFTS`-dependent tag counts.
+- **Don't visually test third-party client-rendered content with non-deterministic sizing — hide it instead.** The Mermaid diagram on `blog-post` renders from an external CDN script with font-dependent node sizing; across several CI runs the same height mismatch flip-flopped between which build (prod vs preview) it hit, proving genuine run-to-run non-determinism rather than a content difference. `.mermaid-diagram` is in `dynamicSelectors` for this reason, not because its content varies with drafts.
+- If a pixel-diff shows the "first differing row" landing inside some element, that does **not** prove that element caused the shift — once two screenshots have different total heights, everything below the true divergence point renders as "different" wherever content is dense enough to register, regardless of where the divergence actually started. Confirm root cause by diffing the SSR HTML (both `SHOW_DRAFTS` states) byte-for-byte before trusting a pixel-scan location.
 
 ### CI
 
@@ -105,3 +108,13 @@ workflow (`.github/workflows/update-visual-baselines.yml`) from the Actions tab.
 site and runs Playwright with `--update-snapshots` on the same `ubuntu-latest` + Docker image the
 CI check uses, then opens a PR with the resulting PNGs for review — baselines are always generated
 and compared on the same machine type, so there's no cross-platform/cross-arch drift to chase.
+
+The prod `build` job waits on `build-preview` and `visual-regression-preview` succeeding (or being
+legitimately skipped, e.g. on `schedule`/`workflow_dispatch(prod)` triggers, where preview never
+runs at all) before starting — a broken preview build blocks the prod path instead of both running
+in parallel and wasting a prod build on a commit that's already known to fail.
+
+Lighthouse (`lighthouse` / `lighthouse-preview` jobs, each a mobile+desktop matrix) passes a unique
+`environment` input through to `.github/actions/lighthouse/action.yml`, which builds
+`artifactName: lighthouse-results-${environment}-${form_factor}`. Without this, all four jobs in a
+single run would try to upload an artifact named `lighthouse-results` and collide.
