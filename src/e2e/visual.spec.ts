@@ -32,7 +32,10 @@ const routes = [
     clipToContent: true,
     maxDiffPixelRatio: 0.05,
     // TagsSidebar queries the live collection and shows per-tag post counts.
-    dynamicSelectors: [".tags-sidebar"],
+    // The mermaid diagram is rendered client-side by an external CDN script with
+    // font-dependent sizing — genuinely non-deterministic run to run, so it's hidden
+    // here rather than visually tested (mermaid rendering itself isn't page-specific).
+    dynamicSelectors: [".tags-sidebar", ".mermaid-diagram"],
   },
   { name: "about", path: "/about" },
   { name: "contact", path: "/contact" },
