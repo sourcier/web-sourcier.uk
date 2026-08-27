@@ -29,8 +29,9 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
 
-      # rsync is not included in the Playwright Docker image, but assets:sync shells out to it
-      - run: apt-get update && apt-get install -y rsync
+      # rsync/jq are not included in the Playwright Docker image — rsync is used by
+      # assets:sync, jq to safely build the PR JSON body (gh CLI isn't installed either)
+      - run: apt-get update && apt-get install -y rsync jq
         shell: bash
 
       - run: pnpm assets:sync
@@ -69,8 +70,16 @@ jobs:
           git checkout -b "$BRANCH"
           git commit -m "chore(e2e): update linux-x64 visual regression baselines"
           git push origin "$BRANCH"
-          gh pr create \
-            --title "chore(e2e): update linux-x64 visual regression baselines" \
-            --body "Automated baseline refresh from the Update Visual Baselines workflow. Review the image diffs before merging." \
-            --base main \
-            --head "$BRANCH"
+
+          # gh CLI isn't installed in the Playwright image — call the REST API directly
+          jq -n --arg title "chore(e2e): update linux-x64 visual regression baselines" \
+                --arg body "Automated baseline refresh from the Update Visual Baselines workflow. Review the image diffs before merging." \
+                --arg head "$BRANCH" \
+                --arg base main \
+                '{title: $title, body: $body, head: $head, base: $base}' \
+            | curl -sS -X POST \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/${{ github.repository }}/pulls" \
+                -d @- \
+                --fail-with-body
