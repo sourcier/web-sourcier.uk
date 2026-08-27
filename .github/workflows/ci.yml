@@ -4,7 +4,7 @@ run-name: >-
       github.event_name == 'repository_dispatch' && format('[content] {0}', github.event.client_payload.commit_message) ||
       github.event_name == 'pull_request' && format('[pr] {0}', github.event.pull_request.title) ||
       github.event_name == 'workflow_dispatch' && format('[manual:{0}] {1} by @{2}', inputs.environment, github.ref_name, github.actor) ||
-      github.event.head_commit.message }}
+      format('[push] {0} @ {1}', github.ref_name, github.event.head_commit.id) }}
 
 on:
   push:
@@ -433,3 +433,5 @@ jobs:
           path: dist
 
       - uses: ./.github/actions/visual-regression
+        with:
+          report_name: visual-regression-report-preview

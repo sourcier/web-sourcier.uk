@@ -1,6 +1,12 @@
 name: Run Visual Regression
 description: Install Playwright browsers and run visual regression tests
 
+inputs:
+  report_name:
+    description: Artifact name for the uploaded diff report (must be unique per workflow run)
+    required: false
+    default: visual-regression-report
+
 runs:
   using: composite
   steps:
@@ -71,6 +77,6 @@ runs:
       if: failure()
       uses: actions/upload-artifact@v7
       with:
-        name: visual-regression-report
+        name: ${{ inputs.report_name }}
         path: reports/playwright/
         retention-days: 7
