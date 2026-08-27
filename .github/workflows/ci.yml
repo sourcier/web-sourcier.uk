@@ -94,10 +94,11 @@ jobs:
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
-      # Serves the deployed commit at /version, so a live site can be checked
-      # against what's expected without digging through CI/deploy logs.
+      # Serves the deployed commit at /version, matching the short SHA GitHub
+      # displays in the UI, so a live site can be checked against what's
+      # expected without digging through CI/deploy logs.
       - name: Write version file
-        run: echo "$GITHUB_SHA" > dist/version
+        run: echo "${GITHUB_SHA:0:7}" > dist/version
 
       - run: pnpm build:search
 
@@ -152,10 +153,11 @@ jobs:
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
-      # Serves the deployed commit at /version, so a live site can be checked
-      # against what's expected without digging through CI/deploy logs.
+      # Serves the deployed commit at /version, matching the short SHA GitHub
+      # displays in the UI, so a live site can be checked against what's
+      # expected without digging through CI/deploy logs.
       - name: Write version file
-        run: echo "$GITHUB_SHA" > dist/version
+        run: echo "${GITHUB_SHA:0:7}" > dist/version
 
       - run: pnpm build:search
 
@@ -300,13 +302,28 @@ jobs:
       # PREVIEW_PASSCODE) must be scoped in the Netlify dashboard to cover this deploy.
       # Do NOT call the restoreSiteDeploy API here — it makes the given deploy the
       # site's live production deploy, not just the alias, which would clobber prod.
-      # If the alias ever stops updating, it's likely https://github.com/netlify/cli/issues/1984
-      # (a prior real "preview" git branch deploy left a stale pointer) — delete that
-      # old branch-deploy via `netlify api deleteSiteDeploy`, don't restore this one.
       - name: Deploy to Netlify (preview alias)
         run: |
           OUTPUT=$(pnpm netlify deploy --dir=dist --functions .netlify/functions-built --alias=preview --no-build --message "$DEPLOY_MSG" --json)
           echo "DEPLOY_URL=$(echo "$OUTPUT" | jq -r '.deploy_url')" >> $GITHUB_ENV
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      # Works around https://github.com/netlify/cli/issues/1984: once a "preview"
+      # branch-deploy record exists, it never rolls forward to newer `--alias=preview`
+      # deploys on its own — the alias keeps serving whatever deploy it's pinned to,
+      # indefinitely. Deleting that pinned deploy after every deploy forces Netlify to
+      # fall through to the most recent one (the deploy just made above), so the alias
+      # can never go stale again. Safe to run unconditionally: the pinned deploy is
+      # always the *previous* cycle's leftover — Netlify doesn't pin the new deploy
+      # until the old one is gone.
+      - name: Clear stale preview branch-deploy pointer
+        run: |
+          STALE_ID=$(netlify api listSiteDeployedBranches --data "{\"site_id\":\"$NETLIFY_SITE_ID\"}" | jq -r '.[] | select(.name == "preview") | .deploy_id')
+          if [ -n "$STALE_ID" ]; then
+            netlify api deleteSiteDeploy --data "{\"site_id\":\"$NETLIFY_SITE_ID\",\"deploy_id\":\"$STALE_ID\"}"
+          fi
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
