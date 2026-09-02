@@ -76,6 +76,13 @@ function extractPhotoId(input) {
     }
   }
 
+  // A "--" right before the ID means the ID itself starts with "-" (some
+  // Unsplash IDs do) — split() turns that into an empty segment that would
+  // otherwise get dropped, silently truncating the leading "-" off the ID.
+  if (segments[idStartIndex - 1] === "") {
+    idStartIndex -= 1;
+  }
+
   return segments.slice(idStartIndex).join("-");
 }
 
